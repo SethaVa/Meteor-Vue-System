@@ -1,9 +1,11 @@
 import  _ from 'lodash';
 
-import School from '../../client/routes';
+import RouterAdmin from '../../client/routes';
+import RouterUser from '../../client/routesUser';
 
 const routes = _.concat(
-    School
+    RouterAdmin,
+    RouterUser
 );
 
 export default routes;

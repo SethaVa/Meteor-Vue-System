@@ -1,14 +1,14 @@
 <template>
   <div>
-     <data-tables :data="tableData" >
+     <!-- <data-tables :data="tableData" >
         <el-table-column prop="date" label="Date" width="140" sortable="custom" >
         </el-table-column>
         <el-table-column prop="name" label="Name" width="120">
         </el-table-column>
         <el-table-column prop="address" label="Address">
         </el-table-column>
-      </data-tables>
-    </el-main>
+      </data-tables> -->
+      <h1>Home Page</h1>
   </div>
 </template>
 

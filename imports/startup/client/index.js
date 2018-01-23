@@ -1,8 +1,5 @@
 // Import client startup through a single index entry point
 
-// import './routes.js';
-
-
 import { Meteor } from 'meteor/meteor';
 import Vue from 'vue';
 import _ from 'lodash';
@@ -27,6 +24,11 @@ Vue.use(ElementUI, {
 import DataTables from 'vue-data-tables';
 Vue.use(DataTables)
 
+//---------- Meta ----------
+import Meta from 'vue-meta';
+Vue.use(Meta);
+
+
 // ---------------create router--------------
 import routes from './routes';
 const router = new VueRouter({
@@ -36,7 +38,7 @@ const router = new VueRouter({
 
 // --------------App layout component---------------
 
-import App from '../../client/pages/index.vue';
+import App from '../../client/layouts/AppLayout.vue';
 
 Meteor.startup(() => {
 
