@@ -28,22 +28,22 @@
 </template>
 
 <script>
-import BookInsert from "./BookInsert.vue";
-import BookUpdate from './BookUpdate.vue';
-import { findBook, removeBook } from "../../api/books/methods.js";
+import TypeInsert from "./TypeInsert.vue";
+import TypeUpdate from './TypeUpdate.vue';
+import { findType, removeType } from "../../api/types/methods.js";
 export default {
-  name: "book",
-  components: { BookInsert },
+  name: "Type",
+  components: { TypeInsert,TypeUpdate },
   data() {
     return {
       currentDialog: null,
       visibleDialog: false,
       updateId: null,
-      tableData: [{ code: "002", title: "Hip Hip 2", bookType: "Full Time" }],
+      tableData: [],
       titles: [
-        { label: "Code", prop: "code", sort: "custom" },
-        { label: "Title", prop: "title", sort: "custom" },
-        { label: "Type", prop: "bookType" }
+        { label: "ID", prop: "_id", sort: "custom" },
+        { label: "Title", prop: "type", sort: "custom" },
+        { label: "Describe", prop: "des" }
       ],
       tableProp: {
         size: "mini"
@@ -57,7 +57,7 @@ export default {
             name: "new",
             icon: "el-icon-plus",
             handler: () => {
-              this.currentDialog = BookInsert;
+              this.currentDialog = TypeInsert;
             }
           }
         ]
@@ -70,7 +70,7 @@ export default {
             icon: "el-icon-edit",
             handler: row => {
                 this.updateId = row._id;
-                this.currentDialog = BookUpdate;
+                this.currentDialog = TypeUpdate;
             }
           },
           {
@@ -79,7 +79,7 @@ export default {
               let id = row._id;
               this.$confirm("Do you want delete this record?", "Warning")
                 .then(result => {
-                  removeBook
+                  removeType
                     .callPromise(id)
                     .then(result => {
                       this.$message({
@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     getData() {
-      findBook
+      findType
         .callPromise({})
         .then(result => {
           this.tableData = result;

@@ -17,6 +17,14 @@
         <i class="fa fa-home"></i>
         <span>Teacher</span>
       </el-menu-item>
+      <el-menu-item index="room">
+        <i class="fa fa-home"></i>
+        <span>Room</span>
+      </el-menu-item>
+      <el-menu-item index="type">
+        <i class="fa fa-home"></i>
+        <span>Type</span>
+      </el-menu-item>
       <!-- <el-submenu index="2">
         <template slot="title">
           <i class="el-cion-message"></i>Student

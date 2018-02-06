@@ -2,18 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6bdaead-dea7-4b2b-a133-9d2511ad230f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/client/head.html" afterPath="$PROJECT_DIR$/client/head.html" />
-      <change beforePath="$PROJECT_DIR$/imports/api/links/server/publications.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/imports/api/links/server/publications.tests.js" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/imports/client/pages/Menu.vue" afterPath="$PROJECT_DIR$/imports/client/pages/Menu.vue" />
-      <change beforePath="$PROJECT_DIR$/imports/client/pages/home.vue" afterPath="$PROJECT_DIR$/imports/client/pages/home.vue" />
+      <change beforePath="$PROJECT_DIR$/imports/api/books/book.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/imports/api/books/methods.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/imports/api/books/server/collection-hook.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/imports/api/books/server/publications.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/imports/api/rooms/methods.js" afterPath="$PROJECT_DIR$/imports/api/rooms/methods.js" />
+      <change beforePath="$PROJECT_DIR$/imports/api/rooms/room.js" afterPath="$PROJECT_DIR$/imports/api/rooms/room.js" />
+      <change beforePath="$PROJECT_DIR$/imports/api/rooms/server/collection-hook.js" afterPath="$PROJECT_DIR$/imports/api/rooms/server/collection-hook.js" />
+      <change beforePath="$PROJECT_DIR$/imports/client/AsideMenu.vue" afterPath="$PROJECT_DIR$/imports/client/AsideMenu.vue" />
+      <change beforePath="$PROJECT_DIR$/imports/client/HeaderMenu.vue" afterPath="$PROJECT_DIR$/imports/client/HeaderMenu.vue" />
+      <change beforePath="$PROJECT_DIR$/imports/client/layouts/AppLayout.vue" afterPath="$PROJECT_DIR$/imports/client/layouts/AppLayout.vue" />
+      <change beforePath="$PROJECT_DIR$/imports/client/layouts/MainLayout.vue" afterPath="$PROJECT_DIR$/imports/client/layouts/MainLayout.vue" />
+      <change beforePath="$PROJECT_DIR$/imports/client/pages/Book.vue" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/imports/client/pages/BookInsert.vue" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/imports/client/pages/BookUpdate.vue" afterPath="" />
       <change beforePath="$PROJECT_DIR$/imports/client/routes.js" afterPath="$PROJECT_DIR$/imports/client/routes.js" />
       <change beforePath="$PROJECT_DIR$/imports/startup/client/index.js" afterPath="$PROJECT_DIR$/imports/startup/client/index.js" />
+      <change beforePath="$PROJECT_DIR$/imports/startup/client/routes.js" afterPath="$PROJECT_DIR$/imports/startup/client/routes.js" />
       <change beforePath="$PROJECT_DIR$/imports/startup/server/api.js" afterPath="$PROJECT_DIR$/imports/startup/server/api.js" />
       <change beforePath="$PROJECT_DIR$/imports/startup/server/fixtures.js" afterPath="$PROJECT_DIR$/imports/startup/server/fixtures.js" />
-      <change beforePath="$PROJECT_DIR$/imports/startup/server/index.js" afterPath="$PROJECT_DIR$/imports/startup/server/index.js" />
-      <change beforePath="$PROJECT_DIR$/imports/startup/server/register-api.js" afterPath="$PROJECT_DIR$/imports/startup/server/register-api.js" />
-      <change beforePath="$PROJECT_DIR$/server/main.js" afterPath="$PROJECT_DIR$/server/main.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -27,24 +34,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Student.vue" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Student.vue" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/imports/client/pages/Student.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="101" column="4" lean-forward="false" selection-start-line="101" selection-start-column="4" selection-end-line="101" selection-end-column="4" />
+            <state relative-caret-position="493">
+              <caret line="110" column="4" lean-forward="false" selection-start-line="110" selection-start-column="4" selection-end-line="110" selection-end-column="4" />
               <folding>
-                <marker date="1515919573000" expanded="true" signature="3338:3340" ph="//..." />
-                <marker date="1515919573000" expanded="true" signature="3338:3344" ph="{...}" />
+                <marker date="1516453800000" expanded="true" signature="3782:3788" ph="{...}" />
+                <marker date="1516453800000" expanded="true" signature="3786:3788" ph="//..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StudentInsert.vue" pinned="false" current-in-tab="false">
+      <file leaf-file-name="StudentInsert.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/imports/client/pages/StudentInsert.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1278">
-              <caret line="71" column="24" lean-forward="false" selection-start-line="71" selection-start-column="24" selection-end-line="71" selection-end-column="24" />
+            <state relative-caret-position="162">
+              <caret line="110" column="27" lean-forward="true" selection-start-line="110" selection-start-column="27" selection-end-line="110" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -74,11 +81,11 @@
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="288" />
-    <option name="y" value="273" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="182" />
+    <option name="y" value="-4" />
     <option name="width" value="1323" />
-    <option name="height" value="744" />
+    <option name="height" value="772" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -96,7 +103,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -126,7 +133,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -163,18 +170,19 @@
       <workItem from="1515847579644" duration="21000" />
       <workItem from="1515847680267" duration="448000" />
       <workItem from="1516031225049" duration="155000" />
+      <workItem from="1517920126006" duration="119000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="624000" />
+    <option name="totallyTimeSpent" value="743000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="288" y="273" width="1323" height="744" extended-state="0" />
+    <frame x="43" y="-4" width="1323" height="772" extended-state="6" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2494331" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2494331" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -208,17 +216,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1515919573000" expanded="true" signature="3338:3340" ph="//..." />
-            <marker date="1515919573000" expanded="true" signature="3338:3344" ph="{...}" />
+            <marker date="1516453800000" expanded="true" signature="3782:3788" ph="{...}" />
+            <marker date="1516453800000" expanded="true" signature="3786:3788" ph="//..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/imports/client/pages/StudentInsert.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1278">
-          <caret line="71" column="39" lean-forward="false" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -232,12 +232,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/imports/client/pages/Student.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="101" column="4" lean-forward="false" selection-start-line="101" selection-start-column="4" selection-end-line="101" selection-end-column="4" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1515919573000" expanded="true" signature="3338:3340" ph="//..." />
-            <marker date="1515919573000" expanded="true" signature="3338:3344" ph="{...}" />
+            <marker date="1516453800000" expanded="true" signature="3782:3788" ph="{...}" />
+            <marker date="1516453800000" expanded="true" signature="3786:3788" ph="//..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imports/client/pages/StudentInsert.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1278">
+          <caret line="71" column="39" lean-forward="false" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imports/client/pages/Student.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="110" column="4" lean-forward="false" selection-start-line="110" selection-start-column="4" selection-end-line="110" selection-end-column="4" />
+          <folding>
+            <marker date="1516453800000" expanded="true" signature="3782:3788" ph="{...}" />
+            <marker date="1516453800000" expanded="true" signature="3786:3788" ph="//..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/imports/client/pages/StudentInsert.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="110" column="27" lean-forward="true" selection-start-line="110" selection-start-column="27" selection-end-line="110" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>

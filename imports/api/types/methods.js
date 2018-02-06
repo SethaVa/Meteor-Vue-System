@@ -5,11 +5,11 @@ import { RestMethodMixin } from 'meteor/simple:rest-method-mixin';
 import SimpleSchema from 'simpl-schema';
 
 
-import Room from './room';
+import Type from './type';
 
 // Find All Data
-export const findRoom = new ValidatedMethod({
-    name: 'findRoom',
+export const findType = new ValidatedMethod({
+    name: 'findType',
     mixins: [CallPromiseMixin],
     validate: null,
     run( selector, option ) {
@@ -17,56 +17,56 @@ export const findRoom = new ValidatedMethod({
             selector = selector || {}
             option = option || {}
 
-            return Room.find(selector, option).fetch();
+            return Type.find(selector, option).fetch();
         }
     }
 });
 
 // find One
-export const findOneRoom= new ValidatedMethod({
-    name:'findOneRoom',
+export const findOneType= new ValidatedMethod({
+    name:'findOneType',
     mixins:[CallPromiseMixin],
     validate:null,
     run({_id}){
         if(Meteor.isServer){
-            return Room.findOne(_id);
+            return Type.findOne(_id);
         }
     }
 });
 
 // Insert
-export const insertRoom = new ValidatedMethod({
-    name: 'insertRoom',
+export const insertType = new ValidatedMethod({
+    name: 'insertType',
     mixins: [CallPromiseMixin],
     validate: null,
     run(doc) {
         if (Meteor.isServer) {
-            return Room.insert(doc)
+            return Type.insert(doc)
         }
     }
 });
 // Update
-export const updateRoom= new ValidatedMethod({
-    name:'updateRoom',
+export const updateType= new ValidatedMethod({
+    name:'updateType',
     mixins:[CallPromiseMixin],
     validate:null,
     run(doc){
         if(Meteor.isServer){
-            return Room.update({_id:doc._id},{$set:doc})
+            return Type.update({_id:doc._id},{$set:doc})
         }
     }
 });
 
 // Delete
-export const removeRoom = new ValidatedMethod({
-    name:'removeRoom',
+export const removeType = new ValidatedMethod({
+    name:'removeType',
     mixins:[CallPromiseMixin],
     validate: new SimpleSchema({
         _id:{type:String}
     }).validator(),
     run(selector){
         if(Meteor.isServer){    
-            return Room.remove(selector)
+            return Type.remove(selector)
         }
     }
 });

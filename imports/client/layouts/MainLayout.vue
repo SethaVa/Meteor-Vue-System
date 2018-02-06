@@ -19,10 +19,22 @@
               <span class="header-title">{{headerTitle}}</span>
                 <!-- Header Menu -->
               <span style="float: right;">
-                
+                    <!-- <span>{{fullName}}</span> -->
                     <component :is="currentHeaderMenu"></component>
-                  
+                    <el-dropdown @command="handleUser" class="header-item-margin">
+                        <span class="el-dropdown-link">
+                          <div class="user-img"><img src="/images/user.png" alt="" class="avatar">
+                            {{fullName}} <i class="el-icon-arrow-down el-icon-right"></i></div>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <!-- <el-dropdown-item>Profile</el-dropdown-item>
+                            <el-dropdown-item>EN - KH</el-dropdown-item> -->
+                            <el-dropdown-item @click.native="_logout" divided="">Logout</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+
               </span>
+              
                     
             </el-header>
             <!-- Mian Page     -->
@@ -45,12 +57,14 @@
 <script>
 import { Meteor } from "meteor/meteor";
 import moment from "moment";
-import _ from 'lodash';
+import _ from "lodash";
 
 import AsideMenu from "../AsideMenu.vue";
 import HeaderMenu from "../HeaderMenu.vue";
-import AsideMenuUser from '../AsideMenuUser.vue';
+import AsideMenuUser from "../AsideMenuUser.vue";
 
+import { appLog } from "../../api/app-logs/methods.js";
+import { mapState, mapGetters } from "vuex";
 export default {
   name: "MainLayout",
   components: {
@@ -67,6 +81,9 @@ export default {
     };
   },
   computed: {
+    fullName() {
+      return this.$store.getters["app/fullName"];
+    },
     headerTitle() {
       let title = "No TiTle";
       title = this.$route.meta.headerTitle
@@ -81,6 +98,33 @@ export default {
         : this.$route.name;
     }
   },
+  methods: {
+    // handleMenuSelect(name) {
+    //   this.$router.push({ name });
+    // },
+    handleUser(name) {
+      // console.log(name);
+      // this[name]();
+    },
+    _profile() {
+      this.$Message.info("Prfile is clicked");
+    },
+    _logout() {
+      appLog
+        .callPromise({ title: "LOG", level: "LOGOUT", data: { logout: true } })
+        .then(result => {
+          if (result) {
+            Meteor.logout(() => {
+              this.$message.success("You are logout!");
+              this.$router.push({ name: "login" });
+            });
+          }
+        })
+        .catch(err => {
+          this.$notify.error(err.reason);
+        });
+    }
+  }
 };
 </script>
 
@@ -131,9 +175,9 @@ export default {
   padding: 15px 0 10px;
 }
 .header-title {
-        font-size: 24px;
-        font-weight: 300; 
-        color: rgb(17, 17, 17);
-        /* // margin: 5px 0px 17px; */
-    }
+  font-size: 24px;
+  font-weight: 300;
+  color: rgb(17, 17, 17);
+  /* // margin: 5px 0px 17px; */
+}
 </style>

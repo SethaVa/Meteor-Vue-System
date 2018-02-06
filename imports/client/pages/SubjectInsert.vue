@@ -13,11 +13,15 @@
             <el-form-item label="Title" prop="title">
                 <el-input v-model="form.title" ref="title"></el-input>
             </el-form-item>
-            <el-form-item label="Type" prop="bookType">
-                <el-select v-model="form.bookType">
-                    <el-option v-for="doc in bookTypeOpts" :key="doc.value" :label="doc.lable" :value="doc.value"></el-option>
+            <el-form-item label="Level" prop="level">
+                <el-input v-model="form.title" ref="level"></el-input>
+            </el-form-item>
+            <el-form-item label="Type" prop="typeId">
+                <el-select v-model="form.typeId">
+                    <el-option v-for="doc in typeIdOpts" :key="doc._id" :label="doc.type" :value="doc._id"></el-option>
                 </el-select>
             </el-form-item>
+
         </el-form>
 
         <span slot="footer" class="dialog-footer">
@@ -29,57 +33,50 @@
 </template>
 
 <script>
-import {updateBook,findOneBook} from '../../api/books/methods.js';
+import {insertSubject} from '../../api/subject/methods.js';
+import {findType, removeType} from '../../api/types/methods.js';
 export default {
   name: "book-new",
-  meta:{
-      title:'Book'
-  },
-  props:['updateId'],
   data() {
     return {
-      bookTypeOpts: [
-        { label: "Full Time", value: "Full Time" },
-        { label: "Part Time", value: "Part Time" }
-      ],
+      typeIdOpts: [],
       form: {
         code: "",
         title: "",
-        bookType: ""
+        typeId: ""
       },
       rules: {
         code: [{ required: true }],
         title: [{ required: true }],
-        bookType: [{ required: true }]
+        typeId: [{ required: true }]
       }
     };
   },
   mounted(){
-      this.getData();
+      this.getTypeData();
   },
   methods: {
-      getData(){
-          let id = this.updateId
-          findOneBook.callPromise({selector:id}).then(result=>{
-              this.form = result
+      getTypeData(){
+          findType.callPromise({}).then(result=>{
+              this.typeIdOpts=result
           }).catch(err=>{
-              this.$message(err.reason)
+              this.$message.error(err.reason)
           })
       },
     handleSave() {
         this.$refs['form'].validate(valid=>{
             if(valid){
-                updateBook.callPromise(this.form).then(result=>{
+                insertSubject.callPromise(this.form).then(result=>{
                     this.$message({
                         message:"Save Success",
                         type:'success'
                     })
-                    this.handleClose();
+                    this.resetform();
                 }).catch(error=>{
                     this.$message(error.reason)
                 })
             }else{
-                return false;
+                return false
             }
         })
     },

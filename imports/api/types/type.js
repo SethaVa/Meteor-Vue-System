@@ -1,10 +1,10 @@
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 
-const Rooms = new Mongo.Collection('rooms');
+const Type = new Mongo.Collection('types');
 
-Rooms.schema = new SimpleSchema({
-    roomName:{
+Type.schema = new SimpleSchema({
+    type:{
         type:String
     },
     des:{
@@ -16,6 +16,6 @@ Rooms.schema = new SimpleSchema({
     }
 });
 
-Rooms.attachSchema(Rooms.schema);
+Type.attachSchema(Type.schema);
 
-export default Rooms;
+export default Type;

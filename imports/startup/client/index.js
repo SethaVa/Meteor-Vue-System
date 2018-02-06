@@ -28,6 +28,12 @@ Vue.use(DataTables)
 import Meta from 'vue-meta';
 Vue.use(Meta);
 
+//---------- Vuex Store ----------
+import store from '../../client/store/index';
+
+//---------- NProgress ----------
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 // ---------------create router--------------
 import routes from './routes';
@@ -41,9 +47,32 @@ const router = new VueRouter({
 import App from '../../client/layouts/AppLayout.vue';
 
 Meteor.startup(() => {
+// Before each
+router.beforeEach((to, from, next) => {
+    NProgress.start();
 
+    if (!to.meta.notRequiresAuth) {
+        // Check user
+        if (!Meteor.loggingIn() && !Meteor.userId()) {
+            next({path: '/login'});
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+
+// After each
+router.afterEach((to, from) => {
+    NProgress.done();
+});
+
+
+    // Start vue
     new Vue({
         router,
+        store,
         ...App
     }).$mount('app');
 })

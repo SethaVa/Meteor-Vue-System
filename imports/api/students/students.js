@@ -5,15 +5,10 @@ const Students = new Mongo.Collection('students');
 
 Students.schema = new SimpleSchema({
     name: {
-        type: Object
+        type: String
     },
-    'name.first': {
-        type: String,
-        required: true
-    },
-    'name.last': {
-        type: String,
-        required: true
+    khName:{
+        type:String,
     },
     gender: {
         type: String,
@@ -26,6 +21,9 @@ Students.schema = new SimpleSchema({
     tel: {
         type: String,
         required: true
+    },
+    studentType:{
+        type:String
     }
 });
 

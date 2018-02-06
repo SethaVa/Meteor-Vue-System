@@ -5,11 +5,11 @@ import { RestMethodMixin } from 'meteor/simple:rest-method-mixin';
 import SimpleSchema from 'simpl-schema';
 
 
-import Books from './book';
+import Subject from './subjects';
 
 // Find 
-export const findBook = new ValidatedMethod({
-    name: 'findBook',
+export const findSubject = new ValidatedMethod({
+    name: 'findSubject',
     mixins: [CallPromiseMixin],
     validate: null,
     run({ selector, options }) {
@@ -17,14 +17,14 @@ export const findBook = new ValidatedMethod({
             selector = selector || {};
             options = options || {};
 
-            return Books.find(selector, options).fetch();
+            return Subject.find(selector, options).fetch();
         }
     }
 });
 
 // Find One
-export const findOneBook = new ValidatedMethod({
-    name: 'findOneBook',
+export const findOneSubject = new ValidatedMethod({
+    name: 'findOneSubject',
     mixins: [CallPromiseMixin],
     validate: null,
     run({ selector, options }) {
@@ -32,43 +32,43 @@ export const findOneBook = new ValidatedMethod({
             selector = selector || {};
             options = options || {};
 
-            return Books.findOne(selector, options);
+            return Subject.findOne(selector, options);
         }
     }
 });
 
 // Insert 
-export const insertBook = new ValidatedMethod({
-    name: 'insertBook',
+export const insertSubject = new ValidatedMethod({
+    name: 'insertSubject',
     mixins: [CallPromiseMixin],
     validate: null,
     run(doc) {
         if (Meteor.isServer) {
-            return Books.insert(doc);
+            return Subject.insert(doc);
         }
     }
 });
 
 // Update
-export const updateBook = new ValidatedMethod({
-    name: 'updateBook',
+export const updateSubject = new ValidatedMethod({
+    name: 'updateSubject',
     mixins: [CallPromiseMixin],
     validate: null,
     run(doc) {
         if (Meteor.isServer) {
-            return Books.update({ _id: doc._id }, { $set: doc });
+            return Subject.update({ _id: doc._id }, { $set: doc });
         }
     }
 });
 
 // Remove
-export const removeBook = new ValidatedMethod({
-    name: 'removeBook',
+export const removeSubject = new ValidatedMethod({
+    name: 'removeSubject',
     mixins: [CallPromiseMixin],
     validate: null,
     run(selector) {
         if (Meteor.isServer) {
-            return Books.remove(selector);
+            return Subject.remove(selector);
         }
     }
 });

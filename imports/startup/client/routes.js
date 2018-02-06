@@ -1,11 +1,11 @@
 import  _ from 'lodash';
 
 import RouterAdmin from '../../client/routes';
-import RouterUser from '../../client/routesUser';
+// import RouterUser from '../../client/routesUser';
 
 const routes = _.concat(
     RouterAdmin,
-    RouterUser
+    // RouterUser
 );
 
 export default routes;
