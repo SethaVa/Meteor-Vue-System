@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-dialog 
-        title="Edit Teacher" 
+        title="Edit Staff" 
         width="80%"  
         :visible="true" 
         :before-close="handleClose"
@@ -9,28 +9,39 @@
         <el-form :model="form" :rules="rules" ref="form" label-position="left" label-width="150px">
             <el-row :gutter="10">
                 <el-col :span="12">
-                    <el-form-item label="First Name" prop="first">
-                        <el-input v-model="form.first" ></el-input>
+                    <el-form-item label="Name" prop="name">
+                        <el-input v-model="form.name" ></el-input>
                     </el-form-item>
-                    <el-form-item label="Last Name" prop="last">
-                        <el-input v-model="form.last" ></el-input>
-                    </el-form-item>
-                    <el-form-item label="Gender" >
-                    <el-select v-model="form.gender" placeholder="Please Gender">
-                        <el-option label="Male" value="Male"></el-option>
-                        <el-option label="Female" value="Female"></el-option>
+                    <el-form-item label="Gender" prop="gender">
+                    <el-select v-model="form.gender">
+                      <el-option
+                        v-for="item in genderOpts"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
                     </el-select>
+                    </el-form-item>
+                    <el-form-item label="Date of Birth" prop="dob">
+                        <el-date-picker v-model="form.dob" type="date"></el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="Date of Birth">
-                        <el-date-picker v-model="form.dob" type="date"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="Email">
+                    <el-form-item label="Email" prop="email">
                         <el-input v-model="form.email"></el-input>
                     </el-form-item>
-                    <el-form-item label="Telephone">
+                    <el-form-item label="Telephone" prop="tel">
                         <el-input v-model="form.tel"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Position" prop="positionId">
+                        <el-select v-model="form.positionId">
+                          <el-option
+                            v-for="doc in positionIdOpts"
+                            :key="doc._id"
+                            :label="doc.position"
+                            :value="doc._id"
+                          ></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -46,33 +57,46 @@
 
 <script>
 import {findOneStaff,updateStaff} from '../../api/Staffs/methods.js';
-
+import {findPosition} from '../../api/positions/methods.js';
+import Lookup from '../libs/Lookup-Value.js';
 export default {
   name: "StaffInsert",
   props: ['updateId','visible'],
   data() {
     return {
       dialogFormVisible: false,
-      form: {
-        first: "",
-        last: "",
-        gender: "",
-        dob: "",
-        email: '',
-        tel: '',
-      },
+      positionIdOpts:[],
+      genderOpts:Lookup.gender,
+      form: {},
       rules:{
-          first:[
-              {required:true,message:'Please Input First Name',trigger:'blur'}
-          ],
-          last:[
-              {required:true,message:'Please Input Last Name',trigger:'blur'}
-          ]
+          name: [
+          {
+            required: true,
+            message: "Please Input Name",
+            trigger: "blur"
+          }
+        ],
+        positionId: [
+          { required: true, message: "Please select Position", trigger: "change" }
+        ],
+        gender:[
+            {required:true}
+        ],
+        dob:[
+            {required:true}
+        ],
+        email:[
+            {required:true}
+        ],
+        tel:[
+            {required:true}
+        ],
       }
     };
   },
   mounted(){
-      this.getData()
+      this.getData();
+      this.getPositionData();
   },
   methods:{
       getData(){
@@ -107,7 +131,18 @@ export default {
       },
       resetForm(){
           this.$refs['from'].resetFields();
+      },
+      getPositionData(){
+      let selector={
+        status:'Active'
       }
+      findPosition.callPromise({selector:selector}).then(result=>{
+        this.positionIdOpts = result;
+        console.log(result)
+      }).catch(error=>{
+        this.$message.error(error.reason)
+      })
+    },
   }
 };
 </script>
