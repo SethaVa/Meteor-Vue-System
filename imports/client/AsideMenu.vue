@@ -13,9 +13,13 @@
         <i class="fa fa-home"></i>
         <span>Book</span>
       </el-menu-item>
-      <el-menu-item index="teacher">
+        <el-menu-item index="position">
+          <i class="fa fa-home"></i>
+          <span>Position</span>
+        </el-menu-item>
+      <el-menu-item index="staff">
         <i class="fa fa-home"></i>
-        <span>Teacher</span>
+        <span>Staff</span>
       </el-menu-item>
       <el-menu-item index="room">
         <i class="fa fa-home"></i>

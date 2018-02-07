@@ -9,9 +9,10 @@ import Login from './pages/Login.vue';
 // import StudentInsert from './pages/StudentInsert.vue';
 // import StudentUpdate from './pages/StudentUpdate.vue';
 
-// Teacher
-import Teacher from './pages/Teacher.vue';
-
+// Staff
+import Staff from './pages/Staff.vue';
+// Position
+import Position from './pages/Position';
 // Subject
 import Subject from './pages/Subject.vue';
 
@@ -56,10 +57,17 @@ const routes = [
                 name: 'welcome',
                 component: welcome
             },
+            // Staff
             {
-                path: 'teacher',
-                name: 'teacher',
-                component: Teacher
+                path: 'staff',
+                name: 'staff',
+                component: Staff
+            },
+            // Position
+            {
+                path:'position',
+                name:'position',
+                component:Position
             },
             // Book
             {
@@ -67,11 +75,13 @@ const routes = [
                 name: 'book',
                 component: Subject
             },
+            // room
             {
                 path: 'room',
                 name: 'room',
                 component: Room
             },
+            // type
             {
                 path:'type',
                 name:'type',

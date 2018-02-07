@@ -9,27 +9,39 @@
         <el-form :model="form" :rules="rules" ref="form" label-position="left" label-width="100px">
             <el-row :gutter="10">
                 <el-col :span="12">
-                    <el-form-item label="First Name" prop="first">
-                        <el-input v-model="form.first" ref="first" ></el-input>
-                    </el-form-item>
-                    <el-form-item label="Last Name" prop="last">
-                        <el-input v-model="form.last" ref="last" ></el-input>
+                    <el-form-item label="Name" prop="name">
+                        <el-input v-model="form.name" ref="name" ></el-input>
                     </el-form-item>
                     <el-form-item label="Gender" prop="gender" ref="gender">
-                    <el-radio-group v-model="form.gender">
-                        <el-radio v-for="doc in genderOpt" :key="doc.value" :label="doc.label" :value="doc.value"></el-radio>
-                    </el-radio-group>
+                    <el-select v-model="form.gender">
+                      <el-option
+                        v-for="item in genderOpts"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
+                    </el-select>
                     </el-form-item>
-                </el-col>
-                <el-col :span="12">
                     <el-form-item label="Date of Birth" prop="dob" >
                         <el-date-picker style="width:100%" v-model="form.dob" type="date"></el-date-picker>
                     </el-form-item>
+                </el-col>
+                <el-col :span="12">
                     <el-form-item label="Email" prop="email">
                         <el-input v-model="form.email"></el-input>
                     </el-form-item>
                     <el-form-item label="Telephone" prop="tel">
                         <el-input v-model="form.tel"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Position" prop="positionId">
+                        <el-select v-model="form.positionId">
+                          <el-option
+                            v-for="doc in positionIdOpts"
+                            :key="doc._id"
+                            :label="doc.position"
+                            :value="doc._id"
+                          ></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -44,35 +56,35 @@
 </template>
 
 <script>
-import { insertTeacher } from "../../api/Teachers/methods.js";
-
+import { insertStaff, findStaff } from "../../api/Staffs/methods.js";
+import {findPosition} from '../../api/positions/methods';
+import Lookup from '../libs/Lookup-Value.js';
+const moment = require('moment');
 export default {
   name: "employeeInsert",
   props: ["visible"],
   data() {
     return {
-      genderOpt: [
-        { label: "Male", value: "M" },
-        { label: "Female", value: "F" }
-      ],
+      genderOpts: Lookup.gender,
+      positionIdOpts:[],
       form: {
-        first: "",
-        last: "",
+        name: "",
         gender: "",
         dob: "",
         email: "",
-        tel: ""
+        tel: "",
+        positionId:''
       },
       rules: {
-        first: [
+        name: [
           {
             required: true,
-            message: "Please Input First Name",
+            message: "Please Input Name",
             trigger: "blur"
           }
         ],
-        last: [
-          { required: true, message: "Please Input Last Name", trigger: "blur" }
+        positionId: [
+          { required: true, message: "Please select Position", trigger: "change" }
         ],
         gender:[
             {required:true}
@@ -89,11 +101,14 @@ export default {
       }
     };
   },
+  mounted(){
+    this.getPositionData();
+  },
   methods: {
     handleSave() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          insertTeacher
+          insertStaff
             .callPromise(this.form)
             .then(result => {
               this.$message({
@@ -109,6 +124,17 @@ export default {
           return false;
         }
       });
+    },
+    getPositionData(){
+      let selector={
+        status:'Active'
+      }
+      findPosition.callPromise({selector:selector}).then(result=>{
+        this.positionIdOpts = result;
+        console.log(result)
+      }).catch(error=>{
+        this.$message.error(error.reason)
+      })
     },
     handleClose() {
       this.$emit("modal-close");

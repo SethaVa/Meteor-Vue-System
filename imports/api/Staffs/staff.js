@@ -1,14 +1,10 @@
 import {Mongo} from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 
-const Employees = new Mongo.Collection('employees');
+const Staff = new Mongo.Collection('staff');
 
-Employees.schema = new SimpleSchema({
-    first:{
-        type:String,
-        required:true
-    },
-    last:{
+Staff.schema = new SimpleSchema({
+    name:{
         type:String,
         required:true
     },
@@ -26,8 +22,11 @@ Employees.schema = new SimpleSchema({
     tel:{
         type:String
     },
+    positionId:{
+        type:String
+    }
 });
 
-Employees.attachSchema(Employees.schema);
+Staff.attachSchema(Staff.schema);
 
-export default Employees;
+export default Staff;

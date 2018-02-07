@@ -45,10 +45,10 @@
 </template>
 
 <script>
-import {findOneTeacher,updateTeacher} from '../../api/Teachers/methods.js';
+import {findOneStaff,updateStaff} from '../../api/Staffs/methods.js';
 
 export default {
-  name: "TeacherInsert",
+  name: "StaffInsert",
   props: ['updateId','visible'],
   data() {
     return {
@@ -77,7 +77,7 @@ export default {
   methods:{
       getData(){
           let _id = this.updateId;
-          findOneTeacher.callPromise({selector:_id}).then(result=>{
+          findOneStaff.callPromise({selector:_id}).then(result=>{
               this.form = result
           }).catch(err=>{
               console.log(err.reason)
@@ -88,7 +88,7 @@ export default {
               if(valid){
                   let doc = this.form
                   doc._id = this.updateId;
-                  updateTeacher.callPromise(doc).then(result=>{
+                  updateStaff.callPromise(doc).then(result=>{
                       this.$message({
                           message:'Update Successfull',
                           type:'success'

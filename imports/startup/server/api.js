@@ -21,15 +21,11 @@ import '../../api/counters/server/publications';
 
 
 //Student
-// import '../../api/students/methods';
-// import '../../api/students/server/publications';
-// import '../../api/students/server/collection-hook';
 import '../../api/students/server/index.js';
 
-// Employee
-import '../../api/Teachers/methods';
-import '../../api/Teachers/server/collection-hook';
-import '../../api/Teachers/server/publications';
+// Staff
+import '../../api/Staffs/server/index';
+
 
 // Book
 import '../../api/subject/methods';
@@ -46,3 +42,5 @@ import '../../api/types/methods';
 import '../../api/types/server/collection-hook';
 import '../../api/types/server/publications';
 
+// Postion of Employee
+import  '../../api/positions/server/index';

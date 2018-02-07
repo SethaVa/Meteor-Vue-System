@@ -10,7 +10,7 @@ import welcome from './pages/Welcome.vue';
 // import StudentUpdate from './pages/StudentUpdate.vue';
 
 // Teacher
-import Teacher from './pages/Teacher.vue';
+import Teacher from './pages/Staff.vue';
 
 // book
 import BookList from './pages/Book.vue';
