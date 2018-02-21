@@ -1,10 +1,8 @@
 <template>
   <div>
-      <el-menu 
-        :default-active="activeMenu"
-        @select="handleMenuSelect" 
-        text-color="#fff"
-    >
+    <el-menu :default-active="activeMenu"
+             @select="handleMenuSelect"
+             text-color="#fff">
       <el-menu-item index="home">
         <i class="fa fa-home"></i>
         <span>Home</span>
@@ -32,14 +30,14 @@
 
 <script>
 export default {
-  name: "aside-menuUser",
-  props: ["activeMenu"],
+  name: 'aside-menuUser',
+  props: ['activeMenu'],
   methods: {
     handleMenuSelect(name) {
-      this.$router.push({ name: name });
+      this.$router.push({ name: name })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

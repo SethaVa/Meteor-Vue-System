@@ -62,11 +62,11 @@ export const removeType = new ValidatedMethod({
     name:'removeType',
     mixins:[CallPromiseMixin],
     validate: new SimpleSchema({
-        _id:{type:String}
+        id:{type:String}
     }).validator(),
-    run(selector){
+    run({id}){
         if(Meteor.isServer){    
-            return Type.remove(selector)
+            return Type.remove({_id:id})
         }
     }
 });

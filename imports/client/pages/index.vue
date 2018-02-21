@@ -6,10 +6,11 @@
 </template>
 Ï
 <script>
-    export default {
-        name: 'Index',
-    }
+export default {
+  name: 'Index'
+}
 </script>
 
 <style lang="scss" scoped>
+
 </style>

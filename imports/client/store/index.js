@@ -1,15 +1,15 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 // State
-import app from './app';
+import app from './app'
 
 const store = new Vuex.Store({
-    modules: {
-        app: app,
-    }
-});
+  modules: {
+    app: app,
+  },
+})
 
-export default store;
+export default store

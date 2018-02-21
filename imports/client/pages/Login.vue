@@ -1,71 +1,94 @@
 <template>
   <div>
-      <div class="box">
-        <el-form :model="form" :rules="rules" ref="form">
-            <el-form-item>
-                <el-input v-model="form.email" autofocus ref="username"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-input type="password" v-model="form.password" ref="password"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button style="width:100%" @click="submitForm" type="primary">Login</el-button>
-            </el-form-item>
-        </el-form>
-      </div>
+    <div class="box">
+      <el-form :model="form"
+               :rules="rules"
+               ref="form">
+        <el-form-item>
+          <el-input v-model="form.email"
+                    autofocus
+                    ref="username"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="password"
+                    v-model="form.password"
+                    ref="password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button style="width:100%"
+                     @click="submitForm"
+                     type="primary">Login</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
-import { Meteor } from "meteor/meteor";
-import _ from 'lodash';
-import {appLog} from '../../api/app-logs/methods.js';
-
+import { Meteor } from 'meteor/meteor'
+import _ from 'lodash'
+import { appLog } from '../../api/app-logs/methods.js'
+import { mapState } from 'vuex'
 export default {
-  name: "login",
+  name: 'Login',
   data() {
     return {
       form: {
-        email: "",
-        password: ""
+        email: '',
+        password: '',
       },
-      rules: {}
-    };
+      rules: {},
+    }
+  },
+  computed: {
+    ...mapState({
+      currentUser(state) {
+        return state.app.currentUser
+      },
+    }),
+  },
+  watch: {
+    currentUser(val) {
+      // Check user logged in
+      if (val) {
+        this.finishProgress('success', 1000)
+      }
+    },
   },
   methods: {
     submitForm() {
       if (!(this.form.email && this.form.password)) {
-        this.$message.warning("Please input username/email and password!");
+        this.$message.warning('Please input username/email and password!')
       } else {
         Meteor.loginWithPassword(this.form.email, this.form.password, err => {
           if (err) {
-            this.$message.error("Username/Email or Password is invalid!");
-            this.$refs.email.$el.querySelector("input").focus();
+            this.$message.error('Username/Email or Password is invalid!')
+            this.$refs.email.$el.querySelector('input').focus()
           } else {
             // log
             appLog
               .callPromise({
-                level: "LOGIN",
-                title: "LOG",
-                data: { login: true }
+                level: 'LOGIN',
+                title: 'LOG',
+                data: { login: true },
               })
               .then(result => {
                 if (result) {
-                  this.$store.commit("app/updateCurrentUser", Meteor.user());
-                  this.$message.success("You are login!");
-                  this.$router.push({ name: "home" });
+                  this.$store.commit('app/updateCurrentUser', Meteor.user())
+                  this.$message.success('You are login!')
+                  this.$router.push({ name: 'home' })
                 }
               })
               .catch(err => {
-                console.log(err.reason);
-                this.$notify.error(err.reason);
-              });
+                console.log(err.reason)
+                this.$notify.error(err.reason)
+              })
           }
-        });
+        })
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style>

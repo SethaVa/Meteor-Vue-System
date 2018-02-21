@@ -1,39 +1,33 @@
 <template>
   <div>
 
-      <component
-        :is="currentDialog"
-        :visible="visibleDialog"
-        :update-id="updateId"
-        @modal-close="handleClose"
-      ></component>
+    <component :is="currentDialog"
+               :visible="visibleDialog"
+               :update-id="updateId"
+               @modal-close="handleClose"></component>
 
-      <!-- Table Data -->
-      <data-tables
-        :data="tableData"
-        :action-col-def="actionColDef"
-        :actions-def="actionsDef"
-        :table-prop="tableProp"
-      >
-      <el-table-column
-        v-for="title in titles" 
-        :key="title.value"
-        :label="title.label"
-        :prop="title.prop"
-        :sortable="title.sort"
-      ></el-table-column>
+    <!-- Table Data -->
+    <data-tables :data="tableData"
+                 :action-col-def="actionColDef"
+                 :actions-def="actionsDef"
+                 :table-prop="tableProp">
+      <el-table-column v-for="title in titles"
+                       :key="title.value"
+                       :label="title.label"
+                       :prop="title.prop"
+                       :sortable="title.sort"></el-table-column>
 
-      </data-tables>
+    </data-tables>
   </div>
 </template>
 
 <script>
-import RoomInsert from "./RoomInsert.vue";
-import RoomUpdate from './RoomUpdate.vue';
-import { findRoom, removeRoom } from "../../api/rooms/methods.js";
+import RoomInsert from './RoomInsert.vue'
+import RoomUpdate from './RoomUpdate.vue'
+import { findRoom, removeRoom } from '../../api/rooms/methods.js'
 export default {
-  name: "Room",
-  components: { RoomInsert,RoomUpdate },
+  name: 'Room',
+  components: { RoomInsert, RoomUpdate },
   data() {
     return {
       currentDialog: null,
@@ -41,12 +35,12 @@ export default {
       updateId: null,
       tableData: [],
       titles: [
-        { label: "ID", prop: "_id", sort: "custom" },
-        { label: "Name", prop: "roomName", sort: "custom" },
-        { label: "Describe", prop: "des" }
+        { label: 'ID', prop: '_id', sort: 'custom' },
+        { label: 'Name', prop: 'roomName', sort: 'custom' },
+        { label: 'Describe', prop: 'des' }
       ],
       tableProp: {
-        size: "mini"
+        size: 'mini'
       },
       actionsDef: {
         colProps: {
@@ -54,79 +48,79 @@ export default {
         },
         def: [
           {
-            name: "new",
-            icon: "el-icon-plus",
+            name: 'new',
+            icon: 'el-icon-plus',
             handler: () => {
-              this.currentDialog = RoomInsert;
+              this.currentDialog = RoomInsert
             }
           }
         ]
       },
       actionColDef: {
-        label: "Action",
-        width: "100",
+        label: 'Action',
+        width: '100',
         def: [
           {
-            icon: "el-icon-edit",
+            icon: 'el-icon-edit',
             handler: row => {
-                this.updateId = row._id;
-                this.currentDialog = RoomUpdate;
+              this.updateId = row._id
+              this.currentDialog = RoomUpdate
             }
           },
           {
-            icon: "el-icon-delete",
+            icon: 'el-icon-delete',
             handler: row => {
-              let id = row._id;
-              this.$confirm("Do you want delete this record?", "Warning")
+              let id = row._id
+              this.$confirm('Do you want delete this record?', 'Warning')
                 .then(result => {
                   removeRoom
                     .callPromise(id)
                     .then(result => {
                       this.$message({
-                        message: "Delete Successfull",
-                        type: "success"
-                      });
+                        message: 'Delete Successfull',
+                        type: 'success'
+                      })
                     })
                     .catch(err => {
-                      this.$message(err.reason);
-                    });
-                    this.getData();
+                      this.$message(err.reason)
+                    })
+                  this.getData()
                 })
                 .catch(err => {
-                    this.$message({
-                        message:'Cacel Delete',
-                        type:'error'
-                    })
-                });
+                  this.$message({
+                    message: 'Cacel Delete',
+                    type: 'error'
+                  })
+                })
             }
           }
         ]
       }
-    };
+    }
   },
   mounted() {
-    this.getData();
+    this.getData()
   },
   methods: {
     getData() {
       findRoom
         .callPromise({})
         .then(result => {
-          this.tableData = result;
+          this.tableData = result
         })
         .catch(err => {
-          this.$message(err.reason);
-        });
+          this.$message(err.reason)
+        })
     },
     handleClose() {
-      this.getData();
-      (this.visibleDialog = false),
+      this.getData()
+      ;(this.visibleDialog = false),
         this.$nextTick(() => {
-          this.currentDialog = null;
-        });
+          this.currentDialog = null
+        })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
