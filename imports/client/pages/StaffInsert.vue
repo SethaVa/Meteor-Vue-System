@@ -2,7 +2,7 @@
   <div>
     <el-dialog title="New Teacher"
                width="80%"
-               :visible="true"
+               :visible="visible"
                :before-close="handleClose">
       <el-form :model="form"
                :rules="rules"
@@ -66,13 +66,17 @@
 </template>
 
 <script>
-import { insertStaff, findStaff } from '../../api/Staffs/methods.js'
+import { insertStaff } from '../../api/Staffs/methods.js'
 import { findPosition } from '../../api/positions/methods'
 import Lookup from '../libs/Lookup-Value.js'
-const moment = require('moment')
 export default {
-  name: 'employeeInsert',
-  props: ['visible'],
+  name: 'EmployeeInsert',
+  props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       genderOpts: Lookup.gender,
@@ -83,28 +87,28 @@ export default {
         dob: '',
         email: '',
         tel: '',
-        positionId: ''
+        positionId: '',
       },
       rules: {
         name: [
           {
             required: true,
             message: 'Please Input Name',
-            trigger: 'blur'
-          }
+            trigger: 'blur',
+          },
         ],
         positionId: [
           {
             required: true,
             message: 'Please select Position',
-            trigger: 'change'
-          }
+            trigger: 'change',
+          },
         ],
         gender: [{ required: true }],
         dob: [{ required: true }],
         email: [{ required: true }],
-        tel: [{ required: true }]
-      }
+        tel: [{ required: true }],
+      },
     }
   },
   mounted() {
@@ -119,12 +123,12 @@ export default {
             .then(result => {
               this.$message({
                 message: 'Save Successfull',
-                type: 'success'
+                type: 'success',
               })
               this.handelresetForm()
             })
             .catch(err => {
-              console.log(err.reason)
+              this.$message.error(err.reason)
             })
         } else {
           return false
@@ -133,13 +137,12 @@ export default {
     },
     getPositionData() {
       let selector = {
-        status: 'Active'
+        status: 'Active',
       }
       findPosition
         .callPromise({ selector: selector })
         .then(result => {
           this.positionIdOpts = result
-          console.log(result)
         })
         .catch(error => {
           this.$message.error(error.reason)
@@ -150,8 +153,8 @@ export default {
     },
     handelresetForm() {
       this.$refs['form'].resetFields()
-    }
-  }
+    },
+  },
 }
 </script>
 
