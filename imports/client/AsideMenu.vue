@@ -7,9 +7,9 @@
         <i class="fa fa-home"></i>
         <span>Home</span>
       </el-menu-item>
-      <el-menu-item index="book">
+      <el-menu-item index="subject">
         <i class="fa fa-home"></i>
-        <span>Book</span>
+        <span>Subject</span>
       </el-menu-item>
       <el-menu-item index="position">
         <i class="fa fa-home"></i>
@@ -46,13 +46,13 @@
 
 <script>
 export default {
-  name: 'aside-menu',
+  name: 'AsideMenu',
   props: ['activeMenu'],
   methods: {
     handleMenuSelect(name) {
       this.$router.push({ name: name })
-    }
-  }
+    },
+  },
 }
 </script>
 

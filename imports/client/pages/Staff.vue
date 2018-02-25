@@ -8,7 +8,6 @@
     <data-tables :data="tableData"
                  :actions-def="actionsDef"
                  :action-col-def="actionColDef"
-                 :table-size="tableSize"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"

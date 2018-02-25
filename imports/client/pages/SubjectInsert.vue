@@ -20,13 +20,18 @@
                     ref="title"></el-input>
         </el-form-item>
         <el-form-item label="Level"
-                      prop="level">
-          <el-input v-model="form.level"
-                    ref="level"></el-input>
+                      prop="levelId">
+          <el-select v-model="form.levelId">
+            <el-option v-for="doc in levelOpts"
+                       :key="doc.value"
+                       :label="doc.label"
+                       :value="doc.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="Type"
                       prop="typeId">
-          <el-select clearable="true"
+          <el-select clearable
                      v-model="form.typeId">
             <el-option v-for="doc in typeIdOpts"
                        :key="doc._id"
@@ -35,7 +40,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Status">
-          <el-select clearable="true"
+          <el-select clearable
                      v-model="form.status">
             <el-option v-for="doc in statusOpts"
                        :key="doc.value"
@@ -56,32 +61,37 @@
 </template>
 
 <script>
+import Notify from '/imports/client/libs/notify'
+import MsgBox from '/imports/client/libs/message'
 import { insertSubject } from '../../api/subject/methods.js'
-import { findType, removeType } from '../../api/types/methods.js'
+import { findType } from '../../api/types/methods.js'
+import { findLevelStudyOpts } from '../../api/level/methods'
 import Lookup from '../libs/Lookup-Value.js'
 export default {
-  name: 'book-new',
+  name: 'BookNew',
   data() {
     return {
       typeIdOpts: [],
+      levelOpts: [],
       statusOpts: Lookup.status,
       form: {
         code: '',
         title: '',
         typeId: '',
-        level: '',
-        status: ''
+        levelId: '',
+        status: '',
       },
       rules: {
         code: [{ required: true }],
         title: [{ required: true }],
         typeId: [{ required: true }],
-        level: [{ required: true }]
-      }
+        levelId: [{ required: true }],
+      },
     }
   },
   mounted() {
     this.getTypeData()
+    this.getLevelData()
   },
   methods: {
     getTypeData() {
@@ -94,6 +104,16 @@ export default {
           this.$message.error(err.reason)
         })
     },
+    getLevelData() {
+      findLevelStudyOpts
+        .callPromise({})
+        .then(result => {
+          this.levelOpts = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
@@ -102,7 +122,7 @@ export default {
             .then(result => {
               this.$message({
                 message: 'Save Success',
-                type: 'success'
+                type: 'success',
               })
               this.resetform()
             })
@@ -119,8 +139,8 @@ export default {
     },
     resetform() {
       this.$refs['form'].resetFields()
-    }
-  }
+    },
+  },
 }
 </script>
 

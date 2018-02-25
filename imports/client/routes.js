@@ -71,8 +71,8 @@ const routes = [
       },
       // Book
       {
-        path: 'book',
-        name: 'book',
+        path: 'subject',
+        name: 'subject',
         component: Subject,
       },
       // room

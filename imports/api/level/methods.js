@@ -3,7 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
-
+import _ from 'lodash'
 import leveleStudy from './level'
 
 export const findLeveleStudy = new ValidatedMethod({
@@ -15,6 +15,27 @@ export const findLeveleStudy = new ValidatedMethod({
       selector = selector || {}
       options = options || {}
       let data = leveleStudy.find(selector, options).fetch()
+      return data
+    }
+  },
+})
+//find for Options
+export const findLevelStudyOpts = new ValidatedMethod({
+  name: 'findlevelStudyOpt',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ selector, options }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      options = options || {}
+      let data = []
+      let level = leveleStudy.find(selector, options).fetch()
+      _.forEach(level, o => {
+        data.push({
+          label: o.leveleStudy,
+          value: o._id,
+        })
+      })
       return data
     }
   },
