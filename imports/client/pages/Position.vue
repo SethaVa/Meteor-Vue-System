@@ -1,7 +1,7 @@
 <template>
   <div>
     <component :is="currentModal"
-               :update-id="updateId"
+               :update-doc="updateDoc"
                :visible="modalVisible"
                @modal-close="handleModalClose">
     </component>
@@ -10,7 +10,6 @@
                  :actions-def="actionsDef"
                  :action-col-def="actionColDef"
                  :table-size="tableSize"
-                 :pagination-def="paginationDef"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
@@ -32,44 +31,41 @@ export default {
   name: 'Position',
   component: {
     PositionInsert,
-    PositionUpdate
+    PositionUpdate,
   },
   data() {
     return {
       currentModal: null,
       modalVisible: false,
-      updateId: null,
+      updateDoc: null,
       tableSize: 'mini',
       tableData: [],
       titles: [
         { label: 'ID', prop: '_id', sort: 'custom' },
         { label: 'Position', prop: 'position', sort: 'custom' },
         { label: 'Description', prop: 'des' },
-        { label: 'Status', prop: 'status' }
+        { label: 'Status', prop: 'status' },
       ],
       tableProps: {
-        size: 'small'
-      },
-      paginationDef: {
-        pageSize: 1,
-        pageSizes: [5, 10, 20]
+        size: 'small',
       },
       actionsDef: {
         colProps: {
-          span: 19
+          span: 19,
         },
         def: [
           {
             name: 'New',
             icon: 'el-icon-plus',
             buttonProps: {
-              size: 'mini'
+              size: 'mini',
             },
             handler: () => {
+              this.modalVisible = true
               this.currentModal = PositionInsert
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       actionColDef: {
         label: 'Action',
@@ -77,9 +73,10 @@ export default {
           {
             icon: 'el-icon-edit',
             handler: row => {
-              this.updateId = row._id
+              this.updateDoc = row
+              this.modalVisible = true
               this.currentModal = PositionUpdate
-            }
+            },
           },
           {
             icon: 'el-icon-delete',
@@ -102,13 +99,13 @@ export default {
                 .catch(() => {
                   this.$message({
                     message: 'Delete Cancel',
-                    type: 'error'
+                    type: 'error',
                   })
                 })
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     }
   },
   mounted() {
@@ -126,7 +123,7 @@ export default {
         })
     },
     dialog() {
-      console.log(this.currentModal)
+      this.$message.error(this.currentModal)
     },
     handleModalClose() {
       this.getData()
@@ -137,8 +134,8 @@ export default {
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')
-    }
-  }
+    },
+  },
 }
 </script>
 

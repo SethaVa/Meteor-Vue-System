@@ -2,7 +2,7 @@
   <div>
     <el-dialog title="Edit Teacher"
                width="80%"
-               :visible="true"
+               :visible="visible"
                :before-close="handleClose">
       <el-form :model="form"
                :rules="rules"
@@ -49,16 +49,26 @@
 </template>
 
 <script>
-import { findOnePosition, updatePosition } from '../../api/positions/methods.js'
+import { updatePosition } from '../../api/positions/methods.js'
 import lookupValue from '../../client/libs/Lookup-Value'
+import _ from 'lodash'
 export default {
   name: 'PositionUpdate',
-  props: ['updateId', 'visible'],
+  props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+    updateDoc: {
+      type: Object,
+      default: null,
+    },
+  },
   data() {
     return {
       dialogFormVisible: false,
       statusOpts: lookupValue.status,
-      form: {},
+      form: this.updateDoc,
       rules: {
         position: [
           {
@@ -70,38 +80,25 @@ export default {
       },
     }
   },
-  mounted() {
-    this.getData()
-  },
   methods: {
-    getData() {
-      let _id = this.updateId
-      findOnePosition
-        .callPromise({ selector: _id })
-        .then(result => {
-          this.form = result
-          console.log(result)
-        })
-        .catch(err => {
-          console.log(err.reason)
-        })
-    },
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          let doc = this.form
-          doc._id = this.updateId
+          // Pick data
+          const doc = _.pick(this.form, ['_id', 'position', 'status', 'des'])
           updatePosition
             .callPromise(doc)
             .then(result => {
-              this.$message({
-                message: 'Update Successfull',
-                type: 'success',
-              })
-              this.handleClose()
+              if (result) {
+                this.$message({
+                  message: 'Update Successfull',
+                  type: 'success',
+                })
+                this.handleClose()
+              }
             })
             .catch(err => {
-              console.log(err.reason)
+              this.$message.console.error(err.reason)
             })
         } else {
           return false
