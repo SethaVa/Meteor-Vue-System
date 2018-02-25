@@ -2,7 +2,7 @@
   <div>
     <el-dialog width="70%"
                title="New Book"
-               :visible="true"
+               :visible="visible"
                :before-close="handleClose">
       <el-form :model="form"
                ref="form"
@@ -19,13 +19,33 @@
           <el-input v-model="form.title"
                     ref="title"></el-input>
         </el-form-item>
+        <el-form-item label="Level"
+                      prop="levelId">
+          <el-select v-model="form.levelId">
+            <el-option v-for="doc in levelOpts"
+                       :key="doc.value"
+                       :label="doc.label"
+                       :value="doc.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="Type"
                       prop="typeId">
-          <el-select v-model="form.typeId">
+          <el-select clearable
+                     v-model="form.typeId">
             <el-option v-for="doc in typeIdOpts"
                        :key="doc._id"
                        :label="doc.type"
                        :value="doc._id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Status">
+          <el-select clearable
+                     v-model="form.status">
+            <el-option v-for="doc in statusOpts"
+                       :key="doc.value"
+                       :label="doc.label"
+                       :value="doc.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -41,35 +61,43 @@
 </template>
 
 <script>
-import { findType, removeType } from '../../api/types/methods.js'
-import { updateSubject, findOneSubject } from '../../api/subject/methods.js'
+import Notify from '/imports/client/libs/notify'
+import MsgBox from '/imports/client/libs/message'
+import Lookup from '../libs/Lookup-Value.js'
+import { findType } from '../../api/types/methods.js'
+import { findLevelStudyOpts } from '../../api/level/methods'
+import { updateSubject } from '../../api/subject/methods.js'
 export default {
-  name: 'book-new',
+  name: 'BookNew',
   meta: {
-    title: 'Book'
+    title: 'Book',
   },
-  props: ['updateId'],
+  props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+    updateDoc: {
+      type: Object,
+      default: null,
+    },
+  },
   data() {
     return {
-      typeIdOpts: [
-        { label: 'Full Time', value: 'Full Time' },
-        { label: 'Part Time', value: 'Part Time' }
-      ],
-      form: {
-        code: '',
-        title: '',
-        typeId: ''
-      },
+      typeIdOpts: [],
+      levelOpts: [],
+      statusOpts: Lookup.status,
+      form: this.updateDoc,
       rules: {
         code: [{ required: true }],
         title: [{ required: true }],
-        typeId: [{ required: true }]
-      }
+        typeId: [{ required: true }],
+      },
     }
   },
   mounted() {
-    this.getData()
     this.getTypeData()
+    this.getLevelData()
   },
   methods: {
     getTypeData() {
@@ -79,18 +107,17 @@ export default {
           this.typeIdOpts = result
         })
         .catch(err => {
-          this.$message.error(err.reason)
+          Notify.error({ message: err })
         })
     },
-    getData() {
-      let id = this.updateId
-      findOneSubject
-        .callPromise({ selector: id })
+    getLevelData() {
+      findLevelStudyOpts
+        .callPromise({})
         .then(result => {
-          this.form = result
+          this.levelOpts = result
         })
-        .catch(err => {
-          this.$message(err.reason)
+        .catch(error => {
+          Notify.error({ message: error })
         })
     },
     handleSave() {
@@ -99,14 +126,11 @@ export default {
           updateSubject
             .callPromise(this.form)
             .then(result => {
-              this.$message({
-                message: 'Save Success',
-                type: 'success'
-              })
+              MsgBox.success('Update Success')
               this.handleClose()
             })
             .catch(error => {
-              this.$message(error.reason)
+              Notify.error({ message: error })
             })
         } else {
           return false
@@ -118,8 +142,8 @@ export default {
     },
     resetform() {
       this.$refs['form'].resetFields()
-    }
-  }
+    },
+  },
 }
 </script>
 

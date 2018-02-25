@@ -3,14 +3,14 @@
 
     <component :is="currentDialog"
                :visible="visibleDialog"
-               :update-id="updateId"
+               :update-doc="updateDoc"
                @modal-close="handleClose"></component>
 
     <!-- Table Data -->
     <data-tables :data="tableData"
                  :action-col-def="actionColDef"
                  :actions-def="actionsDef"
-                 :table-prop="tableProp">
+                 :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.value"
                        :label="title.label"
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import Notify from '/imports/client/libs/notify'
+import MsgBox from '/imports/client/libs/message'
 import SubjectInsert from './SubjectInsert.vue'
 import SubjectUpdate from './SubjectUpdate.vue'
 import { findSubject, removeSubject } from '../../api/subject/methods.js'
@@ -32,29 +34,34 @@ export default {
     return {
       currentDialog: null,
       visibleDialog: false,
-      updateId: null,
+      updateDoc: null,
       tableData: [],
       titles: [
         { label: 'Code', prop: 'code', sort: 'custom' },
         { label: 'Title', prop: 'title', sort: 'custom' },
-        { label: 'Type', prop: 'typeId' }
+        { label: 'Level', prop: 'levelId' },
+        { label: 'Type', prop: 'typeId' },
       ],
-      tableProp: {
-        size: 'mini'
+      tableProps: {
+        size: 'mini',
       },
       actionsDef: {
         colProps: {
-          span: 19
+          span: 19,
         },
         def: [
           {
             name: 'new',
             icon: 'el-icon-plus',
+            buttonProps: {
+              size: 'mini',
+            },
             handler: () => {
+              this.visibleDialog = true
               this.currentDialog = SubjectInsert
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       actionColDef: {
         label: 'Action',
@@ -63,9 +70,10 @@ export default {
           {
             icon: 'el-icon-edit',
             handler: row => {
-              this.updateId = row._id
+              this.updateDoc = row
+              this.visibleDialog = true
               this.currentDialog = SubjectUpdate
-            }
+            },
           },
           {
             icon: 'el-icon-delete',
@@ -73,33 +81,31 @@ export default {
               let id = row._id
               this.$confirm('Do you want delete this record?', 'Warning')
                 .then(result => {
-                  removeSubject
-                    .callPromise(id)
-                    .then(result => {
-                      this.$message({
-                        message: 'Delete Successfull',
-                        type: 'success'
+                  if (result) {
+                    removeSubject
+                      .callPromise(id)
+                      .then(result => {
+                        if (result) {
+                          MsgBox.success('Delete Success')
+                        }
                       })
-                    })
-                    .catch(err => {
-                      this.$message(err.reason)
-                    })
-                  this.getData()
+                      .catch(err => {
+                        this.$message(err.reason)
+                      })
+                    this.getData()
+                  }
                 })
                 .catch(err => {
-                  this.$message({
-                    message: 'Cacel Delete',
-                    type: 'error'
-                  })
+                  MsgBox.warning('Delete has been ' + err)
                 })
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     }
   },
   mounted() {
-    // this.getData();
+    this.getData()
   },
   methods: {
     getData() {
@@ -108,8 +114,8 @@ export default {
         .then(result => {
           this.tableData = result
         })
-        .catch(err => {
-          this.$message(err.reason)
+        .catch(error => {
+          Notify.error({ message: error })
         })
     },
     handleClose() {
@@ -118,8 +124,8 @@ export default {
         this.$nextTick(() => {
           this.currentDialog = null
         })
-    }
-  }
+    },
+  },
 }
 </script>
 
