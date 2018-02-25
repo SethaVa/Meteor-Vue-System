@@ -2,7 +2,7 @@
   <div>
     <el-dialog title="New Teacher"
                width="80%"
-               :visible="true"
+               :visible="visible"
                :before-close="handleClose">
       <el-form :model="form"
                :rules="rules"
@@ -49,30 +49,34 @@
 </template>
 
 <script>
-import { insertStaff } from '../../api/Staffs/methods.js'
 import { insertPosition } from '../../api/positions/methods'
 import lookupValue from '../../client/libs/Lookup-Value'
 
 export default {
   name: 'PositionInsert',
-  props: ['visible'],
+  props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       statusOpts: lookupValue.status,
       form: {
         position: '',
         status: '',
-        des: ''
+        des: '',
       },
       rules: {
         position: [
           {
             required: true,
             message: 'Please Input First Name',
-            trigger: 'blur'
-          }
-        ]
-      }
+            trigger: 'blur',
+          },
+        ],
+      },
     }
   },
   methods: {
@@ -84,7 +88,7 @@ export default {
             .then(result => {
               this.$message({
                 message: 'Save Successfull',
-                type: 'success'
+                type: 'success',
               })
               this.handleresetForm()
             })
@@ -101,8 +105,8 @@ export default {
     },
     handleresetForm() {
       this.$refs['form'].resetFields()
-    }
-  }
+    },
+  },
 }
 </script>
 
