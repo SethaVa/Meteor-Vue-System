@@ -45,3 +45,7 @@ import '../../api/positions/server/index'
 import '../../api/time/server/index'
 // Level
 import '../../api/level/server/index'
+//Class Study
+import '../../api/classStudy/server/'
+//class Detail
+import '../../api/classDetails/server/'

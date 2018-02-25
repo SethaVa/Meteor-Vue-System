@@ -4,8 +4,8 @@
              @select="handleMenuSelect"
              text-color="#fff">
       <el-menu-item index="home">
-        <i class="fa fa-home"></i>
-        <span>Home</span>
+        <i class="fa fa-tachometer"></i>
+        <span>Dashboad</span>
       </el-menu-item>
       <el-menu-item index="subject">
         <i class="fa fa-home"></i>
@@ -30,6 +30,10 @@
       <el-menu-item index="levele">
         <i class="fa fa-home"></i>
         <span>Levele</span>
+      </el-menu-item>
+      <el-menu-item index="classStudy">
+        <i class="fa fa-home"></i>
+        <span>Class Study</span>
       </el-menu-item>
       <!-- <el-submenu index="2">
         <template slot="title">
@@ -59,6 +63,3 @@ export default {
 <style lang="scss" scoped>
 @import '~imports/client/styles/menu.scss';
 </style>
- 
-
-

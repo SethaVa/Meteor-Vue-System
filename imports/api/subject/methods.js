@@ -3,7 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
-
+import _ from 'lodash'
 import Subject from './subjects'
 
 // Find
@@ -17,6 +17,28 @@ export const findSubject = new ValidatedMethod({
       options = options || {}
 
       return Subject.find(selector, options).fetch()
+    }
+  },
+})
+
+//find for Options
+export const findSubjectOpts = new ValidatedMethod({
+  name: 'findSubjectOpts',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ selector, options }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      options = options || {}
+      let data = []
+      let sub = Subject.find(selector, options).fetch()
+      _.forEach(sub, o => {
+        data.push({
+          label: o._id,
+          value: o.title,
+        })
+      })
+      return data
     }
   },
 })
