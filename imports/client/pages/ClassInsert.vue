@@ -7,6 +7,7 @@
       <el-form :model="form"
                :rules="rules"
                ref="form"
+               size="mini"
                label-position="left"
                label-width="100px">
         <el-row :gutter="10">
@@ -156,6 +157,8 @@ export default {
 }
 </script>
 
-<style>
-
+ <style lang="scss">
+.el-date-picker {
+  width: 100%;
+}
 </style>

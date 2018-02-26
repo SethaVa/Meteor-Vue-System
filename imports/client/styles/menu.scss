@@ -1,45 +1,49 @@
 .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    line-height: 60px;
-  }
-  
-  .el-aside {
-    color: #333;
-  }
-  .el-menu {
-    border-right: none !important;
-    background-color: transparent !important;
-  }
-  .el-menu-item{
-    font-weight: 600;
-    text-transform: capitalize;
-    font-size: 12px;
-    margin-left: 20px;
-    margin-right: 20px;
-    border-radius: 3px;
-    margin-top: 5px;
-  }
-  .el-menu-item:focus,
-  .el-menu-item:hover,
-  .el-menu-item:active,
-  {
-    opacity: 1;
-    background: hsla(0, 0%, 100%, 0.23);
-  }
-  .el-menu-item-group{
+  background-color: #b3c0d1;
+  color: #333;
+  line-height: 60px;
+}
+
+.el-aside {
+  color: #333;
+}
+
+.el-menu {
+  border-right: none !important;
+  background-color: transparent !important;
+}
+
+.el-menu-item {
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 12px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+
+.el-menu-item:focus,
+.el-menu-item:hover,
+.el-menu-item:active {
+  opacity: 1;
+  background: hsla(0, 0%, 100%, 0.23);
+}
+
+.el-menu-item-group {
   background: transparent;
-  
-  }
-  .el-menu-item.is-active {
-    color: #ffffff;
-    background: hsla(0, 0%, 100%, 0.23);
-  }
-  .el-menu-item [class^="fa"], .el-submenu [class^="fa"] {
-    margin-right: 5px;
-    width: 24px;
-    text-align: center;
-    font-size: 18px;
-    vertical-align: middle;
-  }
-  
+}
+
+.el-menu-item.is-active {
+  color: #ffffff;
+  background: hsla(0, 0%, 100%, 0.23);
+}
+
+.el-menu-item [class^='fa'],
+.el-submenu [class^='fa'] {
+  margin-right: 5px;
+  width: 24px;
+  text-align: center;
+  font-size: 18px;
+  vertical-align: middle;
+}
