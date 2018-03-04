@@ -31,7 +31,7 @@
               <el-select v-model="form.timeId">
                 <el-option v-for="item in timeIdOpts"
                            :key="item.value"
-                           :label="item.label"
+                           :label="formatTime(item.label)"
                            :value="item.value"></el-option>
               </el-select>
             </el-form-item>
@@ -90,6 +90,7 @@
 <script>
 import MsgBox from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
+import { findTimeStudyOpts } from '/imports/api/time/methods'
 import { insertClassStudy } from '../../api/classStudy/methods'
 import { findRoomOpts } from '../../api/rooms/methods'
 import { findStaffOpts } from '../../api/Staffs/methods'
@@ -184,6 +185,7 @@ export default {
     this.getStaffData()
     this.getSubjectId()
     this.getTypeData()
+    this.getTimeData()
   },
   methods: {
     getRoomData() {
@@ -226,6 +228,16 @@ export default {
           Notify.error({ message: err })
         })
     },
+    getTimeData() {
+      findTimeStudyOpts
+        .callPromise({})
+        .then(result => {
+          this.timeIdOpts = result
+        })
+        .catch(err => {
+          Notify.error({ message: err })
+        })
+    },
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
@@ -249,6 +261,14 @@ export default {
     },
     handleresetForm() {
       this.$refs['form'].resetFields()
+    },
+    formatTime(val) {
+      let data = val
+        .map(o => {
+          return moment(o).format('hh:mm a')
+        })
+        .join('-')
+      return data
     },
   },
 }

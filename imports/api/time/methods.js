@@ -31,8 +31,8 @@ export const findTimeStudyOpts = new ValidatedMethod({
 
       _.forEach(timeStudy, o => {
         data.push({
-          label: o._id,
-          value: o.timeStudy,
+          label: o.timeStudy,
+          value: o._id,
         })
       })
 

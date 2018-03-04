@@ -22,6 +22,9 @@
           <span v-if="title.prop === 'classDate'">
             {{ formatDate(scope.row.classDate) }}
           </span>
+          <span v-else-if="title.prop === 'timeStudy'">
+            {{ formatTime(scope.row.timeStudy) }}
+          </span>
           <span v-else>{{ scope.row[title.prop] }}</span>
 
         </template>
@@ -35,7 +38,6 @@ import MsgBox from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
 import ClassInsert from './ClassInsert'
 import ClassUpdate from './ClassUpdate'
-import PositionUpdate from './PositionUpdate.vue'
 import { findClassStudy, removeClassStudy } from '../../api/classStudy/methods'
 import moment from 'moment'
 import _ from 'lodash'
@@ -56,9 +58,9 @@ export default {
         // { label: 'ID', prop: '_id' },
         { label: 'Date', prop: 'classDate' },
         { label: 'Room', prop: 'roomName' },
-        { label: 'Time', prop: 'timeId' },
         { label: 'Teacher', prop: 'teacher' },
         { label: 'Subject', prop: 'subject' },
+        { label: 'Time', prop: 'timeStudy' },
         { label: 'Type', prop: 'type' },
         { label: 'Status', prop: 'status' },
       ],
@@ -154,6 +156,14 @@ export default {
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')
+    },
+    formatTime(val) {
+      let data = val
+        .map(o => {
+          return moment(o).format('hh:mm a')
+        })
+        .join('-')
+      return data
     },
   },
 }

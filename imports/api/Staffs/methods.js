@@ -172,6 +172,20 @@ const aggregatefindStaffDetails = selector => {
     },
     {
       $lookup: {
+        from: 'timeStudy',
+        localField: 'timeId',
+        foreignField: '_id',
+        as: 'timeDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$timeDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
         from: 'staff',
         localField: 'staffId',
         foreignField: '_id',
@@ -221,6 +235,7 @@ const aggregatefindStaffDetails = selector => {
           $push: {
             room: '$roomDoc.roomName',
             subject: '$subjectDoc.title',
+            time: '$timeDoc.timeStudy',
             type: '$typeDoc.type',
             status: '$status',
           },

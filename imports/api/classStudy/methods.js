@@ -82,6 +82,20 @@ const aggregateFindClassStudy = () => {
     },
     {
       $lookup: {
+        from: 'timeStudy',
+        localField: 'timeId',
+        foreignField: '_id',
+        as: 'timeDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$timeDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
         from: 'staff',
         localField: 'staffId',
         foreignField: '_id',
@@ -129,6 +143,7 @@ const aggregateFindClassStudy = () => {
         roomId: '$roomId',
         roomName: '$roomDoc.roomName',
         timeId: '$timeId',
+        timeStudy: '$timeDoc.timeStudy',
         staffId: '$staffId',
         teacher: '$staffDoc.name',
         subId: '$subId',
