@@ -4,6 +4,7 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
+import moment from 'moment'
 import TimeStudy from './times'
 
 export const findTimeStudy = new ValidatedMethod({
@@ -27,10 +28,20 @@ export const findTimeStudyOpts = new ValidatedMethod({
       selector = selector || {}
       let data = []
       let timeStudy = TimeStudy.find(selector).fetch()
+      // let data = val
+      //   .map(o => {
+      //     return moment(o).format('hh:mm a')
+      //   })
+      //   .join('-')
       _.forEach(timeStudy, o => {
+        let value = o
+          .map(o => {
+            return moment(o).format('hh:mm a')
+          })
+          .join('-')
         data.push({
           label: o._id,
-          value: o.timeStudy,
+          value: value,
         })
       })
 
@@ -46,6 +57,17 @@ export const findOneTimeStudy = new ValidatedMethod({
   run({ id }) {
     if (Meteor.isServer) {
       return TimeStudy.findOne({ _id: id })
+    }
+  },
+})
+
+export const insertTimeStudy = new ValidatedMethod({
+  name: 'insertTimeStudy',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run(doc) {
+    if (Meteor.isServer) {
+      return TimeStudy.insert(doc)
     }
   },
 })
