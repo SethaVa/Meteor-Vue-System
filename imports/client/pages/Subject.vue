@@ -39,8 +39,8 @@ export default {
       titles: [
         { label: 'Code', prop: 'code', sort: 'custom' },
         { label: 'Title', prop: 'title', sort: 'custom' },
-        { label: 'Level', prop: 'levelId' },
-        { label: 'Type', prop: 'typeId' },
+        { label: 'Level', prop: 'level' },
+        { label: 'Type', prop: 'type' },
       ],
       tableProps: {
         size: 'mini',

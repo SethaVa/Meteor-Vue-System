@@ -4,68 +4,63 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
-import Position from './position'
-// Find All Data
-export const findPosition = new ValidatedMethod({
-  name: 'findPosition',
+import classDetails from './classDetails'
+//Find
+export const findclassDetails = new ValidatedMethod({
+  name: 'findclassDetails',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector, option }) {
+  run({ selector }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      option = option || {}
-
-      return Position.find(selector, option).fetch()
+      return classDetails.find(selector).fetch()
     }
   },
 })
-
-// find One
-export const findOnePosition = new ValidatedMethod({
-  name: 'findOnePosition',
+// Find One
+export const findOneclassDetails = new ValidatedMethod({
+  name: 'findOneclassDetails',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ _id }) {
+  run({ id }) {
     if (Meteor.isServer) {
-      return Position.findOne(_id)
+      return classDetails.findOne({ _id: id })
     }
   },
 })
-//=============================================
-// Insert
-//=============================================
-export const insertPosition = new ValidatedMethod({
-  name: 'insertPosition',
+
+export const insertClassDetail = new ValidatedMethod({
+  name: 'insertClassDetail',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return Position.insert(doc)
+      return classDetails.insert(doc)
     }
   },
 })
+
 // Update
-export const updatePosition = new ValidatedMethod({
-  name: 'updatePosition',
+export const updateclassDetails = new ValidatedMethod({
+  name: 'updateclassDetails',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return Position.update({ _id: doc._id }, { $set: doc })
+      return classDetails.update({ _id: doc._id }, { $set: doc })
     }
   },
 })
 
-// Delete
-export const removePosition = new ValidatedMethod({
-  name: 'removePosition',
+export const removeclassDetails = new ValidatedMethod({
+  name: 'removeclassDetails',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: { type: String },
   }).validator(),
   run({ _id }) {
     if (Meteor.isServer) {
-      return Position.remove(_id)
+      return classDetails.remove(_id)
     }
   },
 })

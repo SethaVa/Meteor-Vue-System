@@ -5,7 +5,7 @@ import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import Room from './room'
-
+import _ from 'lodash'
 // Find All Data
 export const findRoom = new ValidatedMethod({
   name: 'findRoom',
@@ -29,6 +29,28 @@ export const findOneRoom = new ValidatedMethod({
   run({ _id }) {
     if (Meteor.isServer) {
       return Room.findOne(_id)
+    }
+  },
+})
+
+// Find Data Fro Options
+export const findRoomOpts = new ValidatedMethod({
+  name: 'findRoomOpts',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run(selector, option) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      option = option || {}
+      let data = []
+      let room = Room.find(selector, option).fetch()
+      _.forEach(room, o => {
+        data.push({
+          label: o._id + '-' + o.roomName,
+          value: o._id,
+        })
+      })
+      return data
     }
   },
 })

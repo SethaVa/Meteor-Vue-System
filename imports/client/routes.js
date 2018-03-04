@@ -22,6 +22,8 @@ import Room from './pages/Room.vue'
 import Type from './pages/Type.vue'
 // Lelvel
 import Levele from './pages/Levele.vue'
+//Class Study
+import ClassStudy from './pages/ClassList'
 const routes = [
   //Notfound
   {
@@ -87,10 +89,17 @@ const routes = [
         name: 'type',
         component: Type,
       },
+      //level
       {
         path: 'levele',
         name: 'levele',
         component: Levele,
+      },
+      //class Study
+      {
+        path: 'class',
+        name: 'classStudy',
+        component: ClassStudy,
       },
     ],
   },
