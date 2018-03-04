@@ -20,6 +20,8 @@ import Subject from './pages/Subject.vue'
 import Room from './pages/Room.vue'
 // type
 import Type from './pages/Type.vue'
+//TimeList
+import TimeList from './pages/TimeList'
 // Lelvel
 import Levele from './pages/Levele.vue'
 //Class Study
@@ -100,6 +102,12 @@ const routes = [
         path: 'class',
         name: 'classStudy',
         component: ClassStudy,
+      },
+      //Time
+      {
+        path: 'time',
+        name: 'time',
+        component: TimeList,
       },
     ],
   },
