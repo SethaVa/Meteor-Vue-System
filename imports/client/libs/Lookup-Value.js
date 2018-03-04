@@ -6,6 +6,7 @@ const LookupValue = {
   status: [
     { label: 'Active', value: 'Active' },
     { label: 'Inactive', value: 'Inactive' },
+    { label: 'Closed', value: 'Closed' },
   ],
 }
 

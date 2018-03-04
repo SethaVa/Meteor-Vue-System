@@ -4,8 +4,11 @@ import { Mongo } from 'meteor/mongo'
 
 const ClassStudy = new Mongo.Collection('classStudy')
 ClassStudy.schema = new SimpleSchema({
-  code: {
-    type: String,
+  // code: {
+  //   type: String,
+  // },
+  classDate: {
+    type: Date,
   },
   roomId: {
     type: String,
@@ -13,8 +16,17 @@ ClassStudy.schema = new SimpleSchema({
   timeId: {
     type: String,
   },
-  classDate: {
-    type: Date,
+  staffId: {
+    type: String,
+    optional: true,
+  },
+  subId: {
+    type: String,
+    optional: true,
+  },
+  typeId: {
+    type: String,
+    optional: true,
   },
   status: {
     type: String,

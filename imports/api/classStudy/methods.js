@@ -5,9 +5,6 @@ import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import ClassStudy from './classStudy'
-import ClassDetails from '../classDetails/classDetails'
-import classDetails from '../classDetails/classDetails'
-
 export const findClassStudy = new ValidatedMethod({
   name: 'findClassStudy',
   mixins: [CallPromiseMixin],
@@ -15,7 +12,8 @@ export const findClassStudy = new ValidatedMethod({
   run({ selector }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      return ClassStudy.find(selector).fetch()
+      // return ClassStudy.find(selector).fetch()
+      return aggregateFindClassStudy()
     }
   },
 })
@@ -36,28 +34,9 @@ export const insertClassStudy = new ValidatedMethod({
   name: 'insertclassStudy',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ doc, clsDetails }) {
+  run(doc) {
     if (Meteor.isServer) {
-      let classStudyId
-      try {
-        ClassStudy.insert(doc, (error, result) => {
-          if (!error) {
-            classStudyId = result
-            clsDetails.forEach(item => {
-              item.referenceId = classStudyId
-              item.teacherId = teacherId
-              item.subId = subId
-              ClassDetails.insert(item)
-            })
-          }
-        })
-        return classStudyId
-      } catch (error) {
-        ClassStudy.remove({ referenceId: classStudyId })
-        ClassStudy.remove({ _id: classStudyId })
-
-        throw new Meteor.Error('transaction-error', 'Transaction Error', error)
-      }
+      ClassStudy.insert(doc)
     }
   },
 })
@@ -84,3 +63,81 @@ export const removeClassStudy = new ValidatedMethod({
     }
   },
 })
+
+const aggregateFindClassStudy = () => {
+  let data = ClassStudy.aggregate([
+    {
+      $lookup: {
+        from: 'rooms',
+        localField: 'roomId',
+        foreignField: '_id',
+        as: 'roomDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$roomDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'staff',
+        localField: 'staffId',
+        foreignField: '_id',
+        as: 'staffDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$staffDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'subjects',
+        localField: 'subId',
+        foreignField: '_id',
+        as: 'subjectDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$subjectDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'types',
+        localField: 'typeId',
+        foreignField: '_id',
+        as: 'typeDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$typeDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        _id: '$_id',
+        classDate: '$classDate',
+        roomId: '$roomId',
+        roomName: '$roomDoc.roomName',
+        timeId: '$timeId',
+        staffId: '$staffId',
+        teacher: '$staffDoc.name',
+        subId: '$subId',
+        subject: '$subjectDoc.title',
+        typeId: '$typeId',
+        type: '$typeDoc.type',
+        status: '$status',
+      },
+    },
+  ])
+  return data
+}

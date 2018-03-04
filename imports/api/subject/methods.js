@@ -16,7 +16,8 @@ export const findSubject = new ValidatedMethod({
       selector = selector || {}
       options = options || {}
 
-      return Subject.find(selector, options).fetch()
+      return aggregateSubject(selector)
+      // return Subject.find(selector, options).fetch()
     }
   },
 })
@@ -34,8 +35,8 @@ export const findSubjectOpts = new ValidatedMethod({
       let sub = Subject.find(selector, options).fetch()
       _.forEach(sub, o => {
         data.push({
-          label: o._id,
-          value: o.title,
+          label: o.title,
+          value: o._id,
         })
       })
       return data
@@ -93,3 +94,55 @@ export const removeSubject = new ValidatedMethod({
     }
   },
 })
+
+const aggregateSubject = selector => {
+  let data = Subject.aggregate([
+    {
+      $match: selector,
+    },
+    {
+      $lookup: {
+        from: 'types',
+        localField: 'typeId',
+        foreignField: '_id',
+        as: 'typeDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$typeDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'leveleStudy',
+        localField: 'levelId',
+        foreignField: '_id',
+        as: 'levelDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$levelDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $project: {
+        _id: '$_id',
+        code: '$code',
+        title: '$title',
+        levelId: '$levelId',
+        typeId: '$typeId',
+        type: '$typeDoc.type',
+        level: '$levelDoc.leveleStudy',
+        status: '$status',
+      },
+    },
+    // {
+    //   $sort: { sort },
+    // },
+  ])
+  return data
+}

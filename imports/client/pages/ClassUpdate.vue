@@ -90,7 +90,7 @@
 <script>
 import MsgBox from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
-import { insertClassStudy } from '../../api/classStudy/methods'
+import { updateClassStudy } from '../../api/classStudy/methods'
 import { findRoomOpts } from '../../api/rooms/methods'
 import { findStaffOpts } from '../../api/Staffs/methods'
 import { findSubjectOpts } from '../../api/subject/methods'
@@ -100,6 +100,10 @@ import moment from 'moment'
 export default {
   name: 'ClassStudyInsert',
   props: {
+    updateDoc: {
+      type: Object,
+      default: null,
+    },
     visible: {
       type: Boolean,
       default: false,
@@ -117,15 +121,16 @@ export default {
       staffIdOpts: [],
       subIdOpts: [],
       typeIdOpts: [],
-      form: {
-        classDate: moment().toDate(),
-        roomId: '',
-        timeId: '',
-        staffId: '',
-        subId: '',
-        typeId: '',
-        status: '',
-      },
+      form: this.updateDoc,
+      // form: {
+      //   classDate: moment().toDate(),
+      //   roomId: '',
+      //   timeId: '',
+      //   staffId: '',
+      //   subId: '',
+      //   typeId: '',
+      //   status: '',
+      // },
       rules: {
         classDate: [
           {
@@ -180,6 +185,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.updateDoc)
     this.getRoomData()
     this.getStaffData()
     this.getSubjectId()
@@ -229,12 +235,11 @@ export default {
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          console.log(this.form)
-          insertClassStudy
+          updateClassStudy
             .callPromise(this.form)
             .then(result => {
               MsgBox.success()
-              this.handleresetForm()
+              this.handleClose()
             })
             .catch(err => {
               Notify.error({ message: err })

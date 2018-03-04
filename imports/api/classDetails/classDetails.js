@@ -7,11 +7,13 @@ ClassDetails.schema = new SimpleSchema({
   referenceId: {
     type: String,
   },
-  teacherId: {
+  staffId: {
     type: String,
+    optional: true,
   },
   subId: {
     type: String,
+    optional: true,
   },
 })
 

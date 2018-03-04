@@ -3,6 +3,6 @@ import ClassDetails from '../classDetails'
 
 ClassDetails.before.insert(function(userId, doc) {
   doc._id = AutoId.make(ClassDetails, {
-    length: 2,
+    length: 10,
   })
 })

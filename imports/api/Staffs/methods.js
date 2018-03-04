@@ -5,7 +5,7 @@ import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
 import Staff from './staff'
-
+import ClassStudy from '../classStudy/classStudy'
 // Find
 export const findStaff = new ValidatedMethod({
   name: 'findStaff',
@@ -20,6 +20,22 @@ export const findStaff = new ValidatedMethod({
     }
   },
 })
+
+// Find Staff Detail for Position Teacher
+export const findStaffDetails = new ValidatedMethod({
+  name: 'findStaffDetails',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ selector }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      // sort = sort || {_id:-1};
+
+      return aggregatefindStaffDetails(selector)
+    }
+  },
+})
+
 //find for opts
 export const findStaffOpts = new ValidatedMethod({
   name: 'findStaffOpts',
@@ -33,11 +49,10 @@ export const findStaffOpts = new ValidatedMethod({
       let staff = aggregateStaff()
       _.forEach(staff, o => {
         data.push({
-          label: o._id,
-          value: o.name,
+          label: o.name,
+          value: o._id,
         })
       })
-
       return data
     }
   },
@@ -132,5 +147,94 @@ const aggregateStaff = () => {
     },
   ])
 
+  return data
+}
+
+// For find Teacher Detail
+const aggregatefindStaffDetails = selector => {
+  let data = ClassStudy.aggregate([
+    {
+      $match: selector,
+    },
+    {
+      $lookup: {
+        from: 'rooms',
+        localField: 'roomId',
+        foreignField: '_id',
+        as: 'roomDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$roomDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'staff',
+        localField: 'staffId',
+        foreignField: '_id',
+        as: 'staffDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$staffDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'subjects',
+        localField: 'subId',
+        foreignField: '_id',
+        as: 'subjectDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$subjectDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'types',
+        localField: 'typeId',
+        foreignField: '_id',
+        as: 'typeDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$typeDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: '$staffId',
+        name: { $last: '$staffDoc.name' },
+        gender: { $last: '$staffDoc.gender' },
+        teacherDetail: {
+          $push: {
+            room: '$roomDoc.roomName',
+            subject: '$subjectDoc.title',
+            type: '$typeDoc.type',
+            status: '$status',
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        gender: 1,
+        teacherDetail: 1,
+      },
+    },
+  ])
   return data
 }

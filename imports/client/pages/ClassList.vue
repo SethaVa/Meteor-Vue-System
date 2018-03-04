@@ -16,13 +16,25 @@
                        :prop="title.prop"
                        :label="title.label"
                        sortable="custom">
+        <template slot-scope="scope">
+          <!-- <label v-if="scope.props='classDate'">{{ formatDate(scope.props.classDate) }}</label>
+          <label v-else></label> -->
+          <span v-if="title.prop === 'classDate'">
+            {{ formatDate(scope.row.classDate) }}
+          </span>
+          <span v-else>{{ scope.row[title.prop] }}</span>
+
+        </template>
       </el-table-column>
     </data-tables>
   </div>
 </template>
 
 <script>
+import MsgBox from '/imports/client/libs/message'
+import Notify from '/imports/client/libs/notify'
 import ClassInsert from './ClassInsert'
+import ClassUpdate from './ClassUpdate'
 import PositionUpdate from './PositionUpdate.vue'
 import { findClassStudy, removeClassStudy } from '../../api/classStudy/methods'
 import moment from 'moment'
@@ -31,7 +43,7 @@ export default {
   name: 'ClassList',
   component: {
     ClassInsert,
-    PositionUpdate,
+    ClassUpdate,
   },
   data() {
     return {
@@ -41,13 +53,23 @@ export default {
       tableSize: 'mini',
       tableData: [],
       titles: [
-        { label: 'ID', prop: '_id' },
-        { label: 'Room', prop: 'roomId' },
-        { label: 'Time', prop: 'time' },
+        // { label: 'ID', prop: '_id' },
         { label: 'Date', prop: 'classDate' },
+        { label: 'Room', prop: 'roomName' },
+        { label: 'Time', prop: 'timeId' },
+        { label: 'Teacher', prop: 'teacher' },
+        { label: 'Subject', prop: 'subject' },
+        { label: 'Type', prop: 'type' },
+        { label: 'Status', prop: 'status' },
       ],
       tableProps: {
-        size: 'small',
+        size: 'mini',
+        border: false,
+        stripe: false,
+        defaultSort: {
+          prop: '_id',
+          order: 'ascending',
+        },
       },
       actionsDef: {
         colProps: {
@@ -75,7 +97,7 @@ export default {
             handler: row => {
               this.updateDoc = row
               this.modalVisible = true
-              this.currentModal = PositionUpdate
+              this.currentModal = ClassUpdate
             },
           },
           {
@@ -87,13 +109,11 @@ export default {
                   removeClassStudy
                     .callPromise({ _id: id })
                     .then(result => {
-                      if (result) {
-                        this.$message.success('Delete Successfull')
-                        this.getData()
-                      }
+                      MsgBox.success('Delete Successfull')
+                      this.getData()
                     })
                     .catch(err => {
-                      this.$message.error(err.reason)
+                      Notify.error({ message: err })
                     })
                 })
                 .catch(() => {

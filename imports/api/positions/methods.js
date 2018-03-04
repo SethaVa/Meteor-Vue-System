@@ -5,7 +5,6 @@ import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import Position from './position'
-
 // Find All Data
 export const findPosition = new ValidatedMethod({
   name: 'findPosition',
@@ -32,8 +31,9 @@ export const findOnePosition = new ValidatedMethod({
     }
   },
 })
-
+//=============================================
 // Insert
+//=============================================
 export const insertPosition = new ValidatedMethod({
   name: 'insertPosition',
   mixins: [CallPromiseMixin],

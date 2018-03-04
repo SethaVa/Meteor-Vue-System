@@ -5,7 +5,7 @@ import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import classDetails from './classDetails'
-
+//Find
 export const findclassDetails = new ValidatedMethod({
   name: 'findclassDetails',
   mixins: [CallPromiseMixin],
@@ -17,7 +17,7 @@ export const findclassDetails = new ValidatedMethod({
     }
   },
 })
-
+// Find One
 export const findOneclassDetails = new ValidatedMethod({
   name: 'findOneclassDetails',
   mixins: [CallPromiseMixin],
@@ -29,6 +29,18 @@ export const findOneclassDetails = new ValidatedMethod({
   },
 })
 
+export const insertClassDetail = new ValidatedMethod({
+  name: 'insertClassDetail',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run(doc) {
+    if (Meteor.isServer) {
+      return classDetails.insert(doc)
+    }
+  },
+})
+
+// Update
 export const updateclassDetails = new ValidatedMethod({
   name: 'updateclassDetails',
   mixins: [CallPromiseMixin],
