@@ -28,20 +28,11 @@ export const findTimeStudyOpts = new ValidatedMethod({
       selector = selector || {}
       let data = []
       let timeStudy = TimeStudy.find(selector).fetch()
-      // let data = val
-      //   .map(o => {
-      //     return moment(o).format('hh:mm a')
-      //   })
-      //   .join('-')
+
       _.forEach(timeStudy, o => {
-        let value = o
-          .map(o => {
-            return moment(o).format('hh:mm a')
-          })
-          .join('-')
         data.push({
           label: o._id,
-          value: value,
+          value: o.timeStudy,
         })
       })
 
