@@ -28,6 +28,7 @@
 <script>
 import StaffInsert from './StaffInsert.vue'
 import StaffUpdate from './StaffUpdate.vue'
+import StaffDetail from './staffDetail'
 import { findStaff, removeStaff } from '../../api/Staffs/methods.js'
 import moment from 'moment'
 import _ from 'lodash'
@@ -36,12 +37,14 @@ export default {
   component: {
     StaffInsert,
     StaffUpdate,
+    StaffDetail,
   },
   data() {
     return {
       currentModal: null,
       modalVisible: false,
       updateId: null,
+      detailStaff: null,
       tableSize: 'mini',
       tableData: [],
       titles: [
@@ -119,7 +122,9 @@ export default {
           {
             icon: 'el-icon-tickets',
             handler: row => {
-              console.log(row)
+              this.updateId = row._id
+              this.modalVisible = true
+              this.currentModal = StaffDetail
             },
           },
         ],

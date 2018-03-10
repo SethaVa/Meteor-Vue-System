@@ -22,15 +22,14 @@ export const findStaff = new ValidatedMethod({
 })
 
 // Find Staff Detail for Position Teacher
-export const findStaffDetails = new ValidatedMethod({
-  name: 'findStaffDetails',
+export const findOneStaffDetails = new ValidatedMethod({
+  name: 'findOneStaffDetails',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ selector }) {
     if (Meteor.isServer) {
       selector = selector || {}
       // sort = sort || {_id:-1};
-
       return aggregatefindStaffDetails(selector)
     }
   },
@@ -231,6 +230,7 @@ const aggregatefindStaffDetails = selector => {
         _id: '$staffId',
         name: { $last: '$staffDoc.name' },
         gender: { $last: '$staffDoc.gender' },
+        email: { $last: '$email' },
         teacherDetail: {
           $push: {
             room: '$roomDoc.roomName',
