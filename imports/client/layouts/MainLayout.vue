@@ -148,7 +148,7 @@ export default {
 .el-header {
   /* background-color: #f5f7fa;
   color: #303133; */
-  background-color: #c7cccc;
+  background-color: #e4e7ed;
   color: rgb(255, 255, 255);
   line-height: 55px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -164,8 +164,8 @@ export default {
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 .image {
-  width: 70%;
-  margin: 0px 0px 0px 34px;
+  width: 50%;
+  margin: 0px 0px 0px 48px;
 }
 
 .layout-content {
