@@ -116,6 +116,12 @@ export default {
                 })
             },
           },
+          {
+            icon: 'el-icon-tickets',
+            handler: row => {
+              console.log(row)
+            },
+          },
         ],
       },
     }
