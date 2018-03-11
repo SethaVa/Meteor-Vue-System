@@ -230,7 +230,8 @@ const aggregatefindStaffDetails = selector => {
         _id: '$staffId',
         name: { $last: '$staffDoc.name' },
         gender: { $last: '$staffDoc.gender' },
-        email: { $last: '$email' },
+        email: { $last: '$staffDoc.email' },
+        tel: { $last: '$staffDoc.tel' },
         teacherDetail: {
           $push: {
             room: '$roomDoc.roomName',
@@ -247,6 +248,8 @@ const aggregatefindStaffDetails = selector => {
         _id: 1,
         name: 1,
         gender: 1,
+        email: 1,
+        tel: 1,
         teacherDetail: 1,
       },
     },

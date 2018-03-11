@@ -120,7 +120,7 @@ export default {
             },
           },
           {
-            icon: 'el-icon-tickets',
+            icon: 'el-icon-menu',
             handler: row => {
               this.updateId = row._id
               this.modalVisible = true
