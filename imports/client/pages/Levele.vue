@@ -10,7 +10,7 @@
     <data-tables :data="tableData"
                  :action-col-def="actionColDef"
                  :actions-def="actionsDef"
-                 :table-prop="tableProp">
+                 :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.value"
                        :label="title.label"
@@ -38,8 +38,9 @@ export default {
         { label: 'Level', prop: 'leveleStudy', sort: 'leveleStudy' },
         { label: 'Describe', prop: 'des' },
       ],
-      tableProp: {
+      tableProps: {
         size: 'mini',
+        border: false,
       },
       actionsDef: {
         colProps: {
@@ -47,8 +48,11 @@ export default {
         },
         def: [
           {
-            name: 'new',
+            name: 'Add New',
             icon: 'el-icon-plus',
+            buttonProps: {
+              size: 'mini',
+            },
             handler: () => {
               this.currentDialog = LeveleInsert
             },

@@ -10,7 +10,7 @@
     <data-tables :data="tableData"
                  :action-col-def="actionColDef"
                  :actions-def="actionsDef"
-                 :table-prop="tableProp">
+                 :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.value"
                        :label="title.label"
@@ -37,24 +37,28 @@ export default {
       titles: [
         { label: 'ID', prop: '_id', sort: 'custom' },
         { label: 'Name', prop: 'roomName', sort: 'custom' },
-        { label: 'Describe', prop: 'des' }
+        { label: 'Describe', prop: 'des' },
       ],
-      tableProp: {
-        size: 'mini'
+      tableProps: {
+        size: 'mini',
+        border: false,
       },
       actionsDef: {
         colProps: {
-          span: 19
+          span: 19,
         },
         def: [
           {
-            name: 'new',
+            name: 'New',
             icon: 'el-icon-plus',
+            buttonProps: {
+              size: 'mini',
+            },
             handler: () => {
               this.currentDialog = RoomInsert
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       actionColDef: {
         label: 'Action',
@@ -65,7 +69,7 @@ export default {
             handler: row => {
               this.updateId = row._id
               this.currentDialog = RoomUpdate
-            }
+            },
           },
           {
             icon: 'el-icon-delete',
@@ -78,7 +82,7 @@ export default {
                     .then(result => {
                       this.$message({
                         message: 'Delete Successfull',
-                        type: 'success'
+                        type: 'success',
                       })
                     })
                     .catch(err => {
@@ -89,13 +93,13 @@ export default {
                 .catch(err => {
                   this.$message({
                     message: 'Cacel Delete',
-                    type: 'error'
+                    type: 'error',
                   })
                 })
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      },
     }
   },
   mounted() {
@@ -118,8 +122,8 @@ export default {
         this.$nextTick(() => {
           this.currentDialog = null
         })
-    }
-  }
+    },
+  },
 }
 </script>
 
