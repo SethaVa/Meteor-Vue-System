@@ -3,8 +3,23 @@
              width="80%"
              :before-close="handleClose"
              :visible="visible">
-    <span>Name : {{ name }}</span>
-    <el-table :data="tableData">
+    <b>
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <label>
+            Name : {{ name }}
+          </label>
+        </el-col>
+        <el-col :span="8">
+          <span>Email : {{ email }}</span>
+        </el-col>
+        <el-col :span="8">
+          <span>Telephone : {{ tel }}</span>
+        </el-col>
+      </el-row>
+    </b>
+    <el-table v-loading="loading"
+              :data="tableData">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
                        :prop="title.prop"
@@ -39,7 +54,10 @@ export default {
 
   data() {
     return {
+      loading: false,
       name: '',
+      email: '',
+      tel: '',
       tableData: [],
       titles: [
         { label: 'Rome', prop: 'room' },
@@ -57,10 +75,14 @@ export default {
       let selector = {
         staffId: this.updateId,
       }
+      this.loading = true
       findOneStaffDetails
         .callPromise({ selector })
         .then(result => {
+          this.loading = false
           this.name = result[0].name
+          this.email = result[0].email
+          this.tel = result[0].tel
           this.tableData = result[0].teacherDetail
         })
         .catch(err => {
