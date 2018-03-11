@@ -23,8 +23,11 @@
         <el-col :span="10">
           <el-form-item>
             <el-button type="primary"
+                       size="small"
                        @click="handleSave">{{ formType }}</el-button>
-            <el-button @click="handleCancel">Cancel</el-button>
+            <el-button type="danger"
+                       size="small"
+                       @click="handleCancel">Cancel</el-button>
           </el-form-item>
         </el-col>
       </el-row>

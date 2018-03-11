@@ -13,6 +13,7 @@
     <!-- <time-form ></time-form> -->
     <!-- Table Data -->
     <data-tables :data="tableData"
+                 :search-def="searchDef"
                  v-loading="loading"
                  :action-col-def="actionColDef"
                  :table-size="tableSize"
@@ -51,7 +52,9 @@ export default {
       loading: false,
       formType: 'Add New',
       updateDoc: null,
-      tableSize: 'mini',
+      searchDef: {
+        show: false,
+      },
       tableData: [],
       titles: [
         { label: 'ID', prop: '_id' },
@@ -65,6 +68,10 @@ export default {
         def: [
           {
             icon: 'el-icon-edit',
+            buttonProps: {
+              size: 'mini',
+              type: 'primary',
+            },
             handler: row => {
               this.updateDoc = row
               this.formType = 'Update'
@@ -72,6 +79,10 @@ export default {
           },
           {
             icon: 'el-icon-delete',
+            buttonProps: {
+              size: 'mini',
+              type: 'danger',
+            },
             handler: row => {
               this.$confirm('Do you want to Delete this record?', 'Warning')
                 .then(() => {
@@ -109,6 +120,7 @@ export default {
         .callPromise({})
         .then(result => {
           this.tableData = result
+          this.formType = 'Add New'
         })
         .catch(err => {
           this.$message.error(err.reason)

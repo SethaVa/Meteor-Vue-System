@@ -1,9 +1,10 @@
 <template>
   <div>
-    <el-dialog title="New Edit"
+    <el-dialog title="Edit Room"
                :visible="true"
                :before-close="handleClose">
       <el-form label-position="left"
+               label-width="150px"
                :model="form"
                ref="form"
                :rules="rules">
@@ -36,14 +37,14 @@
 import { findOneRoom, updateRoom } from '../../api/rooms/methods.js'
 
 export default {
-  name: 'Room-Edit',
+  name: 'RoomEdit',
   props: ['visible', 'updateId'],
   data() {
     return {
       form: {},
       rules: {
-        // roomName: [{ required: true }]
-      }
+        roomName: [{ required: true }],
+      },
     }
   },
   mounted() {
@@ -69,7 +70,7 @@ export default {
             .then(result => {
               this.$message({
                 message: 'Update Successfull',
-                type: 'success'
+                type: 'success',
               })
               this.handleClose()
             })
@@ -86,8 +87,8 @@ export default {
     },
     resetForm() {
       this.$refs['form'].resetFields()
-    }
-  }
+    },
+  },
 }
 </script>
 
