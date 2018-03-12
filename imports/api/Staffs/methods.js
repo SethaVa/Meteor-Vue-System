@@ -79,11 +79,8 @@ export const insertStaff = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      try {
-        Staff.insert(doc, (error, result) => {})
-      } catch (e) {
-        throw Meteor.Error('Insert Staff', 'Can not Insert', e)
-      }
+      console.log(doc)
+        return Staff.insert(doc)
     }
   },
 })

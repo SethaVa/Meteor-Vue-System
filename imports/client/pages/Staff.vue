@@ -120,7 +120,7 @@ export default {
             },
           },
           {
-            icon: 'el-icon-menu',
+            icon: 'fa fa-align-justify',
             handler: row => {
               this.updateId = row._id
               this.modalVisible = true
