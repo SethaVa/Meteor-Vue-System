@@ -1,6 +1,6 @@
-// import {Meteor} from 'meteor/meteor';
-// import Teacher from '../staff';
-//
-// Meteor.publish('Teacher', (selector = {}, options = {}) => {
-//     return Teacher.find(selector, options);
-// });
+// import { Meteor } from 'meteor/meteor'
+// import Staff from '../staff'
+
+// Meteor.publish('Staff', (selector = {}, options = {}) => {
+//   return Staff.find(selector, options)
+// })

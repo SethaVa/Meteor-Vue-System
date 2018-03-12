@@ -1,3 +1,3 @@
-import '../methods';
-import './publications';
-import './collection-hook';
+import '../methods'
+import './publications'
+import './collection-hook'
