@@ -39,6 +39,10 @@
         <i class="fa fa-home"></i>
         <span>Time</span>
       </el-menu-item>
+      <el-menu-item index="register">
+        <i class="fa fa-home"></i>
+        <span>Register</span>
+      </el-menu-item>
       <!-- <el-submenu index="2">
         <template slot="title">
           <i class="el-cion-message"></i>Student

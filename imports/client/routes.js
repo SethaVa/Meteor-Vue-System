@@ -26,6 +26,8 @@ import TimeList from './pages/TimeList'
 import Levele from './pages/Levele.vue'
 //Class Study
 import ClassStudy from './pages/ClassList'
+//Register
+import Register from './pages/Register'
 const routes = [
   //Notfound
   {
@@ -108,6 +110,12 @@ const routes = [
         path: 'time',
         name: 'time',
         component: TimeList,
+      },
+      //Register
+      {
+        path: 'register',
+        name: 'register',
+        component: Register,
       },
     ],
   },
