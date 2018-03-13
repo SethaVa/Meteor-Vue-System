@@ -2,3 +2,4 @@
 import './api'
 import './fixtures.js'
 import './register-api.js'
+import './libs'

@@ -13,7 +13,7 @@ export const findClassStudy = new ValidatedMethod({
     if (Meteor.isServer) {
       selector = selector || {}
       // return ClassStudy.find(selector).fetch()
-      return aggregateFindClassStudy()
+      return aggregateFindClassStudy(selector)
     }
   },
 })
@@ -64,8 +64,11 @@ export const removeClassStudy = new ValidatedMethod({
   },
 })
 
-const aggregateFindClassStudy = () => {
+const aggregateFindClassStudy = selector => {
   let data = ClassStudy.aggregate([
+    {
+      $match: selector,
+    },
     {
       $lookup: {
         from: 'rooms',
