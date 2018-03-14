@@ -49,3 +49,5 @@ import '../../api/level/server/index'
 import '../../api/classStudy/server/'
 //class Detail
 import '../../api/classDetails/server/'
+// Payment
+import '../../api/payment/server/index'

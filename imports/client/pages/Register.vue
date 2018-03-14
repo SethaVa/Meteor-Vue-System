@@ -8,14 +8,9 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-tabs type="card">
-          <el-tab-pane>
+          <el-tab-pane label="Student">
             <span slot="label">
-            <i class="fa fa-user-plus"></i> Class</span>
-            <el-form-item label="Date"
-                          prop="rsDate">
-              <el-date-picker style="width:100%"
-                              v-model="form.rsDate"></el-date-picker>
-            </el-form-item>
+              <i class="fa fa-users"></i> Student</span>
             <el-form-item label="Type"
                           prop="typeId">
               <el-select v-model="form.typeId"
@@ -42,10 +37,6 @@
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-tab-pane>
-          <el-tab-pane label="Student">
-            <span slot="label">
-            <i class="fa fa-users"></i> Student</span>
             <el-form-item label="Kh Name"
                           prop="khName">
               <el-input v-model="form.khName"
@@ -127,10 +118,10 @@
     <el-form-item style="float:right">
       <el-button type="primary"
                  @click="saveForm">
-      <i class="fa fa-save"></i> Save</el-button>
+        <i class="fa fa-save"></i> Save</el-button>
       <el-button type="danger"
                  @click="resetForm">
-      <i class="fa fa-refresh"></i> Reset</el-button>
+        <i class="fa fa-refresh"></i> Reset</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -142,6 +133,7 @@ import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import moment from 'moment'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { lookupType, lookupClass } from '/imports/libs/lookup-methods'
+import { insertStudent } from '../../api/students/methods'
 const numeral = require('numeral')
 export default {
   name: 'Register',
@@ -269,8 +261,33 @@ export default {
           this.form.endPayDate = wrapCurrentTime(
             moment(this.form.payDate).add(this.form.duration, 'months')
           )
-          console.log(this.form)
-          this.resetForm()
+          let Payment = {
+            classId: this.form.classId,
+            payDate: this.form.payDate,
+            duration: this.form.duration,
+            endPayDate: this.form.endPayDate,
+            totalPay: this.form.totalPay,
+            discountVal: this.form.discountVal,
+            pay: this.form.pay,
+            remaining: this.form.remaining,
+            status: 'Active',
+          }
+          let Students = {
+            enName: this.form.enName,
+            khName: this.form.khName,
+            gender: this.form.gender,
+            dob: this.form.dob,
+            tel: this.form.tel,
+          }
+          insertStudent
+            .callPromise({ doc: Students, details: Payment })
+            .then(result => {
+              Msg.success()
+              this.resetForm()
+            })
+            .catch(error => {
+              Notify.error({ message: error })
+            })
         } else {
           return false
         }
