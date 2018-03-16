@@ -28,6 +28,8 @@ import Levele from './pages/Levele.vue'
 import ClassStudy from './pages/ClassList'
 //Register
 import Register from './pages/Register'
+//Payment
+import Payment from './pages/Payment.vue'
 const routes = [
   //Notfound
   {
@@ -116,6 +118,12 @@ const routes = [
         path: 'register',
         name: 'register',
         component: Register,
+      },
+      //Payment
+      {
+        path: 'payment',
+        name: 'payment',
+        component: Payment,
       },
     ],
   },

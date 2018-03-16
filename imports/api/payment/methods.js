@@ -22,6 +22,19 @@ export const findPayment = new ValidatedMethod({
   },
 })
 
+export const findPaymentForClass = new ValidatedMethod({
+  name: 'findPaymentForClass',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ selector }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      // option = option || {}
+      return aggregatePayment(selector)[0]
+    }
+  },
+})
+
 // find One
 export const findOnePayment = new ValidatedMethod({
   name: 'findOnePayment',

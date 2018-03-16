@@ -1,0 +1,153 @@
+<template>
+  <div>
+    <el-form :model="form"
+             ref="form"
+             :rules="rules"
+             size="mini">
+      <el-row :gutter="10">
+        <el-col :span="6"></el-col>
+        <el-col :span="6">
+          <el-form-item label="Class"
+                        prop="classId">
+            <el-select v-model="form.classId"
+                       clearable
+                       placeholder="Select Class">
+              <el-option v-for="doc in classIdOpts"
+                         :key="doc.value"
+                         :label="doc.label"
+                         :value="doc.value">
+                <span style="float: left">{{ doc.label }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ doc.labelRight }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item style="margin-top:5vh">
+            <el-button type="primary"
+                       @click="handleSubmit">Submit</el-button>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6"></el-col>
+      </el-row>
+    </el-form>
+    <data-tables :data="dataTable"
+                 :action-col-def="actionColDef"
+                 :table-props="tableProps"
+                 v-loading="loading">
+      <el-table-column v-for="title in titles"
+                       :key="title.prop"
+                       :prop="title.prop"
+                       :label="title.label"
+                       :sortable="title.sort">
+        <template slot-scope="scope">
+          <span v-if="title.prop === 'payDate'">
+            {{ formatDate(scope.row.payDate) }}
+          </span>
+          <span v-else-if="title.prop === 'endPayDate'">
+            {{ formatDate(scope.row.endPayDate) }}
+          </span>
+          <span v-else>{{ scope.row[title.prop] }}</span>
+
+        </template>
+      </el-table-column>
+    </data-tables>
+  </div>
+</template>
+
+<script>
+import Msg from '/imports/client/libs/message'
+import Notify from '/imports/client/libs/notify'
+import moment from 'moment'
+import { lookupClass } from '/imports/libs/lookup-methods'
+import { findPaymentForClass } from '/imports/api/payment/methods'
+export default {
+  name: 'Payment',
+  data() {
+    return {
+      loading: false,
+      classIdOpts: [],
+      classId: '',
+      form: {
+        classId: '',
+      },
+      rules: {
+        classId: [
+          { required: true, message: 'Date is Required', trigger: 'change' },
+        ],
+      },
+      dataTable: [],
+      titles: [
+        { label: 'Student', prop: 'student' },
+        { label: 'Gender', prop: 'gender' },
+        { label: 'Pay Date', prop: 'payDate' },
+        { label: 'End Date', prop: 'endPayDate' },
+      ],
+      tableProps: {
+        size: 'small',
+      },
+      actionColDef: {
+        label: 'Action',
+        def: [
+          {
+            icon: 'el-icon-edit',
+            handler: row => {
+              // this.updateDoc = row
+              // this.modalVisible = true
+              // this.currentModal = PositionUpdate
+            },
+          },
+        ],
+      },
+    }
+  },
+  computed: {
+    // 'form.classId'(val) {
+    //   this.classId = val
+    //   return this.classId
+    // },
+  },
+  mounted() {
+    this.getClassData()
+  },
+  methods: {
+    getClassData() {
+      lookupClass
+        .callPromise({})
+        .then(result => {
+          this.classIdOpts = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
+    handleSubmit() {
+      let selector = {
+        classId: this.form.classId,
+      }
+      this.loading = true
+      findPaymentForClass
+        .callPromise({ selector: selector })
+        .then(result => {
+          console.log(result)
+          if (result.classDetail.length > 0) {
+            this.dataTable = result.classDetail
+          } else {
+            this.dataTable = []
+          }
+          this.loading = false
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
+    formatDate(val) {
+      return moment(val).format('DD/MM/YYYY')
+    },
+  },
+}
+</script>
+
+<style>
+
+</style>

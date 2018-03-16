@@ -43,6 +43,10 @@
         <i class="fa fa-home"></i>
         <span>Register</span>
       </el-menu-item>
+      <el-menu-item index="payment">
+        <i class="fa fa-home"></i>
+        <span>Payment</span>
+      </el-menu-item>
       <!-- <el-submenu index="2">
         <template slot="title">
           <i class="el-cion-message"></i>Student
