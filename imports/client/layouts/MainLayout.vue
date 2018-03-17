@@ -148,7 +148,7 @@ export default {
 .el-header {
   /* background-color: #f5f7fa;
   color: #303133; */
-  background-color: #e4e7ed;
+  background-color: #409eff;
   color: rgb(255, 255, 255);
   line-height: 55px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);

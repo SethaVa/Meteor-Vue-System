@@ -1,5 +1,10 @@
 <template>
   <div>
+    <component :is="currentModal"
+               :modal-doc="modalDoc"
+               :visible="modalVisible"
+               @modal-close="handleClose">
+    </component>
     <el-form :model="form"
              ref="form"
              :rules="rules"
@@ -59,12 +64,18 @@
 import Msg from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
 import moment from 'moment'
+import _ from 'lodash'
 import { lookupClass } from '/imports/libs/lookup-methods'
 import { findPaymentForClass } from '/imports/api/payment/methods'
+import StudentPay from './StudentPay.vue'
 export default {
   name: 'Payment',
+  components: { StudentPay },
   data() {
     return {
+      currentModal: null,
+      modalVisible: false,
+      modalDoc: null,
       loading: false,
       classIdOpts: [],
       classId: '',
@@ -90,11 +101,15 @@ export default {
         label: 'Action',
         def: [
           {
-            icon: 'el-icon-edit',
+            type: 'primary',
+            name: 'Pay',
+            buttonProps: {
+              size: 'mini',
+            },
             handler: row => {
               // this.updateDoc = row
-              // this.modalVisible = true
-              // this.currentModal = PositionUpdate
+              this.modalVisible = true
+              this.currentModal = StudentPay
             },
           },
         ],
@@ -129,17 +144,30 @@ export default {
       findPaymentForClass
         .callPromise({ selector: selector })
         .then(result => {
-          console.log(result)
-          if (result.classDetail.length > 0) {
-            this.dataTable = result.classDetail
+          if (result.length > 0) {
+            this.dataTable = []
+            _.forEach(result[0].classDetail, o => {
+              this.dataTable.push({
+                student: o.student,
+                gender: o.gender,
+                payDate: o.payDate,
+                endPayDate: o.endPayDate,
+              })
+            })
           } else {
             this.dataTable = []
           }
           this.loading = false
         })
         .catch(error => {
-          Notify.error({ message: error })
+          Notify.error({ message: error.reason })
         })
+    },
+    handleClose() {
+      this.modalVisible = false
+      this.$nextTick(() => {
+        this.currentModal = null
+      })
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')

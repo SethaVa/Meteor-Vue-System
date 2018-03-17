@@ -30,7 +30,9 @@ export const findPaymentForClass = new ValidatedMethod({
     if (Meteor.isServer) {
       selector = selector || {}
       // option = option || {}
-      return aggregatePayment(selector)[0]
+      console.log(selector)
+      console.log(aggregatePayment(selector))
+      return aggregatePayment(selector)
     }
   },
 })
@@ -75,13 +77,7 @@ export const insertPayment = new ValidatedMethod({
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Payment.schema,
-    details:
-      //  {
-      // type:
-      Student.schema,
-    //   optional: true,
-    // },
-    // 'detail.Students': Student.schema,
+    details: Student.schema,
   }).validator(),
   run({ doc, details }) {
     if (Meteor.isServer) {
@@ -90,7 +86,6 @@ export const insertPayment = new ValidatedMethod({
           if (!error) {
             // get Student ID
             details.studentId = result
-            console.log(details)
             Student.insert(details)
           }
         })
@@ -234,6 +229,8 @@ const aggregatePayment = selector => {
         time: { $last: '$timeDoc.timeStudy' },
         classDetail: {
           $push: {
+            classId: '$classId',
+            studentId: '$studentDoc._id',
             student: '$studentDoc.enName',
             gender: '$studentDoc.gender',
             payDate: '$payDate',
