@@ -16,7 +16,6 @@
                  :search-def="searchDef"
                  v-loading="loading"
                  :action-col-def="actionColDef"
-                 :table-size="tableSize"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
@@ -60,9 +59,6 @@ export default {
         { label: 'ID', prop: '_id' },
         { label: 'Time', prop: 'timeStudy' },
       ],
-      tableProps: {
-        size: 'mini',
-      },
       actionColDef: {
         label: 'Action',
         def: [

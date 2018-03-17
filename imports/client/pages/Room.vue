@@ -118,10 +118,10 @@ export default {
     },
     handleClose() {
       this.getData()
-      ;(this.visibleDialog = false),
-        this.$nextTick(() => {
-          this.currentDialog = null
-        })
+      this.visibleDialog = false
+      this.$nextTick(() => {
+        this.currentDialog = null
+      })
     },
   },
 }
