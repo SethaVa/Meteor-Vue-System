@@ -21,7 +21,9 @@ Students.schema = new SimpleSchema({
     type: String,
     optional: true,
   },
-
+  remove: {
+    type: Boolean,
+  },
 })
 Students.attachSchema(Students.schema)
 

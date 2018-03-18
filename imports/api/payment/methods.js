@@ -30,8 +30,6 @@ export const findPaymentForClass = new ValidatedMethod({
     if (Meteor.isServer) {
       selector = selector || {}
       // option = option || {}
-      console.log(selector)
-      console.log(aggregatePayment(selector))
       return aggregatePayment(selector)
     }
   },
@@ -49,7 +47,7 @@ export const findOnePayment = new ValidatedMethod({
   },
 })
 
-// Find Data Fro Options
+// Find Data For Options
 export const findPaymentOpts = new ValidatedMethod({
   name: 'findPaymentOpts',
   mixins: [CallPromiseMixin],
@@ -77,16 +75,17 @@ export const insertPayment = new ValidatedMethod({
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Payment.schema,
-    details: Student.schema,
+    _id: {
+      type: String,
+      optional: true,
+    },
   }).validator(),
-  run({ doc, details }) {
+  run({ doc, _id }) {
     if (Meteor.isServer) {
       try {
         return Payment.insert(doc, (error, result) => {
           if (!error) {
-            // get Student ID
-            details.studentId = result
-            Student.insert(details)
+            updatePaymentStatus.run(_id)
           }
         })
       } catch (error) {
@@ -108,6 +107,26 @@ export const updatePayment = new ValidatedMethod({
         },
         {
           $set: doc,
+        }
+      )
+    }
+  },
+})
+// Update Status
+export const updatePaymentStatus = new ValidatedMethod({
+  name: 'updatePaymentStatus',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    _id: String,
+  }).validator(),
+  run(_id) {
+    if (Meteor.isServer) {
+      return Payment.update(
+        {
+          _id: _id,
+        },
+        {
+          $set: { status: 'Closed' },
         }
       )
     }
@@ -229,6 +248,7 @@ const aggregatePayment = selector => {
         time: { $last: '$timeDoc.timeStudy' },
         classDetail: {
           $push: {
+            _id: '$_id',
             classId: '$classId',
             studentId: '$studentDoc._id',
             student: '$studentDoc.enName',
@@ -236,6 +256,7 @@ const aggregatePayment = selector => {
             payDate: '$payDate',
             duration: '$duration',
             endPayDate: '$endPayDate',
+            status: '$status',
           },
         },
       },
