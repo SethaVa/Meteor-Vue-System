@@ -10,7 +10,7 @@
         <el-tabs type="card">
           <el-tab-pane label="Student">
             <span slot="label">
-              <i class="fa fa-users"></i> Student</span>
+            <i class="fa fa-users"></i> Student</span>
             <el-form-item label="Type"
                           prop="typeId">
               <el-select v-model="form.typeId"
@@ -118,10 +118,10 @@
     <el-form-item style="float:right">
       <el-button type="primary"
                  @click="saveForm">
-        <i class="fa fa-save"></i> Save</el-button>
+      <i class="fa fa-save"></i> Save</el-button>
       <el-button type="danger"
                  @click="resetForm">
-        <i class="fa fa-refresh"></i> Reset</el-button>
+      <i class="fa fa-refresh"></i> Reset</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -134,6 +134,7 @@ import moment from 'moment'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { lookupType, lookupClass } from '/imports/libs/lookup-methods'
 import { insertStudent } from '../../api/students/methods'
+import payment from '../../api/payment/payment'
 const numeral = require('numeral')
 export default {
   name: 'Register',
@@ -158,6 +159,7 @@ export default {
         discountVal: 0,
         pay: 0,
         remaining: 0,
+        status: 'Paid',
       },
       rules: {
         rsDate: [
@@ -261,6 +263,9 @@ export default {
           this.form.endPayDate = wrapCurrentTime(
             moment(this.form.payDate).add(this.form.duration, 'months')
           )
+          if (this.form.remaining != 0) {
+            this.form.status = 'Dept'
+          }
           let Payment = {
             classId: this.form.classId,
             payDate: this.form.payDate,
@@ -270,7 +275,7 @@ export default {
             discountVal: this.form.discountVal,
             pay: this.form.pay,
             remaining: this.form.remaining,
-            status: 'Active',
+            status: this.form.status,
           }
           let Students = {
             enName: this.form.enName,
@@ -278,6 +283,7 @@ export default {
             gender: this.form.gender,
             dob: this.form.dob,
             tel: this.form.tel,
+            remove: false,
           }
           insertStudent
             .callPromise({ doc: Students, details: Payment })

@@ -59,6 +59,9 @@ export default {
         { label: 'ID', prop: '_id' },
         { label: 'Time', prop: 'timeStudy' },
       ],
+      tableProps: {
+        size: 'mini',
+      },
       actionColDef: {
         label: 'Action',
         def: [

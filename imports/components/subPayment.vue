@@ -42,6 +42,7 @@
 
 <script>
 const numeral = require('numeral')
+import _ from 'lodash'
 import moment from 'moment'
 export default {
   name: 'SubPayment',
@@ -64,6 +65,14 @@ export default {
     }
   },
   methods: {
+    emitToParent() {
+      this.$emit('sub-payment', _.cloneDeep(this.form))
+    },
+    saveForm() {
+      this.$refs['form'].validate(valid => {
+        this.$emit('save-form', valid)
+      })
+    },
     formatNumer(val) {
       return numeral(val).format('0,0.00 $')
     },

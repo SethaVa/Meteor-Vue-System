@@ -8,10 +8,12 @@
     <el-form :model="form"
              ref="form"
              :rules="rules"
-             size="mini">
-      <el-row :gutter="10">
-        <el-col :span="6"></el-col>
-        <el-col :span="6">
+             size="mini"
+             label-position="left"
+             label-width="50px">
+      <el-row>
+        <!-- <el-col :span="6"></el-col> -->
+        <el-col :span="18">
           <el-form-item label="Class"
                         prop="classId">
             <el-select v-model="form.classId"
@@ -28,12 +30,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item style="margin-top:5vh">
+          <el-form-item>
             <el-button type="primary"
                        @click="handleSubmit">Submit</el-button>
           </el-form-item>
         </el-col>
-        <el-col :span="6"></el-col>
+        <!-- <el-col :span="6"></el-col> -->
       </el-row>
     </el-form>
     <data-tables :data="dataTable"
@@ -107,7 +109,7 @@ export default {
               size: 'mini',
             },
             handler: row => {
-              // this.updateDoc = row
+              this.modalDoc = row
               this.modalVisible = true
               this.currentModal = StudentPay
             },
@@ -137,33 +139,36 @@ export default {
         })
     },
     handleSubmit() {
-      let selector = {
-        classId: this.form.classId,
-      }
-      this.loading = true
-      findPaymentForClass
-        .callPromise({ selector: selector })
-        .then(result => {
-          if (result.length > 0) {
-            this.dataTable = []
-            _.forEach(result[0].classDetail, o => {
-              this.dataTable.push({
-                student: o.student,
-                gender: o.gender,
-                payDate: o.payDate,
-                endPayDate: o.endPayDate,
-              })
-            })
-          } else {
-            this.dataTable = []
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          let selector = {
+            classId: this.form.classId,
+            status: { $in: ['Expire', '$classDetail'] },
           }
-          this.loading = false
-        })
-        .catch(error => {
-          Notify.error({ message: error.reason })
-        })
+          this.loading = true
+          findPaymentForClass
+            .callPromise({ selector: selector })
+            .then(result => {
+              if (result.length > 0) {
+                this.dataTable = []
+                _.forEach(result[0].classDetail, o => {
+                  this.dataTable = result[0].classDetail
+                })
+              } else {
+                this.dataTable = []
+              }
+              this.loading = false
+            })
+            .catch(error => {
+              Notify.error({ message: error.reason })
+            })
+        } else {
+          return false
+        }
+      })
     },
     handleClose() {
+      this.handleSubmit()
       this.modalVisible = false
       this.$nextTick(() => {
         this.currentModal = null
