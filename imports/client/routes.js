@@ -26,6 +26,8 @@ import TimeList from './pages/TimeList'
 import Levele from './pages/Levele.vue'
 //Class Study
 import ClassStudy from './pages/ClassList'
+//Class Details
+import ClassDetails from './pages/ClassDetails.vue'
 //Register
 import Register from './pages/Register'
 //Payment
@@ -130,6 +132,12 @@ const routes = [
         path: 'student',
         name: 'student',
         component: StudentList,
+      },
+      // Class Details
+      {
+        path: 'details',
+        name: 'classDetails',
+        component: ClassDetails,
       },
     ],
   },

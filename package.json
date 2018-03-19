@@ -27,7 +27,8 @@
     "vue-meteor-tracker": "^1.2.3",
     "vue-outside-events": "^1.1.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "printd": "0.0.10"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.104",
