@@ -5,7 +5,7 @@ import Home from './pages/home.vue'
 import welcome from './pages/Welcome.vue'
 import Login from './pages/Login.vue'
 // Student
-// import Student from './pages/Student.vue';
+import StudentList from './pages/StudentList.vue'
 // import StudentInsert from './pages/StudentInsert.vue';
 // import StudentUpdate from './pages/StudentUpdate.vue';
 
@@ -124,6 +124,12 @@ const routes = [
         path: 'payment',
         name: 'payment',
         component: Payment,
+      },
+      // Student
+      {
+        path: 'student',
+        name: 'student',
+        component: StudentList,
       },
     ],
   },

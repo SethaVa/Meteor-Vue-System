@@ -12,7 +12,7 @@ export const findStudents = new ValidatedMethod({
   name: 'findStudents',
   mixins: [CallPromiseMixin],
   validate: null,
-  run(selector, option) {
+  run({ selector, option }) {
     if (Meteor.isServer) {
       selector = selector || {}
       option = option || {}
@@ -58,12 +58,13 @@ export const insertStudent = new ValidatedMethod({
     }
   },
 })
+
 // Update
 export const updateStudent = new ValidatedMethod({
   name: 'updateStudent',
   mixins: [CallPromiseMixin],
-  validate: null,
-  run(doc) {
+  validate: new SimpleSchema({ doc: Students.schema }).validator(),
+  run({ doc }) {
     if (Meteor.isServer) {
       return Students.update({ _id: doc._id }, { $set: doc })
     }
@@ -77,9 +78,10 @@ export const removeStudent = new ValidatedMethod({
   validate: new SimpleSchema({
     _id: { type: String },
   }).validator(),
-  run(selector) {
+  run({ _id }) {
     if (Meteor.isServer) {
-      return Students.remove(selector)
+      return Students.update({ _id: _id }, { $set: { remove: true } })
+      // return Students.remove(selector)
     }
   },
 })
