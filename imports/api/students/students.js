@@ -4,6 +4,10 @@ import SimpleSchema from 'simpl-schema'
 const Students = new Mongo.Collection('students')
 
 Students.schema = new SimpleSchema({
+  _id: {
+    type: String,
+    optional: true,
+  },
   enName: {
     type: String,
   },
@@ -12,7 +16,6 @@ Students.schema = new SimpleSchema({
   },
   gender: {
     type: String,
-    required: true,
   },
   dob: {
     type: Date,
