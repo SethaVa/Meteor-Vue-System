@@ -32,6 +32,8 @@ import ClassDetails from './reports/ClassDetails.vue'
 import Register from './pages/Register'
 //Payment
 import Payment from './pages/Payment.vue'
+//Refund
+import Refund from './pages/Refund.vue'
 const routes = [
   //Notfound
   {
@@ -138,6 +140,12 @@ const routes = [
         path: 'details',
         name: 'classDetails',
         component: ClassDetails,
+      },
+      // Refund
+      {
+        path: 'refund',
+        name: 'refund',
+        component: Refund,
       },
     ],
   },
