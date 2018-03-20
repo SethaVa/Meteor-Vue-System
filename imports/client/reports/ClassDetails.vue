@@ -19,7 +19,7 @@
         <span class="headerEn">B.A.D Foreign Language School</span>
       </div>
       <!-- Info Class -->
-      <div class="InfoClass">
+      <div class="info-class">
         <div class="clLeft">
           <label>Teacher : Dara</label><br><br>
           <label>Room : Dara</label>
@@ -37,6 +37,7 @@
         <table class="table-content">
           <thead>
             <tr>
+              <th>No</th>
               <th>Student Name</th>
               <th>Gender</th>
               <th>Pay Date</th>
@@ -46,6 +47,7 @@
           <tbody>
             <tr v-for="(doc, index) in tableData"
                 :key="index">
+              <td>{{ index + 1 }}</td>
               <td>{{ doc.student }}</td>
               <td>{{ doc.gender }}</td>
               <td>{{ doc.payDate }}</td>
@@ -66,6 +68,7 @@
 <script>
 import { Printd } from 'printd'
 import toCss from 'to-css'
+// const toCss = require('to-css')
 import reportCSS from '../styles/reportCss'
 export default {
   data() {
@@ -95,75 +98,85 @@ export default {
       }
     },
     handlePrint() {
+      //       const reportCSS = `
+      // .logo {
+      //     width: 140px;
+      //     height: 100px;
+      //     position: absolute;
+      //   }
+      // .header {
+      //     position: relative;
+      //     left: 20%;
+      //     top: 30%;
+      //     right: 0%;
+      //     bottom: 0%;
+      //   }
+      //   .header>.headerKhmer {
+      //     font-size: 35px;
+      //     font-family: 'Moul', Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
+      //     color: darkgray;
+      //     margin-left: 5vh;
+      //   }
+      //   .header>.headerEn {
+      //     font-size: 33px;
+      //     font-family: 'Times New Roman', Times, serif;
+      //     color: darkgray;
+      //     margin-left: 8vh;
+      //     margin-top: -3vh;
+      //   }
+      //   .table-content {
+      //     border-collapse: collapse;
+      //     width: 100%;
+      //   }
+      //   .info-class {
+      //     position: relative;
+      //   margin-top: 4vh;
+      // }
+
+      // .info-class>.clLeft {
+      //     font-size: 12px;
+      //     position: absolute;
+      //     top: 35%;
+      //     width: 10%;
+      //     left: 10%;
+      // }
+
+      // .info-class>.clCenter {
+      //     font-size: 12px;
+      //     position: absolute;
+      //     margin-left: 10vh;
+      //     top: 35%;
+      //     left: 35%;
+      // }
+
+      // .info-class>.clRight {
+      //     font-size: 12px;
+      //     position: absolute;
+      //     left: 80%;
+      //     top: 35%;
+      // }
+      // .tableShow {
+      //     font-size: 12px;
+      //     margin-top: 10vh;
+      // }
+      //  .tableShow .table-content,
+      // th,
+      // td {
+      //     border: 1px solid #ddd;
+      //     border-bottom: 1px solid #ddd;
+      //     padding: 5px;
+      // }
+
+      //  .tableShow th {
+      //     background-color: #ddd;
+      //   }
+      // `
       this.d.print(document.getElementById('tableStudent'), toCss(reportCSS))
     },
   },
 }
 </script>
 
-<style>
-.logo {
-  width: 140px;
-  height: 100px;
-  position: absolute;
-}
-.header {
-  position: relative;
-  left: 20%;
-  top: 30%;
-  right: 0%;
-  bottom: 0%;
-}
-.headerKhmer {
-  font-size: 35px;
-  font-family: 'Moul';
-  color: darkgray;
-  margin-left: 5vh;
-}
-.headerEn {
-  font-size: 33px;
-  font-family: 'Times New Roman', Times, serif;
-  color: darkgray;
-  margin-left: 8vh;
-  margin-top: -3vh;
-}
-.inforClass {
-  clear: both;
-  /* margin-top: 5vh;
-  margin-bottom: 5vh; */
-}
-.clLeft {
-  font-size: 12px;
-  background-color: red;
-  width: 10%;
-  float: left;
-}
-.clCenter {
-  font-size: 12px;
-  margin-left: 10vh;
-  text-align: center;
-}
-.clRight {
-  font-size: 12px;
-  float: right;
-  background-color: aqua;
-}
-.tableShow {
-  font-size: 12px;
-  margin-top: 5vh;
-}
-.table-content {
-  border-collapse: inherit;
-
-  width: 100%;
-}
-.table-content,
-th,
-td {
-  border-bottom: 1px solid #ddd;
-  padding: 5px;
-}
-th {
-  background-color: #ddd;
-}
+<style lang="sass">
+@import '../styles/report.scss'
 </style>
