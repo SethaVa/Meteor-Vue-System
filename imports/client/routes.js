@@ -27,7 +27,7 @@ import Levele from './pages/Levele.vue'
 //Class Study
 import ClassStudy from './pages/ClassList'
 //Class Details
-import ClassDetails from './pages/ClassDetails.vue'
+import ClassDetails from './reports/ClassDetails.vue'
 //Register
 import Register from './pages/Register'
 //Payment
