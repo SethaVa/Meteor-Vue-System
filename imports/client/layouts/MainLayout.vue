@@ -1,10 +1,14 @@
 <template>
-  <el-container>
+  <el-container class="container">
     <el-aside width="250px"
-              style="background-color: #1d2525de;height:675px">
+              id="menu-side"
+              class="aside">
       <!-- Aside Menu -->
-      <img src="/img/logo.png"
-           class="image">
+      <div class="logo">
+        <img src="/img/logo.png"
+             class="logo-img">
+      </div>
+
       <!-- <span v-if="true">
               <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
               <component :is="currentAsideMenu" :active-menu="linkActiveClass"></component>
@@ -13,12 +17,15 @@
             <aside-menu :active-menu="linkActiveClass"></aside-menu>
             <component :is="currentAsideMenu" :active-menu="linkActiveClass"></component>
           </span> -->
+      <!-- @select="handleHomeSelect" -->
+
       <component :is="currentAsideMenu"
                  :active-menu="linkActiveClass"></component>
+
     </el-aside>
     <el-container>
       <!-- Heder -->
-      <el-header style=" font-size: 12px">
+      <el-header class="header-menu">
         <span class="header-title">{{ headerTitle }}</span>
         <!-- Header Menu -->
         <span style="float: right;">
@@ -27,9 +34,10 @@
           <el-dropdown @command="handleUser"
                        class="header-item-margin">
             <span class="el-dropdown-link">
-              <div class="user-img"><img src="/images/user.png"
-                                         alt=""
-                                         class="avatar"> {{ userFullName }}
+              <div class="user-img">
+                <img src="/images/user.png"
+                     alt=""
+                     class="avatar"> {{ userFullName }}
                 <i class="el-icon-arrow-down el-icon-right"></i>
               </div>
             </span>
@@ -40,11 +48,10 @@
                                 divided="">Logout</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-
         </span>
       </el-header>
       <!-- Mian Page     -->
-      <el-main>
+      <el-main class="content">
 
         <div class="layout-content">
           <router-view></router-view>
@@ -61,6 +68,7 @@
 </template>
 
 <script>
+import { slimScroll } from 'meteor/rochal:slimscroll'
 import { Meteor } from 'meteor/meteor'
 import moment from 'moment'
 import _ from 'lodash'
@@ -95,7 +103,6 @@ export default {
       // },
       userFullName() {
         let data = this.$store.getters['app/userFullName']
-        console.log(data)
         return data
       },
     }),
@@ -141,59 +148,80 @@ export default {
         })
     },
   },
+  //   $(function() {
+  //   $('#menu-side').slimScroll({
+  //     height: '200px',
+  //   })
+  // })
 }
 </script>
 
-<style>
-.el-header {
-  /* background-color: #f5f7fa;
-  color: #303133; */
+<style lang="scss" scoped>
+a:-webkit-any-link {
+  color: white;
+  text-decoration: none;
+}
+/* Container */
+.container {
+  height: 100vh;
+  // min-height: calc(100vh - 189px);
+  // min-width: 1024px;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // bottom: 0;
+  // right: 0;
+  // overflow: auto;
+}
+
+/* Aside */
+.aside {
+  background-color: #303133;
+  .logo {
+    text-align: center;
+    line-height: 25px;
+    color: white;
+    position: relative;
+    .logo-img {
+      width: 70%;
+      margin: 0px 0px 0px 48px;
+      // width: 80px;
+      // padding: 14px 0px 3px;
+    }
+  }
+}
+.header-menu {
   background-color: #409eff;
-  color: rgb(255, 255, 255);
+  color: #d4d4d4;
   line-height: 55px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   height: 55px !important;
-}
-.main {
-  min-height: calc(100vh - 189px);
-  background-color: white;
-  margin: 0px 0px 0px;
-  padding: 25px 25px;
-  position: relative;
-  border-radius: 0px 0px 4px 4px;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-}
-.image {
-  width: 50%;
-  margin: 0px 0px 0px 48px;
-}
-
-.layout-content {
-  min-height: calc(100vh - 189px);
-  background-color: white;
-  margin: 0px 0px 0px;
-  padding: 25px 25px;
-  position: relative;
-  border-radius: 0px 0px 4px 4px;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
-
   .header-title {
     font-size: 24px;
-    font-weight: 300;
-    margin: 5px 0px 17px;
+    font-weight: 400;
+    padding-right: 10px;
+    line-height: 50px;
   }
 }
+/* Content */
+.content {
+  padding: 15px 20px 0px;
+  background: #eee;
+  .layout-content {
+    min-height: calc(100vh - 189px);
+    background-color: white;
+    margin: 0px 0px 0px;
+    padding: 25px 25px;
+    position: relative;
+    border-radius: 0px 0px 4px 4px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  }
 
-.layout-footer {
-  text-align: center;
-  font-size: 14px;
-  color: #97a8be;
-  padding: 15px 0 10px;
-}
-.header-title {
-  font-size: 24px;
-  font-weight: 300;
-  color: rgb(17, 17, 17);
-  /* // margin: 5px 0px 17px; */
+  .layout-footer {
+    text-align: center;
+    font-size: 13px;
+    color: #97a8be;
+    padding: 15px 0 10px;
+  }
 }
 </style>

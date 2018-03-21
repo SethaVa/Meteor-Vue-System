@@ -34,7 +34,7 @@ dynamic-import@0.2.0
 
 # Community
 akryum:vue-sass
-
+fourseven:scss
 fortawesome:fontawesome
 vuejs:blaze-integration
 u2622:persistent-session
@@ -57,3 +57,4 @@ simple:rest
 simple:json-routes
 simple:rest-method-mixin
 akryum:vue-component@=0.12.2
+rochal:slimscroll
