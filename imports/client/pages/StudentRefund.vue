@@ -70,7 +70,7 @@ const numeral = require('numeral')
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import _ from 'lodash'
 import moment from 'moment'
-import { insertPayment } from '../../api/payment/methods'
+import { updatePaymentForRefund } from '../../api/payment/methods'
 export default {
   name: 'StudentRefund',
   props: {
@@ -138,9 +138,6 @@ export default {
       }
     },
   },
-  mounted() {
-    console.log(this.modalDoc)
-  },
   methods: {
     saveForm() {
       this.$refs['form'].validate(valid => {
@@ -150,9 +147,12 @@ export default {
             moment(this.form.payDate).add(this.form.duration, 'months')
           )
           if (this.form.remaining != 0) {
-            this.form.status = 'Dept'
+            this.form.status = 'Debt'
+          } else {
+            this.form.status = 'Paid'
           }
           let Payment = {
+            _id: this.modalDoc._id,
             classId: this.modalDoc.classId,
             studentId: this.modalDoc.studentId,
             payDate: this.form.payDate,
@@ -164,8 +164,8 @@ export default {
             remaining: this.form.remaining,
             status: this.form.status,
           }
-          insertPayment
-            .callPromise({ doc: Payment, _id: this.modalDoc._id })
+          updatePaymentForRefund
+            .callPromise({ doc: Payment })
             .then(result => {
               Msg.success()
               this.handleClose()

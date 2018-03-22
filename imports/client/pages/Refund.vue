@@ -104,7 +104,7 @@ export default {
         def: [
           {
             type: 'primary',
-            name: 'Pay',
+            name: 'Refund',
             buttonProps: {
               size: 'mini',
             },
@@ -143,7 +143,7 @@ export default {
         if (valid) {
           let selector = {
             classId: this.form.classId,
-            status: { $in: ['Dept', '$classDetail'] },
+            status: { $in: ['Debt', '$classDetail'] },
           }
           this.loading = true
           findPaymentForClass

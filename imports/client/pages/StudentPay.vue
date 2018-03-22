@@ -145,7 +145,7 @@ export default {
             moment(this.form.payDate).add(this.form.duration, 'months')
           )
           if (this.form.remaining != 0) {
-            this.form.status = 'Dept'
+            this.form.status = 'Debt'
           }
           let Payment = {
             classId: this.modalDoc.classId,
