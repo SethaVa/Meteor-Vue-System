@@ -115,7 +115,7 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-form-item style="float:right">
+    <el-form-item style="margin-left:60%;margin-top:-8%;">
       <el-button type="primary"
                  @click="saveForm">
       <i class="fa fa-save"></i> Save</el-button>
@@ -264,7 +264,7 @@ export default {
             moment(this.form.payDate).add(this.form.duration, 'months')
           )
           if (this.form.remaining != 0) {
-            this.form.status = 'Dept'
+            this.form.status = 'Debt'
           }
           let Payment = {
             classId: this.form.classId,

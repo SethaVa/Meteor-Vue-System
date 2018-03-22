@@ -69,7 +69,7 @@ export const findPaymentOpts = new ValidatedMethod({
   },
 })
 
-// Insert
+// Insert សំរាបើសិស្សចាស់ដែលគាតមកបងលុយ
 export const insertPayment = new ValidatedMethod({
   name: 'insertPayment',
   mixins: [CallPromiseMixin],
@@ -94,12 +94,14 @@ export const insertPayment = new ValidatedMethod({
     }
   },
 })
-// Update
-export const updatePayment = new ValidatedMethod({
+// Update សំរាប់សិស្សដែលគាតជំពាក់លុយ រួចហើយគាតមកសងលុយវិញ
+export const updatePaymentForRefund = new ValidatedMethod({
   name: 'updatePayment',
   mixins: [CallPromiseMixin],
-  validate: null,
-  run(doc) {
+  validate: new SimpleSchema({
+    doc: Payment.schema,
+  }).validator(),
+  run({ doc }) {
     if (Meteor.isServer) {
       return Payment.update(
         {
@@ -255,6 +257,10 @@ const aggregatePayment = selector => {
             gender: '$studentDoc.gender',
             payDate: '$payDate',
             duration: '$duration',
+            totalPay: '$totalPay',
+            discountVal: '$discountVal',
+            pay: '$pay',
+            remaining: '$remaining',
             endPayDate: '$endPayDate',
             status: '$status',
           },

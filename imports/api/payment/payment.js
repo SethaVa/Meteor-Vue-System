@@ -42,7 +42,7 @@ Payment.schema = new SimpleSchema({
   // Check Payments
   status: {
     type: String,
-    allowedValues: ['Paid', 'Dept', 'Expires', 'Closed'],
+    allowedValues: ['Paid', 'Debt', 'Expires', 'Closed'],
   },
 })
 
