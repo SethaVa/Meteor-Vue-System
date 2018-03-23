@@ -143,7 +143,7 @@ export default {
         if (valid) {
           let selector = {
             classId: this.form.classId,
-            status: { $in: ['Expire', '$classDetail'] },
+            status: { $in: ['Expires', '$classDetail'] },
           }
           this.loading = true
           findPaymentForClass
