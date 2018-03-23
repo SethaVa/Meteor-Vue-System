@@ -12,7 +12,7 @@ export const findPayment = new ValidatedMethod({
   name: 'findPayment',
   mixins: [CallPromiseMixin],
   validate: null,
-  run(selector, option) {
+  run({ selector, option }) {
     if (Meteor.isServer) {
       selector = selector || {}
       option = option || {}
@@ -85,7 +85,8 @@ export const insertPayment = new ValidatedMethod({
       try {
         return Payment.insert(doc, (error, result) => {
           if (!error) {
-            updatePaymentStatus.run(_id)
+            let value = 'Closed'
+            updatePaymentStatus.run({ _id, value })
           }
         })
       } catch (error) {
@@ -120,15 +121,17 @@ export const updatePaymentStatus = new ValidatedMethod({
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: String,
+    value: String,
   }).validator(),
-  run(_id) {
+  run({ _id, value }) {
     if (Meteor.isServer) {
+      console.log(_id, value)
       return Payment.update(
         {
           _id: _id,
         },
         {
-          $set: { status: 'Closed' },
+          $set: { status: value },
         }
       )
     }

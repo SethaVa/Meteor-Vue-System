@@ -50,26 +50,21 @@ export default {
       // },
       currentBranch(state) {
         const branch = state.app.currentBranch
-        console.log(branch)
+        // console.log(branch)
         return branch
         // && branch.shortName
       },
       userFullName() {
         let data = this.$store.getters['app/userFullName']
-        console.log(data)
+        // console.log(data)
         return data
       },
     }),
   },
   created() {
     let d1 = moment(moment().toDate()).format('L')
-    console.log(compareDate({ date: moment().toDate() }))
-    let cpDate = moment(d1).isSame('03-22-2018') // true
-    // if (cpDate) {
-    //   console.log('true')
-    // } else {
-    //   console.log('false')
-    // }
+    // check student on time to pay
+    compareDate()
     this.chartData = {
       columns: ['Total', 'Gender'],
       rows: [
