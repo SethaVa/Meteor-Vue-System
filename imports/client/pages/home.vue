@@ -71,18 +71,10 @@ export default {
         {
           Total: 200,
           Gender: 'Male',
-          // cost: 1523,
-          // profit: 1523,
-          // growthRate: 0.12,
-          // people: 100,
         },
         {
           Total: 150,
           Gender: 'Female',
-          // cost: 1223,
-          // profit: 1523,
-          // growthRate: 0.345,
-          // people: 100,
         },
       ],
     }
