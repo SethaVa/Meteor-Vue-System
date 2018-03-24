@@ -7,18 +7,25 @@
         <i class="fa fa-tachometer"></i>
         <span>Dashboad</span>
       </el-menu-item>
+      <!-- // Staff -->
+      <el-submenu index="staff">
+        <template slot="title">
+          <i class="fa fa-home"></i>staff
+        </template>
+        <el-menu-item index="position">
+          <i class="fa fa-home"></i>
+          <span>Position</span>
+        </el-menu-item>
+        <el-menu-item index="staff">
+          <i class="fa fa-home"></i>
+          <span>Staff</span>
+        </el-menu-item>
+      </el-submenu>
       <el-menu-item index="subject">
         <i class="fa fa-home"></i>
         <span>Subject</span>
       </el-menu-item>
-      <el-menu-item index="position">
-        <i class="fa fa-home"></i>
-        <span>Position</span>
-      </el-menu-item>
-      <el-menu-item index="staff">
-        <i class="fa fa-home"></i>
-        <span>Staff</span>
-      </el-menu-item>
+
       <el-menu-item index="room">
         <i class="fa fa-home"></i>
         <span>Room</span>
@@ -59,15 +66,10 @@
         <i class="fa fa-home"></i>
         <span>Refund</span>
       </el-menu-item>
-      <!-- <el-submenu index="2">
-        <template slot="title">
-          <i class="el-cion-message"></i>Student
-        </template>
-        <el-menu-item index="3">
-          <i class="el-icon-message"></i>
-        </el-menu-item>
-      </el-submenu> -->
-
+      <el-menu-item index="salary">
+        <i class="fa fa-home"></i>
+        <span>Salary</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

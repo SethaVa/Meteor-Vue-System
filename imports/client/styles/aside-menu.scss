@@ -84,53 +84,53 @@
     color: #909399;
     margin-right: 5px;
   } // Group Title
-  // .aside-menu-group-title {
-  //     padding: 7px 0px 3px 0px;
-  //     margin: 0 15px 0 15px;
-  //     line-height: normal;
-  //     font-size: 12px;
-  //     color: #909399;
-  //     font-weight: 700;
-  //     text-transform: uppercase;
-  //     margin-top: 5px;
-  //     border-bottom: 1px solid #909399;
-  // }
-  // .el-menu-item,
-  // .el-submenu__title {
-  //     height: 45px !important;
-  //     line-height: 45px !important;
-  // }
-  // .el-submenu__title {
-  //     font-weight: 600;
-  //     text-transform: capitalize;
-  //     font-size: 12px !important;
-  //     margin-left: 15px;
-  //     margin-right: 15px;
-  //     border-radius: 3px;
-  //     margin-top: 5px;
-  // }
-  // .el-submenu__title:hover {
-  //     background-color: hsla(0, 0%, 100%, 0.23) !important;
-  // }
-  // .is-opened {
-  //     .el-submenu__title {
-  //         background-color: hsla(0, 0%, 100%, 0.23) !important;
-  //     }
-  // }
-  // .el-submenu {
-  //     .el-menu {
-  //         background: transparent;
-  //         margin-left: 15px;
-  //     }
-  // }
-  // .el-menu-item-group {
-  //     .el-submenu {
-  //         margin-left: 15px;
-  //     }
-  // }
-  // .is-opened {
-  //     .el-submenu__title i {
-  //         color: inherit;
-  //     }
-  // }
+  .aside-menu-group-title {
+    padding: 7px 0px 3px 0px;
+    margin: 0 15px 0 15px;
+    line-height: normal;
+    font-size: 12px;
+    color: #909399;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 5px;
+    border-bottom: 1px solid #909399;
+  }
+  .el-menu-item,
+  .el-submenu__title {
+    height: 45px !important;
+    line-height: 45px !important;
+  }
+  .el-submenu__title {
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 12px !important;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 3px;
+    margin-top: 5px;
+  }
+  .el-submenu__title:hover {
+    background-color: hsla(0, 0%, 100%, 0.23) !important;
+  }
+  .is-opened {
+    .el-submenu__title {
+      background-color: hsla(0, 0%, 100%, 0.23) !important;
+    }
+  }
+  .el-submenu {
+    .el-menu {
+      background: transparent;
+      margin-left: 15px;
+    }
+  }
+  .el-menu-item-group {
+    .el-submenu {
+      margin-left: 15px;
+    }
+  }
+  .is-opened {
+    .el-submenu__title i {
+      color: inherit;
+    }
+  }
 }
