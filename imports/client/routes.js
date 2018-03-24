@@ -34,6 +34,8 @@ import Register from './pages/Register'
 import Payment from './pages/Payment.vue'
 //Refund
 import Refund from './pages/Refund.vue'
+//Staff Salary
+import StaffSalary from './reports/StaffSalary.vue'
 const routes = [
   //Notfound
   {
@@ -146,6 +148,12 @@ const routes = [
         path: 'refund',
         name: 'refund',
         component: Refund,
+      },
+      // Salary
+      {
+        path: 'salary',
+        name: 'salary',
+        component: StaffSalary,
       },
     ],
   },

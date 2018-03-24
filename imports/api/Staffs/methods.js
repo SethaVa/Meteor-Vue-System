@@ -6,6 +6,7 @@ import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
 import Staff from './staff'
 import ClassStudy from '../classStudy/classStudy'
+import Payment from '../payment/payment'
 // Find
 export const findStaff = new ValidatedMethod({
   name: 'findStaff',
@@ -72,6 +73,22 @@ export const findOneStaff = new ValidatedMethod({
   },
 })
 
+//find salary
+export const findStaffSalary = new ValidatedMethod({
+  name: 'findStaffSalary',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ selector }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      console.log(selector)
+      // sort = sort || {_id:-1};
+      console.log(aggregateFindStaffSalary(selector))
+      return aggregateFindStaffSalary(selector)
+    }
+  },
+})
+
 // Insert
 export const insertStaff = new ValidatedMethod({
   name: 'insertStaff',
@@ -80,7 +97,7 @@ export const insertStaff = new ValidatedMethod({
   run(doc) {
     if (Meteor.isServer) {
       console.log(doc)
-        return Staff.insert(doc)
+      return Staff.insert(doc)
     }
   },
 })
@@ -251,5 +268,166 @@ const aggregatefindStaffDetails = selector => {
       },
     },
   ])
+  return data
+}
+
+// Salary Aggregate
+const aggregateFindStaffSalary = selector => {
+  let data = Payment.aggregate([
+    {
+      $match: {
+        status: 'Paid',
+      },
+    },
+    {
+      $lookup: {
+        from: 'classStudy',
+        localField: 'classId',
+        foreignField: '_id',
+        as: 'classDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$classDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'types',
+        localField: 'classDoc.typeId',
+        foreignField: '_id',
+        as: 'typeDoc',
+      },
+    },
+    {
+      $lookup: {
+        from: 'rooms',
+        localField: 'classDoc.roomId',
+        foreignField: '_id',
+        as: 'roomDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$roomDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $unwind: { path: '$typeDoc', preserveNullAndEmptyArrays: true },
+    },
+    {
+      $lookup: {
+        from: 'types',
+        localField: 'classDoc.typeId',
+        foreignField: '_id',
+        as: 'typeDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$typeDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'staff',
+        localField: 'classDoc.staffId',
+        foreignField: '_id',
+        as: 'staffDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$staffDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: 'position',
+        localField: 'staffDoc.positionId',
+        foreignField: '_id',
+        as: 'positionDoc',
+      },
+    },
+    {
+      $unwind: {
+        path: '$positionDoc',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+
+    {
+      $group: {
+        _id: '$classId',
+        classId: { $last: '$classDoc._id' },
+        roomName: { $last: '$roomDoc.roomName' },
+        staffId: { $last: '$staffDoc._id' },
+        staffName: { $last: '$staffDoc.name' },
+        gender: { $last: '$staffDoc.gender' },
+        position: { $last: '$positionDoc.position' },
+        typeId: { $last: '$typeDoc._id' },
+        type: { $last: '$typeDoc.type' },
+        total: {
+          $sum: {
+            $divide: [
+              {
+                $multiply: [
+                  '$totalPay',
+                  {
+                    $divide: [50, 100],
+                  },
+                ],
+              },
+              '$duration',
+            ],
+          },
+        },
+      },
+    },
+    {
+      // Type : Full Time , Part Time Id
+      $match: selector,
+    },
+    {
+      $group: {
+        _id: '$staffId',
+        classId: { $last: '$classId' },
+        // roomName:{$last:'$roomName'},
+        staffId: { $last: '$staffId' },
+        staffName: { $last: '$staffName' },
+        gender: { $last: '$gender' },
+        position: { $last: '$position' },
+        typeId: { $last: '$typeId' },
+        type: { $last: '$type' },
+        totalSalary: {
+          $sum: '$total',
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        classId: 1,
+        staffId: 1,
+        staffName: 1,
+        gender: 1,
+        position: 1,
+        typeId: 1,
+        type: 1,
+        totalSalary: 1,
+      },
+    },
+    {
+      $sort: {
+        _id: 1,
+      },
+    },
+  ])
+
   return data
 }
