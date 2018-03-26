@@ -70,6 +70,10 @@
         <i class="fa fa-home"></i>
         <span>Salary</span>
       </el-menu-item>
+      <el-menu-item index="acc">
+        <i class="fa fa-home"></i>
+        <span>Accouting</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
