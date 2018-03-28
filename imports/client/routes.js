@@ -36,6 +36,8 @@ import Payment from './pages/Payment.vue'
 import Refund from './pages/Refund.vue'
 //Staff Salary
 import StaffSalary from './reports/StaffSalary.vue'
+// Accouting
+import Acc from './pages/Accouting.vue'
 const routes = [
   //Notfound
   {
@@ -154,6 +156,12 @@ const routes = [
         path: 'salary',
         name: 'salary',
         component: StaffSalary,
+      },
+      // Accouting
+      {
+        path: 'acc',
+        name: 'acc',
+        component: Acc,
       },
     ],
   },
