@@ -24,14 +24,15 @@ Payment.schema = new SimpleSchema({
   endPayDate: {
     type: Date,
   },
-  totalPay: {
-    type: Number,
-  },
-  discountVal: {
+  usd: {
     type: Number,
     defaultValue: 0,
   },
-  pay: {
+  khr: {
+    type: Number,
+    defaultValue: 0,
+  },
+  discountVal: {
     type: Number,
     defaultValue: 0,
   },

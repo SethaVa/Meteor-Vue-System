@@ -22,14 +22,20 @@
                       v-model.number="form.duration"
                       auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="Total Pay"
-                        prop="totalPay">
-            <el-input type="totalPay"
-                      v-model.number="form.totalPay"
+          <el-form-item label="USD"
+                        prop="usd">
+            <el-input type="usd"
+                      v-model.number="form.usd"
                       auto-complete="off"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
+          <el-form-item label="KHR"
+                        prop="khr">
+            <el-input type="khr"
+                      v-model.number="form.khr"
+                      auto-complete="off"></el-input>
+          </el-form-item>
           <el-form-item label="Dis Val"
                         prop="discountVal">
             <el-input type="discountVal"
@@ -38,15 +44,11 @@
 
             </el-input>
           </el-form-item>
-          <el-form-item label="Pay"
-                        prop="pay">
-            <el-input type="pay"
-                      v-model.number="form.pay"
-                      auto-complete="off"></el-input>
-          </el-form-item>
           <el-form-item label="Remaining"
                         prop="remaining">
-            <label>{{ formatNumer(remaining) }}</label>
+            <el-input type="remaining"
+                      v-model.number="form.remaining"
+                      auto-complete="off"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -90,9 +92,9 @@ export default {
         payDate: moment().toDate(),
         duration: 0,
         endPayDate: '',
-        totalPay: 0,
+        usd: 0,
+        khr: 0,
         discountVal: 0,
-        pay: 0,
         remaining: 0,
         status: 'Paid',
       },
@@ -107,34 +109,37 @@ export default {
             trigger: 'change',
           },
         ],
-        totalPay: [
-          { required: true, message: 'Total is Required', trigger: 'change' },
+        usd: [
+          { required: true, message: 'USD is Required', trigger: 'change' },
+        ],
+        khr: [
+          { required: true, message: 'KHR is Required', trigger: 'change' },
         ],
       },
     }
   },
   watch: {
-    'form.totalPay'(val) {
-      this.remaining = val
-    },
-    'form.discountVal'(val) {
-      this.remaining = this.form.totalPay - val
-      this.form.remaining = this.form.totalPay - val
-      if (this.remaining < 0) {
-        Notify.warning({
-          message: 'Discount Balance is bigger than Total balance',
-        })
-        this.form.pay = 0
-      }
-    },
-    'form.pay'(val) {
-      this.remaining = this.form.totalPay - this.form.discountVal - val
-      this.form.remaining = this.form.totalPay - this.form.discountVal - val
-      if (this.remaining < 0) {
-        Notify.warning({ message: 'Pay Balance is bigger than Total balance' })
-        this.form.pay = 0
-      }
-    },
+    // 'form.totalPay'(val) {
+    //   this.remaining = val
+    // },
+    // 'form.discountVal'(val) {
+    //   this.remaining = this.form.totalPay - val
+    //   this.form.remaining = this.form.totalPay - val
+    //   if (this.remaining < 0) {
+    //     Notify.warning({
+    //       message: 'Discount Balance is bigger than Total balance',
+    //     })
+    //     this.form.pay = 0
+    //   }
+    // },
+    // 'form.pay'(val) {
+    //   this.remaining = this.form.totalPay - this.form.discountVal - val
+    //   this.form.remaining = this.form.totalPay - this.form.discountVal - val
+    //   if (this.remaining < 0) {
+    //     Notify.warning({ message: 'Pay Balance is bigger than Total balance' })
+    //     this.form.pay = 0
+    //   }
+    // },
   },
   methods: {
     saveForm() {
@@ -153,9 +158,9 @@ export default {
             payDate: this.form.payDate,
             duration: this.form.duration,
             endPayDate: this.form.endPayDate,
-            totalPay: this.form.totalPay,
+            usd: this.form.usd,
+            khr: this.form.khr,
             discountVal: this.form.discountVal,
-            pay: this.form.pay,
             remaining: this.form.remaining,
             status: this.form.status,
           }

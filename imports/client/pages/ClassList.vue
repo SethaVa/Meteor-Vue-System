@@ -160,7 +160,7 @@ export default {
     formatTime(val) {
       let data = val
         .map(o => {
-          return moment(o).format('hh:mm a')
+          return moment(o).format('LT')
         })
         .join('-')
       return data
