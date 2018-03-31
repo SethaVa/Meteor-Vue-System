@@ -73,7 +73,7 @@ import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import SubAcc from '../../components/SubAccounting.vue'
 const numeral = require('numeral')
 //=============================================================
-import { insertIncome } from '../../api/Income/methods'
+import { findOneIncome, updateIncome } from '../../api/Income/methods'
 export default {
   name: 'Acc',
   components: { SubAcc },
@@ -81,6 +81,10 @@ export default {
     visible: {
       type: Boolean,
       default: false,
+    },
+    updateId: {
+      type: String,
+      default: null,
     },
   },
   data() {
@@ -93,7 +97,6 @@ export default {
       totalUsd: 0,
       totalKhr: 0,
       itemsProp: this.initItems(),
-      items: [],
       form: {
         tranDate: moment().toDate(),
         referenceType: '',
@@ -106,7 +109,27 @@ export default {
       },
     }
   },
+  mounted() {
+    this.getIncomeUpdate()
+  },
   methods: {
+    getIncomeUpdate() {
+      findOneIncome
+        .callPromise({ id: this.updateId })
+        .then(result => {
+          this.form = result.data
+          this.itemsProp = result.details
+          _.forEach(this.itemsProp, o => {
+            delete o._id
+            delete o.tranDate
+            delete o.referenceType
+            delete o.referenceId
+          })
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     initItems() {
       return [
         {
@@ -128,17 +151,17 @@ export default {
       this.totalKhr = totalKHR
       this.form.totalKhr = totalKHR
 
-      this.items = item
+      this.itemsProp = item
     },
     saveForm(childValid) {
       this.$refs['form'].validate(valid => {
         if (valid && childValid) {
           this.form.tranDate = wrapCurrentTime(this.form.tranDate)
-          insertIncome
-            .callPromise({ doc: this.form, details: this.items })
+          updateIncome
+            .callPromise({ doc: this.form, details: this.itemsProp })
             .then(result => {
               Msg.success()
-              this.cancelForm()
+              this.handleClose()
             })
             .catch(error => {
               Notify.error({ message: error })

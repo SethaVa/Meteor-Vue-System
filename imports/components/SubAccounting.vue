@@ -5,18 +5,33 @@
              ref="form"
              v-loading.body="loading">
       <el-table :data="form.items"
+                size="mini"
                 style="width: 100%">
-        <el-table-column prop="details"
-                         label="Details">
+        <el-table-column prop="name"
+                         label="name">
           <template slot-scope="scope">
-            <el-form-item :key="scope.$index + '.details'"
-                          :prop="'items.' + scope.$index +'.details'"
-                          :rules="rules.details"
+            <el-form-item :key="scope.$index + '.name'"
+                          :prop="'items.' + scope.$index +'.name'"
+                          :rules="rules.name"
                           class="form-item">
-              <el-input v-model="scope.row.details"
-                        placeholder="Items Details"
+              <el-input v-model="scope.row.name"
+                        placeholder="Items name"
                         size="small"
                         style="width:100%"></el-input>
+            </el-form-item>
+          </template>
+        </el-table-column>
+        <el-table-column prop="qty"
+                         label="Qty">
+          <template slot-scope="scope">
+            <el-form-item :key="scope.$index + '.qty'"
+                          :prop="'items.' + scope.$index + '.qty'"
+                          :rules="rules.qty"
+                          class="form-item">
+              <el-input v-model.number="scope.row.qty"
+                        size="small"
+                        type="number">
+              </el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -99,7 +114,8 @@ export default {
         items: this.itemsProp,
       },
       rules: {
-        details: [{ required: true }],
+        name: [{ required: true }],
+        qty: [{ required: true }],
       },
     }
   },
@@ -116,7 +132,8 @@ export default {
   methods: {
     addItem() {
       this.form.items.push({
-        details: '',
+        name: '',
+        qty: 0,
         usd: 0,
         khr: 0,
       })

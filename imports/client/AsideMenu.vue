@@ -70,9 +70,9 @@
         <i class="fa fa-home"></i>
         <span>Salary</span>
       </el-menu-item>
-      <el-menu-item index="acc">
+      <el-menu-item index="income">
         <i class="fa fa-home"></i>
-        <span>Accouting</span>
+        <span>Income</span>
       </el-menu-item>
       <el-menu-item index="exchange">
         <i class="fa fa-home"></i>
