@@ -36,8 +36,8 @@ import Payment from './pages/Payment.vue'
 import Refund from './pages/Refund.vue'
 //Staff Salary
 import StaffSalary from './reports/StaffSalary.vue'
-// Accouting
-import Acc from './pages/Accouting.vue'
+// Incomeouting
+import Income from './pages/IncomeList.vue'
 //Exchange
 import Exchange from './pages/Exchange.vue'
 const routes = [
@@ -159,11 +159,11 @@ const routes = [
         name: 'salary',
         component: StaffSalary,
       },
-      // Accouting
+      // Incomeouting
       {
-        path: 'acc',
-        name: 'acc',
-        component: Acc,
+        path: 'income',
+        name: 'income',
+        component: Income,
       },
       // Exchange
       {

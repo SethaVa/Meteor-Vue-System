@@ -53,3 +53,5 @@ import '../../api/classDetails/server/'
 import '../../api/payment/server/index'
 //Exchange
 import '../../api/exchanges/server/index'
+// Income
+import '../../api/Income/server/index'
