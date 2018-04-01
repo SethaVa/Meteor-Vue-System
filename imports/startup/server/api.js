@@ -52,6 +52,8 @@ import '../../api/classDetails/server/'
 // Payment
 import '../../api/payment/server/index'
 //Exchange
-import '../../api/exchanges/server/index'
+// import '../../api/exchanges/server/index'
+import '../../api/exchanges/server/collection-hook'
+import '../../api/exchanges/methods'
 // Income
 import '../../api/Income/server/index'

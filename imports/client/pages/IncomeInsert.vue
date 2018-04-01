@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="New Class"
+    <el-dialog title="New Income"
                width="80%"
                :visible="visible"
                :before-close="handleClose">
@@ -57,8 +57,10 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
-                   @click="saveEvent++">Save</el-button>
-        <el-button @click="handleClose">Cancel</el-button>
+                   @click="saveEvent++"
+                   size="mini">Save</el-button>
+        <el-button @click="handleClose"
+                   size="mini">Cancel</el-button>
       </span>
     </el-dialog>
   </div>
@@ -75,7 +77,7 @@ const numeral = require('numeral')
 //=============================================================
 import { insertIncome } from '../../api/Income/methods'
 export default {
-  name: 'Acc',
+  name: 'IncomeInsert',
   components: { SubAcc },
   props: {
     visible: {
