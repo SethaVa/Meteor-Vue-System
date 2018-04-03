@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="New Class"
+    <el-dialog title="Edit Income"
                width="80%"
                :visible="visible"
                :before-close="handleClose">
@@ -57,8 +57,10 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
-                   @click="saveEvent++">Save</el-button>
-        <el-button @click="handleClose">Cancel</el-button>
+                   @click="saveEvent++"
+                   size="mini">Save</el-button>
+        <el-button @click="handleClose"
+                   size="mini">Cancel</el-button>
       </span>
     </el-dialog>
   </div>
@@ -119,7 +121,12 @@ export default {
         .then(result => {
           this.form = result.data
           this.itemsProp = result.details
+
           _.forEach(this.itemsProp, o => {
+            if (result.data.referenceType === 'Expend') {
+              o.usd = -o.usd
+              o.khr = -o.khr
+            }
             delete o._id
             delete o.tranDate
             delete o.referenceType

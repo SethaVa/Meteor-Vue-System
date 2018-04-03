@@ -19,6 +19,12 @@
           <span v-if="title.prop === 'tranDate'">
             {{ formatDate(scope.row.tranDate) }}
           </span>
+          <span v-else-if="title.prop === 'totalUsd'">
+            {{ formatNum(scope.row.totalUsd)+' $' }}
+          </span>
+          <span v-else-if="title.prop === 'totalKhr'">
+            {{ formatNum(scope.row.totalKhr) + ' ៛' }}
+          </span>
           <span v-else>{{ scope.row[title.prop] }}</span>
         </template>
       </el-table-column>
@@ -30,11 +36,11 @@
 import Msg from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
 import { findIncome, removeIncome } from '../../api/Income/methods'
-import IncomeInsert from './Accouting.vue'
+import IncomeInsert from './IncomeInsert.vue'
 import IncomeUpdate from './IncomeUpdate.vue'
-
+import _ from 'lodash'
 import moment from 'moment'
-
+const numeral = require('numeral')
 export default {
   name: 'IncomeList',
   meta: {
@@ -92,10 +98,6 @@ export default {
               this.updateId = row._id
               this.modalVisible = true
               this.currentModal = IncomeUpdate
-              // this.$router.push({
-              //   name: 'studentUpdate',
-              //   params: { _id: row._id },
-              // })
             },
           },
           {
@@ -121,6 +123,14 @@ export default {
       findIncome
         .callPromise({ options: options })
         .then(result => {
+          console.log(result)
+          _.forEach(result, o => {
+            if (o.referenceType === 'Expend') {
+              o.totalUsd = -o.totalUsd
+              o.totalKhr = -o.totalKhr
+            }
+          })
+
           this.tableData = result
           this.loading = false
         })
@@ -153,6 +163,9 @@ export default {
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')
+    },
+    formatNum(val) {
+      return numeral(val).format('0,0.00')
     },
     handleModalClose() {
       this.getData()
