@@ -87,25 +87,27 @@
                         v-model.number="form.duration"
                         auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="USD "
-                          prop="usd">
-              <el-input type="usd"
-                        v-model.number="form.usd"
-                        auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="KHR"
-                          prop="khr">
-              <el-input type="khr"
-                        v-model.number="form.khr"
-                        auto-complete="off">
-
-              </el-input>
+            <el-form-item label="Total Pay "
+                          prop="totalPay">
+              <el-input type="number"
+                        v-model.number="form.totalPay"></el-input>
             </el-form-item>
             <el-form-item label="Dis Val"
                           prop="discountVal">
               <el-input type="discountVal"
-                        v-model.number="form.discountVal"
-                        auto-complete="off">
+                        v-model.number="form.discountVal">
+
+              </el-input>
+            </el-form-item>
+            <el-form-item label="USD "
+                          prop="usd">
+              <el-input type="number"
+                        v-model.number="form.usd"></el-input>
+            </el-form-item>
+            <el-form-item label="KHR"
+                          prop="khr">
+              <el-input type="number"
+                        v-model.number="form.khr">
 
               </el-input>
             </el-form-item>
@@ -159,6 +161,7 @@ export default {
         tel: '',
         payDate: moment().toDate(),
         duration: 0,
+        totalPay: 0,
         usd: 0,
         discountVal: 0,
         khr: 0,
@@ -194,12 +197,9 @@ export default {
           { required: true, message: 'Duration is required' },
           { type: 'number', message: 'Duration must be a number' },
         ],
-        usd: [
-          { required: true, message: 'Total is required' },
-          { type: 'number', message: 'Total must be a number' },
-        ],
-        discountVal: [{ type: 'number', message: 'Discount must be a number' }],
-        khr: [{ type: 'number', message: 'khr must be a number' }],
+        usd: [{ required: true, message: 'Total is required' }],
+        khr: [{ required: true, message: 'Total is required' }],
+        totalPay: [{ required: true, message: 'Total must be a number' }],
       },
     }
   },
@@ -263,6 +263,7 @@ export default {
         if (valid) {
           this.form.rsDate = wrapCurrentTime(this.form.rsDate)
           this.form.dob = wrapCurrentTime(this.form.dob)
+          this.form.tranDate = wrapCurrentTime(moment().toDate())
           this.form.payDate = wrapCurrentTime(this.form.payDate)
           this.form.endPayDate = wrapCurrentTime(
             moment(this.form.payDate).add(this.form.duration, 'months')
@@ -271,12 +272,14 @@ export default {
             this.form.status = 'Debt'
           }
           let details = {
+            tranDate: this.form.tranDate,
             classId: this.form.classId,
             payDate: this.form.payDate,
             duration: this.form.duration,
             endPayDate: this.form.endPayDate,
             usd: this.form.usd,
             discountVal: this.form.discountVal,
+            totalPay: this.form.totalPay,
             khr: this.form.khr,
             remaining: this.form.remaining,
             status: this.form.status,
