@@ -222,6 +222,9 @@ export default {
         })
     },
     handlePrint() {
+      // font-family: Times New Roman, Times, serif;
+      // font-family: Moul, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
+
       const reportCSS = `
       .logo {
           width: 140px;
@@ -237,13 +240,13 @@ export default {
         }
         .header >.headerKhmer {
           font-size: 35px;
-          font-family: 'Moul', Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
+          font-family: 'Moul';
           color: darkgray;
           margin-left: 5vh;
         }
         .header >.headerEn {
           font-size: 33px;
-          font-family: 'Times New Roman', Times, serif;
+          font-family: Times New Roman;
           color: darkgray;
           margin-left: 8vh;
           margin-top: -3vh;
@@ -280,6 +283,7 @@ export default {
           top: 35%;
       }
       .tableShow {
+          font-family: sans-serif;
           font-size: 12px;
           margin-top: 10vh;
       }
