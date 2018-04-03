@@ -8,6 +8,9 @@ Payment.schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  tranDate: {
+    type: Date,
+  },
   classId: {
     type: String,
   },
@@ -24,6 +27,13 @@ Payment.schema = new SimpleSchema({
   endPayDate: {
     type: Date,
   },
+  totalPay: {
+    type: Number,
+  },
+  discountVal: {
+    type: Number,
+    defaultValue: 0,
+  },
   usd: {
     type: Number,
     defaultValue: 0,
@@ -32,10 +42,7 @@ Payment.schema = new SimpleSchema({
     type: Number,
     defaultValue: 0,
   },
-  discountVal: {
-    type: Number,
-    defaultValue: 0,
-  },
+
   remaining: {
     type: Number,
     defaultValue: 0,
