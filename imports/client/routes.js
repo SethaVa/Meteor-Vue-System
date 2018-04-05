@@ -29,6 +29,7 @@ import ClassStudy from './pages/ClassList'
 //Class Details
 import ClassDetails from './reports/ClassDetails.vue'
 //Register
+import RegisterList from './pages/RegisterList'
 import Register from './pages/Register'
 //Payment
 import Payment from './pages/Payment.vue'
@@ -64,8 +65,7 @@ const routes = [
   {
     path: '/',
     component: index,
-    children: [
-      {
+    children: [{
         path: '',
         name: 'home',
         component: Home,
@@ -122,6 +122,12 @@ const routes = [
         path: 'time',
         name: 'time',
         component: TimeList,
+      },
+      //Register
+      {
+        path: 'register-list',
+        name: 'registerList',
+        component: RegisterList,
       },
       //Register
       {
