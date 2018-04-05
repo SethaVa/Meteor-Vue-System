@@ -1,45 +1,46 @@
 <template>
   <div>
-    <el-dialog title="New Student"
-               width="80%"
-               :visible="true"
-               :before-close="handleClose">
+    <el-dialog :visible="visible"
+               :before-close="handleClose"
+               width="80%">
+      <span slot="title">
+      <i class="fa fa-user"></i> Student</span>
       <el-form label-position="left"
+               label-width="100px"
                :model="form"
                ref="form"
-               :rules="rules">
+               :rules="rules"
+               size="mini">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="First Name"
-                          prop="first">
-              <el-input v-model="form.first"></el-input>
+            <el-form-item label="Kh Name"
+                          prop="khName">
+              <el-input v-model="form.khName"></el-input>
             </el-form-item>
-            <el-form-item label="Last Name"
-                          prop="last">
-              <el-input v-model="form.last"></el-input>
+            <el-form-item label="En Name"
+                          prop="enName">
+              <el-input v-model="form.enName"></el-input>
             </el-form-item>
             <el-form-item label="Gender"
                           prop="gender">
-              <el-radio-group v-model="form.gender">
-                <el-radio v-for="item in genderOpt"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value"></el-radio>
-              </el-radio-group>
+              <el-select v-model="form.gender">
+                <el-option v-for="doc in genderOpts"
+                           :key="doc.value"
+                           :label="doc.label"
+                           :value="doc.value"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <div class="right">
+            <el-form-item label="DOB"
+                          prop="dob">
+              <el-date-picker v-model="form.dob"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="Telephone"
+                          prop="tel">
+              <el-input v-model="form.tel"></el-input>
+            </el-form-item>
 
-              <el-form-item label="DOB"
-                            prop="dob">
-                <el-date-picker v-model="form.dob"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="Telephone"
-                            prop="tel">
-                <el-input v-model="form.tel"></el-input>
-              </el-form-item>
-            </div>
           </el-col>
         </el-row>
       </el-form>
@@ -54,90 +55,86 @@
 </template>
 
 <script>
-import { insertStudent } from '../../api/students/methods.js'
+import Msg from '/imports/client/libs/message'
+import Notify from '/imports/client/libs/notify'
+import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import lookupValue from '/imports/client/libs/Lookup-Value'
+import _ from 'lodash'
+import { updateStudent } from '../../api/students/methods.js'
 
 export default {
-  name: 'studentinsert',
-  props: ['visible'],
+  name: 'StudentInsert',
+  props: {
+    updateDoc: {
+      type: Object,
+      default: null,
+    },
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
-      genderOpt: [
-        { label: 'Male', value: 'M' },
-        { label: 'Female', value: 'F' }
-      ],
+      genderOpts: lookupValue.gender,
+
       form: {
-        first: '',
-        last: '',
+        khName: '',
+        enName: '',
         gender: '',
         dob: '',
-        tel: ''
+        tel: '',
       },
       rules: {
-        first: [
+        khName: [
           {
             required: true,
-            message: 'Please Insert First Name',
-            trigger: 'blur'
-          }
+            message: 'Please Input Khmrt Name',
+            trigger: 'blur',
+          },
         ],
-        last: [
+        enName: [
           {
             required: true,
-            message: 'Please Insert Last Name',
-            trigger: 'blur'
-          }
+            message: 'Please Input English Name',
+            trigger: 'blur',
+          },
         ],
         gender: [
-          { required: true, message: 'Please Insert Gender', trigger: 'change' }
+          { required: true, message: 'Please Select Gender', trigger: 'blur' },
         ],
-        tel: [
-          {
-            required: true,
-            message: 'Please Insert Telephone',
-            trigger: 'blur'
-          }
-        ]
-      }
+      },
     }
   },
+
   methods: {
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          let doc = {
-            name: {
-              first: this.form.first,
-              last: this.form.last
-            },
-            gender: this.form.gender,
-            dob: this.form.dob,
-            tel: this.form.tel
-          }
-          console.log(doc)
-          insertStudent
-            .callPromise(doc)
+          this.form.dob = wrapCurrentTime(this.form.dob)
+          // console.log(this.form)
+          updateStudent
+            .callPromise({ doc: this.form })
             .then(result => {
-              this.$message({
-                message: 'Insert Successfull',
-                type: 'success'
-              })
-              this.resetForm()
+              Msg.success()
+              this.handleClose()
             })
             .catch(error => {
-              console.log(error.reason)
+              Notify.error({ message: error })
             })
         } else {
           return false
         }
       })
     },
+
     handleClose() {
       this.$emit('modal-close')
     },
     resetForm() {
-      this.$refs['form'].resetFields()
-    }
-  }
+      this.$refs['form'].resetFileds()
+    },
+  },
 }
 </script>
 

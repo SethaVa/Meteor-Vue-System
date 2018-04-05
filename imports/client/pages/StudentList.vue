@@ -5,8 +5,10 @@
                :visible="modalVisible"
                @modal-close="handleModalClose"></component>
     <!-- table Data -->
-    <data-tables :data="tableData"
+    <data-tables v-loading="loading"
+                 :data="tableData"
                  :action-col-def="actionColDef"
+                 :actions-def="actionsDef"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
@@ -44,6 +46,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       currentModal: null,
       updateDoc: null,
       modalVisible: false,
@@ -58,6 +61,24 @@ export default {
       tableProps: {
         border: false,
         size: 'mini',
+      },
+      actionsDef: {
+        colProps: {
+          span: 19,
+        },
+        def: [
+          {
+            name: 'New Student',
+            icon: 'el-icon-circle-plus',
+            buttonProps: {
+              size: 'mini',
+            },
+            handler: () => {
+              this.modalVisible = true
+              this.currentModal = StudentInsert
+            },
+          },
+        ],
       },
       actionColDef: {
         label: 'Action',
@@ -99,12 +120,14 @@ export default {
 
   methods: {
     getData() {
+      this.loading = true
       let selector = {
         remove: false,
       }
       findStudents
         .callPromise({ selector: selector })
         .then(result => {
+          this.loading = false
           this.tableData = result
         })
         .catch(err => {

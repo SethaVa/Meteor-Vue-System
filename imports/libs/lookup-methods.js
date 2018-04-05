@@ -6,6 +6,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import Type from '/imports/api/types/type'
 import { findClassStudy } from '/imports/api/classStudy/methods'
+import Students from '../api/students/students'
+
 
 export const lookupType = new ValidatedMethod({
   name: 'lookupType',
@@ -48,6 +50,25 @@ export const lookupClass = new ValidatedMethod({
         })
       })
 
+      return list
+    }
+  },
+})
+
+export const lookupStudent = new ValidatedMethod({
+  name: 'lookupStudent',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run() {
+    if (Meteor.isServer) {
+      let list = []
+      let type = Students.find({}).fetch()
+      _.forEach(type, o => {
+        list.push({
+          value: o._id,
+          label: o._id + ' : ' + o.enName,
+        })
+      })
       return list
     }
   },

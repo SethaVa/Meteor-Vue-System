@@ -46,7 +46,7 @@
         <i class="fa fa-home"></i>
         <span>Time</span>
       </el-menu-item>
-      <el-menu-item index="register">
+      <el-menu-item index="registerList">
         <i class="fa fa-home"></i>
         <span>Register</span>
       </el-menu-item>
