@@ -16,7 +16,8 @@
                        :label="title.label"
                        :prop="title.prop"
                        :sortable="title.sort"></el-table-column>
-      <el-table-column label="Action">
+      <el-table-column width="60px"
+                       label="Action">
         <template slot-scope="scope">
           <el-dropdown trigger="click"
                        @command="handleCommand">
@@ -45,12 +46,12 @@
 </template>
 
 <script>
-import RoomInsert from './RoomInsert.vue'
-import RoomUpdate from './RoomUpdate.vue'
+import RegisterInsert from './RegisterInsert.vue'
+import RegisterUpdate from './RegisterUpdate.vue'
 import { findRoom, removeRoom } from '../../api/rooms/methods.js'
 export default {
   name: 'RegisterList',
-  components: { RoomInsert, RoomUpdate },
+  components: { RegisterInsert, RegisterUpdate },
   data() {
     return {
       currentDialog: null,
@@ -78,7 +79,8 @@ export default {
               size: 'mini',
             },
             handler: () => {
-              this.currentDialog = RoomInsert
+              this.visibleDialog = true
+              this.currentDialog = RegisterInsert
             },
           },
         ],
@@ -91,7 +93,7 @@ export default {
             // icon: 'el-icon-edit',
             // handler: row => {
             //   this.updateId = row._id
-            //   this.currentDialog = RoomUpdate
+            //   this.currentDialog = RegisterUpdate
             // },
           },
           // {
@@ -141,8 +143,11 @@ export default {
     },
     handleCommand(command) {
       if (command.action === 'edit') {
+        // this.route({ name: 'register-new' })
+        this.visibleDialog = true
+              this.currentDialog = RegisterUpdate
         // this.updateId = command.row._id
-        // this.currentDialog = RoomUpdate
+        // this.currentDialog = RegisterUpdate
       } else if (command.action === 'remove') {
         this.$confirm('Do you want delete this record?', 'Warning', {
           type: 'warning',

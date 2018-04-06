@@ -30,7 +30,7 @@ import ClassStudy from './pages/ClassList'
 import ClassDetails from './reports/ClassDetails.vue'
 //Register
 import RegisterList from './pages/RegisterList'
-import Register from './pages/Register'
+import RegisterInsert from './pages/RegisterInsert.vue'
 //Payment
 import Payment from './pages/Payment.vue'
 //Refund
@@ -65,7 +65,8 @@ const routes = [
   {
     path: '/',
     component: index,
-    children: [{
+    children: [
+      {
         path: '',
         name: 'home',
         component: Home,
@@ -131,9 +132,9 @@ const routes = [
       },
       //Register
       {
-        path: 'register',
-        name: 'register',
-        component: Register,
+        path: 'register-new',
+        name: 'register-new',
+        component: RegisterInsert,
       },
       //Payment
       {
