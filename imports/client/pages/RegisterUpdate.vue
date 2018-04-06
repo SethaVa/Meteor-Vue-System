@@ -1,4 +1,9 @@
 <template>
+<el-dialog :visible="visible"
+             :before-close="handleClose"
+             width="80%">
+    <span slot="title">
+    <i class="fa fa-user"></i> Student</span>
   <el-form :model="form"
            :rules="rules"
            ref="form"
@@ -113,17 +118,14 @@
 
       </el-tab-pane>
     </el-tabs>
-
-    <el-form-item style="margin-left:60%;">
-      <el-button type="primary"
-                 @click="saveForm">
-        <i class="fa fa-save"></i> Save</el-button>
-      <el-button type="danger"
-                 @click="resetForm">
-        <i class="fa fa-refresh"></i> Reset</el-button>
-    </el-form-item>
-
   </el-form>
+  <span slot="footer"
+          class="dialog-footer">
+      <el-button type="primary"
+                 @click="handleSave">Save</el-button>
+      <el-button @click="handleClose">Cancel</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
@@ -140,7 +142,13 @@ import {
 import { insertStudent } from '../../api/students/methods'
 const numeral = require('numeral')
 export default {
-  name: 'Register',
+  name: 'RegisterUpdate',
+   props:{
+    visible:{
+      type:Boolean,
+      default:false
+    }
+  },
   data() {
     return {
       loading: false,
@@ -259,7 +267,7 @@ export default {
           Notify.error({ message: error })
         })
     },
-    saveForm() {
+    handleSave() {
     this.$refs['form'].validate(valid => {
       if (valid) {
         this.form.rsDate = wrapCurrentTime(this.form.rsDate)
@@ -339,6 +347,9 @@ export default {
     this.$refs['form'].resetFields()
     this.classIdOpts = []
   },
+  handleClose() {
+      this.$emit('modal-close')
+    },
   formatNumer(val) {
     return numeral(val).format('0,0.00 $')
   },
