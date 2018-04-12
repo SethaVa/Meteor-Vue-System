@@ -8,7 +8,6 @@ import Type from '/imports/api/types/type'
 import { findClassStudy } from '/imports/api/classStudy/methods'
 import Students from '../api/students/students'
 
-
 export const lookupType = new ValidatedMethod({
   name: 'lookupType',
   mixins: [CallPromiseMixin],
@@ -38,7 +37,7 @@ export const lookupClass = new ValidatedMethod({
       let list = []
       let classStudy = findClassStudy.run({ selector: selector })
       _.forEach(classStudy, o => {
-        let timeStudy = o.timeStudy
+        let timeStudy = _.map(o.timeStudy)
           .map(o => {
             return moment(o).format('LT')
           })

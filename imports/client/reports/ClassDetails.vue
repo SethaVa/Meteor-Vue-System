@@ -319,4 +319,5 @@ export default {
 <style lang="sass">
 @import '../styles/report.scss';
 
+
 </style>
