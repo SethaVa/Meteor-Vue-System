@@ -138,6 +138,7 @@ export default {
       findClassStudy
         .callPromise({})
         .then(result => {
+          console.log(result)
           this.tableData = result
         })
         .catch(err => {
@@ -158,7 +159,7 @@ export default {
       return moment(val).format('DD/MM/YYYY')
     },
     formatTime(val) {
-      let data = val
+      let data = _.map(val)
         .map(o => {
           return moment(o).format('LT')
         })

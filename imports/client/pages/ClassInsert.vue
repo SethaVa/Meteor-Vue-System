@@ -98,6 +98,7 @@ import { findSubjectOpts } from '../../api/subject/methods'
 import { findTypeOpts } from '../../api/types/methods'
 import lookupValue from '../../client/libs/Lookup-Value'
 import moment from 'moment'
+import _ from 'lodash'
 export default {
   name: 'ClassStudyInsert',
   props: {
@@ -241,7 +242,6 @@ export default {
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          console.log(this.form)
           insertClassStudy
             .callPromise(this.form)
             .then(result => {
@@ -263,9 +263,9 @@ export default {
       this.$refs['form'].resetFields()
     },
     formatTime(val) {
-      let data = val
+      let data = _.map(val)
         .map(o => {
-          return moment(o).format('hh:mm a')
+          return moment(o).format('LT')
         })
         .join('-')
       return data
