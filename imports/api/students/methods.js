@@ -42,16 +42,10 @@ export const insertStudent = new ValidatedMethod({
     doc: Students.schema,
     details: Payment.schema,
   }).validator(),
-  run({ doc, details }) {
+  run({ doc }) {
     if (Meteor.isServer) {
       try {
-        return Students.insert(doc, (error, result) => {
-          if (!error) {
-            // get Student ID
-            details.studentId = result
-            Payment.insert(details)
-          }
-        })
+        return Students.insert(doc)
       } catch (error) {
         throw new Meteor.Error('Error', 'Payment', error.reason)
       }

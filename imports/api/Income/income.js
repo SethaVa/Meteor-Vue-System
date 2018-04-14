@@ -11,9 +11,11 @@ Income.schema = new SimpleSchema({
   tranDate: {
     type: Date,
   },
+  // New ,Pay,Refund,Income,Expend
   referenceType: {
     type: String,
   },
+  // From Register,Pay,Refund,Income,Expend
   referenceId: {
     type: String,
     optional: true,
