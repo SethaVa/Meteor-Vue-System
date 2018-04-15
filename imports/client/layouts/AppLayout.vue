@@ -57,6 +57,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
+// @import '~imports/client/styles/aside-menu.scss';
 </style>
 
