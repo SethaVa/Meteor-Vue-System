@@ -78,6 +78,10 @@
         <i class="fa fa-home"></i>
         <span>Exchange</span>
       </el-menu-item>
+      <el-menu-item index="salary-rate">
+        <i class="fa fa-home"></i>
+        <span>Rate</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

@@ -78,7 +78,6 @@ export const insertIncome = new ValidatedMethod({
         }
         Income.insert(doc, (error, IncomeId) => {
           if (!error) {
-            let items = []
             _.forEach(details, obj => {
               if (doc.referenceType === 'Expend') {
                 obj.usd = -obj.usd
@@ -91,9 +90,8 @@ export const insertIncome = new ValidatedMethod({
               obj.referenceType = doc.referenceType
               obj.referenceId = IncomeId
 
-              items.push(obj)
+              incomeDetails.insert(obj)
             })
-            incomeDetails.rawCollection().insert(items)
           }
         })
 
@@ -147,6 +145,23 @@ export const removeIncome = new ValidatedMethod({
     if (Meteor.isServer) {
       Income.remove(_id)
       IncomeDetails.remove({ referenceId: _id })
+
+      return 'success'
+    }
+  },
+})
+export const removeIncomeFromOther = new ValidatedMethod({
+  name: 'removeIncomeFromOther',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    referenceId: { type: String },
+    referenceType: {
+      type: String,
+    },
+  }).validator(),
+  run({ referenceId, referenceType }) {
+    if (Meteor.isServer) {
+      Income.remove({ referenceId: referenceId, referenceType: referenceType })
 
       return 'success'
     }

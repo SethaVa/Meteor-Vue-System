@@ -3,7 +3,7 @@
              :before-close="handleClose"
              width="80%">
     <span slot="title">
-    <i class="fa fa-user"></i> Student</span>
+      <i class="fa fa-user"></i> Student</span>
     <el-form :model="form"
              :rules="rules"
              ref="form"
@@ -118,7 +118,7 @@
 
         </el-tab-pane>
       </el-tabs>
-    
+
     </el-form>
     <span slot="footer"
           class="dialog-footer">
@@ -140,19 +140,18 @@ import {
   lookupClass,
   lookupStudent,
 } from '/imports/libs/lookup-methods'
-import { insertStudent } from '../../api/students/methods'
+import { insertRegister } from '../../api/register/methods'
 const numeral = require('numeral')
 export default {
   name: 'RegisterInsert',
-  props:{
-    visible:{
-      type:Boolean,
-      default:false
-    }
+  props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      
       loading: false,
       typeIdOpts: [],
       classIdOpts: [],
@@ -285,6 +284,7 @@ export default {
           let details = {
             tranDate: this.form.tranDate,
             classId: this.form.classId,
+            studentId:this.form.studentId,
             payDate: this.form.payDate,
             duration: this.form.duration,
             endPayDate: this.form.endPayDate,
@@ -295,17 +295,13 @@ export default {
             remaining: this.form.remaining,
             status: this.form.status,
           }
-          let Students = {
-            enName: this.form.enName,
-            khName: this.form.khName,
-            gender: this.form.gender,
-            dob: this.form.dob,
-            tel: this.form.tel,
-            remove: false,
-            typeId: this.form.typeId,
+          let doc = {
+            tranDate: this.form.tranDate,
+            classId: this.form.classId,
+            studentId:this.form.studentId
           }
-          insertStudent
-            .callPromise({ doc: Students, details: details })
+          insertRegister
+            .callPromise({ doc: doc, details: details })
             .then(result => {
               Msg.success()
               this.resetForm()

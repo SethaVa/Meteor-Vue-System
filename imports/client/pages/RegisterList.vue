@@ -8,7 +8,8 @@
 
     <!-- Table Data -->
     <!-- :action-col-def="actionColDef" -->
-    <data-tables :data="tableData"
+    <data-tables v-loading="loading"
+                 :data="tableData"
                  :actions-def="actionsDef"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
@@ -46,22 +47,25 @@
 </template>
 
 <script>
+import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/libs/message'
 import RegisterInsert from './RegisterInsert.vue'
 import RegisterUpdate from './RegisterUpdate.vue'
-import { findRoom, removeRoom } from '../../api/rooms/methods.js'
+import { findRegister, removeRegister } from '../../api/register/methods.js'
 export default {
   name: 'RegisterList',
   components: { RegisterInsert, RegisterUpdate },
   data() {
     return {
+      loading: false,
       currentDialog: null,
       visibleDialog: false,
       updateId: null,
       tableData: [],
       titles: [
         { label: 'ID', prop: '_id', sort: 'custom' },
-        { label: 'Name', prop: 'roomName', sort: 'custom' },
-        { label: 'Describe', prop: 'des' },
+        { label: 'Class', prop: 'classId', sort: 'custom' },
+        { label: 'Student', prop: 'studentId' },
       ],
       tableProps: {
         size: 'mini',
@@ -132,9 +136,11 @@ export default {
   },
   methods: {
     getData() {
-      findRoom
+      this.loading = true
+      findRegister
         .callPromise({})
         .then(result => {
+          this.loading = false
           this.tableData = result
         })
         .catch(err => {
@@ -145,7 +151,7 @@ export default {
       if (command.action === 'edit') {
         // this.route({ name: 'register-new' })
         this.visibleDialog = true
-              this.currentDialog = RegisterUpdate
+        this.currentDialog = RegisterUpdate
         // this.updateId = command.row._id
         // this.currentDialog = RegisterUpdate
       } else if (command.action === 'remove') {
@@ -153,24 +159,27 @@ export default {
           type: 'warning',
         })
           .then(result => {
-            removeRoom
-              .callPromise(command.row.id)
-              .then(result => {
-                this.$message({
-                  message: 'Delete Successfull',
-                  type: 'success',
+            if (result) {
+              let id = command.row._id
+              removeRegister
+                .callPromise({ _id: id, referenceType: 'New' })
+                .then(result => {
+                  if (result) {
+                    Msg.success()
+                  }
                 })
-              })
-              .catch(err => {
-                this.$message(err.reason)
-              })
-            this.getData()
+                .catch(err => {
+                  Notify.error({ message: err.reason + 'Error' })
+                })
+              this.getData()
+            }
           })
           .catch(err => {
-            this.$message({
-              message: 'Cacel Delete',
-              type: 'error',
-            })
+            Notify.error({ message: 'Cacel Delete' })
+            // this.$message({
+            //   message: 'Cacel Delete',
+            //   type: 'error',
+            // })
           })
       }
     },

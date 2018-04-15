@@ -57,3 +57,7 @@ import '../../api/exchanges/server/collection-hook'
 import '../../api/exchanges/methods'
 // Income
 import '../../api/Income/server/index'
+// Salary Rate
+import '../../api/salary-rate/server/index'
+//Register
+import '../../api/register/server/index'

@@ -16,7 +16,7 @@ export const findExchanges = new ValidatedMethod({
     if (!this.isSimulation) {
       Meteor._sleepForMs(200)
       selector = selector || {}
-      options = options || { sort: { _id: -1 }, limit: 10 }
+      options = options || { sort: { _id: -1 }, limit: 1 }
 
       return Exchanges.find(selector, options).fetch()
     }

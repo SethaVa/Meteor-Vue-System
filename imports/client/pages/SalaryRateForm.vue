@@ -8,51 +8,48 @@
                :rules="rules"
                size="mini"
                label-position="left"
-               label-width="70px">
+               label-width="110px">
         <el-row :gutter="20">
-          <el-col :span="8">
+          <el-col :span="10">
             <el-form-item label="Date"
                           prop="exDate">
               <el-date-picker v-model="form.exDate"
                               type="date"
-                              format="dd/MM/yyyy"
-                              style="width:100%">
+                              format="dd/MM/yyyy">
               </el-date-picker>
             </el-form-item>
           </el-col>
 
-          <el-col :span="8">
-            <el-form-item label="Base"
+          <el-col :span="14">
+            <el-form-item label="Student"
                           prop="base">
-              <el-input v-model="form.base"
-                        disabled
-                        style="width:100%"></el-input>
+              <el-input-number v-model="form.base"
+                               disabled
+                               controls-position="right"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-row :gutter="10">
-          <el-col :span="9">
-            <el-form-item label="USD"
-                          prop="usd">
-              <el-input-number v-model="form.usd"
-                               disabled
-                               controls-position="right"
-                               style="width:100%"></el-input-number>
+        <el-row :gutter="20">
+
+          <el-col :span="8">
+            <el-form-item label="Part Time (%)"
+                          prop="partTime">
+              <el-input-number ref="partTime"
+                               v-model="form.partTime"
+                               controls-position="right"></el-input-number>
             </el-form-item>
           </el-col>
 
-          <el-col :span="9">
-            <el-form-item label="KHR"
-                          prop="khr">
-              <el-input-number ref="khr"
-                               v-model="form.khr"
-                               controls-position="right"
-                               style="width:100%"></el-input-number>
+          <el-col :span="8">
+            <el-form-item label="Full Time($)"
+                          prop="fullTime">
+              <el-input-number v-model="form.fullTime"
+                               controls-position="right"></el-input-number>
             </el-form-item>
           </el-col>
 
-          <el-col :span="6">
+          <el-col :span="8">
             <el-form-item>
               <el-button type="primary"
                          @click="submitForm">{{ formType }}</el-button>
@@ -72,10 +69,13 @@ import Msg from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 
-import { insertExchange, updateExchange } from '../../api/exchanges/methods'
+import {
+  insertSalaryRate,
+  updateSalaryRate,
+} from '../../api/salary-rate/methods'
 
 export default {
-  name: 'ExchangeNew',
+  name: 'SalaryRate',
   props: {
     formType: {
       type: String,
@@ -90,15 +90,16 @@ export default {
     return {
       loading: false,
       form: {
-        base: 'USD',
+        base: '1',
         exDate: moment().toDate(),
-        usd: 1,
-        khr: 0,
+        partTime: 0,
+        fullTime: 0,
       },
       rules: {
         exDate: [{ required: true }],
-        usd: [{ required: true }],
-        khr: [{ required: true }],
+        Student: [{ required: true }],
+        partTime: [{ required: true }],
+        fullTime: [{ required: true }],
       },
     }
   },
@@ -106,20 +107,20 @@ export default {
     updateDoc(val) {
       if (val) {
         this.form = val
-        this.focusForm('khr')
+        this.focusForm('part Time')
       } else {
         this.form = {
-          base: 'USD',
+          base: 'Student',
           exDate: moment().toDate(),
-          usd: 1,
-          khr: 0,
+          Student: 1,
+          partTime: 0,
           thb: 0,
         }
       }
     },
   },
   mounted() {
-    this.focusForm('khr')
+    this.focusForm('partTime')
   },
   methods: {
     focusForm(refName) {
@@ -132,8 +133,9 @@ export default {
 
           // Pick doc
           this.form.exDate = wrapCurrentTime(this.form.exDate)
+
           if (this.formType === 'New') {
-            insertExchange
+            insertSalaryRate
               .callPromise(this.form)
               .then(result => {
                 if (result) {
@@ -146,7 +148,7 @@ export default {
                 Notify.error({ message: error })
               })
           } else if (this.formType === 'Update') {
-            updateExchange
+            updateSalaryRate
               .callPromise(this.form)
               .then(result => {
                 if (result) {
@@ -169,7 +171,7 @@ export default {
     },
     handleCancel() {
       this.resetForm()
-      this.focusForm('khr')
+      this.focusForm('partTime')
       this.$emit('form-change')
     },
   },

@@ -41,6 +41,8 @@ import StaffSalary from './reports/StaffSalary.vue'
 import Income from './pages/IncomeList.vue'
 //Exchange
 import Exchange from './pages/Exchange.vue'
+// SalaryRate
+import SalaryRate from './pages/SalaryRate.vue'
 const routes = [
   //Notfound
   {
@@ -177,6 +179,12 @@ const routes = [
         path: 'exchange',
         name: 'exchange',
         component: Exchange,
+      },
+      // Exchange
+      {
+        path: 'salary-rate',
+        name: 'salary-rate',
+        component: SalaryRate,
       },
     ],
   },
