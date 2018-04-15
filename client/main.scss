@@ -1,0 +1,319 @@
+body {
+  display: block;
+  margin: 0px;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', SimSun, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow: auto;
+}
+
+/* battambang-regular - khmer */
+
+@font-face {
+  font-family: 'Battambang';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/battambang-v9-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Battambang'),
+    url('/fonts-kh/battambang-v9-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/battambang-v9-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/battambang-v9-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/battambang-v9-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/battambang-v9-khmer-regular.svg#Battambang') format('svg');
+  /* Legacy iOS */
+}
+
+/* bokor-regular - khmer */
+
+@font-face {
+  font-family: 'Bokor';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/bokor-v8-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Bokor'),
+    url('/fonts-kh/bokor-v8-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/bokor-v8-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/bokor-v8-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/bokor-v8-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/bokor-v8-khmer-regular.svg#Bokor') format('svg');
+  /* Legacy iOS */
+}
+
+/* content-regular - khmer */
+
+@font-face {
+  font-family: 'Content';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/content-v8-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Content'),
+    url('/fonts-kh/content-v8-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/content-v8-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/content-v8-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/content-v8-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/content-v8-khmer-regular.svg#Content') format('svg');
+  /* Legacy iOS */
+}
+
+/* fasthand-regular - khmer */
+
+@font-face {
+  font-family: 'Fasthand';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/fasthand-v7-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Fasthand'), local('Fasthand-Regular'),
+    url('/fonts-kh/fasthand-v7-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/fasthand-v7-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/fasthand-v7-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/fasthand-v7-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/fasthand-v7-khmer-regular.svg#Fasthand') format('svg');
+  /* Legacy iOS */
+}
+
+/* freehand-regular - khmer */
+
+@font-face {
+  font-family: 'Freehand';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/freehand-v8-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Freehand'),
+    url('/fonts-kh/freehand-v8-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/freehand-v8-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/freehand-v8-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/freehand-v8-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/freehand-v8-khmer-regular.svg#Freehand') format('svg');
+  /* Legacy iOS */
+}
+
+/* metal-regular - khmer */
+
+@font-face {
+  font-family: 'Metal';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/metal-v9-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Metal'),
+    url('/fonts-kh/metal-v9-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/metal-v9-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/metal-v9-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/metal-v9-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/metal-v9-khmer-regular.svg#Metal') format('svg');
+  /* Legacy iOS */
+}
+
+/* moul-regular - khmer */
+
+@font-face {
+  font-family: 'Moul';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/moul-v8-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Moul'),
+    url('/fonts-kh/moul-v8-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/moul-v8-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/moul-v8-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/moul-v8-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/moul-v8-khmer-regular.svg#Moul') format('svg');
+  /* Legacy iOS */
+}
+
+/* moulpali-regular - khmer */
+
+@font-face {
+  font-family: 'Moulpali';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/moulpali-v9-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Moul Pali'), local('MoulPali'),
+    url('/fonts-kh/moulpali-v9-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/moulpali-v9-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/moulpali-v9-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/moulpali-v9-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/moulpali-v9-khmer-regular.svg#Moulpali') format('svg');
+  /* Legacy iOS */
+}
+
+/* siemreap-regular - khmer */
+
+@font-face {
+  font-family: 'Siemreap';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts-kh/siemreap-v9-khmer-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Siemreap'),
+    url('/fonts-kh/siemreap-v9-khmer-regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('/fonts-kh/siemreap-v9-khmer-regular.woff2') format('woff2'),
+    url('/fonts-kh/siemreap-v9-khmer-regular.woff') format('woff'),
+    url('/fonts-kh/siemreap-v9-khmer-regular.ttf') format('truetype'),
+    url('/fonts-kh/siemreap-v9-khmer-regular.svg#Siemreap') format('svg');
+  /* Legacy iOS */
+}
+
+/* Element UI */
+
+@font-face {
+  font-family: element-icons;
+  src: url('/fonts-element/element-icons.woff?t=1508313898411') format('woff'),
+    url('/fonts-element/element-icons.ttf?t=1508313898411') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+// /* Style For Aside Menu (Because it not work in vue file) */
+.el-menu-item,
+.el-submenu__title {
+  height: 45px !important;
+  line-height: 45px !important;
+}
+
+.el-submenu__title:hover {
+  background-color: hsla(0, 0%, 100%, 0.23) !important;
+}
+
+.is-opened > .el-submenu__title {
+  background-color: hsla(0, 0%, 100%, 0.23) !important;
+}
+
+.el-submenu > .el-menu {
+  background: transparent;
+}
+
+.el-menu-item-group > .el-submenu {
+  margin-left: 20px;
+}
+
+.el-submenu__title {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px !important;
+  margin-left: 15px !important;
+  margin-right: 15px !important;
+  border-radius: 3px;
+  margin-top: 5px;
+  padding-left: 20px !important;
+}
+
+.is-opened > .el-submenu__title i {
+  color: inherit;
+}
+
+.el-dropdown-menu__item:focus,
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  background-color: #ffeee3 !important;
+  color: #f47321 !important;
+}
+
+.el-submenu {
+  .el-menu {
+    background: transparent;
+    margin-left: 15px;
+  }
+}
+
+/* DropDown Space*/
+
+.el-popper[x-placement^='bottom'] {
+  margin-top: 5px !important;
+}
+
+h1 {
+  display: block;
+  font-size: 2em;
+  -webkit-margin-before: 0.67em;
+  -webkit-margin-after: 0.67em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  font-weight: bold;
+} // Changelog
+/* Login Form*/
+
+.login-textbox {
+  .el-input__inner {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border: none;
+    color: #ffffff;
+  }
+}
+
+/* Element Dropdown */
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+} // Icon
+.el-icon-caret-bottom {
+  font-size: 12px;
+}
+
+.icon-white {
+  color: white;
+}
+
+.header-item-margin {
+  margin-left: 15px;
+}
+
+/* Element textarea font */
+
+.el-textarea__inner {
+  font-size: 12px;
+} // Fieldset
+fieldset {
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  color: #606266;
+  font-size: 14px;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  margin-bottom: 22px;
+  padding: 10px 15px;
+}
+
+fieldset legend {
+  color: #606266;
+  font-weight: 500;
+}
+
+/* Soft Remove*/
+
+.soft-remove {
+  color: #f56c6c;
+  text-decoration: line-through;
+}
+
+/* Custom Select Opt*/
+
+.custom-select-opts-left {
+  float: left;
+}
+
+.custom-select-opts-right {
+  float: right;
+  color: #8492a6;
+  font-size: 12px;
+  font-style: italic;
+} //Fix Collapse-List Width
+.el-container {
+  flex-basis: 0 !important;
+}
