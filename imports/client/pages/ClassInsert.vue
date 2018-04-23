@@ -56,9 +56,9 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Type"
-                          prop="typeId">
-              <el-select v-model="form.typeId">
-                <el-option v-for="item in typeIdOpts"
+                          prop="type">
+              <el-select v-model="form.type">
+                <el-option v-for="item in typeOpts"
                            :key="item.value"
                            :label="item.label"
                            :value="item.value"></el-option>
@@ -95,8 +95,8 @@ import { insertClassStudy } from '../../api/classStudy/methods'
 import { findRoomOpts } from '../../api/rooms/methods'
 import { findStaffOpts } from '../../api/Staffs/methods'
 import { findSubjectOpts } from '../../api/subject/methods'
-import { findTypeOpts } from '../../api/types/methods'
 import lookupValue from '../../client/libs/Lookup-Value'
+import LookUp from '../../client/libs/Lookup-Value'
 import moment from 'moment'
 import _ from 'lodash'
 export default {
@@ -118,14 +118,14 @@ export default {
       ],
       staffIdOpts: [],
       subIdOpts: [],
-      typeIdOpts: [],
+      typeOpts: LookUp.type,
       form: {
         classDate: moment().toDate(),
         roomId: '',
         timeId: '',
         staffId: '',
         subId: '',
-        typeId: '',
+        type: '',
         status: '',
       },
       rules: {
@@ -164,7 +164,7 @@ export default {
             trigger: 'change',
           },
         ],
-        typeId: [
+        type: [
           {
             required: true,
             message: 'Please Select Type',
@@ -185,7 +185,6 @@ export default {
     this.getRoomData()
     this.getStaffData()
     this.getSubjectId()
-    this.getTypeData()
     this.getTimeData()
   },
   methods: {
@@ -219,16 +218,7 @@ export default {
           Notify.error({ message: err })
         })
     },
-    getTypeData() {
-      findTypeOpts
-        .callPromise({})
-        .then(result => {
-          this.typeIdOpts = result
-        })
-        .catch(err => {
-          Notify.error({ message: err })
-        })
-    },
+
     getTimeData() {
       findTimeStudyOpts
         .callPromise({})

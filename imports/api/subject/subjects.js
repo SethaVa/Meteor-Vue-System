@@ -4,16 +4,13 @@ import SimpleSchema from 'simpl-schema'
 const Subjects = new Mongo.Collection('subjects')
 
 Subjects.schema = new SimpleSchema({
-  code: {
-    type: String,
-  },
   title: {
     type: String,
   },
-  typeId: {
+  type: {
     type: String,
   },
-  levelId: {
+  level: {
     type: String,
   },
   status: {

@@ -1,11 +1,9 @@
 import { Meteor } from 'meteor/meteor'
 import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import Students from './students'
-import Payment from '../payment/payment'
 
 // Find All Data
 export const findStudents = new ValidatedMethod({
@@ -40,7 +38,6 @@ export const insertStudent = new ValidatedMethod({
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Students.schema,
-    details: Payment.schema,
   }).validator(),
   run({ doc }) {
     if (Meteor.isServer) {

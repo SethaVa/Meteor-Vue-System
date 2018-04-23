@@ -56,9 +56,9 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Type"
-                          prop="typeId">
-              <el-select v-model="form.typeId">
-                <el-option v-for="item in typeIdOpts"
+                          prop="type">
+              <el-select v-model="form.type">
+                <el-option v-for="item in typeOpts"
                            :key="item.value"
                            :label="item.label"
                            :value="item.value"></el-option>
@@ -97,6 +97,8 @@ import { findStaffOpts } from '../../api/Staffs/methods'
 import { findSubjectOpts } from '../../api/subject/methods'
 import { findTypeOpts } from '../../api/types/methods'
 import lookupValue from '../../client/libs/Lookup-Value'
+import LookUp from '../../client/libs/Lookup-Value'
+
 import moment, { isMoment } from 'moment'
 export default {
   name: 'ClassStudyInsert',
@@ -114,24 +116,12 @@ export default {
     return {
       statusOpts: lookupValue.status,
       roomIdOpts: [],
-      timeIdOpts: [
-        { label: '1:00-2:00', value: '001' },
-        { label: '2:00-3:00', value: '002' },
-        { label: '3:00-4:00', value: '003' },
-      ],
+      timeIdOpts: [],
       staffIdOpts: [],
       subIdOpts: [],
-      typeIdOpts: [],
+      typeOpts: LookUp.type,
       form: this.updateDoc,
-      // form: {
-      //   classDate: moment().toDate(),
-      //   roomId: '',
-      //   timeId: '',
-      //   staffId: '',
-      //   subId: '',
-      //   typeId: '',
-      //   status: '',
-      // },
+
       rules: {
         classDate: [
           {
@@ -168,7 +158,7 @@ export default {
             trigger: 'change',
           },
         ],
-        typeId: [
+        type: [
           {
             required: true,
             message: 'Please Select Type',
@@ -189,7 +179,6 @@ export default {
     this.getRoomData()
     this.getStaffData()
     this.getSubjectId()
-    this.getTypeData()
     this.getTimeData()
   },
   methods: {
@@ -223,16 +212,7 @@ export default {
           Notify.error({ message: err })
         })
     },
-    getTypeData() {
-      findTypeOpts
-        .callPromise({})
-        .then(result => {
-          this.typeIdOpts = result
-        })
-        .catch(err => {
-          Notify.error({ message: err })
-        })
-    },
+
     getTimeData() {
       findTimeStudyOpts
         .callPromise({})

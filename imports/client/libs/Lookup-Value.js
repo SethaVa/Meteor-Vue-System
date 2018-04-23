@@ -8,6 +8,10 @@ const LookupValue = {
     { label: 'Inactive', value: 'Inactive' },
     { label: 'Closed', value: 'Closed' },
   ],
+  type: [
+    { label: 'Part Time', value: 'Part Time' },
+    { label: 'Full Time', value: 'Full Time' },
+  ],
 }
 
 export default LookupValue

@@ -6,9 +6,9 @@
                @modal-close="handleModalClose">
     </component>
     <!-- Table Data -->
+    <!-- :action-col-def="actionColDef" -->
     <data-tables :data="tableData"
                  :actions-def="actionsDef"
-                 :action-col-def="actionColDef"
                  :table-size="tableSize"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
@@ -27,6 +27,28 @@
           </span>
           <span v-else>{{ scope.row[title.prop] }}</span>
 
+        </template>
+      </el-table-column>
+      <el-table-column width="60px"
+                       label="Action">
+        <template slot-scope="scope">
+          <el-dropdown trigger="click"
+                       @command="handleCommand">
+            <span class="el-dropdown-link">
+              <i class="fa fa-align-justify"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+
+              <el-dropdown-item :command="{action: 'edit', row: scope.row}">
+                Edit
+              </el-dropdown-item>
+
+              <el-dropdown-item :command="{action: 'remove', row: scope.row}">
+                Remove
+              </el-dropdown-item>
+
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </data-tables>
@@ -91,43 +113,6 @@ export default {
           },
         ],
       },
-      actionColDef: {
-        label: 'Action',
-        def: [
-          {
-            icon: 'el-icon-edit',
-            handler: row => {
-              this.updateDoc = row
-              this.modalVisible = true
-              this.currentModal = ClassUpdate
-            },
-          },
-          {
-            icon: 'el-icon-delete',
-            handler: row => {
-              this.$confirm('Do you want to Delete this record?', 'Warning')
-                .then(() => {
-                  let id = row._id
-                  removeClassStudy
-                    .callPromise({ _id: id })
-                    .then(result => {
-                      MsgBox.success('Delete Successfull')
-                      this.getData()
-                    })
-                    .catch(err => {
-                      Notify.error({ message: err })
-                    })
-                })
-                .catch(() => {
-                  this.$message({
-                    message: 'Delete Cancel',
-                    type: 'error',
-                  })
-                })
-            },
-          },
-        ],
-      },
     }
   },
   mounted() {
@@ -138,12 +123,51 @@ export default {
       findClassStudy
         .callPromise({})
         .then(result => {
-          console.log(result)
           this.tableData = result
         })
         .catch(err => {
           this.$message.error(err.reason)
         })
+    },
+    handleCommand(command) {
+      if (command.action === 'edit') {
+        // this.route({ name: 'register-new' })
+        this.updateDoc = command.row
+        this.modalVisible = true
+        this.currentModal = ClassUpdate
+
+        // this.modalVisible = true
+        // this.currentModal = ClassUpdate
+        // this.updateId = command.row._id
+        // this.currentDialog = RegisterUpdate
+      } else if (command.action === 'remove') {
+        this.$confirm('Do you want delete this record?', 'Warning', {
+          type: 'warning',
+        })
+          .then(result => {
+            if (result) {
+              let id = command.row._id
+              removeClassStudy
+                .callPromise({ _id: id })
+                .then(result => {
+                  if (result) {
+                    MsgBox.success()
+                  }
+                })
+                .catch(err => {
+                  Notify.error({ message: err.reason + 'Error' })
+                })
+              this.getData()
+            }
+          })
+          .catch(err => {
+            Notify.error({ message: 'Cacel Delete' })
+            // this.$message({
+            //   message: 'Cacel Delete',
+            //   type: 'error',
+            // })
+          })
+      }
     },
     dialog() {
       this.$message.error(this.currentModal)
@@ -170,6 +194,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 10px;
+}
 </style>
