@@ -16,8 +16,8 @@ export const findSubject = new ValidatedMethod({
       selector = selector || {}
       options = options || {}
 
-      return aggregateSubject(selector)
-      // return Subject.find(selector, options).fetch()
+      // return aggregateSubject(selector)
+      return Subject.find(selector, options).fetch()
     }
   },
 })

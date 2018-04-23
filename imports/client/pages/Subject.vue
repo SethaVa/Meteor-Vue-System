@@ -37,7 +37,7 @@ export default {
       updateDoc: null,
       tableData: [],
       titles: [
-        { label: 'Code', prop: 'code', sort: 'custom' },
+        { label: 'ID', prop: '_id', sort: 'custom' },
         { label: 'Title', prop: 'title', sort: 'custom' },
         { label: 'Level', prop: 'level' },
         { label: 'Type', prop: 'type' },

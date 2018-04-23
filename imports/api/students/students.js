@@ -26,8 +26,9 @@ Students.schema = new SimpleSchema({
   },
   remove: {
     type: Boolean,
+    optional: true,
   },
-  typeId: {
+  type: {
     type: String,
   },
 })

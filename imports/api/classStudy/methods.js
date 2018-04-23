@@ -126,20 +126,20 @@ const aggregateFindClassStudy = selector => {
         preserveNullAndEmptyArrays: true,
       },
     },
-    {
-      $lookup: {
-        from: 'types',
-        localField: 'typeId',
-        foreignField: '_id',
-        as: 'typeDoc',
-      },
-    },
-    {
-      $unwind: {
-        path: '$typeDoc',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
+    // {
+    //   $lookup: {
+    //     from: 'types',
+    //     localField: 'typeId',
+    //     foreignField: '_id',
+    //     as: 'typeDoc',
+    //   },
+    // },
+    // {
+    //   $unwind: {
+    //     path: '$typeDoc',
+    //     preserveNullAndEmptyArrays: true,
+    //   },
+    // },
     {
       $project: {
         _id: '$_id',
@@ -152,8 +152,7 @@ const aggregateFindClassStudy = selector => {
         teacher: '$staffDoc.name',
         subId: '$subId',
         subject: '$subjectDoc.title',
-        typeId: '$typeId',
-        type: '$typeDoc.type',
+        type: '$type',
         status: '$status',
       },
     },

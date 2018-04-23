@@ -13,6 +13,15 @@
                size="mini">
         <el-row :gutter="20">
           <el-col :span="12">
+            <el-form-item label="Type"
+                          prop="type">
+              <el-select v-model="form.type">
+                <el-option v-for="doc in typeOpts"
+                           :key="doc.value"
+                           :label="doc.label"
+                           :value="doc.value"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="Kh Name"
                           prop="khName">
               <el-input v-model="form.khName"></el-input>
@@ -21,6 +30,9 @@
                           prop="enName">
               <el-input v-model="form.enName"></el-input>
             </el-form-item>
+
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="Gender"
                           prop="gender">
               <el-select v-model="form.gender">
@@ -30,11 +42,10 @@
                            :value="doc.value"></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="DOB"
                           prop="dob">
-              <el-date-picker v-model="form.dob"></el-date-picker>
+              <el-date-picker v-model="form.dob"
+                              style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="Telephone"
                           prop="tel">
@@ -77,6 +88,7 @@ export default {
   data() {
     return {
       genderOpts: lookupValue.gender,
+      typeOpts: lookupValue.type,
 
       form: this.updateDoc,
       rules: {
@@ -96,6 +108,9 @@ export default {
         ],
         gender: [
           { required: true, message: 'Please Select Gender', trigger: 'blur' },
+        ],
+        type: [
+          { required: true, message: 'Please Select Type', trigger: 'blur' },
         ],
       },
     }
