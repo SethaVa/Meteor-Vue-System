@@ -30,14 +30,7 @@
         <i class="fa fa-home"></i>
         <span>Room</span>
       </el-menu-item>
-      <el-menu-item index="type">
-        <i class="fa fa-home"></i>
-        <span>Type</span>
-      </el-menu-item>
-      <el-menu-item index="levele">
-        <i class="fa fa-home"></i>
-        <span>Levele</span>
-      </el-menu-item>
+
       <el-menu-item index="classStudy">
         <i class="fa fa-home"></i>
         <span>Class Study</span>
