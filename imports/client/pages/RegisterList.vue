@@ -3,7 +3,7 @@
 
     <component :is="currentDialog"
                :visible="visibleDialog"
-               :update-id="updateId"
+               :update-doc="updateDoc"
                @modal-close="handleClose"></component>
 
     <!-- Table Data -->
@@ -16,7 +16,27 @@
                        :key="title.value"
                        :label="title.label"
                        :prop="title.prop"
-                       :sortable="title.sort"></el-table-column>
+                       :sortable="title.sort">
+        <template slot-scope="scope">
+          <span v-if="title.prop === 'payDate'">
+            {{ formatDate(scope.row.payDate) }}
+          </span>
+          <span v-else-if="title.prop === 'endPayDate'">
+            {{ formatDate(scope.row.endPayDate) }}
+          </span>
+          <span v-else-if="title.prop === 'usd'">
+            {{ formatNumber(scope.row.usd) + ' $' }}
+          </span>
+          <span v-else-if="title.prop === 'khr'">
+            {{ formatNumber(scope.row.khr) +' ៛' }}
+          </span>
+          <span v-else-if="title.prop === 'remaining'">
+            {{ formatNumber(scope.row.remaining) }}
+          </span>
+          <span v-else>{{ scope.row[title.prop] }}</span>
+
+        </template>
+      </el-table-column>
       <el-table-column width="60px"
                        label="Action">
         <template slot-scope="scope">
@@ -26,8 +46,6 @@
               <i class="fa fa-align-justify"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <!-- <el-dropdown-item command="edit">Edit</el-dropdown-item> -->
-              <!-- <el-dropdown-item command="remove">Remove</el-dropdown-item> -->
 
               <el-dropdown-item :command="{action: 'edit', row: scope.row}">
                 Edit
@@ -47,11 +65,17 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 import Notify from '/imports/client/libs/notify'
 import Msg from '/imports/client/libs/message'
 import RegisterInsert from './RegisterInsert.vue'
 import RegisterUpdate from './RegisterUpdate.vue'
-import { findRegister, removeRegister } from '../../api/register/methods.js'
+
+import { findPayment, removePayment } from '../../api/payment/methods'
+
+var numeral = require('numeral')
+
 export default {
   name: 'RegisterList',
   components: { RegisterInsert, RegisterUpdate },
@@ -60,12 +84,16 @@ export default {
       loading: false,
       currentDialog: null,
       visibleDialog: false,
-      updateId: null,
+      updateDoc: null,
       tableData: [],
       titles: [
-        { label: 'ID', prop: '_id', sort: 'custom' },
         { label: 'Class', prop: 'classId', sort: 'custom' },
         { label: 'Student', prop: 'studentId' },
+        { label: 'Pay Date', prop: 'payDate', sort: 'custom' },
+        { label: 'End Date', prop: 'endPayDate', sort: 'custom' },
+        { label: 'USD', prop: 'usd' },
+        { label: 'KHR', prop: 'khr' },
+        { label: 'Remaining', prop: 'remaining' },
       ],
       tableProps: {
         size: 'mini',
@@ -96,7 +124,7 @@ export default {
           {
             // icon: 'el-icon-edit',
             // handler: row => {
-            //   this.updateId = row._id
+            //   this.updateDoc = row._id
             //   this.currentDialog = RegisterUpdate
             // },
           },
@@ -137,7 +165,7 @@ export default {
   methods: {
     getData() {
       this.loading = true
-      findRegister
+      findPayment
         .callPromise({})
         .then(result => {
           this.loading = false
@@ -150,9 +178,11 @@ export default {
     handleCommand(command) {
       if (command.action === 'edit') {
         // this.route({ name: 'register-new' })
+        // console.log(command.row)
+        this.updateDoc = command.row
         this.visibleDialog = true
         this.currentDialog = RegisterUpdate
-        // this.updateId = command.row._id
+        // this.updateDoc = command.row._id
         // this.currentDialog = RegisterUpdate
       } else if (command.action === 'remove') {
         this.$confirm('Do you want delete this record?', 'Warning', {
@@ -161,8 +191,8 @@ export default {
           .then(result => {
             if (result) {
               let id = command.row._id
-              removeRegister
-                .callPromise({ _id: id, referenceType: 'New' })
+              removePayment
+                .callPromise({ _id: id })
                 .then(result => {
                   if (result) {
                     Msg.success()
@@ -175,11 +205,7 @@ export default {
             }
           })
           .catch(err => {
-            Notify.error({ message: 'Cacel Delete' })
-            // this.$message({
-            //   message: 'Cacel Delete',
-            //   type: 'error',
-            // })
+            Notify.error({ message: err })
           })
       }
     },
@@ -189,6 +215,12 @@ export default {
       this.$nextTick(() => {
         this.currentDialog = null
       })
+    },
+    formatDate(val) {
+      return moment(val).format('DD/MM/YYYY')
+    },
+    formatNumber(val) {
+      return numeral(val).format('0,0.00')
     },
   },
 }

@@ -52,6 +52,9 @@ Payment.schema = new SimpleSchema({
     type: String,
     allowedValues: ['Paid', 'Debt', 'Expires', 'Closed'],
   },
+  type: {
+    type: String,
+  },
 })
 
 Payment.attachSchema(Payment.schema)

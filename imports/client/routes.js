@@ -18,12 +18,8 @@ import Subject from './pages/Subject.vue'
 
 // room
 import Room from './pages/Room.vue'
-// type
-import Type from './pages/Type.vue'
 //TimeList
 import TimeList from './pages/TimeList'
-// Lelvel
-import Levele from './pages/Levele.vue'
 //Class Study
 import ClassStudy from './pages/ClassList'
 //Class Details
@@ -102,18 +98,7 @@ const routes = [
         name: 'room',
         component: Room,
       },
-      // type
-      {
-        path: 'type',
-        name: 'type',
-        component: Type,
-      },
-      //level
-      {
-        path: 'levele',
-        name: 'levele',
-        component: Levele,
-      },
+
       //class Study
       {
         path: 'class',

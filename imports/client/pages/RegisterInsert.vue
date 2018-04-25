@@ -3,7 +3,7 @@
              :before-close="handleClose"
              width="80%">
     <span slot="title">
-      <i class="fa fa-user"></i> Student</span>
+    <i class="fa fa-user"></i> Student</span>
     <el-form :model="form"
              :rules="rules"
              ref="form"
@@ -15,12 +15,12 @@
         <el-row :gutter="10">
           <el-col :span="8">
             <el-form-item label="Type"
-                          prop="typeId">
-              <el-select v-model="form.typeId"
+                          prop="type">
+              <el-select v-model="form.type"
                          clearable
                          placeholder="select type"
                          @change="handleTypeChange">
-                <el-option v-for="doc in typeIdOpts"
+                <el-option v-for="doc in typeOpts"
                            :key="doc.value"
                            :label="doc.label"
                            :value="doc.value"></el-option>
@@ -135,11 +135,7 @@ import Msg from '/imports/client/libs/message'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import moment from 'moment'
 import Lookup from '/imports/client/libs/Lookup-Value'
-import {
-  lookupType,
-  lookupClass,
-  lookupStudent,
-} from '/imports/libs/lookup-methods'
+import { lookupClass, lookupStudent } from '/imports/libs/lookup-methods'
 import { insertRegister } from '../../api/register/methods'
 const numeral = require('numeral')
 export default {
@@ -153,13 +149,13 @@ export default {
   data() {
     return {
       loading: false,
-      typeIdOpts: [],
+      typeOpts: Lookup.type,
       classIdOpts: [],
       genderOpts: Lookup.gender,
       studentIdOpts: [],
       remaining: 0,
       form: {
-        typeId: '',
+        type: '',
         classId: '',
         rsDate: moment().toDate(),
         studentId: '',
@@ -176,7 +172,7 @@ export default {
         rsDate: [
           { required: true, message: 'Date is Required', trigger: 'change' },
         ],
-        typeId: [
+        type: [
           { required: true, message: 'Type is Required', trigger: 'change' },
         ],
         classId: [
@@ -226,24 +222,13 @@ export default {
   //   },
   // },
   mounted() {
-    this.getTypeData()
     this.getStudentData()
   },
   methods: {
-    getTypeData() {
-      lookupType
-        .callPromise()
-        .then(result => {
-          this.typeIdOpts = result
-        })
-        .catch(error => {
-          Notify.error({ message: error })
-        })
-    },
     handleTypeChange(val) {
       if (val.length > 0) {
         let selector = {
-          typeId: val,
+          type: val,
         }
         lookupClass
           .callPromise({ selector })
@@ -284,7 +269,7 @@ export default {
           let details = {
             tranDate: this.form.tranDate,
             classId: this.form.classId,
-            studentId:this.form.studentId,
+            studentId: this.form.studentId,
             payDate: this.form.payDate,
             duration: this.form.duration,
             endPayDate: this.form.endPayDate,
@@ -294,11 +279,12 @@ export default {
             khr: this.form.khr,
             remaining: this.form.remaining,
             status: this.form.status,
+            type: this.form.type,
           }
           let doc = {
             tranDate: this.form.tranDate,
             classId: this.form.classId,
-            studentId:this.form.studentId
+            studentId: this.form.studentId,
           }
           insertRegister
             .callPromise({ doc: doc, details: details })

@@ -13,7 +13,8 @@
           <el-col :span="10">
             <el-form-item label="Date"
                           prop="exDate">
-              <el-date-picker v-model="form.exDate"
+              <el-date-picker style="width:100%"
+                              v-model="form.exDate"
                               type="date"
                               format="dd/MM/yyyy">
               </el-date-picker>
@@ -23,7 +24,8 @@
           <el-col :span="14">
             <el-form-item label="Student"
                           prop="base">
-              <el-input-number v-model="form.base"
+              <el-input-number style="width:100%"
+                               v-model="form.base"
                                disabled
                                controls-position="right"></el-input-number>
             </el-form-item>
@@ -37,7 +39,8 @@
                           prop="partTime">
               <el-input-number ref="partTime"
                                v-model="form.partTime"
-                               controls-position="right"></el-input-number>
+                               controls-position="right"
+                               style="width:100%"></el-input-number>
             </el-form-item>
           </el-col>
 
@@ -45,7 +48,8 @@
             <el-form-item label="Full Time($)"
                           prop="fullTime">
               <el-input-number v-model="form.fullTime"
-                               controls-position="right"></el-input-number>
+                               controls-position="right"
+                               style="width:100%"></el-input-number>
             </el-form-item>
           </el-col>
 
