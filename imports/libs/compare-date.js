@@ -15,6 +15,7 @@ const compareDate = function() {
         let compareDate = moment(currentDate).isSame(
           moment(obj.endPayDate).format('L')
         )
+        console.log(moment(obj.endPayDate).format('L'), currentDate)
         if (compareDate) {
           let value = 'Expires'
           updatePaymentStatus
