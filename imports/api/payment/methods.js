@@ -7,6 +7,13 @@ import SimpleSchema from 'simpl-schema'
 import Payment from './payment'
 import Student from '../students/students'
 import _ from 'lodash'
+
+import {
+  insertIncome,
+  removeIncomeFromOther,
+  updateIncomeForPaymentNew,
+} from '../Income/methods'
+
 // Find All Data
 export const findPayment = new ValidatedMethod({
   name: 'findPayment',
@@ -81,6 +88,55 @@ export const findPaymentOpts = new ValidatedMethod({
     }
   },
 })
+// For New Student
+export const insertPayementForNew = new ValidatedMethod({
+  name: 'insertPaymentForNew',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ doc }) {
+    if (Meteor.isServer) {
+      Payment.insert(doc, (error, paymentId) => {
+        if (!error) {
+          let data = {
+            tranDate: doc.tranDate,
+            referenceId: paymentId,
+            referenceType: 'New',
+            totalUsd: doc.usd,
+            totalKhr: doc.khr,
+          }
+          insertIncome.run({ doc: data })
+        }
+      })
+
+      return 'Success'
+    }
+  },
+})
+// update for new Student
+export const updatePayementForNew = new ValidatedMethod({
+  name: 'updatePayementForNew',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ doc }) {
+    if (Meteor.isServer) {
+      let _id = doc._id
+      Payment.update({ _id: _id }, { $set: doc }, error => {
+        if (!error) {
+          let data = {
+            tranDate: doc.tranDate,
+            referenceId: _id,
+            referenceType: 'New',
+            totalUsd: doc.usd,
+            totalKhr: doc.khr,
+          }
+          updateIncomeForPaymentNew.run({ doc: data })
+        }
+      })
+
+      return 'Success'
+    }
+  },
+})
 
 // Insert សំរាបើសិស្សចាស់ដែលគាតមកបងលុយ
 export const insertPayment = new ValidatedMethod({
@@ -98,6 +154,7 @@ export const insertPayment = new ValidatedMethod({
       try {
         return Payment.insert(doc, (error, result) => {
           if (!error) {
+            // Update Status Expire Payement
             let value = 'Closed'
             updatePaymentStatus.run({ _id, value })
           }
@@ -138,7 +195,6 @@ export const updatePaymentStatus = new ValidatedMethod({
   }).validator(),
   run({ _id, value }) {
     if (Meteor.isServer) {
-      console.log(_id, value)
       return Payment.update(
         {
           _id: _id,
@@ -156,13 +212,23 @@ export const removePayment = new ValidatedMethod({
   name: 'removePayment',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    _id: {
-      type: String,
+    selector: {
+      type: Object,
+      blackbox: true,
     },
   }).validator(),
-  run(selector) {
+  run({ selector }) {
+    console.log(selector)
     if (Meteor.isServer) {
-      return Payment.remove(selector)
+      Payment.remove({ _id: selector._id }, error => {
+        if (!error) {
+          removeIncomeFromOther.run({
+            referenceId: selector._id,
+            referenceType: selector.referenceType,
+          })
+        }
+      })
+      return 'Success'
     }
   },
 })

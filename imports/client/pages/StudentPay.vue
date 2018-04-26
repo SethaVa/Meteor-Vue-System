@@ -3,12 +3,13 @@
              width="80%"
              :before-close="handleClose">
     <span slot="title">
-    <i class="fa fa-money"></i> Payment</span>
+      <i class="fa fa-money"></i> Payment</span>
     <el-form :model="form"
              ref="form"
              :rules="rules"
              label-position="left"
-             label-width="100px">
+             label-width="100px"
+             size="mini">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="Pay Date"
@@ -21,6 +22,11 @@
             <el-input type="duration"
                       v-model.number="form.duration"
                       auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="Total Pay"
+                        prop="totalPay">
+            <el-input type="number"
+                      v-model="form.totalPay"></el-input>
           </el-form-item>
           <el-form-item label="USD"
                         prop="usd">
@@ -92,6 +98,7 @@ export default {
         payDate: moment().toDate(),
         duration: 0,
         endPayDate: '',
+        totalPay: 0,
         usd: 0,
         khr: 0,
         discountVal: 0,
@@ -106,6 +113,13 @@ export default {
           {
             required: true,
             message: 'Duration is Required',
+            trigger: 'change',
+          },
+        ],
+        totalPay: [
+          {
+            required: true,
+            message: 'Total pay is Required',
             trigger: 'change',
           },
         ],
