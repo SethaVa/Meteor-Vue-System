@@ -135,6 +135,21 @@ export const updateIncome = new ValidatedMethod({
   },
 })
 
+export const updateIncomeForPaymentNew = new ValidatedMethod({
+  name: 'updateIncomeForPaymentNew',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ doc }) {
+    if (Meteor.isServer) {
+      Income.remove({ referenceId: doc.referenceId })
+
+      Income.insert(doc)
+
+      return 'success'
+    }
+  },
+})
+
 export const removeIncome = new ValidatedMethod({
   name: 'removeIncome',
   mixins: [CallPromiseMixin],
@@ -161,6 +176,7 @@ export const removeIncomeFromOther = new ValidatedMethod({
   }).validator(),
   run({ referenceId, referenceType }) {
     if (Meteor.isServer) {
+      console.log(referenceId, referenceType)
       Income.remove({ referenceId: referenceId, referenceType: referenceType })
 
       return 'success'

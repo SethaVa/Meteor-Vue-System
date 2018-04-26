@@ -95,9 +95,18 @@ export default {
           {
             icon: 'el-icon-edit',
             handler: row => {
-              this.updateId = row._id
-              this.modalVisible = true
-              this.currentModal = IncomeUpdate
+              if (
+                row.referenceType !== 'Income' &&
+                row.referenceType !== 'Expend'
+              ) {
+                Notify.warning({
+                  message: 'This recorde is not Income or Expend !',
+                })
+              } else {
+                this.updateId = row._id
+                this.modalVisible = true
+                this.currentModal = IncomeUpdate
+              }
             },
           },
           {
@@ -123,7 +132,6 @@ export default {
       findIncome
         .callPromise({ options: options })
         .then(result => {
-          console.log(result)
           _.forEach(result, o => {
             if (o.referenceType === 'Expend') {
               o.totalUsd = -o.totalUsd
@@ -139,27 +147,31 @@ export default {
         })
     },
     handleRemove(row) {
-      let _id = row._id
-      this.$confirm('Do you want to delete this record?', 'Warning', {
-        type: 'warning',
-      })
-        .then(() => {
-          removeIncome
-            .callPromise({ _id })
-            .then(result => {
-              Msg.success()
-              this.getData()
-            })
-            .catch(err => {
-              Notify.error({ message: err })
-            })
+      if (row.referenceType !== 'Income' && row.referenceType !== 'Expend') {
+        Notify.warning({ message: 'This recorde is not Income or Expend !' })
+      } else {
+        let _id = row._id
+        this.$confirm('Do you want to delete this record?', 'Warning', {
+          type: 'warning',
         })
-        .catch(() => {
-          this.$message({
-            message: 'Delete is Cancel',
-            type: 'error',
+          .then(() => {
+            removeIncome
+              .callPromise({ _id })
+              .then(result => {
+                Msg.success()
+                this.getData()
+              })
+              .catch(err => {
+                Notify.error({ message: err })
+              })
           })
-        })
+          .catch(() => {
+            this.$message({
+              message: 'Delete is Cancel',
+              type: 'error',
+            })
+          })
+      }
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')

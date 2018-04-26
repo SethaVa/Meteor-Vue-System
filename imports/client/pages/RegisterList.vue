@@ -177,36 +177,45 @@ export default {
     },
     handleCommand(command) {
       if (command.action === 'edit') {
-        // this.route({ name: 'register-new' })
-        // console.log(command.row)
-        this.updateDoc = command.row
-        this.visibleDialog = true
-        this.currentDialog = RegisterUpdate
-        // this.updateDoc = command.row._id
-        // this.currentDialog = RegisterUpdate
+        if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {
+          Notify.warning({
+            message: 'This recorde is ' + command.row.status + " can't edit!",
+          })
+        } else {
+          this.updateDoc = command.row
+          this.visibleDialog = true
+          this.currentDialog = RegisterUpdate
+        }
       } else if (command.action === 'remove') {
-        this.$confirm('Do you want delete this record?', 'Warning', {
-          type: 'warning',
-        })
-          .then(result => {
-            if (result) {
-              let id = command.row._id
-              removePayment
-                .callPromise({ _id: id })
-                .then(result => {
-                  if (result) {
-                    Msg.success()
-                  }
-                })
-                .catch(err => {
-                  Notify.error({ message: err.reason + 'Error' })
-                })
-              this.getData()
-            }
+        if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {
+          Notify.warning({
+            message: 'This recorde is ' + command.row.status + " can't remove!",
           })
-          .catch(err => {
-            Notify.error({ message: err })
+        } else {
+          this.$confirm('Do you want delete this record?', 'Warning', {
+            type: 'warning',
           })
+            .then(result => {
+              if (result) {
+                let id = command.row._id
+                removePayment
+                  .callPromise({ selector: { _id: id, referenceType: 'New' } })
+                  .then(result => {
+                    if (result) {
+                      Msg.success()
+                      this.getData()
+                    }
+                  })
+                  .catch(err => {
+                    Notify.error({ message: err.reason + 'Error' })
+                  })
+                this.getData()
+              }
+            })
+            .catch(err => {
+              Notify.error({ message: err })
+            })
+        }
       }
     },
     handleClose() {

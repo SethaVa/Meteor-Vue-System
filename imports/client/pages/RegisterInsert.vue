@@ -136,7 +136,7 @@ import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import moment from 'moment'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { lookupClass, lookupStudent } from '/imports/libs/lookup-methods'
-import { insertRegister } from '../../api/register/methods'
+import { insertPayementForNew } from '../../api/payment/methods'
 const numeral = require('numeral')
 export default {
   name: 'RegisterInsert',
@@ -266,7 +266,7 @@ export default {
           if (this.form.remaining != 0) {
             this.form.status = 'Debt'
           }
-          let details = {
+          let doc = {
             tranDate: this.form.tranDate,
             classId: this.form.classId,
             studentId: this.form.studentId,
@@ -281,13 +281,13 @@ export default {
             status: this.form.status,
             type: this.form.type,
           }
-          let doc = {
-            tranDate: this.form.tranDate,
-            classId: this.form.classId,
-            studentId: this.form.studentId,
-          }
-          insertRegister
-            .callPromise({ doc: doc, details: details })
+          // let doc = {
+          //   tranDate: this.form.tranDate,
+          //   classId: this.form.classId,
+          //   studentId: this.form.studentId,
+          // }
+          insertPayementForNew
+            .callPromise({ doc: doc })
             .then(result => {
               Msg.success()
               this.resetForm()
