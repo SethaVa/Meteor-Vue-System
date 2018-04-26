@@ -14,12 +14,12 @@
       <el-row :gutter="10">
         <el-col :span="9">
           <el-form-item label="Type"
-                        prop="typeId">
-            <el-select v-model="form.typeId"
+                        prop="type">
+            <el-select v-model="form.type"
                        clearable
                        placeholder="select type"
                        @change="handleTypeChange">
-              <el-option v-for="doc in typeIdOpts"
+              <el-option v-for="doc in typeOpts"
                          :key="doc.value"
                          :label="doc.label"
                          :value="doc.value"></el-option>
@@ -82,6 +82,7 @@ import moment from 'moment'
 import _ from 'lodash'
 import compareDate from '/imports/libs/compare-date'
 import { lookupClass, lookupType } from '/imports/libs/lookup-methods'
+import Lookup from '/imports/client/libs/Lookup-Value'
 import { findPaymentForClass } from '/imports/api/payment/methods'
 import StudentPay from './StudentPay.vue'
 export default {
@@ -89,8 +90,8 @@ export default {
   components: { StudentPay },
   data() {
     return {
-      typeId: '',
-      typeIdOpts: [],
+      type: '',
+      typeOpts: Lookup.type,
       currentModal: null,
       modalVisible: false,
       modalDoc: null,
@@ -104,7 +105,7 @@ export default {
         classId: [
           { required: true, message: 'Subject is Required', trigger: 'change' },
         ],
-        typeId: [
+        type: [
           { required: true, message: 'Type is Required', trigger: 'change' },
         ],
       },
@@ -144,28 +145,53 @@ export default {
     // },
   },
   mounted() {
-    this.getTypeData()
+    // this.getTypeData()
+    this.getPaymentData()
     compareDate()
   },
   methods: {
-    getTypeData() {
-      lookupType
-        .callPromise()
+    getPaymentData() {
+      let selector = {
+        // classId: this.form.classId,
+        status: { $in: ['Expires', '$classDetail'] },
+      }
+      this.loading = true
+      findPaymentForClass
+        .callPromise({ selector: selector })
         .then(result => {
-          this.typeIdOpts = result
+          if (result.length > 0) {
+            this.dataTable = []
+            _.forEach(result[0].classDetail, o => {
+              this.dataTable = result[0].classDetail
+            })
+          } else {
+            this.dataTable = []
+          }
+          this.loading = false
         })
         .catch(error => {
-          Notify.error({ message: error })
+          Notify.error({ message: error.reason })
         })
     },
+    // getTypeData() {
+    //   lookupType
+    //     .callPromise()
+    //     .then(result => {
+    //       this.typeOpts = result
+    //     })
+    //     .catch(error => {
+    //       Notify.error({ message: error })
+    //     })
+    // },
     handleTypeChange(val) {
       if (val.length > 0) {
         let selector = {
-          typeId: val,
+          type: val,
         }
         lookupClass
           .callPromise({ selector })
           .then(result => {
+            // console.log(result)
             this.classIdOpts = result
           })
           .catch(error => {
