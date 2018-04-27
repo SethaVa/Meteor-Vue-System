@@ -7,7 +7,10 @@ import moment from 'moment'
 import Type from '/imports/api/types/type'
 import { findClassStudy } from '/imports/api/classStudy/methods'
 import Students from '../api/students/students'
-
+import {
+  
+  findPaymentForClass,
+} from '/imports/api/payment/methods'
 export const lookupType = new ValidatedMethod({
   name: 'lookupType',
   mixins: [CallPromiseMixin],
@@ -68,6 +71,39 @@ export const lookupStudent = new ValidatedMethod({
           label: o._id + ' : ' + o.enName,
         })
       })
+      return list
+    }
+  },
+})
+
+export const lookupStudentForExpire = new ValidatedMethod({
+  name: 'lookupStudentForExpire',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run() {
+    if (Meteor.isServer) {
+      let list = []
+      let selector = {
+        // classId: this.form.classId,
+        status: { $in: ['Expires', '$classDetail'] },
+      }
+      
+      findPaymentForClass
+        .callPromise({ selector: selector })
+        .then(result => {
+          if (result.length > 0) {
+            _.forEach(result[0].classDetail, o => {
+              list.push({
+                value: o.studentId,
+                label: o.studentId + ' - ' + o.student,
+              })
+            })
+            
+          } 
+        })
+        .catch(error => {
+          Notify.error({ message: error.reason })
+        })
       return list
     }
   },

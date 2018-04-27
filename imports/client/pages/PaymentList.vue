@@ -71,7 +71,6 @@ import Notify from '/imports/client/libs/notify'
 import Msg from '/imports/client/libs/message'
 import RegisterInsert from './RegisterInsert.vue'
 import RegisterUpdate from './RegisterUpdate.vue'
-import RegisterInsertOld from './RegisterInsertOld.vue'
 
 import { findPayment, removePayment } from '../../api/payment/methods'
 
@@ -79,7 +78,7 @@ var numeral = require('numeral')
 
 export default {
   name: 'RegisterList',
-  components: { RegisterInsert, RegisterUpdate, RegisterInsertOld },
+  components: { RegisterInsert, RegisterUpdate },
   data() {
     return {
       loading: false,
@@ -114,17 +113,6 @@ export default {
             handler: () => {
               this.visibleDialog = true
               this.currentDialog = RegisterInsert
-            },
-          },
-          {
-            name: 'Odl',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.visibleDialog = true
-              this.currentDialog = RegisterInsertOld
             },
           },
         ],

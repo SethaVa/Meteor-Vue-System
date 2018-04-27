@@ -19,7 +19,7 @@
         </el-radio-group>
       </div> -->
       <fieldset>
-        <legend>New Student</legend>
+        <legend>Old Student</legend>
         <el-row :gutter="10">
           <el-col :span="8">
             <el-form-item label="Type"
@@ -144,7 +144,11 @@ import Msg from '/imports/client/libs/message'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import moment from 'moment'
 import Lookup from '/imports/client/libs/Lookup-Value'
-import { lookupClass, lookupStudent } from '/imports/libs/lookup-methods'
+import {
+  lookupClass,
+  lookupStudent,
+  lookupStudentForExpire,
+} from '/imports/libs/lookup-methods'
 import {
   insertPayementForNew,
   findPaymentForClass,
@@ -236,7 +240,9 @@ export default {
   //     }
   //   },
   // },
-  mounted() {this.getStudentData()},
+  mounted() {
+    this.getStudentData()
+  },
   methods: {
     handleTypeChange(val) {
       if (val.length > 0) {
@@ -257,7 +263,7 @@ export default {
       }
     },
     getStudentData() {
-      lookupStudent
+      lookupStudentForExpire
         .callPromise({})
         .then(result => {
           this.studentIdOpts = result
@@ -266,7 +272,37 @@ export default {
           Notify.error({ message: error })
         })
     },
-    
+    handleRadioChange(val) {
+      this.listExpireStudent = []
+      if (val === 'Old') {
+        let selector = {
+          // classId: this.form.classId,
+          status: { $in: ['Expires', '$classDetail'] },
+        }
+        this.loading = true
+        findPaymentForClass
+          .callPromise({ selector: selector })
+          .then(result => {
+            if (result.length > 0) {
+              _.forEach(result[0].classDetail, o => {
+                this.listExpireStudent.push({
+                  value: o.studentId,
+                  label: o.studentId + ' - ' + o.student,
+                })
+              })
+              this.studentIdOpts = this.listExpireStudent
+            } else {
+              this.studentIdOpts = []
+            }
+            this.loading = false
+          })
+          .catch(error => {
+            Notify.error({ message: error.reason })
+          })
+      } else if (val === 'New') {
+        this.getStudentData()
+      }
+    },
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
@@ -315,9 +351,10 @@ export default {
         this.loading = true
         setTimeout(() => {
           this.loading = false
-          lookupStudent
+          lookupStudentForExpire
             .callPromise({})
             .then(result => {
+              console.log(result)
               this.studentIdOpts = result.filter(item => {
                 return (
                   item.label.toLowerCase().indexOf(query.toLowerCase()) > -1
@@ -330,7 +367,7 @@ export default {
         }, 200)
       } else {
         this.loading = true
-        lookupStudent
+        lookupStudentForExpire
           .callPromise({})
           .then(result => {
             this.studentIdOpts = result
