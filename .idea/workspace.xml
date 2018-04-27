@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f6bdaead-dea7-4b2b-a133-9d2511ad230f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/imports/api/Income/methods.js" afterPath="$PROJECT_DIR$/imports/api/Income/methods.js" />
-      <change beforePath="$PROJECT_DIR$/imports/api/payment/methods.js" afterPath="$PROJECT_DIR$/imports/api/payment/methods.js" />
-      <change beforePath="$PROJECT_DIR$/imports/client/pages/IncomeList.vue" afterPath="$PROJECT_DIR$/imports/client/pages/IncomeList.vue" />
-      <change beforePath="$PROJECT_DIR$/imports/client/pages/RegisterList.vue" afterPath="$PROJECT_DIR$/imports/client/pages/RegisterList.vue" />
-      <change beforePath="$PROJECT_DIR$/imports/client/pages/StudentPay.vue" afterPath="$PROJECT_DIR$/imports/client/pages/StudentPay.vue" />
-      <change beforePath="$PROJECT_DIR$/imports/libs/compare-date.js" afterPath="$PROJECT_DIR$/imports/libs/compare-date.js" />
-    </list>
+    <list default="true" id="f6bdaead-dea7-4b2b-a133-9d2511ad230f" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -68,7 +60,7 @@
         <entry file="file://$PROJECT_DIR$/imports/client/pages/PositionUpdate.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="317">
-              <caret line="73" column="11" lean-forward="true" selection-start-line="73" selection-start-column="11" selection-end-line="73" selection-end-column="11" />
+              <caret line="73" column="11" lean-forward="false" selection-start-line="73" selection-start-column="11" selection-end-line="73" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -127,7 +119,7 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2775" />
+    <option name="x" value="43" />
     <option name="y" value="-4" />
     <option name="width" value="1323" />
     <option name="height" value="772" />
@@ -267,16 +259,15 @@
       <workItem from="1516031225049" duration="155000" />
       <workItem from="1517920126006" duration="119000" />
       <workItem from="1517921512858" duration="12247000" />
-      <workItem from="1524756140470" duration="146000" />
+      <workItem from="1524756140470" duration="742000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13136000" />
+    <option name="totallyTimeSpent" value="13732000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2775" y="-4" width="1323" height="772" extended-state="6" />
-    <editor active="true" />
+    <frame x="43" y="-4" width="1323" height="772" extended-state="6" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2494331" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -464,6 +455,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -506,6 +498,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="13" column="27" lean-forward="false" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -560,7 +553,7 @@
     <entry file="file://$PROJECT_DIR$/imports/client/pages/PositionUpdate.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="317">
-          <caret line="73" column="11" lean-forward="true" selection-start-line="73" selection-start-column="11" selection-end-line="73" selection-end-column="11" />
+          <caret line="73" column="11" lean-forward="false" selection-start-line="73" selection-start-column="11" selection-end-line="73" selection-end-column="11" />
           <folding />
         </state>
       </provider>
