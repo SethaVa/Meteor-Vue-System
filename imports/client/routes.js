@@ -38,6 +38,8 @@ import Refund from './pages/Refund.vue'
 import StaffSalary from './reports/StaffSalary.vue'
 // Accouting
 import Acc from './pages/Accouting.vue'
+//Exchange
+import Exchange from './pages/Exchange.vue'
 const routes = [
   //Notfound
   {
@@ -162,6 +164,12 @@ const routes = [
         path: 'acc',
         name: 'acc',
         component: Acc,
+      },
+      // Exchange
+      {
+        path: 'exchange',
+        name: 'exchange',
+        component: Exchange,
       },
     ],
   },

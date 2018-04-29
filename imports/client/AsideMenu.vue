@@ -74,6 +74,10 @@
         <i class="fa fa-home"></i>
         <span>Accouting</span>
       </el-menu-item>
+      <el-menu-item index="exchange">
+        <i class="fa fa-home"></i>
+        <span>Exchange</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

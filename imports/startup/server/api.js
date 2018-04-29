@@ -51,3 +51,5 @@ import '../../api/classStudy/server/'
 import '../../api/classDetails/server/'
 // Payment
 import '../../api/payment/server/index'
+//Exchange
+import '../../api/exchanges/server/index'
