@@ -82,13 +82,7 @@ export default {
     itemsProp: {
       type: Array,
       default: function() {
-        return [
-          {
-            details: '',
-            usd: 0,
-            khr: 0,
-          },
-        ]
+        return []
       },
     },
     saveEvent: {

@@ -38,12 +38,12 @@ export const lookupClass = new ValidatedMethod({
       _.forEach(classStudy, o => {
         let timeStudy = o.timeStudy
           .map(o => {
-            return moment(o).format('hh:mm a')
+            return moment(o).format('LT')
           })
           .join('-')
         list.push({
           value: o._id,
-          label: o.roomName + ' : ' + o.teacher,
+          label: o.subject,
           labelRight: timeStudy,
         })
       })

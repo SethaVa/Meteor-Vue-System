@@ -23,7 +23,7 @@
                            :value="doc.value"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="Class"
+            <el-form-item label="Subject"
                           prop="classId">
               <el-select v-model="form.classId"
                          clearable
@@ -87,11 +87,19 @@
                         v-model.number="form.duration"
                         auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="Total Pay"
-                          prop="totalPay">
-              <el-input type="totalPay"
-                        v-model.number="form.totalPay"
+            <el-form-item label="USD "
+                          prop="usd">
+              <el-input type="usd"
+                        v-model.number="form.usd"
                         auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="KHR"
+                          prop="khr">
+              <el-input type="khr"
+                        v-model.number="form.khr"
+                        auto-complete="off">
+
+              </el-input>
             </el-form-item>
             <el-form-item label="Dis Val"
                           prop="discountVal">
@@ -101,15 +109,12 @@
 
               </el-input>
             </el-form-item>
-            <el-form-item label="Pay"
-                          prop="pay">
-              <el-input type="pay"
-                        v-model.number="form.pay"
-                        auto-complete="off"></el-input>
-            </el-form-item>
+
             <el-form-item label="Remaining"
                           prop="remaining">
-              <label>{{ formatNumer(remaining) }}</label>
+              <el-input type="khr"
+                        v-model.number="form.remaining"
+                        auto-complete="off"></el-input>
             </el-form-item>
           </el-tab-pane>
         </el-tabs>
@@ -134,7 +139,6 @@ import moment from 'moment'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { lookupType, lookupClass } from '/imports/libs/lookup-methods'
 import { insertStudent } from '../../api/students/methods'
-import payment from '../../api/payment/payment'
 const numeral = require('numeral')
 export default {
   name: 'Register',
@@ -155,9 +159,9 @@ export default {
         tel: '',
         payDate: moment().toDate(),
         duration: 0,
-        totalPay: 0,
+        usd: 0,
         discountVal: 0,
-        pay: 0,
+        khr: 0,
         remaining: 0,
         status: 'Paid',
       },
@@ -190,38 +194,38 @@ export default {
           { required: true, message: 'Duration is required' },
           { type: 'number', message: 'Duration must be a number' },
         ],
-        totalPay: [
+        usd: [
           { required: true, message: 'Total is required' },
           { type: 'number', message: 'Total must be a number' },
         ],
         discountVal: [{ type: 'number', message: 'Discount must be a number' }],
-        pay: [{ type: 'number', message: 'Pay must be a number' }],
+        khr: [{ type: 'number', message: 'khr must be a number' }],
       },
     }
   },
-  watch: {
-    'form.totalPay'(val) {
-      this.remaining = val
-    },
-    'form.discountVal'(val) {
-      this.remaining = this.form.totalPay - val
-      this.form.remaining = this.form.totalPay - val
-      if (this.remaining < 0) {
-        Notify.warning({
-          message: 'Discount Balance is bigger than Total balance',
-        })
-        this.form.pay = 0
-      }
-    },
-    'form.pay'(val) {
-      this.remaining = this.form.totalPay - this.form.discountVal - val
-      this.form.remaining = this.form.totalPay - this.form.discountVal - val
-      if (this.remaining < 0) {
-        Notify.warning({ message: 'Pay Balance is bigger than Total balance' })
-        this.form.pay = 0
-      }
-    },
-  },
+  // watch: {
+  //   'form.usd'(val) {
+  //     this.remaining = val
+  //   },
+  //   'form.discountVal'(val) {
+  //     this.remaining = this.form.usd - val
+  //     this.form.remaining = this.form.usd - val
+  //     if (this.remaining < 0) {
+  //       Notify.warning({
+  //         message: 'Discount Balance is bigger than Total balance',
+  //       })
+  //       this.form.khr = 0
+  //     }
+  //   },
+  //   'form.khr'(val) {
+  //     this.remaining = this.form.usd - this.form.discountVal - val
+  //     this.form.remaining = this.form.usd - this.form.discountVal - val
+  //     if (this.remaining < 0) {
+  //       Notify.warning({ message: 'khr Balance is bigger than Total balance' })
+  //       this.form.khr = 0
+  //     }
+  //   },
+  // },
   mounted() {
     this.getTypeData()
   },
@@ -266,14 +270,14 @@ export default {
           if (this.form.remaining != 0) {
             this.form.status = 'Debt'
           }
-          let Payment = {
+          let details = {
             classId: this.form.classId,
             payDate: this.form.payDate,
             duration: this.form.duration,
             endPayDate: this.form.endPayDate,
-            totalPay: this.form.totalPay,
+            usd: this.form.usd,
             discountVal: this.form.discountVal,
-            pay: this.form.pay,
+            khr: this.form.khr,
             remaining: this.form.remaining,
             status: this.form.status,
           }
@@ -284,9 +288,10 @@ export default {
             dob: this.form.dob,
             tel: this.form.tel,
             remove: false,
+            typeId: this.form.typeId,
           }
           insertStudent
-            .callPromise({ doc: Students, details: Payment })
+            .callPromise({ doc: Students, details: details })
             .then(result => {
               Msg.success()
               this.resetForm()

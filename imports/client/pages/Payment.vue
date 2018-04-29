@@ -10,11 +10,24 @@
              :rules="rules"
              size="mini"
              label-position="left"
-             label-width="50px">
-      <el-row>
-        <!-- <el-col :span="6"></el-col> -->
-        <el-col :span="18">
-          <el-form-item label="Class"
+             label-width="90px">
+      <el-row :gutter="10">
+        <el-col :span="9">
+          <el-form-item label="Type"
+                        prop="typeId">
+            <el-select v-model="form.typeId"
+                       clearable
+                       placeholder="select type"
+                       @change="handleTypeChange">
+              <el-option v-for="doc in typeIdOpts"
+                         :key="doc.value"
+                         :label="doc.label"
+                         :value="doc.value"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="9">
+          <el-form-item label="Subject"
                         prop="classId">
             <el-select v-model="form.classId"
                        clearable
@@ -67,7 +80,8 @@ import Msg from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
 import moment from 'moment'
 import _ from 'lodash'
-import { lookupClass } from '/imports/libs/lookup-methods'
+import compareDate from '/imports/libs/compare-date'
+import { lookupClass, lookupType } from '/imports/libs/lookup-methods'
 import { findPaymentForClass } from '/imports/api/payment/methods'
 import StudentPay from './StudentPay.vue'
 export default {
@@ -75,6 +89,8 @@ export default {
   components: { StudentPay },
   data() {
     return {
+      typeId: '',
+      typeIdOpts: [],
       currentModal: null,
       modalVisible: false,
       modalDoc: null,
@@ -86,7 +102,10 @@ export default {
       },
       rules: {
         classId: [
-          { required: true, message: 'Date is Required', trigger: 'change' },
+          { required: true, message: 'Subject is Required', trigger: 'change' },
+        ],
+        typeId: [
+          { required: true, message: 'Type is Required', trigger: 'change' },
         ],
       },
       dataTable: [],
@@ -125,18 +144,37 @@ export default {
     // },
   },
   mounted() {
-    this.getClassData()
+    this.getTypeData()
+    compareDate()
   },
   methods: {
-    getClassData() {
-      lookupClass
-        .callPromise({})
+    getTypeData() {
+      lookupType
+        .callPromise()
         .then(result => {
-          this.classIdOpts = result
+          this.typeIdOpts = result
         })
         .catch(error => {
           Notify.error({ message: error })
         })
+    },
+    handleTypeChange(val) {
+      if (val.length > 0) {
+        let selector = {
+          typeId: val,
+        }
+        lookupClass
+          .callPromise({ selector })
+          .then(result => {
+            this.classIdOpts = result
+          })
+          .catch(error => {
+            Notify.error({ message: error })
+          })
+      } else {
+        this.form.classId = ''
+        this.classIdOpts = []
+      }
     },
     handleSubmit() {
       this.$refs['form'].validate(valid => {

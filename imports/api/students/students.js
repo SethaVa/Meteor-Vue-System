@@ -27,6 +27,9 @@ Students.schema = new SimpleSchema({
   remove: {
     type: Boolean,
   },
+  typeId: {
+    type: String,
+  },
 })
 Students.attachSchema(Students.schema)
 

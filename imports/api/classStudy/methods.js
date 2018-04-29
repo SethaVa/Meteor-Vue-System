@@ -5,6 +5,7 @@ import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import ClassStudy from './classStudy'
+
 export const findClassStudy = new ValidatedMethod({
   name: 'findClassStudy',
   mixins: [CallPromiseMixin],
@@ -13,7 +14,7 @@ export const findClassStudy = new ValidatedMethod({
     if (Meteor.isServer) {
       selector = selector || {}
       // return ClassStudy.find(selector).fetch()
-      return aggregateFindClassStudy(selector)
+      return aggregateFindClassStudy(selector, { limit: 50 })
     }
   },
 })
