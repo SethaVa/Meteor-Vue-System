@@ -69,16 +69,17 @@ import moment from 'moment'
 
 import Notify from '/imports/client/libs/notify'
 import Msg from '/imports/client/libs/message'
-import RegisterInsert from './RegisterInsert.vue'
-import RegisterUpdate from './RegisterUpdate.vue'
+import PaymentInsert from './Payment.vue'
+import StudentPayUpdate from './StudentPayUpdate.vue'
+import compareDate from '/imports/libs/compare-date'
 
 import { findPayment, removePayment } from '../../api/payment/methods'
 
 var numeral = require('numeral')
 
 export default {
-  name: 'RegisterList',
-  components: { RegisterInsert, RegisterUpdate },
+  name: 'PaymentList',
+  components: { PaymentInsert, StudentPayUpdate },
   data() {
     return {
       loading: false,
@@ -111,8 +112,10 @@ export default {
               size: 'mini',
             },
             handler: () => {
-              this.visibleDialog = true
-              this.currentDialog = RegisterInsert
+              // this.visibleDialog = true
+              // this.currentDialog = RegisterInsert
+              compareDate()
+              this.$router.push({ name: 'NewPayment' })
             },
           },
         ],
@@ -166,7 +169,10 @@ export default {
     getData() {
       this.loading = true
       findPayment
-        .callPromise({ option: { sort: { _id: -1 } } })
+        .callPromise({
+          selector: { refType: 'Payment' },
+          option: { sort: { _id: -1 } },
+        })
         .then(result => {
           this.loading = false
           this.tableData = result
@@ -184,7 +190,7 @@ export default {
         } else {
           this.updateDoc = command.row
           this.visibleDialog = true
-          this.currentDialog = RegisterUpdate
+          this.currentDialog = StudentPayUpdate
         }
       } else if (command.action === 'remove') {
         if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {

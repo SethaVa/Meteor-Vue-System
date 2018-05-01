@@ -11,6 +11,10 @@ Payment.schema = new SimpleSchema({
   tranDate: {
     type: Date,
   },
+  // New = Register , Payment,Refunt
+  refType: {
+    type: String,
+  },
   classId: {
     type: String,
   },
