@@ -92,7 +92,7 @@ export const findPaymentOpts = new ValidatedMethod({
 export const insertPayementForNew = new ValidatedMethod({
   name: 'insertPaymentForNew',
   mixins: [CallPromiseMixin],
-  validate: null,
+  validate: new SimpleSchema({ doc: Payment.schema }).validator(),
   run({ doc }) {
     if (Meteor.isServer) {
       Payment.insert(doc, (error, paymentId) => {
@@ -152,19 +152,65 @@ export const insertPayment = new ValidatedMethod({
   run({ doc, _id }) {
     if (Meteor.isServer) {
       try {
-        return Payment.insert(doc, (error, result) => {
+        Payment.insert(doc, (error, paymentId) => {
           if (!error) {
             // Update Status Expire Payement
             let value = 'Closed'
             updatePaymentStatus.run({ _id, value })
+
+            let data = {
+              tranDate: doc.tranDate,
+              referenceId: paymentId,
+              referenceType: 'Payment',
+              totalUsd: doc.usd,
+              totalKhr: doc.khr,
+            }
+            updateIncomeForPaymentNew.run({ doc: data })
           }
         })
+
+        return 'Success'
       } catch (error) {
         throw new Meteor.Error('Error', 'Payment', error.reason)
       }
     }
   },
 })
+
+// update សំរាបើសិស្សចាស់ដែលគាតមកបងលុយ
+export const updatePaymentForPayment = new ValidatedMethod({
+  name: 'updatePaymentForPayment',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    doc: Payment.schema,
+  }).validator(),
+  run({ doc }) {
+    if (Meteor.isServer) {
+      try {
+        Payment.update({ _id: doc._id }, { $set: doc }, error => {
+          if (!error) {
+            // Update Status Expire Payement
+            // let value = 'Closed'
+            // updatePaymentStatus.run({ _id, value })
+            let data = {
+              tranDate: doc.tranDate,
+              referenceId: doc._id,
+              referenceType: 'Payment',
+              totalUsd: doc.usd,
+              totalKhr: doc.khr,
+            }
+            updateIncomeForPaymentNew.run({ doc: data })
+          }
+        })
+
+        return 'Success'
+      } catch (error) {
+        throw new Meteor.Error('Error', 'Payment', error.reason)
+      }
+    }
+  },
+})
+
 // Update សំរាប់សិស្សដែលគាតជំពាក់លុយ រួចហើយគាតមកសងលុយវិញ
 export const updatePaymentForRefund = new ValidatedMethod({
   name: 'updatePayment',
@@ -344,6 +390,7 @@ const aggregatePayment = selector => {
             discountVal: '$discountVal',
             remaining: '$remaining',
             endPayDate: '$endPayDate',
+            type: '$type',
             status: '$status',
           },
         },

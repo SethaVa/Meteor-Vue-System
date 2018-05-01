@@ -3,7 +3,7 @@
              width="80%"
              :before-close="handleClose">
     <span slot="title">
-      <i class="fa fa-money"></i> Payment</span>
+    <i class="fa fa-money"></i> Payment</span>
     <el-form :model="form"
              ref="form"
              :rules="rules"
@@ -95,6 +95,8 @@ export default {
     return {
       remaining: 0,
       form: {
+        refType: 'Payment',
+        tranDate: moment().toDate(),
         payDate: moment().toDate(),
         duration: 0,
         endPayDate: '',
@@ -167,10 +169,14 @@ export default {
             this.form.status = 'Debt'
           }
           let Payment = {
+            tranDate: moment().toDate(),
+            refType: this.form.refType,
             classId: this.modalDoc.classId,
             studentId: this.modalDoc.studentId,
+            type: this.modalDoc.type,
             payDate: this.form.payDate,
             duration: this.form.duration,
+            totalPay: parseInt(this.form.totalPay),
             endPayDate: this.form.endPayDate,
             usd: this.form.usd,
             khr: this.form.khr,
@@ -181,8 +187,10 @@ export default {
           insertPayment
             .callPromise({ doc: Payment, _id: this.modalDoc._id })
             .then(result => {
-              Msg.success()
-              this.handleClose()
+              if (result) {
+                Msg.success()
+                this.handleClose()
+              }
             })
             .catch(error => {
               Notify.error({ message: error })

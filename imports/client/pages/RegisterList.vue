@@ -116,17 +116,17 @@ export default {
               this.currentDialog = RegisterInsert
             },
           },
-          {
-            name: 'Odl',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.visibleDialog = true
-              this.currentDialog = RegisterInsertOld
-            },
-          },
+          // {
+          //   name: 'Odl',
+          //   icon: 'el-icon-plus',
+          //   buttonProps: {
+          //     size: 'mini',
+          //   },
+          //   handler: () => {
+          //     this.visibleDialog = true
+          //     this.currentDialog = RegisterInsertOld
+          //   },
+          // },
         ],
       },
       actionColDef: {
@@ -178,7 +178,10 @@ export default {
     getData() {
       this.loading = true
       findPayment
-        .callPromise({ option: { sort: { _id: -1 } } })
+        .callPromise({
+          selector: { refType: 'New' },
+          option: { sort: { _id: -1 } },
+        })
         .then(result => {
           this.loading = false
           this.tableData = result

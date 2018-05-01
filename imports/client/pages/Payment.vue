@@ -5,52 +5,58 @@
                :visible="modalVisible"
                @modal-close="handleClose">
     </component>
-    <el-form :model="form"
-             ref="form"
-             :rules="rules"
-             size="mini"
-             label-position="left"
-             label-width="90px">
-      <el-row :gutter="10">
-        <el-col :span="9">
-          <el-form-item label="Type"
-                        prop="type">
-            <el-select v-model="form.type"
-                       clearable
-                       placeholder="select type"
-                       @change="handleTypeChange">
-              <el-option v-for="doc in typeOpts"
-                         :key="doc.value"
-                         :label="doc.label"
-                         :value="doc.value"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="9">
-          <el-form-item label="Subject"
-                        prop="classId">
-            <el-select v-model="form.classId"
-                       clearable
-                       placeholder="Select Class">
-              <el-option v-for="doc in classIdOpts"
-                         :key="doc.value"
-                         :label="doc.label"
-                         :value="doc.value">
-                <span style="float: left">{{ doc.label }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px">{{ doc.labelRight }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item>
-            <el-button type="primary"
-                       @click="handleSubmit">Submit</el-button>
-          </el-form-item>
-        </el-col>
-        <!-- <el-col :span="6"></el-col> -->
-      </el-row>
-    </el-form>
+    <fieldset style="padding-bottom:-5vh;">
+      <!-- <legend>Filter</legend> -->
+      <el-form :model="form"
+               ref="form"
+               :rules="rules"
+               size="mini"
+               label-position="left"
+               label-width="90px">
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="Type"
+                          prop="type">
+              <el-select v-model="form.type"
+                         clearable
+                         placeholder="select type"
+                         @change="handleTypeChange">
+                <el-option v-for="doc in typeOpts"
+                           :key="doc.value"
+                           :label="doc.label"
+                           :value="doc.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="Subject"
+                          prop="classId">
+              <el-select v-model="form.classId"
+                         clearable
+                         placeholder="Select Class">
+                <el-option v-for="doc in classIdOpts"
+                           :key="doc.value"
+                           :label="doc.label"
+                           :value="doc.value">
+                  <span style="float: left">{{ doc.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ doc.labelRight }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="7">
+            <el-form-item>
+              <el-button type="primary"
+                         @click="handleSubmit">Submit</el-button>
+              <el-button @click="handleBack"
+                         icon="fa fa-arrow-circle-left"
+                         type="danger"> Back</el-button>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+      </el-form>
+    </fieldset>
     <data-tables :data="dataTable"
                  :action-col-def="actionColDef"
                  :table-props="tableProps"
@@ -115,6 +121,7 @@ export default {
         { label: 'Gender', prop: 'gender' },
         { label: 'Pay Date', prop: 'payDate' },
         { label: 'End Date', prop: 'endPayDate' },
+        { label: 'Type', prop: 'type' },
       ],
       tableProps: {
         size: 'small',
@@ -147,7 +154,6 @@ export default {
   mounted() {
     // this.getTypeData()
     this.getPaymentData()
-    compareDate()
   },
   methods: {
     getPaymentData() {
@@ -162,6 +168,7 @@ export default {
           if (result.length > 0) {
             this.dataTable = []
             _.forEach(result[0].classDetail, o => {
+              console.log(result[0].classDetail)
               this.dataTable = result[0].classDetail
             })
           } else {
@@ -232,6 +239,7 @@ export default {
       })
     },
     handleClose() {
+      this.getPaymentData()
       this.handleSubmit()
       this.modalVisible = false
       this.$nextTick(() => {
@@ -240,6 +248,9 @@ export default {
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')
+    },
+    handleBack() {
+      this.$router.go(-1)
     },
   },
 }

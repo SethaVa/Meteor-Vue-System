@@ -29,6 +29,7 @@ import RegisterList from './pages/RegisterList'
 import RegisterInsert from './pages/RegisterInsert.vue'
 //Payment
 import Payment from './pages/Payment.vue'
+import PaymentList from './pages/PaymentList.vue'
 //Refund
 import Refund from './pages/Refund.vue'
 //Staff Salary
@@ -127,6 +128,12 @@ const routes = [
       {
         path: 'payment',
         name: 'payment',
+        component: PaymentList,
+      },
+      //Payment New
+      {
+        path: 'new-Payment',
+        name: 'NewPayment',
         component: Payment,
       },
       // Student
