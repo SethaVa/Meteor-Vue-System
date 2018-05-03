@@ -59,6 +59,11 @@ Payment.schema = new SimpleSchema({
   type: {
     type: String,
   },
+  // for Payment
+  lastId: {
+    type: String,
+    optional: true,
+  },
 })
 
 Payment.attachSchema(Payment.schema)

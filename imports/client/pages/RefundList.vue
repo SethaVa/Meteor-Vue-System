@@ -69,9 +69,8 @@ import moment from 'moment'
 
 import Notify from '/imports/client/libs/notify'
 import Msg from '/imports/client/libs/message'
-import PaymentInsert from './PaymentInsert.vue'
+import PaymentInsert from './RefundInsert.vue'
 import PaymentUpdate from './PaymentUpdate.vue'
-import Refund from './RefundInsert.vue'
 import StudentPayUpdate from './StudentPayUpdate.vue'
 import compareDate from '/imports/libs/compare-date'
 
@@ -81,7 +80,7 @@ var numeral = require('numeral')
 
 export default {
   name: 'PaymentList',
-  components: { PaymentInsert, PaymentUpdate, Refund },
+  components: { PaymentInsert, PaymentUpdate },
   data() {
     return {
       loading: false,
@@ -116,19 +115,6 @@ export default {
             handler: () => {
               this.visibleDialog = true
               this.currentDialog = PaymentInsert
-              compareDate()
-              // this.$router.push({ name: 'NewPayment' })
-            },
-          },
-          {
-            name: 'Refund',
-            // icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.visibleDialog = true
-              this.currentDialog = Refund
               compareDate()
               // this.$router.push({ name: 'NewPayment' })
             },

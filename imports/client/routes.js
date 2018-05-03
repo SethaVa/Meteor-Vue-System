@@ -28,10 +28,10 @@ import ClassDetails from './reports/ClassDetails.vue'
 import RegisterList from './pages/RegisterList'
 import RegisterInsert from './pages/RegisterInsert.vue'
 //Payment
-import Payment from './pages/Payment.vue'
+import Payment from './pages/PaymentInsert.vue'
 import PaymentList from './pages/PaymentList.vue'
 //Refund
-import Refund from './pages/Refund.vue'
+import Refund from './pages/RefundList.vue'
 //Staff Salary
 import StaffSalary from './reports/StaffSalary.vue'
 // Incomeouting
