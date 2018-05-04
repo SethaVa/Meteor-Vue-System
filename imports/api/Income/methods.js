@@ -112,7 +112,7 @@ export const updateIncome = new ValidatedMethod({
       Income.update({ _id: doc._id }, { $set: doc }, (error, result) => {
         if (!error) {
           IncomeDetails.remove({ referenceId: doc._id })
-          let items = []
+
           _.forEach(details, obj => {
             if (doc.referenceType === 'Expend') {
               obj.usd = -obj.usd
@@ -125,9 +125,8 @@ export const updateIncome = new ValidatedMethod({
             obj.referenceType = doc.referenceType
             obj.referenceId = doc._id
 
-            items.push(obj)
+            incomeDetails.insert(obj)
           })
-          incomeDetails.rawCollection().insert(items)
         }
       })
       return 'success'
@@ -141,7 +140,6 @@ export const updateIncomeForPaymentNew = new ValidatedMethod({
   validate: null,
   run({ doc }) {
     if (Meteor.isServer) {
-      console.log(doc)
       Income.remove({ referenceId: doc.referenceId })
 
       Income.insert(doc)
@@ -177,9 +175,7 @@ export const removeIncomeFromOther = new ValidatedMethod({
   }).validator(),
   run({ referenceId, referenceType }) {
     if (Meteor.isServer) {
-      console.log(referenceId, referenceType)
       Income.remove({ referenceId: referenceId, referenceType: referenceType })
-
       return 'success'
     }
   },

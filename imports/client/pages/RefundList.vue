@@ -69,18 +69,17 @@ import moment from 'moment'
 
 import Notify from '/imports/client/libs/notify'
 import Msg from '/imports/client/libs/message'
-import PaymentInsert from './RefundInsert.vue'
-import PaymentUpdate from './PaymentUpdate.vue'
-import StudentPayUpdate from './StudentPayUpdate.vue'
+import RefundInsert from './RefundInsert.vue'
+import RefundUpdate from './RefundUpdate.vue'
 import compareDate from '/imports/libs/compare-date'
 
-import { findPayment, removePayment } from '../../api/payment/methods'
+import { findRefund, removePayment } from '../../api/Refund/methods'
 
 var numeral = require('numeral')
 
 export default {
   name: 'PaymentList',
-  components: { PaymentInsert, PaymentUpdate },
+  components: { RefundInsert, RefundUpdate },
   data() {
     return {
       loading: false,
@@ -91,11 +90,8 @@ export default {
       titles: [
         { label: 'Class', prop: 'classId', sort: 'custom' },
         { label: 'Student', prop: 'studentId' },
-        { label: 'Pay Date', prop: 'payDate', sort: 'custom' },
-        { label: 'End Date', prop: 'endPayDate', sort: 'custom' },
         { label: 'USD', prop: 'usd' },
         { label: 'KHR', prop: 'khr' },
-        { label: 'Remaining', prop: 'remaining' },
       ],
       tableProps: {
         size: 'mini',
@@ -114,7 +110,7 @@ export default {
             },
             handler: () => {
               this.visibleDialog = true
-              this.currentDialog = PaymentInsert
+              this.currentDialog = RefundInsert
               compareDate()
               // this.$router.push({ name: 'NewPayment' })
             },
@@ -133,9 +129,8 @@ export default {
   methods: {
     getData() {
       this.loading = true
-      findPayment
+      findRefund
         .callPromise({
-          selector: { refType: 'Payment' },
           option: { sort: { _id: -1 } },
         })
         .then(result => {
@@ -148,52 +143,52 @@ export default {
     },
     handleCommand(command) {
       if (command.action === 'edit') {
-        if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {
-          Notify.warning({
-            message: 'This recorde is ' + command.row.status + " can't edit!",
-          })
-        } else {
-          this.updateDoc = command.row
-          this.visibleDialog = true
-          this.currentDialog = PaymentUpdate
-        }
+        // if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {
+        //   Notify.warning({
+        //     message: 'This recorde is ' + command.row.status + " can't edit!",
+        //   })
+        // } else {
+        this.updateDoc = command.row
+        this.visibleDialog = true
+        this.currentDialog = RefundUpdate
+        // }
       } else if (command.action === 'remove') {
-        if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {
-          Notify.warning({
-            message: 'This recorde is ' + command.row.status + " can't remove!",
+        // if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {
+        //   Notify.warning({
+        //     message: 'This recorde is ' + command.row.status + " can't remove!",
+        //   })
+        // } else {
+        this.$confirm('Do you want delete this record?', 'Warning', {
+          type: 'warning',
+        })
+          .then(result => {
+            if (result) {
+              let id = command.row._id
+              let lastId = command.row.lastId
+              removePayment
+                .callPromise({
+                  selector: {
+                    _id: id,
+                    referenceType: 'Payment',
+                    lastId: lastId,
+                  },
+                })
+                .then(result => {
+                  if (result) {
+                    Msg.success()
+                    this.getData()
+                  }
+                })
+                .catch(err => {
+                  Notify.error({ message: err.reason + 'Error' })
+                })
+              this.getData()
+            }
           })
-        } else {
-          this.$confirm('Do you want delete this record?', 'Warning', {
-            type: 'warning',
+          .catch(err => {
+            Notify.error({ message: err })
           })
-            .then(result => {
-              if (result) {
-                let id = command.row._id
-                let lastId = command.row.lastId
-                removePayment
-                  .callPromise({
-                    selector: {
-                      _id: id,
-                      referenceType: 'Payment',
-                      lastId: lastId,
-                    },
-                  })
-                  .then(result => {
-                    if (result) {
-                      Msg.success()
-                      this.getData()
-                    }
-                  })
-                  .catch(err => {
-                    Notify.error({ message: err.reason + 'Error' })
-                  })
-                this.getData()
-              }
-            })
-            .catch(err => {
-              Notify.error({ message: err })
-            })
-        }
+        // }
       }
     },
     handleClose() {

@@ -212,6 +212,7 @@ export const updatePaymentForRefund = new ValidatedMethod({
   validate: null,
   run({ doc }) {
     if (Meteor.isServer) {
+      console.log(doc)
       Payment.update(
         {
           _id: doc._id,
@@ -225,18 +226,6 @@ export const updatePaymentForRefund = new ValidatedMethod({
             usd: doc.usd,
             khr: doc.khr,
           },
-        },
-        error => {
-          if (!error) {
-            let data = {
-              tranDate: doc.tranDate,
-              referenceId: doc._id,
-              referenceType: 'Refund',
-              totalUsd: doc.usd,
-              totalKhr: doc.khr,
-            }
-            insertIncome.run({ doc: data })
-          }
         }
       )
 
@@ -292,7 +281,23 @@ export const removePayment = new ValidatedMethod({
     }
   },
 })
+// Remove Payment from Refund
+export const removePaymentFromRefund = new ValidatedMethod({
+  name: 'removePaymentFromRefund',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    _id: {
+      type: String,
+    },
+  }).validator(),
+  run({ _id }) {
+    if (Meteor.isServer) {
+      Payment.remove({ _id: _id })
 
+      return 'Success'
+    }
+  },
+})
 const aggregatePayment = selector => {
   let data = Payment.aggregate([
     {

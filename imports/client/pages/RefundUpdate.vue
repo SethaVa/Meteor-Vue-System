@@ -1,12 +1,6 @@
 <template>
   <div>
-    <!-- <component :is="currentModal"
-               :modal-doc="modalDoc"
-               :visible="modalVisible"
-               @modal-close="handleClose">
-    </component> -->
-    <!-- <legend>Filter</legend> -->
-    <el-dialog title="New Refund"
+    <el-dialog title="Update Refund"
                width="80%"
                :visible="visible"
                :before-close="handleClose">
@@ -46,15 +40,6 @@
               <el-date-picker style="width:100%"
                               v-model="form.tranDate"></el-date-picker>
             </el-form-item>
-            <!-- <el-form-item label="Duration"
-                          prop="duration">
-              <el-select v-model="form.duration">
-                <el-option v-for="doc in 12 "
-                           :key="doc"
-                           :label="doc + ' months'"
-                           :value="doc"></el-option>
-              </el-select>
-            </el-form-item> -->
 
           </el-col>
           <el-col :span="12">
@@ -62,14 +47,7 @@
               <legend class="legend-style">Info</legend>
               <el-row>
                 <el-col :span="12">
-                  <!-- <el-form-item class="info"
-                                label="Late Date :">
-                    <label> {{ 0 }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="End Date :">
-                    <label>{{ formatDate(endDate) }}</label>
-                  </el-form-item> -->
+
                   <el-form-item class="info"
                                 label="Teacher :">
                     <label> {{ teacher }}</label>
@@ -119,10 +97,9 @@ import Notify from '/imports/client/libs/notify'
 import moment from 'moment'
 import _ from 'lodash'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
-import compareDate from '/imports/libs/compare-date'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { findPaymentForClass } from '/imports/api/payment/methods'
-import { insertRefund } from '../../api/Refund/methods'
+import { updateRefund, findOneRefund } from '../../api/Refund/methods'
 import StudentPay from './StudentPay.vue'
 import SubPayment from '../../components/subPayment'
 export default {
@@ -132,6 +109,10 @@ export default {
     visible: {
       type: Boolean,
       default: false,
+    },
+    updateDoc: {
+      type: Object,
+      default: null,
     },
   },
   data() {
@@ -146,17 +127,17 @@ export default {
       room: '',
       teacher: '',
       subject: '',
-      timeStudy: [],
-      endDate: moment().toDate(),
       itemsProp: this.initItems(),
       saveEvent: 0,
-      form: {
-        payId: '',
-        tranDate: moment().toDate(),
-        type: '',
-        studentId: '',
-        status: 'Paid',
-      },
+      timeStudy: [],
+      form: this.updateDoc,
+      // form: {
+      // payId: '',
+      // tranDate: moment().toDate(),
+      // type: '',
+      // studentId: '',
+      // status: 'Paid',
+      // },
 
       rules: {
         studentId: [
@@ -178,10 +159,16 @@ export default {
       },
     }
   },
-
+  watch: {
+    'form.studentId'(val) {
+      alert(val)
+      this.handleStudentChange(val)
+    },
+  },
   mounted() {
     // this.getTypeData()
     // this.getPaymentData()
+    this.getStudentUpdate()
   },
   methods: {
     initItems() {
@@ -195,7 +182,31 @@ export default {
         },
       ]
     },
-
+    getStudentUpdate() {
+      let selector = {
+        _id: this.updateDoc.payId,
+      }
+      this.loading = true
+      findPaymentForClass
+        .callPromise({ selector: selector })
+        .then(result => {
+          if (result.length > 0) {
+            this.dataTable = []
+            _.forEach(result[0].classDetail, o => {
+              this.studentIdOpts.push({
+                label: o.studentId + ' - ' + o.student,
+                value: o.studentId,
+              })
+            })
+          } else {
+            this.studentIdOpts = []
+          }
+          this.loading = false
+        })
+        .catch(error => {
+          Notify.error({ message: error.reason })
+        })
+    },
     handlePaymentChange(item) {
       this.itemsProp = item
     },
@@ -271,7 +282,6 @@ export default {
             this.form.status = 'Debt'
           }
           let Refund = {
-            type: this.form.type,
             payId: this.form.payId,
             classId: this.form.classId,
             studentId: this.form.studentId,
@@ -283,7 +293,7 @@ export default {
             status: this.form.status,
           }
           // console.log(Refund)
-          insertRefund
+          updateRefund
             .callPromise({ doc: Refund })
             .then(result => {
               if (result) {
