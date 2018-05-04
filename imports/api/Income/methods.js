@@ -141,6 +141,7 @@ export const updateIncomeForPaymentNew = new ValidatedMethod({
   validate: null,
   run({ doc }) {
     if (Meteor.isServer) {
+      console.log(doc)
       Income.remove({ referenceId: doc.referenceId })
 
       Income.insert(doc)
