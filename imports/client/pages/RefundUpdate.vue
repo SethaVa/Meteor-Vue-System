@@ -130,14 +130,7 @@ export default {
       itemsProp: this.initItems(),
       saveEvent: 0,
       timeStudy: [],
-      form: this.updateDoc,
-      // form: {
-      // payId: '',
-      // tranDate: moment().toDate(),
-      // type: '',
-      // studentId: '',
-      // status: 'Paid',
-      // },
+      form: {},
 
       rules: {
         studentId: [
@@ -161,16 +154,30 @@ export default {
   },
   watch: {
     'form.studentId'(val) {
-      alert(val)
       this.handleStudentChange(val)
     },
   },
   mounted() {
-    // this.getTypeData()
-    // this.getPaymentData()
+    this.getData()
     this.getStudentUpdate()
   },
   methods: {
+    getData() {
+      findOneRefund
+        .callPromise({ id: this.updateDoc._id })
+        .then(result => {
+          // console.log(result)
+          this.form = result
+          this.itemsProp[0].amount = result.amount
+          this.itemsProp[0].discountVal = result.discountVal
+          this.itemsProp[0].usd = result.usd
+          this.itemsProp[0].khr = result.khr
+          this.itemsProp[0].remaining = result.remaining
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     initItems() {
       return [
         {
@@ -198,6 +205,13 @@ export default {
                 value: o.studentId,
               })
             })
+
+            this.room = result[0].room
+            this.teacher = result[0].teacher
+            this.subject = result[0].subject
+            this.timeStudy = result[0].time
+            this.form.classId = result[0].classDetail[0].classId
+            this.form.payId = result[0].classDetail[0]._id
           } else {
             this.studentIdOpts = []
           }
@@ -254,14 +268,6 @@ export default {
             this.form.classId = result[0].classDetail[0].classId
             this.form.payId = result[0].classDetail[0]._id
             this.itemsProp[0].amount = result[0].classDetail[0].remaining
-
-            // this.dataTable = []
-            // _.forEach(result[0].classDetail, o => {
-            //   this.studentIdOpts.push({
-            //     label: o.studentId + ' - ' + o.student,
-            //     value: o.studentId,
-            //   })
-            // })
           }
           this.loading = false
         })
@@ -280,12 +286,17 @@ export default {
           )
           if (this.itemsProp[0].remaining != 0) {
             this.form.status = 'Debt'
+          } else {
+            this.form.status = 'Paid'
           }
           let Refund = {
+            _id: this.updateDoc._id,
             payId: this.form.payId,
             classId: this.form.classId,
             studentId: this.form.studentId,
             tranDate: this.form.tranDate,
+            type: 'Refund',
+            amount: this.itemsProp[0].amount,
             usd: this.itemsProp[0].usd,
             khr: this.itemsProp[0].khr,
             discountVal: this.itemsProp[0].discountVal,
@@ -366,168 +377,3 @@ export default {
   margin-top: 2vh;
 }
 </style>
-
-//
-// import Msg from '/imports/client/libs/message'
-// import Notify from '/imports/client/libs/notify'
-// import moment from 'moment'
-// import _ from 'lodash'
-// import { lookupClass, lookupType } from '/imports/libs/lookup-methods'
-// import { findPaymentForClass } from '/imports/api/payment/methods'
-// import StudentRefund from './StudentRefund.vue'
-// export default {
-//   name: 'RefundInsert',
-//   components: { StudentRefund },
-//   data() {
-//     return {
-//       typeId: '',
-//       typeIdOpts: [],
-//       currentModal: null,
-//       modalVisible: false,
-//       modalDoc: null,
-//       loading: false,
-//       classIdOpts: [],
-//       classId: '',
-//       form: {
-//         classId: '',
-//       },
-//       rules: {
-//         classId: [
-//           { required: true, message: 'Subject is Required', trigger: 'change' },
-//         ],
-//         typeId: [
-//           { required: true, message: 'Type is Required', trigger: 'change' },
-//         ],
-//       },
-//       dataTable: [],
-//       titles: [
-//         { label: 'Student', prop: 'student' },
-//         { label: 'Gender', prop: 'gender' },
-//         { label: 'Pay Date', prop: 'tranDate' },
-//         { label: 'End Date', prop: 'endtranDate' },
-//       ],
-//       tableProps: {
-//         size: 'small',
-//       },
-//       actionColDef: {
-//         label: 'Action',
-//         def: [
-//           {
-//             type: 'primary',
-//             name: 'Refund',
-//             buttonProps: {
-//               size: 'mini',
-//             },
-//             handler: row => {
-//               this.modalDoc = row
-//               this.modalVisible = true
-//               this.currentModal = StudentRefund
-//             },
-//           },
-//         ],
-//       },
-//     }
-//   },
-//   computed: {
-//     // 'form.classId'(val) {
-//     //   this.classId = val
-//     //   return this.classId
-//     // },
-//   },
-//   mounted() {
-//     this.getRefundDate()
-//     this.getTypeData()
-//   },
-//   methods: {
-//     getTypeData() {
-//       lookupType
-//         .callPromise()
-//         .then(result => {
-//           this.typeIdOpts = result
-//         })
-//         .catch(error => {
-//           Notify.error({ message: error })
-//         })
-//     },
-//     handleTypeChange(val) {
-//       if (val.length > 0) {
-//         let selector = {
-//           typeId: val,
-//         }
-//         lookupClass
-//           .callPromise({ selector })
-//           .then(result => {
-//             this.classIdOpts = result
-//           })
-//           .catch(error => {
-//             Notify.error({ message: error })
-//           })
-//       } else {
-//         this.form.classId = ''
-//         this.classIdOpts = []
-//       }
-//     },
-//     getRefundDate() {
-//       let selector = {
-//         status: { $in: ['Debt', '$classDetail'] },
-//       }
-//       this.loading = true
-//       findPaymentForClass
-//         .callPromise({ selector: selector })
-//         .then(result => {
-//           if (result.length > 0) {
-//             this.dataTable = []
-//             _.forEach(result[0].classDetail, o => {
-//               this.dataTable = result[0].classDetail
-//             })
-//           } else {
-//             this.dataTable = []
-//           }
-//           this.loading = false
-//         })
-//         .catch(error => {
-//           Notify.error({ message: error.reason })
-//         })
-//     },
-//     handleSubmit() {
-//       this.$refs['form'].validate(valid => {
-//         if (valid) {
-//           let selector = {
-//             classId: this.form.classId,
-//             status: { $in: ['Debt', '$classDetail'] },
-//           }
-//           this.loading = true
-//           findPaymentForClass
-//             .callPromise({ selector: selector })
-//             .then(result => {
-//               if (result.length > 0) {
-//                 this.dataTable = []
-//                 _.forEach(result[0].classDetail, o => {
-//                   this.dataTable = result[0].classDetail
-//                 })
-//               } else {
-//                 this.dataTable = []
-//               }
-//               this.loading = false
-//             })
-//             .catch(error => {
-//               Notify.error({ message: error.reason })
-//             })
-//         } else {
-//           return false
-//         }
-//       })
-//     },
-//     handleClose() {
-//       this.handleSubmit()
-//       this.modalVisible = false
-//       this.$nextTick(() => {
-//         this.currentModal = null
-//       })
-//     },
-//     formatDate(val) {
-//       return moment(val).format('DD/MM/YYYY')
-//     },
-//   },
-// }
-/

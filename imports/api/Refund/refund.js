@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor'
 import SimpleSchema from 'simpl-schema'
 import { Mongo } from 'meteor/mongo'
-import { SIGTTIN } from 'constants'
 
 const Refund = new Mongo.Collection('refund')
 Refund.schema = new SimpleSchema({
@@ -21,6 +20,9 @@ Refund.schema = new SimpleSchema({
   studentId: {
     type: String,
   },
+  amount: {
+    type: Number,
+  },
   discountVal: {
     type: Number,
   },
@@ -28,6 +30,9 @@ Refund.schema = new SimpleSchema({
     type: Number,
   },
   khr: {
+    type: Number,
+  },
+  remaining: {
     type: Number,
   },
   type: {
