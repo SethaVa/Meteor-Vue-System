@@ -82,14 +82,16 @@ export const updateRefund = new ValidatedMethod({
   }).validator(),
   run({ doc }) {
     if (Meteor.isServer) {
+      let remaining = doc.remaining
+      let status = doc.status
       Refund.update({ _id: doc._id }, { $set: doc }, error => {
         if (!error) {
           let Payment = {
             _id: doc.payId,
             usd: doc.usd,
             khr: doc.khr,
-            remaining: doc.remaining,
-            tranDate: doc.tranDate,
+            remaining: remaining,
+            status: status,
           }
           updatePaymentForRefund.run({ doc: Payment })
 
