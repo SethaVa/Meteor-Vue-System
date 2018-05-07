@@ -47,9 +47,9 @@
             </span>
             <el-dropdown-menu slot="dropdown">
 
-              <el-dropdown-item :command="{action: 'edit', row: scope.row}">
+              <!-- <el-dropdown-item :command="{action: 'edit', row: scope.row}">
                 Edit
-              </el-dropdown-item>
+              </el-dropdown-item> -->
 
               <el-dropdown-item :command="{action: 'remove', row: scope.row}">
                 Remove
@@ -73,7 +73,7 @@ import RefundInsert from './RefundInsert.vue'
 import RefundUpdate from './RefundUpdate.vue'
 import compareDate from '/imports/libs/compare-date'
 
-import { findRefund, removePayment } from '../../api/Refund/methods'
+import { findRefund, removeRefund } from '../../api/Refund/methods'
 
 var numeral = require('numeral')
 
@@ -163,15 +163,11 @@ export default {
         })
           .then(result => {
             if (result) {
-              let id = command.row._id
-              let lastId = command.row.lastId
-              removePayment
+              // let id = command.row._id
+              // let lastId = command.row.lastId
+              removeRefund
                 .callPromise({
-                  selector: {
-                    _id: id,
-                    referenceType: 'Payment',
-                    lastId: lastId,
-                  },
+                  doc: command.row,
                 })
                 .then(result => {
                   if (result) {

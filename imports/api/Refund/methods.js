@@ -114,14 +114,24 @@ export const updateRefund = new ValidatedMethod({
 export const removeRefund = new ValidatedMethod({
   name: 'removeRefund',
   mixins: [CallPromiseMixin],
-  validate: new SimpleSchema({
-    _id: { type: String },
-  }).validator(),
-  run({ _id }) {
+  validate: null,
+  run({ doc }) {
     if (Meteor.isServer) {
-      Refund.remove(_id)
-      removePaymentFromRefund.run({ _id })
-      removeIncomeFromOther.run({ referenceId: _id, referenceType: 'Refund' })
+      // console.log(doc)
+      let Payment = {
+        _id: doc.payId,
+        usd: -doc.usd,
+        khr: -doc.khr,
+        remaining: doc.amount,
+        status: 'Debt',
+      }
+      updatePaymentForRefund.run({ doc: Payment })
+      Refund.remove({ _id: doc._id })
+      removePaymentFromRefund.run({ _id: doc._id })
+      removeIncomeFromOther.run({
+        referenceId: doc._id,
+        referenceType: 'Refund',
+      })
     }
   },
 })

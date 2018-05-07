@@ -276,6 +276,7 @@ export default {
             classId: this.form.classId,
             studentId: this.form.studentId,
             tranDate: this.form.tranDate,
+            amount: this.itemsProp[0].amount,
             usd: this.itemsProp[0].usd,
             khr: this.itemsProp[0].khr,
             discountVal: this.itemsProp[0].discountVal,
