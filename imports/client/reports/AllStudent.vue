@@ -1,37 +1,44 @@
 <template>
   <div>
-    <el-form :model="form"
-             ref="form"
-             :rules="rules"
-             :inline="true"
-             size="mini">
+    <fieldset>
+      <legend>Option</legend>
+      <el-form :model="form"
+               ref="form"
+               :rules="rules"
+               :inline="true"
+               size="mini">
 
-      <el-form-item label="Option"
-                    prop="opt">
-        <el-select v-model="form.opt"
-                   @change="handleOptChange">
-          <el-option v-for="doc in opts"
-                     :key="doc.value"
-                     :label="doc.label"
-                     :value="doc.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <slot v-if="itemProp">
-        <el-form-item label="Subject"
-                      prop="classId">
-          <el-select v-model="form.classId">
-            <el-option v-for="doc in classIdOpts"
-                       :key="doc.value"
-                       :label="doc.label"
-                       :value="doc.value"></el-option>
-          </el-select>
+        <el-form-item label="Start"
+                      prop="start">
+          <el-date-picker v-model="form.start"
+                          placeholder="Select Date"
+                          :picker-options="optionStart"></el-date-picker>
         </el-form-item>
-      </slot>
-      <el-form-item label="">
-        <el-button type="primary"
-                   @click="handleSubmit">Submit</el-button>
-      </el-form-item>
-    </el-form>
+        <!-- <el-form-item label="To"
+                      prop="end">
+          <el-date-picker v-model="form.end"
+                          placeholder="Select Date"
+                          :picker-options="optionStart"></el-date-picker>
+        </el-form-item> -->
+
+        <slot v-if="itemProp">
+          <el-form-item label="Subject"
+                        prop="classId">
+            <el-select v-model="form.classId">
+              <el-option v-for="doc in classIdOpts"
+                         :key="doc.value"
+                         :label="doc.label"
+                         :value="doc.value"></el-option>
+            </el-select>
+          </el-form-item>
+        </slot>
+        <el-form-item label="">
+          <el-button type="primary"
+                     @click="handleSubmit">Submit</el-button>
+        </el-form-item>
+      </el-form>
+    </fieldset>
+
     <el-card class="box-card">
       <div slot="header"
            class="clearfix">
@@ -82,11 +89,11 @@
               <tr>
                 <th>No</th>
                 <th>Code</th>
-                <th>Student Name</th>
+                <th>Name</th>
                 <th>Gender</th>
-                <th>Pay Date</th>
-                <th>End Pay Date</th>
-                <th>Status</th>
+                <th>Register Date</th>
+                <th>DOB</th>
+                <th>Telphone</th>
               </tr>
             </thead>
             <tbody>
@@ -94,11 +101,11 @@
                   :key="index">
                 <td>{{ index + 1 }}</td>
                 <td>{{ doc._id }}</td>
-                <td>{{ doc.student }}</td>
+                <td>{{ doc.enName }}</td>
                 <td>{{ doc.gender }}</td>
-                <td>{{ formatDate (doc.payDate) }}</td>
-                <td>{{ formatDate( doc.endPayDate) }}</td>
-                <td>{{ doc.status }}</td>
+                <td>{{ formatDate (doc.regiserDate) }}</td>
+                <td>{{ formatDate( doc.dobDate) }}</td>
+                <td>{{ doc.tel }}</td>
               </tr>
             </tbody>
 
@@ -115,11 +122,12 @@
 
 <script>
 import _ from 'lodash'
-import moment from 'moment'
+import moment, { invalid } from 'moment'
 
 import Notify from '/imports/client/libs/notify'
+import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import { lookupClass } from '/imports/libs/lookup-methods'
-import { findClassForStudenDetails } from '../../api/payment/methods'
+import { findStudents } from '../../api/students/methods'
 import { Printd } from 'printd'
 import toCss from 'to-css'
 // const toCss = require('to-css')
@@ -127,6 +135,50 @@ import reportCSS from '../styles/reportCss'
 export default {
   data() {
     return {
+      optionStart: {
+        shortcuts: [
+          {
+            text: 'Today',
+            onClick(picker) {
+              picker.$emit('pick', new Date())
+            },
+          },
+          {
+            text: 'Yesterday',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: 'A week ago',
+            onClick(picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: 'Last month',
+            onClick(picker) {
+              // const end = new Date()
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', date)
+            },
+          },
+          {
+            text: 'Last 3 months',
+            onClick(picker) {
+              // const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', start)
+            },
+          },
+        ],
+      },
       loading: false,
       tableData: [],
       titles: [
@@ -141,14 +193,11 @@ export default {
       roomName: '',
       subjectName: '',
       timeStudy: [],
-      opts: [
-        { label: 'All Student', value: '1' },
-        { label: 'By Class', value: '2' },
-      ],
+
       classIdOpts: [],
       form: {
-        opt: '',
-        classId: '',
+        start: '',
+        end: '',
       },
       rules: {
         opts: [{ required: true }],
@@ -158,20 +207,20 @@ export default {
   },
   mounted() {
     this.d = new Printd()
-    this.getClassData()
+    // this.getClassData()
   },
   methods: {
-    // getData() {
-    //   this.tableData = []
-    //   for (let i = 1; i <= 100; i++) {
-    //     this.tableData.push({
-    //       student: 'Logn Dara' + i,
-    //       gender: 'Male',
-    //       payDate: '12/03/2018',
-    //       endPayDate: '2018/2/' + i,
-    //     })
-    //   }
-    // },
+    getData() {
+      this.tableData = []
+      for (let i = 1; i <= 100; i++) {
+        this.tableData.push({
+          student: 'Logn Dara' + i,
+          gender: 'Male',
+          payDate: '12/03/2018',
+          endPayDate: '2018/2/' + i,
+        })
+      }
+    },
     handleOptChange(val) {
       if (val === '2') {
         this.itemProp = true
@@ -190,23 +239,29 @@ export default {
         })
     },
     handleSubmit() {
+      this.form.start = wrapCurrentTime(this.form.start)
+      this.form.end = wrapCurrentTime(this.form.end)
+      let date = wrapCurrentTime(moment().toDate())
+
       this.loading = true
-      let selector = {
-        classId: this.form.classId,
-        status: { $ne: 'Closed' },
+      let selector = {}
+      if (!moment(this.form.start).isValid()) {
+        selector = {
+          registerDate: { $lte: date },
+          remove: { $ne: 'true' },
+        }
+      } else {
+        selector = {
+          registerDate: { $lte: this.form.start },
+          remove: { $ne: 'true' },
+        }
       }
-      findClassForStudenDetails
+
+      findStudents
         .callPromise({ selector })
         .then(result => {
           if (result.length > 0) {
-            _.forEach(result, o => {
-              this.teacherName = o.teacher
-              this.roomName = o.room
-              this.subjectName = o.subject
-              this.timeStudy = o.time
-
-              this.tableData = o.classDetail
-            })
+            this.tableData = result
           } else {
             this.teacherName = ''
             this.roomName = ''
@@ -298,6 +353,7 @@ export default {
        .tableShow th {
           background-color: #ddd;
         }
+        
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)
     },

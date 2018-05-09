@@ -40,6 +40,9 @@ import Income from './pages/IncomeList.vue'
 import Exchange from './pages/Exchange.vue'
 // SalaryRate
 import SalaryRate from './pages/SalaryRate.vue'
+
+// Report
+import AllStudent from './reports/AllStudent'
 const routes = [
   //Notfound
   {
@@ -177,6 +180,12 @@ const routes = [
         path: 'salary-rate',
         name: 'salary-rate',
         component: SalaryRate,
+      },
+      // Report
+      {
+        path: 'rpt-student',
+        name: 'All Student',
+        component: AllStudent,
       },
     ],
   },

@@ -1,11 +1,5 @@
 <template>
   <div>
-    <!-- <component :is="currentModal"
-               :modal-doc="modalDoc"
-               :visible="modalVisible"
-               @modal-close="handleClose">
-    </component> -->
-    <!-- <legend>Filter</legend> -->
     <el-dialog title="New Refund"
                width="80%"
                :visible="visible"

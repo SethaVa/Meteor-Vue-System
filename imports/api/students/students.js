@@ -8,6 +8,9 @@ Students.schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  registerDate: {
+    type: Date,
+  },
   enName: {
     type: String,
   },

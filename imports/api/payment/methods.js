@@ -4,13 +4,16 @@ import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import Payment from './payment'
+import Exchange from '../exchanges/exchanges'
 import _ from 'lodash'
+import moment from 'moment'
 
 import {
   insertIncome,
   removeIncomeFromOther,
   updateIncomeForPaymentNew,
 } from '../Income/methods'
+import SalaryRate from '../salary-rate/salaryRate'
 
 // Find All Data
 export const findPayment = new ValidatedMethod({
@@ -298,6 +301,49 @@ export const removePaymentFromRefund = new ValidatedMethod({
     }
   },
 })
+
+// Find Salay
+
+export const findSalary = new ValidatedMethod({
+  name: 'findSalary',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ selector, option }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      option = option || {}
+      let data = aggregateSalary(selector)
+      const exchangeRate = Exchange.find(
+        {},
+        { sort: { _id: -1 }, limit: 1 }
+      ).fetch()
+
+      const salaryRate = SalaryRate.find(
+        {},
+        { sort: { _id: -1 }, limit: 1 }
+      ).fetch()
+
+      // let partTiemRate = salaryRate[0].partTime / 100
+
+      // console.log(partTiemRate)
+      // _.forEach(data, o => {
+      //   console.log(o.totalPay)
+      // })
+      return { data, exchangeRate, salaryRate }
+    }
+  },
+})
+
+const loopDate = (from, to) => {
+  let data = []
+
+  for (let m = from; m <= to; m.setMonth(m.getMonth() + 1)) {
+    data.push({ date: moment(m).format('YYYY-MM-D') })
+  }
+
+  return data
+}
+
 const aggregatePayment = selector => {
   let data = Payment.aggregate([
     {
@@ -424,6 +470,38 @@ const aggregatePayment = selector => {
         time: 1,
         classDetail: 1,
       },
+    },
+  ])
+  return data
+}
+
+// Find Salary
+const aggregateSalary = selector => {
+  let data = Payment.aggregate([
+    {
+      $match: selector,
+    },
+    {
+      $lookup: {
+        from: 'classStudy',
+        localField: 'classId',
+        foreignField: '_id',
+        as: 'classDoc',
+      },
+    },
+    {
+      $unwind: { path: '$classDoc', preserveNullAndEmptyArrays: true },
+    },
+    {
+      $lookup: {
+        from: 'staff',
+        localField: 'classDoc.staffId',
+        foreignField: '_id',
+        as: 'staffDoc',
+      },
+    },
+    {
+      $unwind: { path: '$staffDoc', preserveNullAndEmptyArrays: true },
     },
   ])
   return data
