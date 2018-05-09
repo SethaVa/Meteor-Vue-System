@@ -72,7 +72,7 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Student Name</th>
+                <th>Date</th>
                 <th>Gender</th>
                 <th>Pay Date</th>
                 <th>End Pay Date</th>
@@ -82,8 +82,8 @@
               <tr v-for="(doc, index) in tableData"
                   :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ doc.student }}</td>
-                <td>{{ doc.gender }}</td>
+                <td>{{ formatDate( doc.date) }}</td>
+                <td>{{ formatNum(doc.totalSalary) }}</td>
                 <td>{{ doc.payDate }}</td>
                 <td>{{ doc.endPayDate }}</td>
 
@@ -102,16 +102,23 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import moment from 'moment'
+import wrapCurrentDate from '/imports/client/libs/wrap-current-time'
 import { Printd } from 'printd'
 import Notify from '/imports/client/libs/notify'
+import Lookup from '../libs/Lookup-Value'
 import { lookupType } from '/imports/libs/lookup-methods'
 //
 import { findStaffSalary } from '../../api/Staffs/methods'
+import { findSalary } from '../../api/payment/methods'
+
+const numeral = require('numeral')
 export default {
   data() {
     return {
       loading: false,
-      docOpts: [],
+      docOpts: Lookup.type,
       tableData: [],
       titles: [
         { label: 'Student', prop: 'student' },
@@ -129,7 +136,7 @@ export default {
   },
   mounted() {
     this.d = new Printd()
-    this.getTypeData()
+    // this.getTypeData()
   },
   methods: {
     getTypeData() {
@@ -145,14 +152,33 @@ export default {
 
     handleSubmit() {
       this.loading = true
+
       let selector = {
-        typeId: this.form.opts,
+        type: { $in: this.form.opts },
+        status: 'Paid',
       }
-      findStaffSalary
+
+      let currentDate = wrapCurrentDate(moment().toDate())
+      currentDate = this.formatDate(currentDate)
+      findSalary
         .callPromise({ selector })
         .then(result => {
+          let partTimeRate = result.salaryRate[0].partTime / 100
+          // console.log(currentDate)
+          _.forEach(result.data, o => {
+            // console.log(o._id, this.loopDate(o.payDate, o.endPayDate))
+            let loopGetDate = this.loopDate(o.payDate, o.endPayDate)
+            _.forEach(loopGetDate, d => {
+              if (moment(currentDate).isSame(d.date)) {
+                // console.log(o.totalPay * partTimeRate / o.duration)
+                this.tableData.push({
+                  date: d.date,
+                  totalSalary: o.totalPay * partTimeRate / o.duration,
+                })
+              }
+            })
+          })
           this.loading = false
-          console.log(result)
         })
         .catch(error => {
           Notify.error({ message: error })
@@ -233,6 +259,23 @@ export default {
         }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)
+    },
+
+    formatDate(val) {
+      return moment(val).format('YYYY-MM')
+    },
+    formatNum(val) {
+      return numeral(val).format('0,0.00')
+    },
+    // function loop Date
+    loopDate(from, to) {
+      let data = []
+
+      for (let m = from; m < to; m.setMonth(m.getMonth() + 1)) {
+        data.push({ date: this.formatDate(m) })
+      }
+
+      return data
     },
   },
 }

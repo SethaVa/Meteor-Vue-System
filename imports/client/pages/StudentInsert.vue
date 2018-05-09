@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import Msg from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
@@ -128,6 +129,7 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.form.dob = wrapCurrentTime(this.form.dob)
+          this.form.registerDate = wrapCurrentTime(moment().toDate())
           // console.log(this.form)
           insertStudent
             .callPromise({ doc: this.form })

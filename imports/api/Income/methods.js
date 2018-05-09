@@ -164,6 +164,7 @@ export const removeIncome = new ValidatedMethod({
     }
   },
 })
+
 export const removeIncomeFromOther = new ValidatedMethod({
   name: 'removeIncomeFromOther',
   mixins: [CallPromiseMixin],
