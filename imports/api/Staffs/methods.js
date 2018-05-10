@@ -7,6 +7,8 @@ import _ from 'lodash'
 import Staff from './staff'
 import ClassStudy from '../classStudy/classStudy'
 import Payment from '../payment/payment'
+import SalaryRate from '../salary-rate/salaryRate'
+
 // Find
 export const findStaff = new ValidatedMethod({
   name: 'findStaff',
@@ -81,10 +83,16 @@ export const findStaffSalary = new ValidatedMethod({
   run({ selector }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      console.log(selector)
+      const salaryRate = SalaryRate.find(
+        {},
+        { sort: { _id: -1 }, limit: 1 }
+      ).fetch()
+
+      let partTiemRate = salaryRate[0].partTime
+
       // sort = sort || {_id:-1};
-      console.log(aggregateFindStaffSalary(selector))
-      return aggregateFindStaffSalary(selector)
+      // console.log(aggregateFindStaffSalary(selector, partTiemRate))
+      return aggregateFindStaffSalary(selector, partTiemRate)
     }
   },
 })
@@ -272,7 +280,7 @@ const aggregatefindStaffDetails = selector => {
 }
 
 // Salary Aggregate
-const aggregateFindStaffSalary = selector => {
+const aggregateFindStaffSalary = (selector, rateSalary) => {
   let data = Payment.aggregate([
     {
       $match: {
@@ -294,22 +302,6 @@ const aggregateFindStaffSalary = selector => {
       },
     },
     {
-      $lookup: {
-        from: 'types',
-        localField: 'classDoc.typeId',
-        foreignField: '_id',
-        as: 'typeDoc',
-      },
-    },
-    {
-      $lookup: {
-        from: 'rooms',
-        localField: 'classDoc.roomId',
-        foreignField: '_id',
-        as: 'roomDoc',
-      },
-    },
-    {
       $unwind: {
         path: '$roomDoc',
         preserveNullAndEmptyArrays: true,
@@ -317,20 +309,6 @@ const aggregateFindStaffSalary = selector => {
     },
     {
       $unwind: { path: '$typeDoc', preserveNullAndEmptyArrays: true },
-    },
-    {
-      $lookup: {
-        from: 'types',
-        localField: 'classDoc.typeId',
-        foreignField: '_id',
-        as: 'typeDoc',
-      },
-    },
-    {
-      $unwind: {
-        path: '$typeDoc',
-        preserveNullAndEmptyArrays: true,
-      },
     },
     {
       $lookup: {
@@ -370,8 +348,8 @@ const aggregateFindStaffSalary = selector => {
         staffName: { $last: '$staffDoc.name' },
         gender: { $last: '$staffDoc.gender' },
         position: { $last: '$positionDoc.position' },
-        typeId: { $last: '$typeDoc._id' },
-        type: { $last: '$typeDoc.type' },
+        // typeId: { $last: '$typeDoc._id' },
+        type: { $last: '$type' },
         total: {
           $sum: {
             $divide: [
@@ -379,7 +357,7 @@ const aggregateFindStaffSalary = selector => {
                 $multiply: [
                   '$totalPay',
                   {
-                    $divide: [50, 100],
+                    $divide: [rateSalary, 100],
                   },
                 ],
               },
@@ -402,7 +380,6 @@ const aggregateFindStaffSalary = selector => {
         staffName: { $last: '$staffName' },
         gender: { $last: '$gender' },
         position: { $last: '$position' },
-        typeId: { $last: '$typeId' },
         type: { $last: '$type' },
         totalSalary: {
           $sum: '$total',

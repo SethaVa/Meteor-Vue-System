@@ -55,7 +55,7 @@
         <i class="fa fa-home"></i>
         <span>Class Details</span>
       </el-menu-item>
-      <el-menu-item index="rpt-student">
+      <el-menu-item index="student-all">
         <i class="fa fa-home"></i>
         <span>All Student</span>
       </el-menu-item>
