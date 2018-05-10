@@ -122,7 +122,7 @@
 
 <script>
 import _ from 'lodash'
-import moment, { invalid } from 'moment'
+import moment from 'moment'
 
 import Notify from '/imports/client/libs/notify'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
@@ -132,7 +132,9 @@ import { Printd } from 'printd'
 import toCss from 'to-css'
 // const toCss = require('to-css')
 import reportCSS from '../styles/reportCss'
+
 export default {
+  name: 'StudentAll',
   data() {
     return {
       optionStart: {

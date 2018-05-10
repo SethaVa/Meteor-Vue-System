@@ -8,16 +8,12 @@
                size="mini">
         <el-form-item label="Option"
                       prop="opts">
-          <el-select v-model="form.opts"
-                     multiple
-                     collapse-tags
-                     clearable
-                     placeholder="select">
-            <el-option v-for="doc in docOpts"
-                       :key="doc.value"
-                       :value="doc.value"
-                       :label="doc.label"></el-option>
-          </el-select>
+          <el-date-picker v-model="form.opts"
+                          multiple
+                          collapse-tags
+                          clearable
+                          placeholder="select">
+          </el-date-picker>
           <el-form-item>
             <el-button type="primary"
                        @click="handleSubmit">Submit</el-button>
@@ -72,21 +68,22 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>Date</th>
+                <th>Name</th>
                 <th>Gender</th>
-                <th>Pay Date</th>
-                <th>End Pay Date</th>
+                <th>Position</th>
+                <th>Salary</th>
+                <th>Type</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(doc, index) in tableData"
                   :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ formatDate( doc.date) }}</td>
+                <td>{{ doc.staffName }}</td>
+                <td>{{ doc.gender }}</td>
+                <td>{{ doc.position }}</td>
                 <td>{{ formatNum(doc.totalSalary) }}</td>
-                <td>{{ doc.payDate }}</td>
-                <td>{{ doc.endPayDate }}</td>
-
+                <td>{{ doc.type }}</td>
               </tr>
             </tbody>
 
@@ -154,30 +151,36 @@ export default {
       this.loading = true
 
       let selector = {
-        type: { $in: this.form.opts },
-        status: 'Paid',
+        type: 'Part Time',
+        // status: 'Paid',
       }
-
-      let currentDate = wrapCurrentDate(moment().toDate())
+      this.tableData = []
+      let currentDate = wrapCurrentDate(this.form.opts)
       currentDate = this.formatDate(currentDate)
-      findSalary
+      findStaffSalary
         .callPromise({ selector })
         .then(result => {
-          let partTimeRate = result.salaryRate[0].partTime / 100
-          // console.log(currentDate)
-          _.forEach(result.data, o => {
-            // console.log(o._id, this.loopDate(o.payDate, o.endPayDate))
-            let loopGetDate = this.loopDate(o.payDate, o.endPayDate)
-            _.forEach(loopGetDate, d => {
-              if (moment(currentDate).isSame(d.date)) {
-                // console.log(o.totalPay * partTimeRate / o.duration)
-                this.tableData.push({
-                  date: d.date,
-                  totalSalary: o.totalPay * partTimeRate / o.duration,
-                })
-              }
+          if (result) {
+            // let partTimeRate = result.salaryRate[0].partTime / 100
+            // console.log(currentDate)
+            // _.forEach(result.data, o => {
+            //   // console.log(o._id, this.loopDate(o.payDate, o.endPayDate))
+            //   let loopGetDate = this.loopDate(o.payDate, o.endPayDate)
+            //   _.forEach(loopGetDate, d => {
+            //     if (moment(currentDate).isSame(d.date)) {
+            //       console.log('true')
+            //       // console.log(o.totalPay * partTimeRate / o.duration)
+            //       this.tableData.push({
+            //         date: d.date,
+            //         totalSalary: o.totalPay * partTimeRate / o.duration,
+            //       })
+            //     }
+            //   })
+            // })
+            _.forEach(result, o => {
+              this.tableData.push(o)
             })
-          })
+          }
           this.loading = false
         })
         .catch(error => {

@@ -183,8 +183,8 @@ const routes = [
       },
       // Report
       {
-        path: 'rpt-student',
-        name: 'All Student',
+        path: 'student-all',
+        name: 'student-all',
         component: AllStudent,
       },
     ],
