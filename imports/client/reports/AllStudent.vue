@@ -103,8 +103,8 @@
                 <td>{{ doc._id }}</td>
                 <td>{{ doc.enName }}</td>
                 <td>{{ doc.gender }}</td>
-                <td>{{ formatDate (doc.regiserDate) }}</td>
-                <td>{{ formatDate( doc.dobDate) }}</td>
+                <td>{{ formatDate (doc.registerDate) }}</td>
+                <td>{{ formatDate( doc.dob) }}</td>
                 <td>{{ doc.tel }}</td>
               </tr>
             </tbody>
@@ -127,7 +127,7 @@ import moment from 'moment'
 import Notify from '/imports/client/libs/notify'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import { lookupClass } from '/imports/libs/lookup-methods'
-import { findStudents } from '../../api/students/methods'
+import { findStudentsByDate, findStudents } from '../../api/students/methods'
 import { Printd } from 'printd'
 import toCss from 'to-css'
 // const toCss = require('to-css')
@@ -244,20 +244,23 @@ export default {
       this.form.start = wrapCurrentTime(this.form.start)
       this.form.end = wrapCurrentTime(this.form.end)
       let date = wrapCurrentTime(moment().toDate())
-
-      this.loading = true
-      let selector = {}
-      if (!moment(this.form.start).isValid()) {
-        selector = {
-          registerDate: { $lte: date },
-          remove: { $ne: 'true' },
-        }
-      } else {
-        selector = {
-          registerDate: { $lte: this.form.start },
-          remove: { $ne: 'true' },
-        }
+      // this.form.start = moment(this.form.start).format('YYYY-MM-DD')
+      let selector = {
+        registerDate: { $lte: this.form.start },
       }
+      // this.loading = true
+      // let selector = {}
+      // if (!moment(this.form.start).isValid()) {
+      //   selector = {
+      //     registerDate: { $lte: date },
+      //     remove: { $ne: 'true' },
+      //   }
+      // } else {
+      //   selector = {
+      //     registerDate: { $lte: this.form.start },
+      //     remove: { $ne: 'true' },
+      //   }
+      // }
 
       findStudents
         .callPromise({ selector })
@@ -265,10 +268,10 @@ export default {
           if (result.length > 0) {
             this.tableData = result
           } else {
-            this.teacherName = ''
-            this.roomName = ''
-            this.subjectName = ''
-            this.timeStudy = []
+            // this.teacherName = ''
+            // this.roomName = ''
+            // this.subjectName = ''
+            // this.timeStudy = []
 
             this.tableData = []
           }

@@ -59,6 +59,14 @@
         <i class="fa fa-home"></i>
         <span>All Student</span>
       </el-menu-item>
+      <el-menu-item index="daily">
+        <i class="fa fa-home"></i>
+        <span>Daily Report</span>
+      </el-menu-item>
+      <el-menu-item index="monthly-report">
+        <i class="fa fa-home"></i>
+        <span>Monthly Report</span>
+      </el-menu-item>
       <el-menu-item index="refund">
         <i class="fa fa-home"></i>
         <span>Refund</span>

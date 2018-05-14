@@ -43,6 +43,8 @@ import SalaryRate from './pages/SalaryRate.vue'
 
 // Report
 import AllStudent from './reports/AllStudent'
+import DailyInEx from './reports/DailyReportInEx.vue';
+import MonthlyInEx from './reports/MonthlyReport.vue';
 const routes = [
   //Notfound
   {
@@ -67,8 +69,7 @@ const routes = [
   {
     path: '/',
     component: index,
-    children: [
-      {
+    children: [{
         path: '',
         name: 'home',
         component: Home,
@@ -186,6 +187,16 @@ const routes = [
         path: 'student-all',
         name: 'student-all',
         component: AllStudent,
+      },
+      {
+        path: 'daily-report',
+        name: 'daily',
+        component: DailyInEx,
+      },
+      {
+        path: 'monthly-report',
+        name: 'monthly-report',
+        component: MonthlyInEx,
       },
     ],
   },
