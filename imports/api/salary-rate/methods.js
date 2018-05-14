@@ -17,9 +17,9 @@ export const findSalaryRate = new ValidatedMethod({
     }
   },
 })
-//find for Options
-export const findSalaryRateOpts = new ValidatedMethod({
-  name: 'findSalaryRateOpts',
+//find for Part Time Options
+export const findSalaryRatePartTimeOpts = new ValidatedMethod({
+  name: 'findSalaryRatePartTimeOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ selector }) {
@@ -30,7 +30,30 @@ export const findSalaryRateOpts = new ValidatedMethod({
 
       _.forEach(SalaryRate, o => {
         data.push({
-          label: o.SalaryRate,
+          label: o.partTime,
+          value: o._id,
+        })
+      })
+
+      return data
+    }
+  },
+})
+
+//find for Full Time Options
+export const findSalaryRateFullTimeTimeOpts = new ValidatedMethod({
+  name: 'findSalaryRateFullTimeTimeOpts',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({ selector }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      let data = []
+      let SalaryRate = SalaryRate.find(selector).fetch()
+
+      _.forEach(SalaryRate, o => {
+        data.push({
+          label: o.fullTime,
           value: o._id,
         })
       })
