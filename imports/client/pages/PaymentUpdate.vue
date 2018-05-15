@@ -36,6 +36,12 @@
                            :value="doc.value"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="Fee"
+                          prop="fee">
+              <el-input v-model="form.fee">
+
+              </el-input>
+            </el-form-item>
             <el-form-item label="Pay Date"
                           prop="payDate">
               <el-date-picker style="width:100%"
@@ -171,6 +177,7 @@ export default {
         payDate: [
           { required: true, message: 'Date is Required', trigger: 'change' },
         ],
+        fee: [{ required: true, message: 'Fee is Required', trigger: 'blure' }],
         duration: [
           {
             required: true,
@@ -384,6 +391,7 @@ export default {
             remaining: this.itemsProp[0].remaining,
             status: this.form.status,
             lastId: this.form.lastId,
+            fee: this.form.fee,
           }
           // console.log(Payment)
           updatePaymentForPayment

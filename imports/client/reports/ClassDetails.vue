@@ -50,31 +50,35 @@
       </div>
       <div id="tableStudent">
 
-        <img src="/img/bwlogo.png"
-             class="logo">
-        <!-- Header -->
-        <div class="header">
-          <span class="headerKhmer">សាលាភាសាបរទេស ប៊ី អេ ឌី</span>
-          <br>
-          <span class="headerEn">B.A.D Foreign Language School</span>
-        </div>
-        <!-- Info Class -->
-        <slot v-show="infoShow">
-          <div class="info-class">
-            <div class="clLeft">
-              <label>Teacher : {{ teacherName }}</label><br><br>
-              <label>Room : {{ roomName }}</label>
-            </div>
-
-            <div class="clCenter">
-              <label>Subject : {{ subjectName }}</label>
-            </div>
-            <div class="clRight">
-              <label>Time : {{ formatTime( timeStudy ) }}</label><br><br>
-              <label>Room : {{ roomName }}</label>
-            </div>
+        <div class="report-header">
+          <div class="logo">
+            <img src="/img/bwlogo.png">
           </div>
-        </slot>
+          <!-- Header -->
+          <div class="header">
+            <span class="headerKhmer">សាលាភាសាបរទេស ប៊ី អេ ឌី</span>
+            <br>
+            <span class="headerEn">B.A.D Foreign Language School</span>
+          </div>
+        </div>
+
+        <!-- Info Class -->
+        <!-- <slot v-show="infoShow"> -->
+        <div class="info-class">
+          <div class="clLeft">
+            <label>Teacher : {{ teacherName }}</label><br><br>
+            <label>Room : {{ roomName }}</label>
+          </div>
+
+          <div class="clCenter">
+            <label>Subject : {{ subjectName }}</label>
+          </div>
+          <div class="clRight">
+            <label>Time : {{ formatTime( timeStudy ) }}</label><br><br>
+            <label>Room : {{ roomName }}</label>
+          </div>
+        </div>
+        <!-- </slot> -->
         <div class="tableShow"
              v-loading="loading">
           <table class="table-content">
@@ -226,30 +230,38 @@ export default {
       // font-family: Moul, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
 
       const reportCSS = `
-      .logo {
-          width: 140px;
+      .logo>img {
+          float:left;
+          // position: absolute;
+        }
+      img{
+         width: 140px;
           height: 100px;
-          position: absolute;
+      }
+        .report-header>header{
+          content: "";
+          clear: both;
+          // display: table;
         }
       .header {
-          position: relative;
-          left: 20%;
-          top: 30%;
-          right: 0%;
-          bottom: 0%;
+          
+          text-align: center;
+          padding-bottom: 10px;
+          width: 80%;
+          margin-left:20px;
         }
         .header >.headerKhmer {
-          font-size: 35px;
-          font-family: 'Moul';
-          color: darkgray;
-          margin-left: 5vh;
+        
+            font-size: 33px;
+            font-weight: 500;
+            padding-top: 10px;
+            font-family: 'Moul', PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
         }
         .header >.headerEn {
-          font-size: 33px;
+          font-size: 25px;
           font-family: Times New Roman;
           color: darkgray;
-          margin-left: 8vh;
-          margin-top: -3vh;
+         
         }
         .table-content {
           border-collapse: collapse;
@@ -257,15 +269,15 @@ export default {
         }
         .info-class {
           position: relative;
-        margin-top: 4vh;
+          height:10vh;
       }
 
       .info-class>.clLeft {
           font-size: 14px;
           position: absolute;
           top: 35%;
-          width: 20%;
-          left: 10%;
+          max-width: 20%;
+          left: 5%;
       }
 
       .info-class>.clCenter {
@@ -273,30 +285,48 @@ export default {
           position: absolute;
           margin-left: 10vh;
           top: 35%;
-          left: 35%;
+          left: 25%;
       }
 
       .info-class>.clRight {
           font-size: 14px;
           position: absolute;
-          left: 80%;
+          left: 70%;
           top: 35%;
       }
       .tableShow {
           font-family: sans-serif;
           font-size: 12px;
-          margin-top: 10vh;
+          
       }
        .tableShow .table-content,
       th,
       td {
-          border: 1px solid #ddd;
-          border-bottom: 1px solid #ddd;
+          // border: 1px solid #ddd;
+           border: 0.1px solid #606266;
+          // border-bottom: 1px solid #ddd;
+          border-bottom: 0.1px solid #606266;
           padding: 5px;
       }
 
        .tableShow th {
           background-color: #ddd;
+        }
+        
+        .title {
+            font-size:14px;
+            text-align: center;
+            font-weight: 700;
+            color: black;
+        }
+
+        .info-header {
+            margin-top: 2vh;
+            height: 4vh;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            font-style: initial oblique;
         }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)

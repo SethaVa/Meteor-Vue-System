@@ -14,6 +14,21 @@
                           placeholder="Select Date"
                           :picker-options="optionStart"></el-date-picker>
         </el-form-item>
+
+        <el-form-item label="Type"
+                      prop="type">
+          <el-select v-model="form.type"
+                     multiple
+                     clearable
+                     collapse-tags
+                     placeholder="Please Selecte Type">
+            <el-option v-for="doc in typeOpts"
+                       :key="doc.value"
+                       :label="doc.label"
+                       :value="doc.value"></el-option>
+          </el-select>
+        </el-form-item>
+
         <!-- <el-form-item label="To"
                       prop="end">
           <el-date-picker v-model="form.end"
@@ -21,7 +36,7 @@
                           :picker-options="optionStart"></el-date-picker>
         </el-form-item> -->
 
-        <slot v-if="itemProp">
+        <!-- <slot v-if="itemProp">
           <el-form-item label="Subject"
                         prop="classId">
             <el-select v-model="form.classId">
@@ -31,7 +46,7 @@
                          :value="doc.value"></el-option>
             </el-select>
           </el-form-item>
-        </slot>
+        </slot> -->
         <el-form-item label="">
           <el-button type="primary"
                      @click="handleSubmit">Submit</el-button>
@@ -55,15 +70,19 @@
         </div>
 
       </div>
-      <div id="tableStudent">
+      <div id="tableStudent"
+           v-loading="loading">
 
-        <img src="/img/bwlogo.png"
-             class="logo">
-        <!-- Header -->
-        <div class="header">
-          <span class="headerKhmer">សាលាភាសាបរទេស ប៊ី អេ ឌី</span>
-          <br>
-          <span class="headerEn">B.A.D Foreign Language School</span>
+        <div class="report-header">
+          <div class="logo">
+            <img src="/img/bwlogo.png">
+          </div>
+          <!-- Header -->
+          <div class="header">
+            <span class="headerKhmer">សាលាភាសាបរទេស ប៊ី អេ ឌី</span>
+            <br>
+            <span class="headerEn">B.A.D Foreign Language School</span>
+          </div>
         </div>
         <!-- Info Class -->
         <slot v-show="infoShow">
@@ -82,8 +101,7 @@
             </div>
           </div>
         </slot>
-        <div class="tableShow"
-             v-loading="loading">
+        <div class="tableShow">
           <table class="table-content">
             <thead>
               <tr>
@@ -94,6 +112,7 @@
                 <th>Register Date</th>
                 <th>DOB</th>
                 <th>Telphone</th>
+                <th>Type</th>
               </tr>
             </thead>
             <tbody>
@@ -106,10 +125,15 @@
                 <td>{{ formatDate (doc.registerDate) }}</td>
                 <td>{{ formatDate( doc.dob) }}</td>
                 <td>{{ doc.tel }}</td>
+                <td>{{ doc.type }}</td>
               </tr>
             </tbody>
 
           </table>
+          <div style="width: 30%; float: right; display: inline-block;margin-top:3%;margin-bottom:3%;">
+            <span class="title">Total All : {{ totalAll }}</span>
+            <span class="title">Female : {{ totalFemale }}</span>
+          </div>
 
         </div>
 
@@ -126,6 +150,7 @@ import moment from 'moment'
 
 import Notify from '/imports/client/libs/notify'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import Lookup from '../libs/Lookup-Value'
 import { lookupClass } from '/imports/libs/lookup-methods'
 import { findStudentsByDate, findStudents } from '../../api/students/methods'
 import { Printd } from 'printd'
@@ -137,6 +162,13 @@ export default {
   name: 'StudentAll',
   data() {
     return {
+      totalAll: 0,
+      totalFemale: 0,
+      typeOpts: Lookup.type,
+      form: {
+        start: moment().toDate(),
+        type: '',
+      },
       optionStart: {
         shortcuts: [
           {
@@ -196,14 +228,14 @@ export default {
       subjectName: '',
       timeStudy: [],
 
-      classIdOpts: [],
-      form: {
-        start: '',
-        end: '',
-      },
+      // classIdOpts: [],
+      // form: {
+      //   start: '',
+      //   end: '',
+      // },
       rules: {
-        opts: [{ required: true }],
-        classId: [{ required: true }],
+        start: [{ required: true }],
+        type: [{ required: true }],
       },
     }
   },
@@ -241,75 +273,82 @@ export default {
         })
     },
     handleSubmit() {
-      this.form.start = wrapCurrentTime(this.form.start)
-      this.form.end = wrapCurrentTime(this.form.end)
-      let date = wrapCurrentTime(moment().toDate())
-      // this.form.start = moment(this.form.start).format('YYYY-MM-DD')
-      let selector = {
-        registerDate: { $lte: this.form.start },
-      }
-      // this.loading = true
-      // let selector = {}
-      // if (!moment(this.form.start).isValid()) {
-      //   selector = {
-      //     registerDate: { $lte: date },
-      //     remove: { $ne: 'true' },
-      //   }
-      // } else {
-      //   selector = {
-      //     registerDate: { $lte: this.form.start },
-      //     remove: { $ne: 'true' },
-      //   }
-      // }
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          this.loading = true
 
-      findStudents
-        .callPromise({ selector })
-        .then(result => {
-          if (result.length > 0) {
-            this.tableData = result
-          } else {
-            // this.teacherName = ''
-            // this.roomName = ''
-            // this.subjectName = ''
-            // this.timeStudy = []
-
-            this.tableData = []
+          this.form.start = wrapCurrentTime(this.form.start)
+          // this.form.start = moment(this.form.start).format('YYYY-MM-DD')
+          let selector = {
+            type: { $in: this.form.type },
+            registerDate: { $lte: this.form.start },
           }
-          this.loading = false
-        })
-        .catch(error => {
-          Notify.error({ message: error })
-        })
+          this.totalAll = 0
+          this.totalFemale = 0
+          findStudents
+            .callPromise({ selector })
+            .then(result => {
+              if (result.length > 0) {
+                this.tableData = result
+
+                _.forEach(result, o => {
+                  this.totalAll += 1
+                  if (o.gender == 'Female') {
+                    this.totalFemale += 1
+                  }
+                })
+              } else {
+                this.tableData = []
+                this.totalAll = 0
+                this.totalFemale = 0
+              }
+              this.loading = false
+            })
+            .catch(error => {
+              Notify.error({ message: error })
+            })
+        } else {
+          return false
+        }
+      })
     },
     handlePrint() {
       // font-family: Times New Roman, Times, serif;
       // font-family: Moul, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
 
       const reportCSS = `
-      .logo {
-          width: 140px;
+      .logo>img {
+          float:left;
+          // position: absolute;
+        }
+      img{
+         width: 140px;
           height: 100px;
-          position: absolute;
+      }
+        .report-header>header{
+          content: "";
+          clear: both;
+          // display: table;
         }
       .header {
-          position: relative;
-          left: 20%;
-          top: 30%;
-          right: 0%;
-          bottom: 0%;
+          
+          text-align: center;
+          padding-bottom: 10px;
+          width: 80%;
+          margin-left:20px;
         }
         .header >.headerKhmer {
-          font-size: 35px;
-          font-family: 'Moul';
-          color: darkgray;
-          margin-left: 5vh;
+        
+            font-size: 33px;
+            font-weight: 500;
+            padding-top: 10px;
+            font-family: 'Moul', PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
         }
         .header >.headerEn {
-          font-size: 33px;
+          font-size: 25px;
           font-family: Times New Roman;
           color: darkgray;
-          margin-left: 8vh;
-          margin-top: -3vh;
+         
         }
         .table-content {
           border-collapse: collapse;
@@ -359,6 +398,11 @@ export default {
           background-color: #ddd;
         }
         
+        .title {
+            text-align: center;
+            font-weight: 700;
+            color: black;
+        }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)
     },
@@ -379,6 +423,4 @@ export default {
 
 <style lang="sass">
 @import '../styles/report.scss';
-
-
 </style>

@@ -57,11 +57,22 @@
             </el-form-item>
             <el-form-item label="Type"
                           prop="type">
-              <el-select v-model="form.type">
+              <el-select v-model="form.type"
+                         @change="handleTypeChange">
                 <el-option v-for="item in typeOpts"
                            :key="item.value"
                            :label="item.label"
                            :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="Rate"
+                          prop="rateId">
+              <el-select v-model="form.rateId"
+                         placeholder="Please Selecte Rate">
+                <el-option v-for="doc in rateOpt"
+                           :key="doc.value"
+                           :label="doc.label"
+                           :value="doc.value"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="Status"
@@ -95,11 +106,13 @@ import { updateClassStudy } from '../../api/classStudy/methods'
 import { findRoomOpts } from '../../api/rooms/methods'
 import { findStaffOpts } from '../../api/Staffs/methods'
 import { findSubjectOpts } from '../../api/subject/methods'
-import { findTypeOpts } from '../../api/types/methods'
+import {
+  findSalaryRatePartTimeOpts,
+  findSalaryRateFullTimeTimeOpts,
+} from '../../api/salary-rate/methods'
 import lookupValue from '../../client/libs/Lookup-Value'
 import LookUp from '../../client/libs/Lookup-Value'
 
-import moment, { isMoment } from 'moment'
 export default {
   name: 'ClassStudyInsert',
   props: {
@@ -120,6 +133,9 @@ export default {
       staffIdOpts: [],
       subIdOpts: [],
       typeOpts: LookUp.type,
+      rateOpt: [],
+      partTimeRate: [],
+      fullTimeRate: [],
       form: this.updateDoc,
 
       rules: {
@@ -172,15 +188,30 @@ export default {
             trigger: 'change',
           },
         ],
+        rateId: [
+          {
+            required: true,
+            message: 'Please Select Rate',
+            trigger: 'change',
+          },
+        ],
       },
     }
+  },
+  watch: {
+    'form.type'(val) {
+      this.handleTypeChange(val)
+    },
   },
   mounted() {
     this.getRoomData()
     this.getStaffData()
     this.getSubjectId()
     this.getTimeData()
+    this.getRatePartTime()
+    this.getRateFullTime()
   },
+
   methods: {
     getRoomData() {
       findRoomOpts
@@ -222,6 +253,36 @@ export default {
         .catch(err => {
           Notify.error({ message: err })
         })
+    },
+    getRatePartTime() {
+      findSalaryRatePartTimeOpts
+        .callPromise({})
+        .then(result => {
+          // console.log(result)
+          this.partTimeRate = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
+    getRateFullTime() {
+      findSalaryRateFullTimeTimeOpts
+        .callPromise({})
+        .then(result => {
+          // console.log(result)
+          this.fullTimeRate = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
+    handleTypeChange(val) {
+      this.rateOpt = []
+      if (val == 'Part Time') {
+        this.rateOpt = this.partTimeRate
+      } else {
+        this.rateOpt = this.fullTimeRate
+      }
     },
     handleSave() {
       this.$refs['form'].validate(valid => {

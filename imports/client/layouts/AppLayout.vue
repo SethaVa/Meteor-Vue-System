@@ -24,9 +24,14 @@ export default {
     MainLayout,
     LoginLayout,
   },
+  computed: {
+    ...mapState({
+      currentUser: state => state.app.currentUser,
+    }),
+  },
   mounted() {
     // this.branches();
-    // this.meteorUser();
+    // this.meteorUser()
     // this.branches();
     // console.log(this.branches());
   },
@@ -48,11 +53,6 @@ export default {
     branches() {
       this.$store.commit('app/updateCurrentBranches', Branches.find().fetch())
     },
-  },
-  computed: {
-    ...mapState({
-      currentUser: state => state.app.currentUser,
-    }),
   },
 }
 </script>

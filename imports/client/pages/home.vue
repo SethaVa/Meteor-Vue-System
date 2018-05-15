@@ -11,7 +11,7 @@
 
     <h1>Home Page</h1>
     <label>{{ userFullName }}</label>
-    <label>Branch : {{ currentBranch }}</label>
+    <!-- <label>Branch : {{ currentBranch }}</label> -->
 
     <ve-pie :data="chartData"
             :settings="chartSettings"></ve-pie>
@@ -44,22 +44,24 @@ export default {
   },
   computed: {
     ...mapState({
-      // currentUser(state) {
-      //   console.log(state.app.currentUser)
-      //   return state.app.currentUser // object
-      // },
-      currentBranch(state) {
-        const branch = state.app.currentBranch
-        // console.log(branch)
-        return branch
-        // && branch.shortName
+      currentUser(state) {
+        // console.log(state.app.currentUser)
+        return state.app.currentUser // object
       },
-      userFullName() {
-        let data = this.$store.getters['app/userFullName']
-        // console.log(data)
-        return data
-      },
+      // currentUser: state => state.app.currentUser,
     }),
+    currentBranch(state) {
+      const branch = state.app.currentBranch
+      // console.log(branch)
+      return branch
+      // && branch.shortName
+    },
+    userFullName() {
+      return this.$store.getters['app/userFullName']
+      // let data = this.$store.getters['app/userFullName']
+      // console.log(data)
+      // return data
+    },
   },
   created() {
     let d1 = moment(moment().toDate()).format('L')

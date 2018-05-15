@@ -1,6 +1,12 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
 import moment from 'moment'
@@ -10,10 +16,17 @@ export const findSalaryRate = new ValidatedMethod({
   name: 'findSalaryRate',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      return SalaryRate.find(selector, { sort: { _id: -1 }, limit: 1 }).fetch()
+      return SalaryRate.find(selector, {
+        sort: {
+          _id: -1
+        },
+        limit: 1
+      }).fetch()
     }
   },
 })
@@ -22,15 +35,22 @@ export const findSalaryRatePartTimeOpts = new ValidatedMethod({
   name: 'findSalaryRatePartTimeOpts',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       let data = []
-      let SalaryRate = SalaryRate.find(selector).fetch()
+      let salaryRate = SalaryRate.find(selector, {
+        sort: {
+          _id: -1
+        },
+        limit: 1
+      }).fetch()
 
-      _.forEach(SalaryRate, o => {
+      _.forEach(salaryRate, o => {
         data.push({
-          label: o.partTime,
+          label: o._id + ' - ' + o.partTime + ' %',
           value: o._id,
         })
       })
@@ -45,15 +65,22 @@ export const findSalaryRateFullTimeTimeOpts = new ValidatedMethod({
   name: 'findSalaryRateFullTimeTimeOpts',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       let data = []
-      let SalaryRate = SalaryRate.find(selector).fetch()
+      let salaryRate = SalaryRate.find(selector, {
+        sort: {
+          _id: -1
+        },
+        limit: 1
+      }).fetch()
 
-      _.forEach(SalaryRate, o => {
+      _.forEach(salaryRate, o => {
         data.push({
-          label: o.fullTime,
+          label: o._id + ' - ' + o.fullTime + ' $',
           value: o._id,
         })
       })
@@ -67,9 +94,13 @@ export const findOneSalaryRate = new ValidatedMethod({
   name: 'findOneSalaryRate',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ id }) {
+  run({
+    id
+  }) {
     if (Meteor.isServer) {
-      return SalaryRate.findOne({ _id: id })
+      return SalaryRate.findOne({
+        _id: id
+      })
     }
   },
 })
@@ -91,7 +122,11 @@ export const updateSalaryRate = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return SalaryRate.update({ _id: doc._id }, { $set: doc })
+      return SalaryRate.update({
+        _id: doc._id
+      }, {
+        $set: doc
+      })
     }
   },
 })
@@ -100,9 +135,13 @@ export const removeSalaryRate = new ValidatedMethod({
   name: 'removeSalaryRate',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    _id: { type: String },
+    _id: {
+      type: String
+    },
   }).validator(),
-  run({ _id }) {
+  run({
+    _id
+  }) {
     if (Meteor.isServer) {
       return SalaryRate.remove(_id)
     }

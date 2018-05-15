@@ -77,6 +77,11 @@
           </span>
           <el-row :gutter="10">
             <el-col :span="12">
+              <el-form-item label="Fee"
+                            prop="fee">
+                <el-input style="width:100%"
+                          v-model="form.fee"></el-input>
+              </el-form-item>
               <el-form-item label="Pay Date"
                             prop="payDate">
                 <el-date-picker style="width:100%"
@@ -93,6 +98,9 @@
                 <el-input type="number"
                           v-model.number="form.totalPay"></el-input>
               </el-form-item>
+
+            </el-col>
+            <el-col :span="12">
               <el-form-item label="Dis Val"
                             prop="discountVal">
                 <el-input type="discountVal"
@@ -100,9 +108,6 @@
 
                 </el-input>
               </el-form-item>
-            </el-col>
-            <el-col :span="12">
-
               <el-form-item label="USD "
                             prop="usd">
                 <el-input type="number"
@@ -170,6 +175,7 @@ export default {
       listExpireStudent: [],
       remaining: 0,
       form: {
+        fee: 0,
         type: '',
         classId: '',
         rsDate: moment().toDate(),
@@ -199,6 +205,9 @@ export default {
             message: 'Student ID is required',
             trigger: 'change',
           },
+        ],
+        fee: [
+          { required: true, message: 'Fee is Required', trigger: 'change' },
         ],
         payDate: [
           { required: true, message: 'Date is Required', trigger: 'change' },
@@ -236,7 +245,9 @@ export default {
   //     }
   //   },
   // },
-  mounted() {this.getStudentData()},
+  mounted() {
+    this.getStudentData()
+  },
   methods: {
     handleTypeChange(val) {
       if (val.length > 0) {
@@ -266,7 +277,7 @@ export default {
           Notify.error({ message: error })
         })
     },
-    
+
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
@@ -284,7 +295,7 @@ export default {
             tranDate: this.form.tranDate,
             classId: this.form.classId,
             studentId: this.form.studentId,
-            refType:'New',
+            refType: 'New',
             payDate: this.form.payDate,
             duration: this.form.duration,
             endPayDate: this.form.endPayDate,
@@ -295,6 +306,7 @@ export default {
             remaining: this.form.remaining,
             status: this.form.status,
             type: this.form.type,
+            fee: parseInt(this.form.fee),
           }
 
           insertPayementForNew

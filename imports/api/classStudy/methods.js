@@ -1,7 +1,15 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
+import {
+  RestMethodMixin
+} from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import ClassStudy from './classStudy'
@@ -10,11 +18,15 @@ export const findClassStudy = new ValidatedMethod({
   name: 'findClassStudy',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       // return ClassStudy.find(selector).fetch()
-      return aggregateFindClassStudy(selector, { limit: 50 })
+      return aggregateFindClassStudy(selector, {
+        limit: 50
+      })
     }
   },
 })
@@ -23,9 +35,13 @@ export const findOneClassStudy = new ValidatedMethod({
   name: 'findOneClassStudy',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ id }) {
+  run({
+    id
+  }) {
     if (Meteor.isServer) {
-      return ClassStudy.findOne({ _id: id })
+      return ClassStudy.findOne({
+        _id: id
+      })
     }
   },
 })
@@ -47,7 +63,11 @@ export const updateClassStudy = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return ClassStudy.update({ _id: doc._id }, { $set: doc })
+      return ClassStudy.update({
+        _id: doc._id
+      }, {
+        $set: doc
+      })
     }
   },
 })
@@ -56,9 +76,13 @@ export const removeClassStudy = new ValidatedMethod({
   name: 'removeClassStudy',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    _id: { type: String },
+    _id: {
+      type: String
+    },
   }).validator(),
-  run({ _id }) {
+  run({
+    _id
+  }) {
     if (Meteor.isServer) {
       return ClassStudy.remove(_id)
     }
@@ -66,8 +90,7 @@ export const removeClassStudy = new ValidatedMethod({
 })
 
 const aggregateFindClassStudy = selector => {
-  let data = ClassStudy.aggregate([
-    {
+  let data = ClassStudy.aggregate([{
       $match: selector,
     },
     {
@@ -153,6 +176,7 @@ const aggregateFindClassStudy = selector => {
         subId: '$subId',
         subject: '$subjectDoc.title',
         type: '$type',
+        rateId: '$rateId',
         status: '$status',
       },
     },

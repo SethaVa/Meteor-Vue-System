@@ -183,10 +183,8 @@ a:-webkit-any-link {
     color: white;
     position: relative;
     .logo-img {
-      width: 70%;
-      margin: 0px 0px 0px 48px;
-      // width: 80px;
-      // padding: 14px 0px 3px;
+      max-width: 40%;
+      height: auto;
     }
   }
 }

@@ -41,6 +41,12 @@
                            :value="doc.value"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="Fee"
+                          prop="fee">
+              <el-input v-model="form.fee">
+
+              </el-input>
+            </el-form-item>
             <el-form-item label="Pay Date"
                           prop="payDate">
               <el-date-picker style="width:100%"
@@ -91,6 +97,7 @@
                 </el-col>
               </el-row>
             </fieldset>
+
           </el-col>
         </el-row>
         <sub-payment @save-form="saveForm"
@@ -150,6 +157,7 @@ export default {
       itemsProp: this.initItems(),
       saveEvent: 0,
       form: {
+        fee: 0,
         refType: 'Payment',
         classId: '',
         payDate: moment().toDate(),
@@ -169,6 +177,7 @@ export default {
         payDate: [
           { required: true, message: 'Date is Required', trigger: 'change' },
         ],
+        fee: [{ required: true, message: 'Fee is Required', trigger: 'blure' }],
         duration: [
           {
             required: true,
@@ -302,6 +311,7 @@ export default {
             remaining: this.itemsProp[0].remaining,
             status: this.form.status,
             lastId: this.form.lastId,
+            fee: this.form.fee,
           }
           // console.log(Payment)
           insertPayment
