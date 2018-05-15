@@ -40,13 +40,16 @@
       <div v-loading="loading"
            id="tableStudent">
 
-        <img src="/img/bwlogo.png"
-             class="logo">
-        <!-- Header -->
-        <div class="header">
-          <span class="headerKhmer">សាលាភាសាបរទេស ប៊ី អេ ឌី</span>
-          <br>
-          <span class="headerEn">B.A.D Foreign Language School</span>
+        <div class="report-header">
+          <div class="logo">
+            <img src="/img/bwlogo.png">
+          </div>
+          <!-- Header -->
+          <div class="header">
+            <span class="headerKhmer">សាលាភាសាបរទេស ប៊ី អេ ឌី</span>
+            <br>
+            <span class="headerEn">B.A.D Foreign Language School</span>
+          </div>
         </div>
         <!-- Info Class -->
         <!-- <div class="info-class">
@@ -79,7 +82,7 @@
               <tr v-for="(doc, index) in tableData"
                   :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ doc.staffName }}</td>
+                <td>{{ doc.name }}</td>
                 <td>{{ doc.gender }}</td>
                 <td>{{ doc.position }}</td>
                 <td>{{ formatNum(doc.totalSalary) }}</td>
@@ -107,6 +110,7 @@ import Notify from '/imports/client/libs/notify'
 import Lookup from '../libs/Lookup-Value'
 import { lookupType } from '/imports/libs/lookup-methods'
 //
+import { findStaff } from '../../api/Staffs/methods'
 import { findStaffSalary } from '../../api/Staffs/methods'
 import { findSalary } from '../../api/payment/methods'
 
@@ -117,6 +121,9 @@ export default {
       loading: false,
       docOpts: Lookup.type,
       tableData: [],
+      classDetails: [],
+      staffDoc: [],
+      salaryDoc: [],
       titles: [
         { label: 'Student', prop: 'student' },
         { label: 'Gender', prop: 'gender', width: '100px' },
@@ -133,7 +140,7 @@ export default {
   },
   mounted() {
     this.d = new Printd()
-    // this.getTypeData()
+    this.getStaff()
   },
   methods: {
     getTypeData() {
@@ -146,73 +153,143 @@ export default {
           Notify.error({ message: error })
         })
     },
+    getStaff() {
+      findStaff
+        .callPromise({})
+        .then(result => {
+          this.staffDoc = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
 
     handleSubmit() {
       this.loading = true
 
-      let selector = {
-        type: 'Part Time',
-        // status: 'Paid',
-      }
-      this.tableData = []
+      // let selector = {
+      //   type: 'Part Time',
+      //   // status: 'Paid',
+      // }
+      this.salaryDoc = []
+      this.classDetails = []
       let currentDate = wrapCurrentDate(this.form.opts)
       currentDate = this.formatDate(currentDate)
-      findStaffSalary
-        .callPromise({ selector })
+      findSalary
+        .callPromise({})
         .then(result => {
           if (result) {
             // let partTimeRate = result.salaryRate[0].partTime / 100
             // console.log(currentDate)
-            // _.forEach(result.data, o => {
-            //   // console.log(o._id, this.loopDate(o.payDate, o.endPayDate))
-            //   let loopGetDate = this.loopDate(o.payDate, o.endPayDate)
-            //   _.forEach(loopGetDate, d => {
-            //     if (moment(currentDate).isSame(d.date)) {
-            //       console.log('true')
-            //       // console.log(o.totalPay * partTimeRate / o.duration)
-            //       this.tableData.push({
-            //         date: d.date,
-            //         totalSalary: o.totalPay * partTimeRate / o.duration,
-            //       })
-            //     }
-            //   })
-            // })
-            _.forEach(result, o => {
-              this.tableData.push(o)
+            _.forEach(result.data, o => {
+              // _.forEach(o.classDetails, obj => {
+              //   this.classDetails.push(obj)
+              // })
+
+              // console.log(o._id, this.loopDate(o.payDate, o.endPayDate))
+              _.forEach(o.classDetails, obj => {
+                if (o.type == 'Part Time' && o.status == 'Paid') {
+                  let loopGetDate = this.loopDate(obj.payDate, obj.endPayDate)
+                  // console.log(obj)
+                  _.forEach(loopGetDate, d => {
+                    // console.log(d)
+                    if (moment(currentDate).isSame(d.date)) {
+                      this.salaryDoc.push({
+                        staffId: o.staffId,
+                        name: o.name,
+                        date: d.date,
+                        salary:
+                          obj.totalPay *
+                          (obj.rate.partTime / 100) /
+                          obj.duration,
+                      })
+                    }
+                  })
+                }
+              })
             })
+            // _.forEach(result, o => {
+            //   this.tableData.push(o)
+            // })
           }
           this.loading = false
         })
         .catch(error => {
           Notify.error({ message: error })
         })
+      // console.log(this.staffDoc, typeof this.salaryDoc)
+      this.tableData = []
+      for (let o in this.salaryDoc) {
+        console.log(this.salaryDoc[o])
+      }
+
+      _.forEach(this.staffDoc, o => {
+        _.forEach(this.salaryDoc, obj => {
+          if (o._id == obj.staffId) {
+            o.totalSalary += o.salary
+          }
+          this.tableData.push({
+            name: o.name,
+            date: o.date,
+            totalSalary: o.totalSalary,
+          })
+        })
+      })
+      // console.log(this.classDetails)
+      // _.forIn(this.classDetails, o => {
+      //   console.log(o)
+      // })
+      // _.forEach(this.classDetails, obj => {
+      //   console.log(obj)
+      //   // let loopGetDate = this.loopDate(obj.payDate, obj.endPayDate)
+      //   // console.log(obj)
+      //   // _.forEach(loopGetDate, d => {
+      //   //   // console.log(d)
+      //   //   if (moment(currentDate).isSame(d.date)) {
+      //   //     console.log('true')
+      //   //     // console.log(o.totalPay * partTimeRate / o.duration)
+      //   //     // this.tableData.push({
+      //   //     //   date: d.date,
+      //   //     //   totalSalary: o.totalPay * partTimeRate / o.duration,
+      //   //     // })
+      //   //   }
+      //   // })
+      // })
     },
     handlePrint() {
       const reportCSS = `
-      .logo {
-          width: 140px;
+      .logo>img {
+          float:left;
+          // position: absolute;
+        }
+      img{
+         width: 140px;
           height: 100px;
-          position: absolute;
+      }
+        .report-header>header{
+          content: "";
+          clear: both;
+          // display: table;
         }
       .header {
-          position: relative;
-          left: 20%;
-          top: 30%;
-          right: 0%;
-          bottom: 0%;
+          
+          text-align: center;
+          padding-bottom: 10px;
+          width: 80%;
+          margin-left:20px;
         }
-        .header>.headerKhmer {
-          font-size: 35px;
-          font-family: 'Moul', Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
-          color: darkgray;
-          margin-left: 5vh;
+        .header >.headerKhmer {
+        
+            font-size: 33px;
+            font-weight: 500;
+            padding-top: 10px;
+            font-family: 'Moul', PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
         }
-        .header>.headerEn {
-          font-size: 33px;
-          font-family: 'Times New Roman', Times, serif;
+        .header >.headerEn {
+          font-size: 25px;
+          font-family: Times New Roman;
           color: darkgray;
-          margin-left: 8vh;
-          margin-top: -3vh;
+         
         }
         .table-content {
           border-collapse: collapse;
@@ -220,45 +297,64 @@ export default {
         }
         .info-class {
           position: relative;
-        margin-top: 4vh;
+          height:10vh;
       }
 
       .info-class>.clLeft {
-          font-size: 12px;
+          font-size: 14px;
           position: absolute;
           top: 35%;
-          width: 10%;
-          left: 10%;
+          max-width: 20%;
+          left: 5%;
       }
 
       .info-class>.clCenter {
-          font-size: 12px;
+          font-size: 14px;
           position: absolute;
           margin-left: 10vh;
           top: 35%;
-          left: 35%;
+          left: 25%;
       }
 
       .info-class>.clRight {
-          font-size: 12px;
+          font-size: 14px;
           position: absolute;
-          left: 80%;
+          left: 70%;
           top: 35%;
       }
       .tableShow {
+          font-family: sans-serif;
           font-size: 12px;
-          margin-top: 10vh;
+          
       }
        .tableShow .table-content,
       th,
       td {
-          border: 1px solid #ddd;
-          border-bottom: 1px solid #ddd;
+          // border: 1px solid #ddd;
+           border: 0.1px solid #606266;
+          // border-bottom: 1px solid #ddd;
+          border-bottom: 0.1px solid #606266;
           padding: 5px;
       }
 
        .tableShow th {
           background-color: #ddd;
+        }
+        
+        .title {
+            font-size:14px;
+            text-align: center;
+            font-weight: 700;
+            color: black;
+        }
+
+        .info-header {
+            margin-top: 2vh;
+            height: 4vh;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            font-style: initial oblique;
         }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)

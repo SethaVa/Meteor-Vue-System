@@ -1,6 +1,10 @@
-import { Meteor } from 'meteor/meteor'
+import {
+  Meteor
+} from 'meteor/meteor'
 import SimpleSchema from 'simpl-schema'
-import { Mongo } from 'meteor/mongo'
+import {
+  Mongo
+} from 'meteor/mongo'
 
 const ClassStudy = new Mongo.Collection('classStudy')
 ClassStudy.schema = new SimpleSchema({
@@ -21,6 +25,9 @@ ClassStudy.schema = new SimpleSchema({
   },
   type: {
     type: String,
+  },
+  rateId: {
+    type: String
   },
   status: {
     type: String,

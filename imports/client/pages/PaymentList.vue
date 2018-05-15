@@ -120,19 +120,19 @@ export default {
               // this.$router.push({ name: 'NewPayment' })
             },
           },
-          {
-            name: 'Refund',
-            // icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.visibleDialog = true
-              this.currentDialog = Refund
-              compareDate()
-              // this.$router.push({ name: 'NewPayment' })
-            },
-          },
+          // {
+          //   name: 'Refund',
+          //   // icon: 'el-icon-plus',
+          //   buttonProps: {
+          //     size: 'mini',
+          //   },
+          //   handler: () => {
+          //     this.visibleDialog = true
+          //     this.currentDialog = Refund
+          //     compareDate()
+          //     // this.$router.push({ name: 'NewPayment' })
+          //   },
+          // },
         ],
       },
       actionColDef: {

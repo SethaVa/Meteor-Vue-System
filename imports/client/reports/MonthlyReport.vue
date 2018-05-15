@@ -40,15 +40,20 @@
       <div v-loading="loading"
            id="tableStudent">
 
-        <img src="/img/bwlogo.png"
-             class="logo">
-        <!-- Header -->
-        <div class="header">
-          <span class="headerKhmer">សាលាភាសាបរទេស ប៊ី អេ ឌី</span>
-          <br>
-          <span class="headerEn">B.A.D Foreign Language School</span>
+        <div class="report-header">
+          <div class="logo">
+            <img src="/img/bwlogo.png">
+          </div>
+          <!-- Header -->
+          <div class="header">
+            <span class="headerKhmer">សាលាភាសាបរទេស ប៊ី អេ ឌី</span>
+            <br>
+            <span class="headerEn">B.A.D Foreign Language School</span>
+          </div>
         </div>
-
+        <div class="info-header">
+          <span>Date : {{ formatDate(reportDate) }}</span>
+        </div>
         <div class="tableShow">
           <table class="table-content">
             <thead>
@@ -114,6 +119,7 @@ export default {
       daily: 'Daily Report',
       usd: 0,
       khr: 0,
+      reportDate: moment().toDate(),
       titles: [
         { label: 'Student', prop: 'student' },
         { label: 'Gender', prop: 'gender', width: '100px' },
@@ -189,30 +195,38 @@ export default {
     },
     handlePrint() {
       const reportCSS = `
-      .logo {
-          width: 140px;
+      .logo>img {
+          float:left;
+          // position: absolute;
+        }
+      img{
+         width: 140px;
           height: 100px;
-          position: absolute;
+      }
+        .report-header>header{
+          content: "";
+          clear: both;
+          // display: table;
         }
       .header {
-          position: relative;
-          left: 20%;
-          top: 30%;
-          right: 0%;
-          bottom: 0%;
+          
+          text-align: center;
+          padding-bottom: 10px;
+          width: 80%;
+          margin-left:20px;
         }
-        .header>.headerKhmer {
-          font-size: 35px;
-          font-family: 'Moul', Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
-          color: darkgray;
-          margin-left: 5vh;
+        .header >.headerKhmer {
+        
+            font-size: 33px;
+            font-weight: 500;
+            padding-top: 10px;
+            font-family: 'Moul', PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
         }
-        .header>.headerEn {
-          font-size: 33px;
-          font-family: 'Times New Roman', Times, serif;
+        .header >.headerEn {
+          font-size: 25px;
+          font-family: Times New Roman;
           color: darkgray;
-          margin-left: 8vh;
-          margin-top: -3vh;
+         
         }
         .table-content {
           border-collapse: collapse;
@@ -220,50 +234,64 @@ export default {
         }
         .info-class {
           position: relative;
-        margin-top: 4vh;
+          height:10vh;
       }
 
       .info-class>.clLeft {
-          font-size: 12px;
+          font-size: 14px;
           position: absolute;
           top: 35%;
-          width: 10%;
-          left: 10%;
+          max-width: 20%;
+          left: 5%;
       }
 
       .info-class>.clCenter {
-          font-size: 12px;
+          font-size: 14px;
           position: absolute;
           margin-left: 10vh;
           top: 35%;
-          left: 35%;
+          left: 25%;
       }
 
       .info-class>.clRight {
-          font-size: 12px;
+          font-size: 14px;
           position: absolute;
-          left: 80%;
+          left: 70%;
           top: 35%;
       }
       .tableShow {
+          font-family: sans-serif;
           font-size: 12px;
-          margin-top: 10vh;
+          
       }
        .tableShow .table-content,
       th,
       td {
-          border: 1px solid #ddd;
-          border-bottom: 1px solid #ddd;
+          // border: 1px solid #ddd;
+           border: 0.1px solid #606266;
+          // border-bottom: 1px solid #ddd;
+          border-bottom: 0.1px solid #606266;
           padding: 5px;
       }
 
        .tableShow th {
           background-color: #ddd;
         }
+        
         .title {
-          text-align: center;
-          font-weight: 700;
-          color: black;
+            font-size:14px;
+            text-align: center;
+            font-weight: 700;
+            color: black;
+        }
+
+        .info-header {
+            margin-top: 2vh;
+            height: 4vh;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            font-style: initial oblique;
         }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)

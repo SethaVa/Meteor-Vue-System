@@ -1,4 +1,6 @@
-import { Mongo } from 'meteor/mongo'
+import {
+  Mongo
+} from 'meteor/mongo'
 import SimpleSchema from 'simpl-schema'
 
 const Payment = new Mongo.Collection('payment')
@@ -21,6 +23,9 @@ Payment.schema = new SimpleSchema({
   studentId: {
     type: String,
     optional: true,
+  },
+  fee: {
+    type: Number
   },
   payDate: {
     type: Date,
@@ -64,6 +69,15 @@ Payment.schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  // paymentDate: {
+  //   type: Array,
+  //   optional: true,
+  // },
+  // 'paymentDate.$': {
+  //   type: Date,
+  //   // blackbox: true,
+  //   // optional: true
+  // }
 })
 
 Payment.attachSchema(Payment.schema)

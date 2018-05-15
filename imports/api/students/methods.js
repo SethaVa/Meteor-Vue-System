@@ -1,12 +1,6 @@
-import {
-  Meteor
-} from 'meteor/meteor'
-import {
-  ValidatedMethod
-} from 'meteor/mdg:validated-method'
-import {
-  CallPromiseMixin
-} from 'meteor/didericis:callpromise-mixin'
+import { Meteor } from 'meteor/meteor'
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import Students from './students'
@@ -16,13 +10,10 @@ export const findStudents = new ValidatedMethod({
   name: 'findStudents',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({
-    selector,
-    option
-  }) {
+  run({ selector, option }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      option = option || {}
+      option = option || { sort: { _id: -1 } }
 
       return Students.find(selector, option).fetch()
     }
@@ -34,10 +25,7 @@ export const findStudentsByDate = new ValidatedMethod({
   name: 'findStudentsByDate',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({
-    selector,
-    option
-  }) {
+  run({ selector, option }) {
     if (Meteor.isServer) {
       selector = selector || {}
       option = option || {}
@@ -66,9 +54,7 @@ export const insertStudent = new ValidatedMethod({
   validate: new SimpleSchema({
     doc: Students.schema,
   }).validator(),
-  run({
-    doc
-  }) {
+  run({ doc }) {
     if (Meteor.isServer) {
       try {
         return Students.insert(doc)
@@ -84,17 +70,18 @@ export const updateStudent = new ValidatedMethod({
   name: 'updateStudent',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    doc: Students.schema
+    doc: Students.schema,
   }).validator(),
-  run({
-    doc
-  }) {
+  run({ doc }) {
     if (Meteor.isServer) {
-      return Students.update({
-        _id: doc._id
-      }, {
-        $set: doc
-      })
+      return Students.update(
+        {
+          _id: doc._id,
+        },
+        {
+          $set: doc,
+        }
+      )
     }
   },
 })
@@ -105,41 +92,41 @@ export const removeStudent = new ValidatedMethod({
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {
-      type: String
+      type: String,
     },
   }).validator(),
-  run({
-    _id
-  }) {
+  run({ _id }) {
     if (Meteor.isServer) {
-      return Students.update({
-        _id: _id
-      }, {
-        $set: {
-          remove: true
+      return Students.update(
+        {
+          _id: _id,
+        },
+        {
+          $set: {
+            remove: true,
+          },
         }
-      })
+      )
       // return Students.remove(selector)
     }
   },
 })
 
-
-
 // find student by date
 const aggregateFindByDate = selector => {
   selector = selector || {}
-  let data = Students.aggregate([{
-      $match: selector
+  let data = Students.aggregate([
+    {
+      $match: selector,
     },
     {
       $project: {
         _id: 1,
         registerDate: {
           $dateToString: {
-            format: "%Y-%m-%d",
-            date: "$registerDate"
-          }
+            format: '%Y-%m-%d',
+            date: '$registerDate',
+          },
         },
         type: 1,
         khName: 1,
@@ -147,9 +134,9 @@ const aggregateFindByDate = selector => {
         gender: 1,
         dob: 1,
         tel: 1,
-        remove: 1
-      }
-    }
+        remove: 1,
+      },
+    },
   ])
 
   return data

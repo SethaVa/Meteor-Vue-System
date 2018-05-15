@@ -69,6 +69,11 @@
           </span>
           <el-row :gutter="10">
             <el-col :span="12">
+              <el-form-item label="Fee"
+                            prop="fee">
+                <el-input style="width:100%"
+                                v-model="form.fee"></el-input>
+              </el-form-item>
               <el-form-item label="Pay Date"
                             prop="payDate">
                 <el-date-picker style="width:100%"
@@ -85,16 +90,16 @@
                 <el-input type="number"
                           v-model.number="form.totalPay"></el-input>
               </el-form-item>
-              <el-form-item label="Dis Val"
+              
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="Dis Val"
                             prop="discountVal">
                 <el-input type="discountVal"
                           v-model.number="form.discountVal">
 
                 </el-input>
               </el-form-item>
-            </el-col>
-            <el-col :span="12">
-
               <el-form-item label="USD "
                             prop="usd">
                 <el-input type="number"
@@ -165,6 +170,9 @@ export default {
         ],
         type: [
           { required: true, message: 'Type is Required', trigger: 'change' },
+        ],
+        fee: [
+          { required: true, message: 'Fee is Required', trigger: 'blure' },
         ],
         classId: [
           { required: true, message: 'Class is Required', trigger: 'change' },
