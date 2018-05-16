@@ -123,34 +123,27 @@ export const insertPayementForNew = new ValidatedMethod({
 
       // }
       // doc.paymentDate = paymentDate
-      console.log(doc);
-      let i = 0
+
       Payment.insert(doc, (error, paymentId) => {
         if (!error) {
-          // let numOfMonth = doc.
-          if (doc.remaining == 0) {
-            for (let m = doc.payDate; m < doc.endPayDate; m.setMonth(m.getMonth() + 1)) {
-              // data.push({
-              //   date: moment(m).format('YYYY-MM-D')
-              // })
-              if (i == doc.duration) {
-                return false
-              }
-              i++
-              // doc.paymentDate.push(m);
-              let data = {
-                refType: doc.refType,
-                refId: paymentId,
-                tranDate: doc.tranDate,
-                fee: doc.fee,
-                pay: doc.totalPay / doc.duration,
-                payDate: m,
-                status: doc.status,
-                type: doc.type,
-              }
-              PaymentDetails.insert(data)
-            }
+
+          let paymentDetails = {
+            totalRecieve: doc.totalRecieve,
+            fee: doc.fee,
+            tranDate: doc.tranDate,
+            payDate: doc.payDate,
+            endPayDate: doc.endPayDate,
+            refType: doc.refType,
+            paymentId: paymentId,
+            totalPay: doc.totalPay,
+            duration: doc.duration,
+            type: doc.type
           }
+          InsertPaymentDetails({
+            doc: paymentDetails
+          })
+          // Income
+
           let data = {
             tranDate: doc.tranDate,
             referenceId: paymentId,
@@ -186,6 +179,28 @@ export const updatePayementForNew = new ValidatedMethod({
         $set: doc
       }, error => {
         if (!error) {
+          // Remove Before Insert 
+          PaymentDetails.remove({
+            refId: doc._id
+          })
+          // Details Payment
+          let paymentDetails = {
+            totalRecieve: doc.totalRecieve,
+            fee: doc.fee,
+            tranDate: doc.tranDate,
+            payDate: doc.payDate,
+            endPayDate: doc.endPayDate,
+            refType: doc.refType,
+            paymentId: doc._id,
+            totalPay: doc.totalPay,
+            duration: doc.duration,
+            type: doc.type
+          }
+          InsertPaymentDetails({
+            doc: paymentDetails
+          })
+
+          // Income 
           let data = {
             tranDate: doc.tranDate,
             referenceId: _id,
@@ -209,7 +224,9 @@ export const insertPayment = new ValidatedMethod({
   name: 'insertPayment',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    doc: Payment.schema,
+    doc: _.clone(Payment.schema).extend({
+      paymentId: String
+    }),
   }).validator(),
   run({
     doc
@@ -222,10 +239,28 @@ export const insertPayment = new ValidatedMethod({
             let value = 'Closed'
             updatePaymentStatus.run({
               _id: doc.lastId,
-              value
+              value,
             })
+            // let data = Payment.findOne({
+            //   _id: doc.lastId
+            // })
+            // let paymentDetails = {
+            //   totalRecieve: data.totalRecieve,
+            //   fee: doc.fee,
+            //   tranDate: doc.tranDate,
+            //   payDate: doc.payDate,
+            //   endPayDate: doc.endPayDate,
+            //   refType: doc.refType,
+            //   paymentId: paymentId,
+            //   totalPay: doc.totalPay,
+            //   duration: doc.duration,
+            //   type: doc.type
+            // }
+            // InsertPaymentDetails({
+            //   doc: paymentDetails
+            // })
 
-            let data = {
+            let dataIncome = {
               tranDate: doc.tranDate,
               referenceId: paymentId,
               referenceType: 'Payment',
@@ -233,7 +268,7 @@ export const insertPayment = new ValidatedMethod({
               totalKhr: doc.khr,
             }
             updateIncomeForPaymentNew.run({
-              doc: data
+              doc: dataIncome
             })
           }
         })
@@ -297,7 +332,7 @@ export const updatePaymentForRefund = new ValidatedMethod({
     doc
   }) {
     if (Meteor.isServer) {
-      console.log(doc)
+      console.log(doc);
       Payment.update({
         _id: doc._id,
       }, {
@@ -308,7 +343,34 @@ export const updatePaymentForRefund = new ValidatedMethod({
         $inc: {
           usd: doc.usd,
           khr: doc.khr,
+          totalRecieve: doc.totalRecieve
         },
+      }, error => {
+        if (!error) {
+          // Remove Before Insert 
+          PaymentDetails.remove({
+            refId: doc._id
+          })
+          // Insert Payment Details
+          let data = Payment.findOne({
+            _id: doc._id
+          })
+          let paymentDetails = {
+            totalRecieve: data.totalRecieve,
+            fee: data.fee,
+            tranDate: data.tranDate,
+            payDate: data.payDate,
+            endPayDate: data.endPayDate,
+            refType: data.refType,
+            paymentId: data._id,
+            totalPay: data.totalPay,
+            duration: data.duration,
+            type: data.type
+          }
+          InsertPaymentDetails({
+            doc: paymentDetails
+          })
+        }
       })
 
       return 'Success'
@@ -322,10 +384,15 @@ export const updatePaymentStatus = new ValidatedMethod({
   validate: new SimpleSchema({
     _id: String,
     value: String,
+    totalRecieve: {
+      type: Number,
+      optional: true
+    }
   }).validator(),
   run({
     _id,
-    value
+    value,
+    totalRecieve
   }) {
     if (Meteor.isServer) {
       return Payment.update({
@@ -334,6 +401,7 @@ export const updatePaymentStatus = new ValidatedMethod({
         $set: {
           status: value
         },
+        $inc: totalRecieve
       })
     }
   },
@@ -365,6 +433,10 @@ export const removePayment = new ValidatedMethod({
         _id: selector._id
       }, error => {
         if (!error) {
+          PaymentDetails.remove({
+            refId: selector._id
+          })
+
           removeIncomeFromOther.run({
             referenceId: selector._id,
             referenceType: selector.referenceType,
@@ -438,17 +510,48 @@ export const findSalary = new ValidatedMethod({
   },
 })
 
-const loopDate = (from, to) => {
-  let data = []
+// const loopDate = (from, to) => {
+//   let data = []
 
-  for (let m = from; m <= to; m.setMonth(m.getMonth() + 1)) {
-    data.push({
-      date: moment(m).format('YYYY-MM-D')
-    })
+//   for (let m = from; m <= to; m.setMonth(m.getMonth() + 1)) {
+//     data.push({
+//       date: moment(m).format('YYYY-MM-D')
+//     })
+//   }
+
+//   return data
+// }
+
+// Insert To Payment Details 
+const InsertPaymentDetails = ({
+  doc
+}) => {
+  let i = 0
+  let numOfMonth = doc.totalRecieve / doc.fee
+  numOfMonth = _.floor(numOfMonth, 0)
+  // if (doc.status == 'Paid') {
+  for (let m = doc.payDate; m < doc.endPayDate; m.setMonth(m.getMonth() + 1)) {
+    // data.push({
+    //   date: moment(m).format('YYYY-MM-D')
+    // })
+    if (i == numOfMonth) {
+      break;
+    }
+    i++
+    // doc.paymentDate.push(m);
+    let data = {
+      refType: doc.refType,
+      refId: doc.paymentId,
+      tranDate: doc.tranDate,
+      fee: doc.fee,
+      pay: doc.totalPay / doc.duration,
+      payDate: m,
+      status: 'Paid',
+      type: doc.type,
+    }
+    PaymentDetails.insert(data)
   }
-
-  return data
-}
+};
 
 const aggregatePayment = selector => {
   let data = Payment.aggregate([{

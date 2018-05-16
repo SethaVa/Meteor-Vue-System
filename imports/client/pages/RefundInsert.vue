@@ -117,6 +117,8 @@ import compareDate from '/imports/libs/compare-date'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { findPaymentForClass } from '/imports/api/payment/methods'
 import { insertRefund } from '../../api/Refund/methods'
+import { findExchanges } from '../../api/exchanges/methods'
+
 import StudentPay from './StudentPay.vue'
 import SubPayment from '../../components/subPayment'
 export default {
@@ -144,6 +146,8 @@ export default {
       endDate: moment().toDate(),
       itemsProp: this.initItems(),
       saveEvent: 0,
+      exchangeRate: 0,
+
       form: {
         payId: '',
         tranDate: moment().toDate(),
@@ -176,6 +180,7 @@ export default {
   mounted() {
     // this.getTypeData()
     // this.getPaymentData()
+    this.getExchangeRate()
   },
   methods: {
     initItems() {
@@ -189,7 +194,16 @@ export default {
         },
       ]
     },
-
+    getExchangeRate() {
+      findExchanges
+        .callPromise({})
+        .then(result => {
+          this.exchangeRate = result[0].khr
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     handlePaymentChange(item) {
       this.itemsProp = item
     },
@@ -264,6 +278,8 @@ export default {
           if (this.itemsProp[0].remaining != 0) {
             this.form.status = 'Debt'
           }
+          let totalRecieve =
+            this.itemsProp[0].usd + this.itemsProp[0].khr / this.exchangeRate
           let Refund = {
             type: this.form.type,
             payId: this.form.payId,
@@ -276,8 +292,8 @@ export default {
             discountVal: this.itemsProp[0].discountVal,
             remaining: this.itemsProp[0].remaining,
             status: this.form.status,
+            totalRecieve: totalRecieve,
           }
-          // console.log(Refund)
           insertRefund
             .callPromise({ doc: Refund })
             .then(result => {
