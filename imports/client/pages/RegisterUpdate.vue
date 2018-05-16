@@ -141,6 +141,8 @@ import moment from 'moment'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { lookupClass, lookupStudent } from '/imports/libs/lookup-methods'
 import { updatePayementForNew } from '../../api/payment/methods'
+import {findExchanges} from '../../api/exchanges/methods'
+
 const numeral = require('numeral')
 export default {
   name: 'RegisterUpdate',
@@ -162,6 +164,8 @@ export default {
       genderOpts: Lookup.gender,
       studentIdOpts: [],
       remaining: 0,
+      exchangeRate:0,
+
       form: this.updateDoc,
 
       rules: {
@@ -197,31 +201,37 @@ export default {
       },
     }
   },
-  // watch: {
-  //   'form.usd'(val) {
-  //     this.remaining = val
-  //   },
-  //   'form.discountVal'(val) {
-  //     this.remaining = this.form.usd - val
-  //     this.form.remaining = this.form.usd - val
-  //     if (this.remaining < 0) {
-  //       Notify.warning({
-  //         message: 'Discount Balance is bigger than Total balance',
-  //       })
-  //       this.form.khr = 0
-  //     }
-  //   },
-  //   'form.khr'(val) {
-  //     this.remaining = this.form.usd - this.form.discountVal - val
-  //     this.form.remaining = this.form.usd - this.form.discountVal - val
-  //     if (this.remaining < 0) {
-  //       Notify.warning({ message: 'khr Balance is bigger than Total balance' })
-  //       this.form.khr = 0
-  //     }
-  //   },
-  // },
+  watch: {
+    // 'form.usd'(val) {
+    //   this.remaining = val
+    // },
+    // 'form.discountVal'(val) {
+    //   this.remaining = this.form.usd - val
+    //   this.form.remaining = this.form.usd - val
+    //   if (this.remaining < 0) {
+    //     Notify.warning({
+    //       message: 'Discount Balance is bigger than Total balance',
+    //     })
+    //     this.form.khr = 0
+    //   }
+    // },
+    // 'form.khr'(val) {
+    //   this.remaining = this.form.usd - this.form.discountVal - val
+    //   this.form.remaining = this.form.usd - this.form.discountVal - val
+    //   if (this.remaining < 0) {
+    //     Notify.warning({ message: 'khr Balance is bigger than Total balance' })
+    //     this.form.khr = 0
+    //   }
+    // },
+    // 'form.type'(val){
+    //   this.handleTypeChange(val)
+    // }
+  },
   mounted() {
     this.getStudentData()
+    this.getExchangeRate()
+    this.handleTypeChange(this.form.type)
+
   },
   methods: {
     handleTypeChange(val) {
@@ -241,6 +251,13 @@ export default {
         this.form.classId = ''
         this.classIdOpts = []
       }
+    },
+    getExchangeRate(){
+      findExchanges.callPromise({}).then(result=>{
+        this.exchangeRate = result[0].khr
+      }).catch(error=>{
+        Notify.error({message:error})
+      })
     },
     getStudentData() {
       lookupStudent
@@ -267,7 +284,7 @@ export default {
           }else{
             this.form.status='Paid'
           }
-
+          this.form.totalRecieve = this.form.usd + (this.form.khr/this.exchangeRate)
           updatePayementForNew
             .callPromise({ doc: this.form })
             .then(result => {

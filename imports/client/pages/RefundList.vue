@@ -74,6 +74,7 @@ import RefundUpdate from './RefundUpdate.vue'
 import compareDate from '/imports/libs/compare-date'
 
 import { findRefund, removeRefund } from '../../api/Refund/methods'
+import { findExchanges } from '../../api/exchanges/methods'
 
 var numeral = require('numeral')
 
@@ -87,6 +88,8 @@ export default {
       visibleDialog: false,
       updateDoc: null,
       tableData: [],
+      exchangeRate: 0,
+
       titles: [
         { label: 'Class', prop: 'classId', sort: 'custom' },
         { label: 'Student', prop: 'studentId' },
@@ -125,15 +128,28 @@ export default {
   },
   mounted() {
     this.getData()
+    // this.getExchangeRate()
   },
   methods: {
     getData() {
       this.loading = true
+
+      findExchanges
+        .callPromise({})
+        .then(result => {
+          this.exchangeRate = result[0].khr
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
       findRefund
         .callPromise({
           option: { sort: { _id: -1 } },
         })
         .then(result => {
+          _.forEach(result, o => {
+            o.totalRecieve = o.usd + o.khr / this.exchangeRate
+          })
           this.loading = false
           this.tableData = result
         })

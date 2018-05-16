@@ -154,7 +154,7 @@ import {
   insertPayementForNew,
   findPaymentForClass,
 } from '../../api/payment/methods'
-
+import {findExchanges} from '../../api/exchanges/methods'
 const numeral = require('numeral')
 export default {
   name: 'RegisterInsert',
@@ -173,6 +173,7 @@ export default {
       genderOpts: Lookup.gender,
       studentIdOpts: [],
       listExpireStudent: [],
+      exchangeRate:0,
       remaining: 0,
       form: {
         fee: 0,
@@ -247,6 +248,7 @@ export default {
   // },
   mounted() {
     this.getStudentData()
+    this.getExchangeRate()
   },
   methods: {
     handleTypeChange(val) {
@@ -266,6 +268,13 @@ export default {
         this.form.classId = ''
         this.classIdOpts = []
       }
+    },
+    getExchangeRate(){
+      findExchanges.callPromise({}).then(result=>{
+        this.exchangeRate = result[0].khr
+      }).catch(error=>{
+        Notify.error({message:error})
+      })
     },
     getStudentData() {
       lookupStudent
@@ -291,6 +300,7 @@ export default {
           if (this.form.remaining != 0) {
             this.form.status = 'Debt'
           }
+          let totalRecieve = this.form.usd + (this.form.khr/this.exchangeRate)
           let doc = {
             tranDate: this.form.tranDate,
             classId: this.form.classId,
@@ -307,6 +317,7 @@ export default {
             status: this.form.status,
             type: this.form.type,
             fee: parseInt(this.form.fee),
+            totalRecieve:totalRecieve,
           }
 
           insertPayementForNew

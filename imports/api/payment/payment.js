@@ -69,10 +69,9 @@ Payment.schema = new SimpleSchema({
     type: String,
     optional: true,
   },
-  // paymentDate: {
-  //   type: Array,
-  //   optional: true,
-  // },
+  totalRecieve: {
+    type: Number,
+  },
   // 'paymentDate.$': {
   //   type: Date,
   //   // blackbox: true,
