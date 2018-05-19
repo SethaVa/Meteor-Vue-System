@@ -51,6 +51,9 @@
             <span class="headerEn">B.A.D Foreign Language School</span>
           </div>
         </div>
+        <div class="info-header">
+          <span>Date : {{ formatDateReport(reportDate) }}</span>
+        </div>
         <!-- Info Class -->
         <!-- <div class="info-class">
           <div class="clLeft">
@@ -70,12 +73,12 @@
           <table class="table-content">
             <thead>
               <tr>
-                <th>No</th>
+                <th style="width:20px;">No</th>
                 <th>Name</th>
-                <th>Gender</th>
+                <th style="width:30px;">Gender</th>
                 <th>Position</th>
-                <th>Salary</th>
-                <th>Type</th>
+                <!-- <th>Type</th> -->
+                <th style="text-align:center">Salary</th>
               </tr>
             </thead>
             <tbody>
@@ -85,10 +88,17 @@
                 <td>{{ doc.name }}</td>
                 <td>{{ doc.gender }}</td>
                 <td>{{ doc.position }}</td>
-                <td>{{ formatNum(doc.totalSalary) }}</td>
-                <td>{{ doc.type }}</td>
+                <!-- <td>{{ doc.type }}</td> -->
+                <td style="text-align:center;font-weight:400;">{{ formatNum(doc.totalSalary) }}</td>
               </tr>
             </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4"
+                    class="title">Total</td>
+                <td class="title">{{ formatNum(totalSalary) +' $' }}</td>
+              </tr>
+            </tfoot>
 
           </table>
 
@@ -110,20 +120,17 @@ import Notify from '/imports/client/libs/notify'
 import Lookup from '../libs/Lookup-Value'
 import { lookupType } from '/imports/libs/lookup-methods'
 //
-import { findStaff } from '../../api/Staffs/methods'
-import { findStaffSalary } from '../../api/Staffs/methods'
 import { findSalary } from '../../api/payment/methods'
 
 const numeral = require('numeral')
+
 export default {
   data() {
     return {
       loading: false,
-      docOpts: Lookup.type,
       tableData: [],
-      classDetails: [],
-      staffDoc: [],
-      salaryDoc: [],
+      totalSalary: 0,
+      reportDate: moment().toDate(),
       titles: [
         { label: 'Student', prop: 'student' },
         { label: 'Gender', prop: 'gender', width: '100px' },
@@ -140,121 +147,44 @@ export default {
   },
   mounted() {
     this.d = new Printd()
-    this.getStaff()
   },
   methods: {
-    getTypeData() {
-      lookupType
-        .callPromise()
-        .then(result => {
-          this.docOpts = result
-        })
-        .catch(error => {
-          Notify.error({ message: error })
-        })
-    },
-    getStaff() {
-      findStaff
-        .callPromise({})
-        .then(result => {
-          this.staffDoc = result
-        })
-        .catch(error => {
-          Notify.error({ message: error })
-        })
-    },
-
     handleSubmit() {
-      this.loading = true
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          this.loading = true
+          let sDate = wrapCurrentDate(moment(this.form.opts))
+          this.reportDate = sDate
+          sDate = moment(sDate).format('YYYY-MM')
+          let eDate = wrapCurrentDate(moment(this.form.opts).add(1, 'months'))
+          eDate = moment(eDate).format('YYYY-MM')
+          let selector = {
+            payDate: {
+              $gte: new Date(sDate),
+              $lte: new Date(eDate),
+            },
+          }
 
-      // let selector = {
-      //   type: 'Part Time',
-      //   // status: 'Paid',
-      // }
-      this.salaryDoc = []
-      this.classDetails = []
-      let currentDate = wrapCurrentDate(this.form.opts)
-      currentDate = this.formatDate(currentDate)
-      findSalary
-        .callPromise({})
-        .then(result => {
-          if (result) {
-            // let partTimeRate = result.salaryRate[0].partTime / 100
-            // console.log(currentDate)
-            _.forEach(result.data, o => {
-              // _.forEach(o.classDetails, obj => {
-              //   this.classDetails.push(obj)
-              // })
+          this.totalSalary = 0
 
-              // console.log(o._id, this.loopDate(o.payDate, o.endPayDate))
-              _.forEach(o.classDetails, obj => {
-                if (o.type == 'Part Time' && o.status == 'Paid') {
-                  let loopGetDate = this.loopDate(obj.payDate, obj.endPayDate)
-                  // console.log(obj)
-                  _.forEach(loopGetDate, d => {
-                    // console.log(d)
-                    if (moment(currentDate).isSame(d.date)) {
-                      this.salaryDoc.push({
-                        staffId: o.staffId,
-                        name: o.name,
-                        date: d.date,
-                        salary:
-                          obj.totalPay *
-                          (obj.rate.partTime / 100) /
-                          obj.duration,
-                      })
-                    }
-                  })
-                }
-              })
+          findSalary
+            .callPromise({ selector })
+            .then(result => {
+              if (result) {
+                _.forEach(result, o => {
+                  this.totalSalary += o.totalSalary
+                })
+                this.tableData = result
+              }
+              this.loading = false
             })
-            // _.forEach(result, o => {
-            //   this.tableData.push(o)
-            // })
-          }
-          this.loading = false
-        })
-        .catch(error => {
-          Notify.error({ message: error })
-        })
-      // console.log(this.staffDoc, typeof this.salaryDoc)
-      this.tableData = []
-      for (let o in this.salaryDoc) {
-        console.log(this.salaryDoc[o])
-      }
-
-      _.forEach(this.staffDoc, o => {
-        _.forEach(this.salaryDoc, obj => {
-          if (o._id == obj.staffId) {
-            o.totalSalary += o.salary
-          }
-          this.tableData.push({
-            name: o.name,
-            date: o.date,
-            totalSalary: o.totalSalary,
-          })
-        })
+            .catch(error => {
+              Notify.error({ message: error })
+            })
+        } else {
+          return false
+        }
       })
-      // console.log(this.classDetails)
-      // _.forIn(this.classDetails, o => {
-      //   console.log(o)
-      // })
-      // _.forEach(this.classDetails, obj => {
-      //   console.log(obj)
-      //   // let loopGetDate = this.loopDate(obj.payDate, obj.endPayDate)
-      //   // console.log(obj)
-      //   // _.forEach(loopGetDate, d => {
-      //   //   // console.log(d)
-      //   //   if (moment(currentDate).isSame(d.date)) {
-      //   //     console.log('true')
-      //   //     // console.log(o.totalPay * partTimeRate / o.duration)
-      //   //     // this.tableData.push({
-      //   //     //   date: d.date,
-      //   //     //   totalSalary: o.totalPay * partTimeRate / o.duration,
-      //   //     // })
-      //   //   }
-      //   // })
-      // })
     },
     handlePrint() {
       const reportCSS = `
@@ -362,6 +292,9 @@ export default {
 
     formatDate(val) {
       return moment(val).format('YYYY-MM')
+    },
+    formatDateReport(val) {
+      return moment(val).format('DD/MM/YYYY')
     },
     formatNum(val) {
       return numeral(val).format('0,0.00')

@@ -19,11 +19,17 @@
       <slot v-if="itemProp">
         <el-form-item label="Subject"
                       prop="classId">
-          <el-select v-model="form.classId">
+          
+          <el-select v-model="form.classId"
+                     clearable
+                     placeholder="Select Class">
             <el-option v-for="doc in classIdOpts"
                        :key="doc.value"
                        :label="doc.label"
-                       :value="doc.value"></el-option>
+                       :value="doc.value">
+              <span style="float: left">{{ doc.label }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ doc.labelRight }}</span>
+            </el-option>
           </el-select>
         </el-form-item>
       </slot>
