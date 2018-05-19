@@ -167,47 +167,57 @@ export default {
     handleSubmit() {
       this.loading = true
 
-      // let selector = {
-      //   type: 'Part Time',
-      //   // status: 'Paid',
-      // }
+      this.loading = true
+      let sDate = wrapCurrentDate(moment(this.form.opts))
+      sDate = moment(sDate).format('YYYY-MM')
+      let eDate = wrapCurrentDate(moment(this.form.opts).add(1, 'months'))
+      eDate = moment(eDate).format('YYYY-MM')
+      let selector = {
+        payDate: {
+          $gte: new Date(sDate),
+          $lte: new Date(eDate),
+        },
+      }
+
       this.salaryDoc = []
       this.classDetails = []
       let currentDate = wrapCurrentDate(this.form.opts)
       currentDate = this.formatDate(currentDate)
+
       findSalary
-        .callPromise({})
+        .callPromise({ selector })
         .then(result => {
           if (result) {
+            this.tableData = result
             // let partTimeRate = result.salaryRate[0].partTime / 100
             // console.log(currentDate)
-            _.forEach(result.data, o => {
-              // _.forEach(o.classDetails, obj => {
-              //   this.classDetails.push(obj)
-              // })
+            // _.forEach(result.data, o => {
+            //   // _.forEach(o.classDetails, obj => {
+            //   //   this.classDetails.push(obj)
+            //   // })
 
-              // console.log(o._id, this.loopDate(o.payDate, o.endPayDate))
-              _.forEach(o.classDetails, obj => {
-                if (o.type == 'Part Time' && o.status == 'Paid') {
-                  let loopGetDate = this.loopDate(obj.payDate, obj.endPayDate)
-                  // console.log(obj)
-                  _.forEach(loopGetDate, d => {
-                    // console.log(d)
-                    if (moment(currentDate).isSame(d.date)) {
-                      this.salaryDoc.push({
-                        staffId: o.staffId,
-                        name: o.name,
-                        date: d.date,
-                        salary:
-                          obj.totalPay *
-                          (obj.rate.partTime / 100) /
-                          obj.duration,
-                      })
-                    }
-                  })
-                }
-              })
-            })
+            //   // console.log(o._id, this.loopDate(o.payDate, o.endPayDate))
+            //   _.forEach(o.classDetails, obj => {
+            //     if (o.type == 'Part Time' && o.status == 'Paid') {
+            //       let loopGetDate = this.loopDate(obj.payDate, obj.endPayDate)
+            //       // console.log(obj)
+            //       _.forEach(loopGetDate, d => {
+            //         // console.log(d)
+            //         if (moment(currentDate).isSame(d.date)) {
+            //           this.salaryDoc.push({
+            //             staffId: o.staffId,
+            //             name: o.name,
+            //             date: d.date,
+            //             salary:
+            //               obj.totalPay *
+            //               (obj.rate.partTime / 100) /
+            //               obj.duration,
+            //           })
+            //         }
+            //       })
+            //     }
+            //   })
+            // })
             // _.forEach(result, o => {
             //   this.tableData.push(o)
             // })
