@@ -51,6 +51,10 @@
         <i class="fa fa-home"></i>
         <span>Student</span>
       </el-menu-item>
+      <el-menu-item index="exchange-class">
+        <i class="fa fa-home"></i>
+        <span>Exchange Class</span>
+      </el-menu-item>
       <el-menu-item index="classDetails">
         <i class="fa fa-home"></i>
         <span>Class Details</span>

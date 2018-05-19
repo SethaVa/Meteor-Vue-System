@@ -40,7 +40,8 @@ import Income from './pages/IncomeList.vue'
 import Exchange from './pages/Exchange.vue'
 // SalaryRate
 import SalaryRate from './pages/SalaryRate.vue'
-
+// Exchange Class 
+import ExchangeClass from './pages/ExchangeClassList.vue'
 // Report
 import AllStudent from './reports/AllStudent'
 import DailyInEx from './reports/DailyReportInEx.vue';
@@ -197,6 +198,11 @@ const routes = [
         path: 'monthly-report',
         name: 'monthly-report',
         component: MonthlyInEx,
+      },
+      {
+        path: 'exchange-class',
+        name: 'exchange-class',
+        component: ExchangeClass,
       },
     ],
   },
