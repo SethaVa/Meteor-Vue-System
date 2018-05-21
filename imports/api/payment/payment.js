@@ -72,11 +72,11 @@ Payment.schema = new SimpleSchema({
   totalRecieve: {
     type: Number,
   },
-  // 'paymentDate.$': {
-  //   type: Date,
-  //   // blackbox: true,
-  //   // optional: true
-  // }
+  // Exchange Class
+  refId: {
+    type: String,
+    optional: true
+  }
 })
 
 Payment.attachSchema(Payment.schema)

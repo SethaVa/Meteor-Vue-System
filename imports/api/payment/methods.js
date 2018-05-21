@@ -1,10 +1,17 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import Payment from './payment'
 import PaymentDetails from './payment-details'
+import Students from '../students/students'
 import Exchange from '../exchanges/exchanges'
 import _ from 'lodash'
 import moment from 'moment'
@@ -21,7 +28,10 @@ export const findPayment = new ValidatedMethod({
   name: 'findPayment',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector, option }) {
+  run({
+    selector,
+    option
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       option = option || {}
@@ -35,7 +45,9 @@ export const findPaymentForClass = new ValidatedMethod({
   name: 'findPaymentForClass',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       // option = option || {}
@@ -48,10 +60,11 @@ export const findClassForStudenDetails = new ValidatedMethod({
   name: 'findClassForStudenDetails',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector,
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      // option = option || {}
       return aggregatePayment(selector)
     }
   },
@@ -62,7 +75,9 @@ export const findOnePayment = new ValidatedMethod({
   name: 'findOnePayment',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ _id }) {
+  run({
+    _id
+  }) {
     if (Meteor.isServer) {
       return Payment.findOne(_id)
     }
@@ -97,7 +112,9 @@ export const insertPayementForNew = new ValidatedMethod({
   validate: new SimpleSchema({
     doc: Payment.schema,
   }).validator(),
-  run({ doc }) {
+  run({
+    doc
+  }) {
     if (Meteor.isServer) {
       // let paymentDate = []
       // for (let m = doc.payDate; m < doc.endPayDate; m.setMonth(m.getMonth() + 1)) {
@@ -150,14 +167,14 @@ export const updatePayementForNew = new ValidatedMethod({
   name: 'updatePayementForNew',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ doc }) {
+  run({
+    doc
+  }) {
     if (Meteor.isServer) {
       let _id = doc._id
-      Payment.update(
-        {
+      Payment.update({
           _id: _id,
-        },
-        {
+        }, {
           $set: doc,
         },
         error => {
@@ -203,16 +220,101 @@ export const updatePayementForNew = new ValidatedMethod({
   },
 })
 
+// Insert from Exchange Student
+
+export const insertPaymentFromExchangeClass = new ValidatedMethod({
+  name: 'insertPaymentFromExchangeClass',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    doc: Payment.schema
+  }).validator(),
+  run({
+    doc
+  }) {
+    if (Meteor.isServer) {
+      try {
+        let data = {
+          tranDate: doc.tranDate,
+          fee: doc.fee,
+          payDate: doc.payDate,
+          duration: doc.duration,
+          endPayDate: doc.endPayDate,
+          totalPay: doc.totalPay,
+          discountVal: doc.discountVal,
+          usd: doc.usd,
+          khr: doc.khr,
+          totalRecieve: doc.totalRecieve,
+          remaining: doc.remaining,
+          refType: doc.refType,
+          classId: doc.classId,
+          studentId: doc.studentId,
+          type: doc.type,
+          status: doc.status,
+          lastId: doc.paymentId,
+          refId: doc.refId
+        }
+        Payment.update({
+          _id: doc.paymentId
+        }, {
+          $set: {
+            status: 'Closed'
+          }
+        })
+
+        Payment.insert(data, (error, paymentId) => {
+          if (!error) {
+            // Update Status Expire Payement
+            // let value = 'Closed'
+            // updatePaymentStatus.run({
+            //   _id: doc.paymentId,
+            //   value,
+            // })
+
+            PaymentDetails.remove({
+              refId: doc.paymentId,
+              payDate: {
+                $gte: doc.tranDate
+              }
+            })
+
+            let paymentDetails = {
+              totalRecieve: doc.totalRecieve,
+              fee: doc.fee,
+              tranDate: doc.tranDate,
+              payDate: doc.payDate,
+              endPayDate: doc.endPayDate,
+              refType: doc.refType,
+              paymentId: paymentId,
+              totalPay: doc.totalPay,
+              duration: doc.duration,
+              type: doc.type,
+            }
+            InsertPaymentDetails({
+              doc: paymentDetails,
+            })
+
+          }
+        })
+
+        return 'Success'
+      } catch (error) {
+        throw new Meteor.Error('Error', 'Payment', error.reason)
+      }
+    }
+  },
+})
+
+
 // Insert សំរាបើសិស្សចាស់ដែលគាតមកបងលុយ
 export const insertPayment = new ValidatedMethod({
   name: 'insertPayment',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    doc: _.clone(Payment.schema).extend({
-      paymentId: String,
-    }),
+    doc: Payment.schema
   }).validator(),
-  run({ doc }) {
+  run({
+    doc
+  }) {
     if (Meteor.isServer) {
       try {
         Payment.insert(doc, (error, paymentId) => {
@@ -223,25 +325,23 @@ export const insertPayment = new ValidatedMethod({
               _id: doc.lastId,
               value,
             })
-            // let data = Payment.findOne({
-            //   _id: doc.lastId
-            // })
-            // let paymentDetails = {
-            //   totalRecieve: data.totalRecieve,
-            //   fee: doc.fee,
-            //   tranDate: doc.tranDate,
-            //   payDate: doc.payDate,
-            //   endPayDate: doc.endPayDate,
-            //   refType: doc.refType,
-            //   paymentId: paymentId,
-            //   totalPay: doc.totalPay,
-            //   duration: doc.duration,
-            //   type: doc.type
-            // }
-            // InsertPaymentDetails({
-            //   doc: paymentDetails
-            // })
 
+            let paymentDetails = {
+              totalRecieve: doc.totalRecieve,
+              fee: doc.fee,
+              tranDate: doc.tranDate,
+              payDate: doc.payDate,
+              endPayDate: doc.endPayDate,
+              refType: doc.refType,
+              paymentId: paymentId,
+              totalPay: doc.totalPay,
+              duration: doc.duration,
+              type: doc.type,
+            }
+            InsertPaymentDetails({
+              doc: paymentDetails,
+            })
+            //Income
             let dataIncome = {
               tranDate: doc.tranDate,
               referenceId: paymentId,
@@ -270,21 +370,39 @@ export const updatePaymentForPayment = new ValidatedMethod({
   validate: new SimpleSchema({
     doc: Payment.schema,
   }).validator(),
-  run({ doc }) {
+  run({
+    doc
+  }) {
     if (Meteor.isServer) {
       try {
-        Payment.update(
-          {
+        Payment.update({
             _id: doc._id,
-          },
-          {
+          }, {
             $set: doc,
           },
           error => {
             if (!error) {
-              // Update Status Expire Payement
-              // let value = 'Closed'
-              // updatePaymentStatus.run({ _id, value })
+              // remove before insert
+              PaymentDetails.remove({
+                refId: doc._id,
+              })
+              // Details Payment
+              let paymentDetails = {
+                totalRecieve: doc.totalRecieve,
+                fee: doc.fee,
+                tranDate: doc.tranDate,
+                payDate: doc.payDate,
+                endPayDate: doc.endPayDate,
+                refType: doc.refType,
+                paymentId: doc._id,
+                totalPay: doc.totalPay,
+                duration: doc.duration,
+                type: doc.type,
+              }
+              InsertPaymentDetails({
+                doc: paymentDetails,
+              })
+              // Income
               let data = {
                 tranDate: doc.tranDate,
                 referenceId: doc._id,
@@ -312,14 +430,13 @@ export const updatePaymentForRefund = new ValidatedMethod({
   name: 'updatePayment',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ doc }) {
+  run({
+    doc
+  }) {
     if (Meteor.isServer) {
-      console.log(doc)
-      Payment.update(
-        {
+      Payment.update({
           _id: doc._id,
-        },
-        {
+        }, {
           $set: {
             status: doc.status,
             remaining: doc.remaining,
@@ -375,19 +492,20 @@ export const updatePaymentStatus = new ValidatedMethod({
       optional: true,
     },
   }).validator(),
-  run({ _id, value, totalRecieve }) {
+  run({
+    _id,
+    value,
+    totalRecieve
+  }) {
     if (Meteor.isServer) {
-      return Payment.update(
-        {
-          _id: _id,
+      return Payment.update({
+        _id: _id,
+      }, {
+        $set: {
+          status: value,
         },
-        {
-          $set: {
-            status: value,
-          },
-          $inc: totalRecieve,
-        }
-      )
+        $inc: totalRecieve,
+      })
     }
   },
 })
@@ -402,21 +520,19 @@ export const removePayment = new ValidatedMethod({
       blackbox: true,
     },
   }).validator(),
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
-      Payment.update(
-        {
-          _id: selector.lastId,
+      Payment.update({
+        _id: selector.lastId,
+      }, {
+        $set: {
+          status: 'Expires',
         },
-        {
-          $set: {
-            status: 'Expires',
-          },
-        }
-      )
+      })
 
-      Payment.remove(
-        {
+      Payment.remove({
           _id: selector._id,
         },
         error => {
@@ -436,6 +552,89 @@ export const removePayment = new ValidatedMethod({
     }
   },
 })
+
+// Delete ECC = Exchange Class
+export const removePaymentFromECC = new ValidatedMethod({
+  name: 'removePaymentFromECC',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+    },
+  }).validator(),
+  run({
+    selector
+  }) {
+    if (Meteor.isServer) {
+      // for get LastId
+      let data = Payment.findOne({
+        refId: selector.refId,
+      })
+      // old Payment that Exchange Class From
+      let oldPaymentECCFrom = Payment.findOne({
+        _id: data.lastId
+      })
+      Payment.update({
+        _id: data.lastId,
+      }, {
+        $set: {
+          status: data.status,
+        },
+      })
+
+      // Remove Before Insert
+      PaymentDetails.remove({
+        refId: oldPaymentECCFrom._id,
+      })
+
+      // Insert to Payment Details
+
+      let paymentDetails = {
+        totalRecieve: oldPaymentECCFrom.totalRecieve,
+        fee: oldPaymentECCFrom.fee,
+        tranDate: oldPaymentECCFrom.tranDate,
+        payDate: oldPaymentECCFrom.payDate,
+        endPayDate: oldPaymentECCFrom.endPayDate,
+        refType: oldPaymentECCFrom.refType,
+        paymentId: oldPaymentECCFrom._id,
+        totalPay: oldPaymentECCFrom.totalPay,
+        duration: oldPaymentECCFrom.duration,
+        type: oldPaymentECCFrom.type,
+      }
+      InsertPaymentDetails({
+        doc: paymentDetails,
+      })
+
+
+      // Update Student Type
+      Students.update({
+        _id: data.studentId
+      }, {
+        $set: {
+          type: oldPaymentECCFrom.type
+        }
+      })
+
+      // Remove Payment from Exchange Class
+      Payment.remove({
+          refId: selector.refId,
+        },
+        error => {
+          if (!error) {
+            // Remove Payment Details from Exchange class 
+            PaymentDetails.remove({
+              refId: data._id,
+            })
+          }
+        }
+      )
+      return 'Success'
+    }
+  },
+})
+
+
 // Remove Payment from Refund
 export const removePaymentFromRefund = new ValidatedMethod({
   name: 'removePaymentFromRefund',
@@ -445,7 +644,9 @@ export const removePaymentFromRefund = new ValidatedMethod({
       type: String,
     },
   }).validator(),
-  run({ _id }) {
+  run({
+    _id
+  }) {
     if (Meteor.isServer) {
       Payment.remove({
         _id: _id,
@@ -461,7 +662,10 @@ export const findSalary = new ValidatedMethod({
   name: 'findSalary',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector, option }) {
+  run({
+    selector,
+    option
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       option = option || {}
@@ -504,7 +708,9 @@ export const findSalary = new ValidatedMethod({
 // }
 
 // Insert To Payment Details
-const InsertPaymentDetails = ({ doc }) => {
+const InsertPaymentDetails = ({
+  doc
+}) => {
   let i = 0
   let numOfMonth = doc.totalRecieve / doc.fee
   numOfMonth = _.floor(numOfMonth, 0)
@@ -532,9 +738,9 @@ const InsertPaymentDetails = ({ doc }) => {
   }
 }
 
-const aggregatePayment = selector => {
-  let data = Payment.aggregate([
-    {
+const aggregatePayment = (selector) => {
+  selector = selector || {}
+  let data = Payment.aggregate([{
       $match: selector,
     },
     {
@@ -669,6 +875,7 @@ const aggregatePayment = selector => {
         classDetail: 1,
       },
     },
+
   ])
   return data
 }
@@ -676,8 +883,7 @@ const aggregatePayment = selector => {
 // Find Salary
 const aggregateSalary = selector => {
   selector = selector || {}
-  let data = PaymentDetails.aggregate([
-    {
+  let data = PaymentDetails.aggregate([{
       $lookup: {
         from: 'payment',
         localField: 'refId',
@@ -754,25 +960,52 @@ const aggregateSalary = selector => {
       $group: {
         // _id: { staffId: '$staffDoc._id', classId: '$classDoc._id' },
         _id: '$_id',
-        refId: { $last: '$refId' },
-        refType: { $last: '$refType' },
-        type: { $last: '$type' },
-        classId: { $last: '$classDoc._id' },
-        staffId: { $last: '$staffDoc._id' },
-        name: { $last: '$staffDoc.name' },
-        gender: { $last: '$staffDoc.gender' },
-        position: { $last: '$positionDoc.position' },
-        rate: { $last: '$rateDoc.partTime' },
-        rateFull: { $last: '$rateDoc.fullTime' },
-        payDate: { $last: '$payDate' },
-        pay: { $last: '$pay' },
+        refId: {
+          $last: '$refId'
+        },
+        refType: {
+          $last: '$refType'
+        },
+        type: {
+          $last: '$type'
+        },
+        classId: {
+          $last: '$classDoc._id'
+        },
+        staffId: {
+          $last: '$staffDoc._id'
+        },
+        name: {
+          $last: '$staffDoc.name'
+        },
+        gender: {
+          $last: '$staffDoc.gender'
+        },
+        position: {
+          $last: '$positionDoc.position'
+        },
+        rate: {
+          $last: '$rateDoc.partTime'
+        },
+        rateFull: {
+          $last: '$rateDoc.fullTime'
+        },
+        payDate: {
+          $last: '$payDate'
+        },
+        pay: {
+          $last: '$pay'
+        },
       },
     },
     {
       $project: {
         _id: 1,
         payDate: {
-          $dateToString: { format: '%Y-%m-%d', date: '$payDate' },
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$payDate'
+          },
         },
         name: 1,
         gender: 1,
@@ -790,16 +1023,26 @@ const aggregateSalary = selector => {
         fullSalary: {
           // $cond: { if: { $eq: ["$type","Full Time"] }, then:{$multiply: [1,"$rateDoc.fullTime" ]},else :0   }
           $cond: {
-            if: { $eq: ['$type', 'Full Time'] },
-            then: { $multiply: [1, '$rateFull'] },
+            if: {
+              $eq: ['$type', 'Full Time']
+            },
+            then: {
+              $multiply: [1, '$rateFull']
+            },
             else: 0,
           },
         },
         partSalary: {
           // $cond: { if: { $eq: ["$type","Part Time"] }, then:{$multiply: ["$pay",{$divide: ["$rateDoc.partTime",100 ]} ]} , else:0  }
           $cond: {
-            if: { $eq: ['$type', 'Part Time'] },
-            then: { $multiply: ['$pay', { $divide: ['$rate', 100] }] },
+            if: {
+              $eq: ['$type', 'Part Time']
+            },
+            then: {
+              $multiply: ['$pay', {
+                $divide: ['$rate', 100]
+              }]
+            },
             else: 0,
           },
         },
@@ -817,16 +1060,37 @@ const aggregateSalary = selector => {
     },
     {
       $group: {
-        _id: { staffId: '$staffId', classId: '$classId' },
-        payDate: { $last: '$payDate' },
-        type: { $last: '$type' },
-        name: { $last: '$name' },
-        gender: { $last: '$gender' },
-        position: { $last: '$position' },
-        staffId: { $last: '$staffId' },
-        classId: { $last: '$classId' },
-        totalFullSalary: { $sum: '$fullSalary' },
-        totalPartSalary: { $sum: '$partSalary' },
+        _id: {
+          staffId: '$staffId',
+          classId: '$classId'
+        },
+        payDate: {
+          $last: '$payDate'
+        },
+        type: {
+          $last: '$type'
+        },
+        name: {
+          $last: '$name'
+        },
+        gender: {
+          $last: '$gender'
+        },
+        position: {
+          $last: '$position'
+        },
+        staffId: {
+          $last: '$staffId'
+        },
+        classId: {
+          $last: '$classId'
+        },
+        totalFullSalary: {
+          $sum: '$fullSalary'
+        },
+        totalPartSalary: {
+          $sum: '$partSalary'
+        },
       },
     },
     {
