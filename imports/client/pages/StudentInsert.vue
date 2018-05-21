@@ -135,7 +135,7 @@ export default {
             .callPromise({ doc: this.form })
             .then(result => {
               Msg.success()
-              this.handleClose()
+              this.resetForm()
             })
             .catch(error => {
               Notify.error({ message: error })

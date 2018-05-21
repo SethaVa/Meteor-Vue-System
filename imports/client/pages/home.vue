@@ -26,6 +26,7 @@
 import compareDate from '/imports/libs/compare-date'
 import moment from 'moment'
 import { mapState } from 'vuex'
+import { Session } from 'meteor/session'
 export default {
   name: 'Home',
   data() {
@@ -45,17 +46,17 @@ export default {
   computed: {
     ...mapState({
       currentUser(state) {
-        // console.log(state.app.currentUser)
+        console.log(state.app.currentUser)
         return state.app.currentUser // object
       },
       // currentUser: state => state.app.currentUser,
     }),
-    currentBranch(state) {
-      const branch = state.app.currentBranch
-      // console.log(branch)
-      return branch
-      // && branch.shortName
-    },
+    // currentBranch(state) {
+    //   const branch = state.app.currentBranch
+    //   // console.log(branch)
+    //   return branch
+    //   // && branch.shortName
+    // },
     userFullName() {
       return this.$store.getters['app/userFullName']
       // let data = this.$store.getters['app/userFullName']
@@ -98,5 +99,4 @@ export default {
 </script>
 
 <style>
-
 </style>

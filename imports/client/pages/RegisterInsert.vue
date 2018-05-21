@@ -77,9 +77,17 @@
           </span>
           <el-row :gutter="10">
             <el-col :span="12">
+              <el-form-item label="Base On :">
+            <!-- style="margin-left:100px;"  -->
+              <el-radio-group @change="handleBaseOnChange" v-model="checkBaseOn">
+                <el-radio label="usd">USD</el-radio>
+                <el-radio label="khr">KHR</el-radio>
+              </el-radio-group>
+            </el-form-item>
               <el-form-item label="Fee"
                             prop="fee">
-                <el-input style="width:100%" type="number"
+                <el-input style="width:100%"
+                          type="number"
                           v-model.number="form.fee"></el-input>
               </el-form-item>
               <el-form-item label="Pay Date"
@@ -179,7 +187,8 @@ export default {
       listExpireStudent: [],
       exchangeRate: 0,
       remaining: 0,
-      type:'',
+      type: '',
+      checkBaseOn:'usd',
       form: {
         fee: 0,
         type: '',
@@ -228,23 +237,22 @@ export default {
       },
     }
   },
-  
+
   watch: {
     'form.duration'(val) {
       this.form.totalPay = val * this.form.fee
     },
-    'form.fee'(val){
+    'form.fee'(val) {
       this.form.totalPay = val * this.form.duration
-    }
+    },
   },
   mounted() {
-    // this.getStudentData()
     this.getExchangeRate()
   },
   methods: {
     handleTypeChange(val) {
       if (val) {
-        this.type=val
+        this.type = val
         let selector = {
           type: val,
         }
@@ -256,11 +264,14 @@ export default {
           .catch(error => {
             Notify.error({ message: error })
           })
-          this.getStudentData(val)
+        this.getStudentData(val)
       } else {
         this.form.classId = ''
         this.classIdOpts = []
       }
+    },
+    handleBaseOnChange(val){
+      console.log(val)
     },
     getExchangeRate() {
       findExchanges
@@ -273,11 +284,11 @@ export default {
         })
     },
     getStudentData(val) {
-     let selector = {
-        type:val
+      let selector = {
+        type: val,
       }
       lookupStudent
-        .callPromise({selector})
+        .callPromise({ selector })
         .then(result => {
           this.studentIdOpts = result
         })
@@ -339,10 +350,10 @@ export default {
         setTimeout(() => {
           this.loading = false
           let selector = {
-            type:this.type
+            type: this.type,
           }
           lookupStudent
-            .callPromise({selector})
+            .callPromise({ selector })
             .then(result => {
               this.studentIdOpts = result.filter(item => {
                 return (
@@ -357,10 +368,10 @@ export default {
       } else {
         this.loading = true
         let selector = {
-            type:this.type
-          }
+          type: this.type,
+        }
         lookupStudent
-          .callPromise({selector})
+          .callPromise({ selector })
           .then(result => {
             this.studentIdOpts = result
             this.loading = false
