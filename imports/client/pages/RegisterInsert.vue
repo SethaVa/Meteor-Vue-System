@@ -79,8 +79,8 @@
             <el-col :span="12">
               <el-form-item label="Fee"
                             prop="fee">
-                <el-input style="width:100%"
-                          v-model="form.fee"></el-input>
+                <el-input style="width:100%" type="number"
+                          v-model.number="form.fee"></el-input>
               </el-form-item>
               <el-form-item label="Pay Date"
                             prop="payDate">
@@ -89,9 +89,13 @@
               </el-form-item>
               <el-form-item label="Duration"
                             prop="duration">
-                <el-input type="duration"
-                          v-model.number="form.duration"
-                          auto-complete="off"></el-input>
+                <el-select v-model="form.duration">
+                  <el-option v-for="doc in 12 "
+                             :key="doc"
+                             :label="doc + ' months'"
+                             :value="doc"></el-option>
+                </el-select>
+
               </el-form-item>
               <el-form-item label="Total Pay "
                             prop="totalPay">
@@ -154,7 +158,7 @@ import {
   insertPayementForNew,
   findPaymentForClass,
 } from '../../api/payment/methods'
-import {findExchanges} from '../../api/exchanges/methods'
+import { findExchanges } from '../../api/exchanges/methods'
 const numeral = require('numeral')
 export default {
   name: 'RegisterInsert',
@@ -173,8 +177,9 @@ export default {
       genderOpts: Lookup.gender,
       studentIdOpts: [],
       listExpireStudent: [],
-      exchangeRate:0,
+      exchangeRate: 0,
       remaining: 0,
+      type:'',
       form: {
         fee: 0,
         type: '',
@@ -182,7 +187,7 @@ export default {
         rsDate: moment().toDate(),
         studentId: '',
         payDate: moment().toDate(),
-        duration: 0,
+        duration: 1,
         totalPay: 0,
         usd: 0,
         discountVal: 0,
@@ -223,36 +228,23 @@ export default {
       },
     }
   },
-  // watch: {
-  //   'form.usd'(val) {
-  //     this.remaining = val
-  //   },
-  //   'form.discountVal'(val) {
-  //     this.remaining = this.form.usd - val
-  //     this.form.remaining = this.form.usd - val
-  //     if (this.remaining < 0) {
-  //       Notify.warning({
-  //         message: 'Discount Balance is bigger than Total balance',
-  //       })
-  //       this.form.khr = 0
-  //     }
-  //   },
-  //   'form.khr'(val) {
-  //     this.remaining = this.form.usd - this.form.discountVal - val
-  //     this.form.remaining = this.form.usd - this.form.discountVal - val
-  //     if (this.remaining < 0) {
-  //       Notify.warning({ message: 'khr Balance is bigger than Total balance' })
-  //       this.form.khr = 0
-  //     }
-  //   },
-  // },
+  
+  watch: {
+    'form.duration'(val) {
+      this.form.totalPay = val * this.form.fee
+    },
+    'form.fee'(val){
+      this.form.totalPay = val * this.form.duration
+    }
+  },
   mounted() {
-    this.getStudentData()
+    // this.getStudentData()
     this.getExchangeRate()
   },
   methods: {
     handleTypeChange(val) {
-      if (val.length > 0) {
+      if (val) {
+        this.type=val
         let selector = {
           type: val,
         }
@@ -264,21 +256,28 @@ export default {
           .catch(error => {
             Notify.error({ message: error })
           })
+          this.getStudentData(val)
       } else {
         this.form.classId = ''
         this.classIdOpts = []
       }
     },
-    getExchangeRate(){
-      findExchanges.callPromise({}).then(result=>{
-        this.exchangeRate = result[0].khr
-      }).catch(error=>{
-        Notify.error({message:error})
-      })
-    },
-    getStudentData() {
-      lookupStudent
+    getExchangeRate() {
+      findExchanges
         .callPromise({})
+        .then(result => {
+          this.exchangeRate = result[0].khr
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
+    getStudentData(val) {
+     let selector = {
+        type:val
+      }
+      lookupStudent
+        .callPromise({selector})
         .then(result => {
           this.studentIdOpts = result
         })
@@ -300,7 +299,7 @@ export default {
           if (this.form.remaining != 0) {
             this.form.status = 'Debt'
           }
-          let totalRecieve = this.form.usd + (this.form.khr/this.exchangeRate)
+          let totalRecieve = this.form.usd + this.form.khr / this.exchangeRate
           let doc = {
             tranDate: this.form.tranDate,
             classId: this.form.classId,
@@ -317,7 +316,7 @@ export default {
             status: this.form.status,
             type: this.form.type,
             fee: parseInt(this.form.fee),
-            totalRecieve:totalRecieve,
+            totalRecieve: totalRecieve,
           }
 
           insertPayementForNew
@@ -339,8 +338,11 @@ export default {
         this.loading = true
         setTimeout(() => {
           this.loading = false
+          let selector = {
+            type:this.type
+          }
           lookupStudent
-            .callPromise({})
+            .callPromise({selector})
             .then(result => {
               this.studentIdOpts = result.filter(item => {
                 return (
@@ -354,8 +356,11 @@ export default {
         }, 200)
       } else {
         this.loading = true
+        let selector = {
+            type:this.type
+          }
         lookupStudent
-          .callPromise({})
+          .callPromise({selector})
           .then(result => {
             this.studentIdOpts = result
             this.loading = false
@@ -380,5 +385,4 @@ export default {
 </script>
 
 <style>
-
 </style>

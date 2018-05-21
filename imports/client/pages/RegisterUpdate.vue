@@ -81,9 +81,12 @@
               </el-form-item>
               <el-form-item label="Duration"
                             prop="duration">
-                <el-input type="duration"
-                          v-model.number="form.duration"
-                          auto-complete="off"></el-input>
+                <el-select v-model="form.duration">
+                <el-option v-for="doc in 12 "
+                           :key="doc"
+                           :label="doc + ' months'"
+                           :value="doc"></el-option>
+              </el-select>
               </el-form-item>
               <el-form-item label="Total Pay "
                             prop="totalPay">
@@ -165,7 +168,7 @@ export default {
       studentIdOpts: [],
       remaining: 0,
       exchangeRate:0,
-
+      type:'',
       form: this.updateDoc,
 
       rules: {
@@ -202,6 +205,9 @@ export default {
     }
   },
   watch: {
+    'form.duration'(val) {
+      this.form.totalPay = val * this.form.fee
+    },
     // 'form.usd'(val) {
     //   this.remaining = val
     // },
@@ -227,15 +233,14 @@ export default {
     //   this.handleTypeChange(val)
     // }
   },
+  
   mounted() {
-    this.getStudentData()
     this.getExchangeRate()
     this.handleTypeChange(this.form.type)
-
   },
   methods: {
     handleTypeChange(val) {
-      if (val.length > 0) {
+      if (val) {
         let selector = {
           type: val,
         }
@@ -247,6 +252,8 @@ export default {
           .catch(error => {
             Notify.error({ message: error })
           })
+          this.type = val
+          this.getStudentData(val)
       } else {
         this.form.classId = ''
         this.classIdOpts = []
@@ -259,9 +266,12 @@ export default {
         Notify.error({message:error})
       })
     },
-    getStudentData() {
+    getStudentData(val) {
+      let selector = {
+        type:val
+      }
       lookupStudent
-        .callPromise({})
+        .callPromise({selector})
         .then(result => {
           this.studentIdOpts = result
         })
@@ -300,12 +310,16 @@ export default {
       })
     },
     remoteMethod(query) {
+      let selector = {
+            type:this.type
+          }
       if (query !== '') {
         this.loading = true
         setTimeout(() => {
           this.loading = false
+          
           lookupStudent
-            .callPromise({})
+            .callPromise({selector})
             .then(result => {
               this.studentIdOpts = result.filter(item => {
                 return (
@@ -320,7 +334,7 @@ export default {
       } else {
         this.loading = true
         lookupStudent
-          .callPromise({})
+          .callPromise({selector})
           .then(result => {
             this.studentIdOpts = result
             this.loading = false

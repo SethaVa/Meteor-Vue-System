@@ -63,3 +63,5 @@ import '../../api/salary-rate/server/index'
 import '../../api/register/server/index'
 //Refund
 import '../../api/Refund/server/index'
+//Exchange class
+import '../../api/exchange-class/server/index'

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="New ExchangeClass"
+    <el-dialog title="Update Class"
                width="80%"
                :visible="visible"
                :before-close="handleClose">
@@ -138,15 +138,21 @@ import Lookup from '/imports/client/libs/Lookup-Value'
 import { lookupClass } from '/imports/libs/lookup-methods'
 import { findClassForStudenDetails } from '../../api/payment/methods'
 import { findOnePayment } from '../../api/payment/methods'
-import { insertExchangeClass } from '../../api/exchange-class/methods'
+import {
+  updateExchangeClass,
+  findOneExchangeClass,
+} from '../../api/exchange-class/methods'
 import { findOneClassStudy } from '../../api/classStudy/methods'
 
 export default {
-  name: 'ExchangeClass',
   props: {
     visible: {
       type: Boolean,
       default: false,
+    },
+    updateId: {
+      type: String,
+      default: null,
     },
   },
   data() {
@@ -165,13 +171,15 @@ export default {
       totalPay: 0,
       usd: 0,
       khr: 0,
-      form: {
-        typeTo: '',
-        tranDate: moment().toDate(),
-        studentId: '',
-        classFromId: '',
-        classToId: '',
-      },
+      classId: '',
+      form: {},
+      // form: {
+      //   typeTo: '',
+      //   tranDate: moment().toDate(),
+      //   studentId: '',
+      //   classFromId: '',
+      //   classToId: '',
+      // },
       rules: {
         tranDate: [{ required: true }],
         type: [{ required: true }],
@@ -185,21 +193,42 @@ export default {
     'form.type'(val) {
       this.handleTypeChange(val)
     },
-    'form.classFormId'(val) {
-      this.handleClassFormChange(val)
+    'form.classFromId'(val) {
+      this.handleClassFromChagne(val)
+    },
+    'form.studentId'(val) {
+      this.handleStudentChange(val)
     },
   },
+  mounted() {
+    this.getDataUpdate()
+    this.getStudentLastExChange()
+  },
   methods: {
+    getDataUpdate() {
+      this.loading = true
+      findOneExchangeClass
+        .callPromise({ id: this.updateId })
+        .then(result => {
+          console.log(result.classFromId)
+          this.form = result
+          this.classId = result.classFromId
+          this.loading = false
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     handleTypeChange(val) {
       if (val) {
         this.type = val
-        this.form.classFromId = ''
-        this.form.classToId = ''
-        this.form.studentId = ''
+        // this.form.classFromId = ''
+        // this.form.classToId = ''
+        // this.form.studentId = ''
 
-        this.classFromIdOpts = []
-        this.classToIdOpts = []
-        this.studentOpts = []
+        // this.classFromIdOpts = []
+        // this.classToIdOpts = []
+        // this.studentOpts = []
         let selector = {
           type: val,
         }
@@ -222,9 +251,8 @@ export default {
     },
     handleClassFromChagne(val) {
       if (val) {
-        this.classToIdOpts = []
-        this.studentOpts = []
-
+        // this.classToIdOpts = []
+        // this.studentOpts = []
         let selector = {
           // type: this.type,
           _id: { $ne: val },
@@ -264,6 +292,28 @@ export default {
         this.form.classToId = ''
         this.form.studentId = ''
       }
+    },
+    getStudentLastExChange() {
+      let classSelector = {
+        classId: this.classId,
+        // status: { $ne: 'Closed' }
+      }
+      // let option = {
+      //   $sort: { _id: -1 },
+      // }
+      findClassForStudenDetails
+        .callPromise({ selector: classSelector })
+        .then(result => {
+          if (result) {
+            console.log(result)
+            this.studentOpts = result[0].classDetail
+          } else {
+            this.studentOpts = []
+          }
+        })
+        .catch(error => {
+          Notify.error({ message: error.reason })
+        })
     },
     handleStudentChange(val) {
       let selector = {
@@ -305,12 +355,12 @@ export default {
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          insertExchangeClass
+          updateExchangeClass
             .callPromise({ doc: this.form, details: this.tmpClassDoc })
             .then(result => {
               if (result) {
                 MsgBox.success()
-                this.handleresetForm()
+                this.handleClose()
               }
             })
             .catch(err => {

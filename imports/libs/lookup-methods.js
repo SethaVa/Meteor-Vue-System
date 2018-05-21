@@ -1,14 +1,22 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
 
 import _ from 'lodash'
 import moment from 'moment'
 import Type from '/imports/api/types/type'
-import { findClassStudy } from '/imports/api/classStudy/methods'
+import {
+  findClassStudy
+} from '/imports/api/classStudy/methods'
 import Students from '../api/students/students'
 import {
-  
+
   findPaymentForClass,
 } from '/imports/api/payment/methods'
 export const lookupType = new ValidatedMethod({
@@ -34,11 +42,15 @@ export const lookupClass = new ValidatedMethod({
   name: 'lookupClass',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       let list = []
-      let classStudy = findClassStudy.run({ selector: selector })
+      let classStudy = findClassStudy.run({
+        selector: selector
+      })
       _.forEach(classStudy, o => {
         let timeStudy = _.map(o.timeStudy)
           .map(o => {
@@ -61,10 +73,13 @@ export const lookupStudent = new ValidatedMethod({
   name: 'lookupStudent',
   mixins: [CallPromiseMixin],
   validate: null,
-  run() {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
+      selector = selector || {}
       let list = []
-      let type = Students.find({}).fetch()
+      let type = Students.find(selector).fetch()
       _.forEach(type, o => {
         list.push({
           value: o._id,
@@ -85,11 +100,15 @@ export const lookupStudentForExpire = new ValidatedMethod({
       let list = []
       let selector = {
         // classId: this.form.classId,
-        status: { $in: ['Expires', '$classDetail'] },
+        status: {
+          $in: ['Expires', '$classDetail']
+        },
       }
-      
+
       findPaymentForClass
-        .callPromise({ selector: selector })
+        .callPromise({
+          selector: selector
+        })
         .then(result => {
           if (result.length > 0) {
             _.forEach(result[0].classDetail, o => {
@@ -98,11 +117,13 @@ export const lookupStudentForExpire = new ValidatedMethod({
                 label: o.studentId + ' - ' + o.student,
               })
             })
-            
-          } 
+
+          }
         })
         .catch(error => {
-          Notify.error({ message: error.reason })
+          Notify.error({
+            message: error.reason
+          })
         })
       return list
     }

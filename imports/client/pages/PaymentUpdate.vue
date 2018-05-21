@@ -125,6 +125,8 @@ import {
   findOnePayment,
 } from '/imports/api/payment/methods'
 import { updatePaymentForPayment } from '../../api/payment/methods'
+import { findExchanges } from '../../api/exchanges/methods'
+
 import SubPayment from '../../components/subPayment'
 export default {
   name: 'Payment',
@@ -155,6 +157,8 @@ export default {
       endDate: moment().toDate(),
       itemsProp: this.initItems(),
       saveEvent: 0,
+      exchangeRate: 0,
+
       form: {},
       // form: this.updateDoc,
       // form: {
@@ -195,10 +199,12 @@ export default {
     'form.studentId'(val) {
       this.handleStudentChange(val)
     },
+    'form.duration'(val) {
+      this.itemsProp[0].totalPay = val * this.form.fee
+    },
   },
   mounted() {
-    // this.getTypeData()
-    // this.getPaymentData()
+    this.getExchangeRate()
     this.getDataForUpdate()
   },
 
@@ -252,6 +258,16 @@ export default {
           remaining: 0,
         },
       ]
+    },
+    getExchangeRate() {
+      findExchanges
+        .callPromise({})
+        .then(result => {
+          this.exchangeRate = result[0].khr
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
     },
     // getPaymentData() {
     //   let selector = {
@@ -374,6 +390,9 @@ export default {
           if (this.itemsProp[0].remaining != 0) {
             this.form.status = 'Debt'
           }
+          let totalRecieve =
+            this.itemsProp[0].usd + this.itemsProp[0].khr / this.exchangeRate
+
           let Payment = {
             _id: this.updateDoc._id,
             tranDate: moment().toDate(),
@@ -391,8 +410,10 @@ export default {
             remaining: this.itemsProp[0].remaining,
             status: this.form.status,
             lastId: this.form.lastId,
-            fee: this.form.fee,
+            fee: parseInt(this.form.fee),
+            totalRecieve: parseInt(totalRecieve),
           }
+          console.log(Payment)
           // console.log(Payment)
           updatePaymentForPayment
             .callPromise({ doc: Payment })

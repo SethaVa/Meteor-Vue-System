@@ -129,6 +129,8 @@ import compareDate from '/imports/libs/compare-date'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { findPaymentForClass } from '/imports/api/payment/methods'
 import { insertPayment } from '../../api/payment/methods'
+import { findExchanges } from '../../api/exchanges/methods'
+//
 import StudentPay from './StudentPay.vue'
 import SubPayment from '../../components/subPayment'
 export default {
@@ -155,6 +157,7 @@ export default {
       timeStudy: [],
       endDate: moment().toDate(),
       itemsProp: this.initItems(),
+      exchangeRate: 0,
       saveEvent: 0,
       form: {
         fee: 0,
@@ -188,10 +191,14 @@ export default {
       },
     }
   },
-
+  watch: {
+    'form.duration'(val) {
+      this.itemsProp[0].totalPay = val * this.form.fee
+    },
+  },
   mounted() {
-    // this.getTypeData()
-    // this.getPaymentData()
+    compareDate
+    this.getExchangeRate()
   },
   methods: {
     initItems() {
@@ -205,7 +212,16 @@ export default {
         },
       ]
     },
-
+    getExchangeRate() {
+      findExchanges
+        .callPromise({})
+        .then(result => {
+          this.exchangeRate = result[0].khr
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     handlePaymentChange(item) {
       this.itemsProp = item
     },
@@ -253,13 +269,6 @@ export default {
             this.form.payDate = result[0].classDetail[0].endPayDate
             this.form.classId = result[0].classDetail[0].classId
             this.form.lastId = result[0].classDetail[0]._id
-            // this.dataTable = []
-            // _.forEach(result[0].classDetail, o => {
-            //   this.studentIdOpts.push({
-            //     label: o.studentId + ' - ' + o.student,
-            //     value: o.studentId,
-            //   })
-            // })
           } else {
             this.studentIdOpts = []
           }
@@ -295,6 +304,9 @@ export default {
           if (this.itemsProp[0].remaining != 0) {
             this.form.status = 'Debt'
           }
+          let totalRecieve =
+            this.itemsProp[0].usd + this.itemsProp[0].khr / this.exchangeRate
+
           let Payment = {
             tranDate: moment().toDate(),
             refType: this.form.refType,
@@ -311,9 +323,10 @@ export default {
             remaining: this.itemsProp[0].remaining,
             status: this.form.status,
             lastId: this.form.lastId,
-            fee: this.form.fee,
+            fee: parseInt(this.form.fee),
+            totalRecieve: totalRecieve,
           }
-          // console.log(Payment)
+
           insertPayment
             .callPromise({ doc: Payment })
             .then(result => {

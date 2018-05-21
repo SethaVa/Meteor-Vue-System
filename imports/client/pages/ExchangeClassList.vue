@@ -1,13 +1,14 @@
 <template>
   <div>
     <component :is="currentModal"
-               :update-doc="updateDoc"
+               :update-id="updateId"
                :visible="modalVisible"
                @modal-close="handleModalClose">
     </component>
     <!-- Table Data -->
     <!-- :action-col-def="actionColDef" -->
     <data-tables :data="tableData"
+                 v-loading="loading"
                  :actions-def="actionsDef"
                  :table-size="tableSize"
                  :table-props="tableProps">
@@ -17,10 +18,10 @@
                        :label="title.label"
                        sortable="custom">
         <template slot-scope="scope">
-          <!-- <label v-if="scope.props='classDate'">{{ formatDate(scope.props.classDate) }}</label>
+          <!-- <label v-if="scope.props='tranDate'">{{ formatDate(scope.props.tranDate) }}</label>
           <label v-else></label> -->
-          <span v-if="title.prop === 'classDate'">
-            {{ formatDate(scope.row.classDate) }}
+          <span v-if="title.prop === 'tranDate'">
+            {{ formatDate(scope.row.tranDate) }}
           </span>
           <span v-else-if="title.prop === 'timeStudy'">
             {{ formatTime(scope.row.timeStudy) }}
@@ -56,24 +57,33 @@
 </template>
 
 <script>
+import Notify from '/imports/client/libs/notify'
+import MsgBox from '/imports/client/libs/message'
+import moment from 'moment'
+//
 import ExchangeClassInsert from '../pages/ExchangeClassInsert.vue'
+import ExchangeClassUpdate from '../pages/ExchangeClassUpdate.vue'
+import {
+  findExchangeClass,
+  removeExchangeClass,
+} from '../../api/exchange-class/methods'
 export default {
   data() {
     return {
+      loading: false,
       currentModal: null,
       modalVisible: false,
-      updateDoc: null,
+      updateId: null,
       tableSize: 'mini',
       tableData: [],
       titles: [
         // { label: 'ID', prop: '_id' },
-        { label: 'Date', prop: 'classDate' },
-        { label: 'Room', prop: 'roomName' },
-        { label: 'Teacher', prop: 'teacher' },
-        { label: 'Subject', prop: 'subject' },
-        { label: 'Time', prop: 'timeStudy' },
-        { label: 'Type', prop: 'type' },
-        { label: 'Status', prop: 'status' },
+        { label: 'Date', prop: 'tranDate' },
+        { label: 'From', prop: 'fromRoom' },
+        { label: 'To', prop: 'toRoom' },
+        { label: 'Student', prop: 'name' },
+        // { label: 'Type', prop: 'type' },
+        // { label: 'Status', prop: 'status' },
       ],
       tableProps: {
         size: 'mini',
@@ -104,17 +114,78 @@ export default {
       },
     }
   },
+  mounted() {
+    this.getData()
+  },
   methods: {
+    getData() {
+      this.loading = true
+      findExchangeClass
+        .callPromise({})
+        .then(result => {
+          this.tableData = result
+          this.loading = false
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
+    handleCommand(command) {
+      if (command.action === 'edit') {
+        // this.route({ name: 'register-new' })
+        this.updateId = command.row._id
+        this.modalVisible = true
+        this.currentModal = ExchangeClassUpdate
+
+        // this.modalVisible = true
+        // this.currentModal = ClassUpdate
+        // this.updateId = command.row._id
+        // this.currentDialog = RegisterUpdate
+      } else if (command.action === 'remove') {
+        this.$confirm('Do you want delete this record?', 'Warning', {
+          type: 'warning',
+        })
+          .then(result => {
+            if (result) {
+              let id = command.row._id
+              removeExchangeClass
+                .callPromise({ _id: id })
+                .then(result => {
+                  if (result) {
+                    MsgBox.success()
+                  }
+                })
+                .catch(err => {
+                  Notify.error({ message: err.reason + 'Error' })
+                })
+              this.getData()
+            }
+          })
+          .catch(err => {
+            Notify.error({ message: err.reason })
+          })
+      }
+    },
     handleModalClose() {
-      // this.getData()
+      this.getData()
       this.modalVisible = false
       this.$nextTick(() => {
         this.currentModal = null
       })
     },
+    formatDate(val) {
+      return moment(val).format('DD/MM/YYYY')
+    },
   },
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 10px;
+}
 </style>
