@@ -26,6 +26,7 @@
 
 <script>
 import { Meteor } from 'meteor/meteor'
+import { Session } from 'meteor/session'
 import _ from 'lodash'
 import { appLog } from '../../api/app-logs/methods.js'
 import { mapState } from 'vuex'
@@ -74,9 +75,14 @@ export default {
               })
               .then(result => {
                 if (result) {
+                  // console.log(result)
+                  // console.log(Meteor.user())
+                  // // console.log(Meteor.user().username)
+                  // Session.set('username', Meteor.user().username)
                   this.$store.commit('app/updateCurrentUser', Meteor.user())
-                  this.$message.success('You are login!')
+                  // this.$message.success('You are login!')
                   this.$router.push({ name: 'home' })
+                  // console.log(Session.get('username'))
                 }
               })
               .catch(err => {

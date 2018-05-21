@@ -160,31 +160,26 @@ export default {
     handleCommand(command) {
       if (command.action === 'edit') {
         // this.route({ name: 'register-new' })
-        this.updateId = command.row._id
+        this.updateDoc = command.row
         this.modalVisible = true
-        // this.currentModal = ExchangeClassUpdate
-
-        // this.modalVisible = true
-        // this.currentModal = ClassUpdate
-        // this.updateId = command.row._id
-        // this.currentDialog = RegisterUpdate
+        this.currentModal = StudentUpdate
       } else if (command.action === 'remove') {
         this.$confirm('Do you want delete this record?', 'Warning', {
           type: 'warning',
         })
           .then(result => {
             if (result) {
-              // let id = command.row._id
-              // removeExchangeClass
-              //   .callPromise({ _id: id })
-              //   .then(result => {
-              //     if (result) {
-              //       MsgBox.success()
-              //     }
-              //   })
-              //   .catch(err => {
-              //     Notify.error({ message: err.reason + 'Error' })
-              //   })
+              let id = command.row._id
+              removeStudent
+                .callPromise({ _id: id })
+                .then(result => {
+                  if (result) {
+                    Msg.success()
+                  }
+                })
+                .catch(err => {
+                  Notify.error({ message: err.reason + ' Error' })
+                })
               this.getData()
             }
           })

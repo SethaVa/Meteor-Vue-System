@@ -65,6 +65,11 @@ const routes = [
       notRequiresAuth: true,
       headerTitle: 'Login',
     },
+    // meta: {
+    //   layout: 'login',
+    //   notRequiresAuth: true,
+    //   pageTitle: 'Login',
+    // },
   },
 
   {

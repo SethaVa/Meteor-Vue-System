@@ -1,4 +1,6 @@
-import { Session } from 'meteor/session'
+import {
+  Session
+} from 'meteor/session'
 import _ from 'lodash'
 
 const app = {
@@ -14,9 +16,9 @@ const app = {
     // langUI(state) {
     //     return state.lang == 'en' ? 'KH' : 'EN';
     // },
-    currentBranchId(state) {
-      return state.currentBranch ? state.currentBranch._id : null
-    },
+    // currentBranchId(state) {
+    //   return state.currentBranch ? state.currentBranch._id : null
+    // },
     userFullName(state) {
       return state.currentUser ? state.currentUser.profile.fullName : 'Unknown'
     },

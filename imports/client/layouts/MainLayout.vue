@@ -76,6 +76,7 @@ import _ from 'lodash'
 import AsideMenu from '../AsideMenu.vue'
 import HeaderMenu from '../HeaderMenu.vue'
 import AsideMenuUser from '../AsideMenuUser.vue'
+import { Session } from 'meteor/session'
 
 import { appLog } from '../../api/app-logs/methods.js'
 import { mapState } from 'vuex'
@@ -88,6 +89,7 @@ export default {
   },
   data() {
     return {
+      // userFullName: Session.get('username'),
       title: this.headerTitle,
       currentAsideMenu: AsideMenu,
       currentHeaderMenu: HeaderMenu,
@@ -104,6 +106,7 @@ export default {
       userFullName() {
         let data = this.$store.getters['app/userFullName']
         return data
+        // return
       },
     }),
     headerTitle() {

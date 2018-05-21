@@ -1,6 +1,8 @@
 // Import client startup through a single index entry point
 
-import { Meteor } from 'meteor/meteor'
+import {
+  Meteor
+} from 'meteor/meteor'
 import Vue from 'vue'
 import _ from 'lodash'
 
@@ -31,6 +33,11 @@ Vue.use(DataTables)
 import Meta from 'vue-meta'
 Vue.use(Meta)
 
+// Router Sync
+import {
+  sync
+} from 'vuex-router-sync'
+
 //---------- Vuex Store ----------
 import store from '../../client/store/index'
 
@@ -45,6 +52,10 @@ const router = new VueRouter({
   routes: routes,
 })
 
+
+// Sync the router with the vuex store
+sync(store, router)
+
 // --------------App layout component---------------
 
 import App from '../../client/layouts/AppLayout.vue'
@@ -57,7 +68,9 @@ Meteor.startup(() => {
     if (!to.meta.notRequiresAuth) {
       // Check user
       if (!Meteor.loggingIn() && !Meteor.userId()) {
-        next({ path: '/login' })
+        next({
+          path: '/login'
+        })
       } else {
         next()
       }
