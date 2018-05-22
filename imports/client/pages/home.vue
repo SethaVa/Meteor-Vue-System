@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import compareDate from '/imports/libs/compare-date'
 import moment from 'moment'
 import { mapState } from 'vuex'
@@ -36,6 +37,7 @@ export default {
       address: 'No. 189, Grove St, Los Angeles',
     }
     return {
+      userDoc:{},
       chartData: '',
       chartSettings: '',
       chartSettings1: '',
@@ -46,10 +48,8 @@ export default {
   computed: {
     ...mapState({
       currentUser(state) {
-        console.log(state.app.currentUser)
         return state.app.currentUser // object
       },
-      // currentUser: state => state.app.currentUser,
     }),
     // currentBranch(state) {
     //   const branch = state.app.currentBranch
@@ -59,12 +59,12 @@ export default {
     // },
     userFullName() {
       return this.$store.getters['app/userFullName']
-      // let data = this.$store.getters['app/userFullName']
-      // console.log(data)
-      // return data
     },
   },
   created() {
+    this.userDoc= _.clone(Session.get('UserDoc'))
+    console.log('userDoc ',this.userDoc)
+    console.log('Session.get ',Session.get('UserDoc'))
     let d1 = moment(moment().toDate()).format('L')
     // check student on time to pay
     compareDate()
