@@ -7,6 +7,49 @@
         <i class="fa fa-tachometer"></i>
         <span>Dashboad</span>
       </el-menu-item>
+      <!-- //======================== // Student //======================== -->
+      <el-submenu index="student">
+        <template slot="title">
+          <i class="fa fa-users"></i>
+          Student
+        </template>
+        <el-menu-item index="student">
+          <i class="fa fa-home"></i>
+          <span>Student</span>
+        </el-menu-item>
+        <el-menu-item index="registerList">
+          <i class="fa fa-home"></i>
+          <span>Register</span>
+        </el-menu-item>
+      </el-submenu>
+
+      <!-- //===============================// Payment //===================== -->
+      <el-submenu index="payment">
+        <template slot="title">
+          <i class="fa fa-users"></i>
+          Payment
+        </template>
+        <el-menu-item index="payment">
+          <i class="fa fa-home"></i>
+          <span>Payment</span>
+        </el-menu-item>
+        <el-menu-item index="refund">
+          <i class="fa fa-home"></i>
+          <span>Refund</span>
+        </el-menu-item>
+      </el-submenu>
+
+      <!-- //========================// Accounting //====================== -->
+      <el-submenu index="account">
+        <template slot="title">
+          <i class="fa fa-home"></i>Account
+        </template>
+        <el-menu-item index="income">
+          <i class="fa fa-home"></i>
+          <span>Income</span>
+        </el-menu-item>
+      </el-submenu>
+
       <!-- // Staff -->
       <el-submenu index="staff">
         <template slot="title">
@@ -21,6 +64,51 @@
           <span>Staff</span>
         </el-menu-item>
       </el-submenu>
+      <!-- //=========================== // Report //=========================== -->
+      <el-submenu index="report">
+        <template slot="title">
+          <i class="fa fa-home"></i>Report
+        </template>
+        <el-menu-item index="student-all">
+          <i class="fa fa-home"></i>
+          <span>All Student</span>
+        </el-menu-item>
+        <el-menu-item index="classDetails">
+          <i class="fa fa-home"></i>
+          <span>Class Details</span>
+        </el-menu-item>
+        <el-menu-item index="daily">
+          <i class="fa fa-home"></i>
+          <span>Daily Report</span>
+        </el-menu-item>
+        <el-menu-item index="monthly-report">
+          <i class="fa fa-home"></i>
+          <span>Monthly Report</span>
+        </el-menu-item>
+        <el-menu-item index="salary">
+          <i class="fa fa-home"></i>
+          <span>Salary</span>
+        </el-menu-item>
+      </el-submenu>
+      <!-- //========================== // Setting //========================== -->
+      <el-submenu index="stting">
+        <template slot="title">
+          <i class="fa fa-home"></i>Setting
+        </template>
+        <el-menu-item index="time">
+          <i class="fa fa-home"></i>
+          <span>Time</span>
+        </el-menu-item>
+        <el-menu-item index="exchange">
+          <i class="fa fa-home"></i>
+          <span>Exchange</span>
+        </el-menu-item>
+        <el-menu-item index="salary-rate">
+          <i class="fa fa-home"></i>
+          <span>Rate</span>
+        </el-menu-item>
+      </el-submenu>
+
       <el-menu-item index="subject">
         <i class="fa fa-home"></i>
         <span>Subject</span>
@@ -35,62 +123,12 @@
         <i class="fa fa-home"></i>
         <span>Class Study</span>
       </el-menu-item>
-      <el-menu-item index="time">
-        <i class="fa fa-home"></i>
-        <span>Time</span>
-      </el-menu-item>
-      <el-menu-item index="registerList">
-        <i class="fa fa-home"></i>
-        <span>Register</span>
-      </el-menu-item>
-      <el-menu-item index="payment">
-        <i class="fa fa-home"></i>
-        <span>Payment</span>
-      </el-menu-item>
-      <el-menu-item index="student">
-        <i class="fa fa-home"></i>
-        <span>Student</span>
-      </el-menu-item>
+
       <el-menu-item index="exchange-class">
         <i class="fa fa-home"></i>
         <span>Exchange Class</span>
       </el-menu-item>
-      <el-menu-item index="classDetails">
-        <i class="fa fa-home"></i>
-        <span>Class Details</span>
-      </el-menu-item>
-      <el-menu-item index="student-all">
-        <i class="fa fa-home"></i>
-        <span>All Student</span>
-      </el-menu-item>
-      <el-menu-item index="daily">
-        <i class="fa fa-home"></i>
-        <span>Daily Report</span>
-      </el-menu-item>
-      <el-menu-item index="monthly-report">
-        <i class="fa fa-home"></i>
-        <span>Monthly Report</span>
-      </el-menu-item>
-      <el-menu-item index="refund">
-        <i class="fa fa-home"></i>
-        <span>Refund</span>
-      </el-menu-item>
-      <el-menu-item index="salary">
-        <i class="fa fa-home"></i>
-        <span>Salary</span>
-      </el-menu-item>
-      <el-menu-item index="income">
-        <i class="fa fa-home"></i>
-        <span>Income</span>
-      </el-menu-item>
-      <el-menu-item index="exchange">
-        <i class="fa fa-home"></i>
-        <span>Exchange</span>
-      </el-menu-item>
-      <el-menu-item index="salary-rate">
-        <i class="fa fa-home"></i>
-        <span>Rate</span>
-      </el-menu-item>
+
     </el-menu>
   </div>
 </template>

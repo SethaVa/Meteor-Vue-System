@@ -99,16 +99,13 @@ export default {
 
   computed: {
     ...mapState({
-      // currentUser(state) {
-      //   console.log(state.app.currentUser)
-      //   return state.app.currentUser // object
-      // },
-      userFullName() {
-        let data = this.$store.getters['app/userFullName']
-        return data
-        // return
+      currentUser(state) {
+        return state.app.currentUser // object
       },
     }),
+    userFullName() {
+      return this.$store.getters['app/userFullName']
+    },
     headerTitle() {
       let title = 'No TiTle'
       title = this.$route.meta.headerTitle
@@ -192,14 +189,15 @@ a:-webkit-any-link {
   }
 }
 .header-menu {
-  background-color: #409eff;
-  color: #d4d4d4;
+  // background-color: #409eff;
+  background-color: rgb(26, 170, 236);
+  color: #ffffff;
   line-height: 55px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   height: 55px !important;
   .header-title {
     font-size: 24px;
-    font-weight: 400;
+    font-weight: 500;
     padding-right: 10px;
     line-height: 50px;
   }
