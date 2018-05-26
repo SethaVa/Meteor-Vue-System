@@ -93,9 +93,9 @@ export default {
             // console.log(result)
             // console.log(Meteor.user())
             // // console.log(Meteor.user().username)
-            Session.set('UserDoc', Meteor.user())
+            // Session.set('UserDoc', Meteor.user())
             // this.userName= Meteor.user().username
-            // this.$store.commit('app/updateCurrentUser', Meteor.user())
+            this.$store.commit('app/updateCurrentUser', Meteor.user())
             this.$message.success('You are login!')
             this.$router.push({ name: 'home' })
             // console.log(Session.get('username'))

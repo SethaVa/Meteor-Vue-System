@@ -1,27 +1,113 @@
 <template>
   <div>
-    <el-row :gutter="10">
-      <el-col :span="6" ><el-card :body-style="{ padding: '0px' }" >
-        <i class="fa fa-user-plus image"></i>
-        <!-- <img src="img/logo.png" class="image"> -->
-        <div style="padding: 14px;">
-          <span>Student</span>
-          <div class="bottom clearfix">
-            <time class="time">{{ currentDate }}</time>
-            <el-button type="text" class="button">Operating button</el-button>
-          </div>
-        </div>
-      </el-card></el-col>
-      <el-col :span="6" ><el-card shadow="hover">
-        Hover
-      </el-card></el-col>
-      <el-col :span="6" ><el-card shadow="hover">
-        Hover
-      </el-card></el-col>
-      <el-col :span="6" ><el-card shadow="hover">
-        Hover
-      </el-card></el-col>
-    </el-row>
+    <div class="dashbord">
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-card :body-style="{ padding: '0px' }"
+                   style="background-color:#FF512F">
+
+            <div class="box-info clearfix">
+              <span class="title">Student</span>
+
+              <div class="bottom">
+                <span class="time">Total </span>
+                <span class="info">{{ totalStudent }}</span>
+              </div>
+
+            </div>
+            <i class="fa fa-user-plus"></i>
+
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card :body-style="{ padding: '0px' }"
+                   style="background-color:#FF416C">
+            <div class="box-info clearfix">
+              <span class="title">Student</span>
+
+              <div class="bottom">
+                <span class="time">Total </span>
+                <span class="info">{{ totalStudent }}</span>
+              </div>
+
+            </div>
+            <i class="fa fa-users"></i>
+
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card :body-style="{ padding: '0px' }"
+                   style="background-color:#4A00E0">
+            <div class="box-info clearfix">
+              <span class="title">Student</span>
+
+              <div class="bottom">
+                <span class="time">Total </span>
+                <span class="info">{{ totalStudent }}</span>
+              </div>
+
+            </div>
+            <i class="fa fa-book"></i>
+
+          </el-card>
+        </el-col>
+
+      </el-row>
+    </div>
+    <div class="dashbord">
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-card :body-style="{ padding: '0px' }"
+                   style="background-color:#1E9600">
+            <div class="box-info clearfix">
+              <span class="title">Student</span>
+
+              <div class="bottom">
+                <span class="time">Total </span>
+                <span class="info">{{ totalStudent }}</span>
+              </div>
+
+            </div>
+            <i class="fa fa-address-book"></i>
+
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card :body-style="{ padding: '0px' }"
+                   style="background-color:red">
+            <div class="box-info clearfix">
+              <span class="title">Student</span>
+
+              <div class="bottom">
+                <span class="time">Total </span>
+                <span class="info">{{ totalStudent }}</span>
+              </div>
+
+            </div>
+            <i class="fa fa-user-plus"></i>
+
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card :body-style="{ padding: '0px' }"
+                   style="background-color:pink">
+            <div class="box-info clearfix">
+              <span class="title">Student</span>
+
+              <div class="bottom">
+                <span class="time">Total </span>
+                <span class="info">{{ totalStudent }}</span>
+              </div>
+
+            </div>
+            <i class="fa fa-user-plus"></i>
+
+          </el-card>
+        </el-col>
+
+      </el-row>
+    </div>
+
     <!-- <data-tables :data="tableData" >
         <el-table-column prop="date" label="Date" width="140" sortable="custom" >
         </el-table-column>
@@ -54,6 +140,8 @@ import json2csv from 'json2csv'
 import moment from 'moment'
 import { mapState } from 'vuex'
 import { Session } from 'meteor/session'
+//==================================================
+import { countStudents } from '../../api/students/methods'
 export default {
   name: 'Home',
   data() {
@@ -68,6 +156,7 @@ export default {
       chartSettings: '',
       chartSettings1: '',
       name: '',
+      totalStudent: 0,
       tableData: Array(20).fill(item),
     }
   },
@@ -88,12 +177,12 @@ export default {
     },
   },
   created() {
-    this.userDoc = _.clone(Session.get('UserDoc'))
-    console.log('userDoc ', this.userDoc)
-    console.log('Session.get ', Session.get('UserDoc'))
-    let d1 = moment(moment().toDate()).format('L')
+    this.getStudentData()
+
     // check student on time to pay
     compareDate()
+
+    // chart
     this.chartData = {
       columns: ['Total', 'Gender'],
       rows: [
@@ -107,7 +196,7 @@ export default {
         },
       ],
     }
-    ;(this.chartSettings = {
+    this.chartSettings = {
       dimension: 'Gender',
       metrics: 'Total',
       // dataType: 'KMB',
@@ -115,13 +204,24 @@ export default {
       hoverAnimation: false,
       radius: 100,
       offsetY: 200,
-    }),
-      (this.chartSettings1 = {
-        metrics: ['Total', 'Gender'],
-        dimension: ['Gender'],
-      })
+    }
+    this.chartSettings1 = {
+      metrics: ['Total', 'Gender'],
+      dimension: ['Gender'],
+    }
   },
   methods: {
+    getStudentData() {
+      countStudents
+        .callPromise({})
+        .then(result => {
+          console.log(result)
+          this.totalStudent = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     handleExport() {
       const Json2csvParser = require('json2csv').Parser
       try {
@@ -161,7 +261,6 @@ export default {
         // console.log(csv)
         Notify.success({ message: 'Success' })
       } catch (error) {
-        console.log(error.reason)
         Notify.error({ message: error })
       }
     },
@@ -169,35 +268,67 @@ export default {
 }
 </script>
 
-<style>
-.time {
-    font-size: 13px;
-    color: #999;
+<style lang="scss" scoped>
+.dashbord {
+  margin-top: 3vh;
+  max-width: 100%;
+  height: auto;
+  .time {
+    font-size: 20px;
+    color: beige;
+    font-weight: 600;
   }
-  
+
   .bottom {
     margin-top: 13px;
     line-height: 12px;
+    display: block;
   }
 
-  .button {
+  .info {
     padding: 0;
+    color: beige;
+    font-size: 20px;
+    font-weight: 600;
     float: right;
   }
 
   .image {
     /* width: 100%; */
-    width:100vh;
+    width: 100vh;
     display: block;
   }
 
   .clearfix:before,
   .clearfix:after {
-      display: table;
-      content: "";
+    display: table;
+    content: '';
   }
-  
   .clearfix:after {
-      clear: both
+    clear: both;
   }
+  .box-info {
+    // position: absolute;
+    float: left;
+    padding: 14px;
+  }
+  .fa {
+    font-size: 400%;
+    /* padding: 2vh; */
+    opacity: 0.2;
+    top: 0;
+    float: right;
+    // color: dimgray;
+    color: black;
+    // position: relative;
+  }
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    color: black;
+    text-transform: uppercase;
+
+    /* font-style: italic; */
+  }
+}
 </style>
