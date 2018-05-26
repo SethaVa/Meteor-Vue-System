@@ -10,27 +10,36 @@
       <!-- //======================== // Student //======================== -->
       <el-submenu index="student">
         <template slot="title">
-          <i class="fa fa-users"></i>
+          <i class="fa fa-graduation-cap"></i>
           Student
         </template>
         <el-menu-item index="student">
-          <i class="fa fa-home"></i>
+          <i class="fa fa-user-plus"></i>
           <span>Student</span>
         </el-menu-item>
         <el-menu-item index="registerList">
-          <i class="fa fa-home"></i>
+          <i class="fa fa-registered"></i>
           <span>Register</span>
+        </el-menu-item>
+        <el-menu-item index="classStudy">
+          <i class="el-icon-menu"></i>
+          <span>Class Study</span>
+        </el-menu-item>
+
+        <el-menu-item index="exchange-class">
+          <i class="fa fa-exchange"></i>
+          <span>Change Class</span>
         </el-menu-item>
       </el-submenu>
 
       <!-- //===============================// Payment //===================== -->
       <el-submenu index="payment">
         <template slot="title">
-          <i class="fa fa-users"></i>
+          <i class="fa fa-money"></i>
           Payment
         </template>
         <el-menu-item index="payment">
-          <i class="fa fa-home"></i>
+          <i class="el-icon-menu"></i>
           <span>Payment</span>
         </el-menu-item>
         <el-menu-item index="refund">
@@ -50,24 +59,24 @@
         </el-menu-item>
       </el-submenu>
 
-      <!-- // Staff -->
+      <!-- //==================================// Staff //====================== -->
       <el-submenu index="staff">
         <template slot="title">
-          <i class="fa fa-home"></i>staff
+          <i class="fa fa-users"></i>staff
         </template>
         <el-menu-item index="position">
           <i class="fa fa-home"></i>
           <span>Position</span>
         </el-menu-item>
         <el-menu-item index="staff">
-          <i class="fa fa-home"></i>
+          <i class="fa fa-user-plus"></i>
           <span>Staff</span>
         </el-menu-item>
       </el-submenu>
       <!-- //=========================== // Report //=========================== -->
       <el-submenu index="report">
         <template slot="title">
-          <i class="fa fa-home"></i>Report
+          <i class="fa fa-file-pdf-o"></i>Report
         </template>
         <el-menu-item index="student-all">
           <i class="fa fa-home"></i>
@@ -93,40 +102,29 @@
       <!-- //========================== // Setting //========================== -->
       <el-submenu index="stting">
         <template slot="title">
-          <i class="fa fa-home"></i>Setting
+          <i class="fa fa-cogs"></i>Setting
         </template>
         <el-menu-item index="time">
-          <i class="fa fa-home"></i>
+          <i class="fa fa-clock-o"></i>
           <span>Time</span>
         </el-menu-item>
         <el-menu-item index="exchange">
-          <i class="fa fa-home"></i>
+          <i class="fa fa-exchange"></i>
           <span>Exchange</span>
         </el-menu-item>
         <el-menu-item index="salary-rate">
-          <i class="fa fa-home"></i>
+          <i class="fa fa-money"></i>
           <span>Rate</span>
+        </el-menu-item>
+        <el-menu-item index="room">
+          <i class="fa fa-windows"></i>
+          <span>Room</span>
         </el-menu-item>
       </el-submenu>
 
       <el-menu-item index="subject">
-        <i class="fa fa-home"></i>
+        <i class="fa fa-book"></i>
         <span>Subject</span>
-      </el-menu-item>
-
-      <el-menu-item index="room">
-        <i class="fa fa-home"></i>
-        <span>Room</span>
-      </el-menu-item>
-
-      <el-menu-item index="classStudy">
-        <i class="fa fa-home"></i>
-        <span>Class Study</span>
-      </el-menu-item>
-
-      <el-menu-item index="exchange-class">
-        <i class="fa fa-home"></i>
-        <span>Exchange Class</span>
       </el-menu-item>
 
     </el-menu>

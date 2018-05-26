@@ -10,13 +10,15 @@
       </div>
 
       <!-- <span v-if="true">
-              <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
-              <component :is="currentAsideMenu" :active-menu="linkActiveClass"></component>
-          </span>
-          <span v-else>
-            <aside-menu :active-menu="linkActiveClass"></aside-menu>
-            <component :is="currentAsideMenu" :active-menu="linkActiveClass"></component>
-          </span> -->
+        <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
+        <component :is="currentAsideMenu"
+                   :active-menu="linkActiveClass"></component>
+      </span>
+      <span v-else>
+        <aside-menu :active-menu="linkActiveClass"></aside-menu>
+        <component :is="currentAsideMenu"
+                   :active-menu="linkActiveClass"></component>
+      </span> -->
       <!-- @select="handleHomeSelect" -->
 
       <component :is="currentAsideMenu"
