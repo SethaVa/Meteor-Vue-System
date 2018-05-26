@@ -26,19 +26,6 @@ PaymentDetails.schema = new SimpleSchema({
   pay: {
     type: Number,
   },
-  // discountVal: {
-  //   type: Number,
-  //   defaultValue: 0,
-  // },
-  // usd: {
-  //   type: Number,
-  //   defaultValue: 0,
-  // },
-  // khr: {
-  //   type: Number,
-  //   defaultValue: 0,
-  // },
-  // Check PaymentDetailss
   status: {
     type: String,
     allowedValues: ['Paid', 'Debt', 'Expires', 'Closed'],
@@ -46,11 +33,7 @@ PaymentDetails.schema = new SimpleSchema({
   type: {
     type: String,
   },
-  // for PaymentDetails
-  // lastId: {
-  //   type: String,
-  //   optional: true,
-  // },
+
 })
 
 PaymentDetails.attachSchema(PaymentDetails.schema)
