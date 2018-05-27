@@ -42,7 +42,9 @@ export const countStudents = new ValidatedMethod({
     selector
   }) {
     if (Meteor.isServer) {
-      selector = selector || {}
+      selector = selector || {
+        remove: false
+      }
 
       return Students.find(selector).count()
     }
@@ -91,7 +93,8 @@ export const insertStudent = new ValidatedMethod({
   }) {
     if (Meteor.isServer) {
       try {
-        return Students.insert(doc)
+        Students.insert(doc)
+        return 'Success'
       } catch (error) {
         throw new Meteor.Error('Error', 'Payment', error.reason)
       }

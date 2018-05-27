@@ -86,6 +86,14 @@
           <i class="fa fa-home"></i>
           <span>Class Details</span>
         </el-menu-item>
+        <el-menu-item index="subject-report">
+          <i class="fa fa-book"></i>
+          <span>Subject</span>
+        </el-menu-item>
+        <el-menu-item index="staff-report">
+          <i class="fa fa-home"></i>
+          <span>Staff</span>
+        </el-menu-item>
         <el-menu-item index="daily">
           <i class="fa fa-home"></i>
           <span>Daily Report</span>

@@ -1,7 +1,15 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
+import {
+  RestMethodMixin
+} from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
 import Staff from './staff'
@@ -16,8 +24,6 @@ export const findStaff = new ValidatedMethod({
   validate: null,
   run() {
     if (Meteor.isServer) {
-      // selector = selector || {};
-      // sort = sort || {_id:-1};
 
       return aggregateStaff()
     }
@@ -29,7 +35,9 @@ export const findOneStaffDetails = new ValidatedMethod({
   name: 'findOneStaffDetails',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       // sort = sort || {_id:-1};
@@ -65,7 +73,10 @@ export const findOneStaff = new ValidatedMethod({
   name: 'findOneStaff',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector, options }) {
+  run({
+    selector,
+    options
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       options = options || {}
@@ -80,13 +91,17 @@ export const findStaffSalary = new ValidatedMethod({
   name: 'findStaffSalary',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      const salaryRate = SalaryRate.find(
-        {},
-        { sort: { _id: -1 }, limit: 1 }
-      ).fetch()
+      const salaryRate = SalaryRate.find({}, {
+        sort: {
+          _id: -1
+        },
+        limit: 1
+      }).fetch()
 
       let partTiemRate = salaryRate[0].partTime
 
@@ -117,7 +132,11 @@ export const updateStaff = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return Staff.update({ _id: doc._id }, { $set: doc })
+      return Staff.update({
+        _id: doc._id
+      }, {
+        $set: doc
+      })
     }
   },
 })
@@ -173,8 +192,7 @@ const aggregateStaff = () => {
 
 // For find Teacher Detail
 const aggregatefindStaffDetails = selector => {
-  let data = ClassStudy.aggregate([
-    {
+  let data = ClassStudy.aggregate([{
       $match: selector,
     },
     {
@@ -250,10 +268,18 @@ const aggregatefindStaffDetails = selector => {
     {
       $group: {
         _id: '$staffId',
-        name: { $last: '$staffDoc.name' },
-        gender: { $last: '$staffDoc.gender' },
-        email: { $last: '$staffDoc.email' },
-        tel: { $last: '$staffDoc.tel' },
+        name: {
+          $last: '$staffDoc.name'
+        },
+        gender: {
+          $last: '$staffDoc.gender'
+        },
+        email: {
+          $last: '$staffDoc.email'
+        },
+        tel: {
+          $last: '$staffDoc.tel'
+        },
         teacherDetail: {
           $push: {
             room: '$roomDoc.roomName',
@@ -281,8 +307,7 @@ const aggregatefindStaffDetails = selector => {
 
 // Salary Aggregate
 const aggregateFindStaffSalary = (selector, rateSalary) => {
-  let data = Payment.aggregate([
-    {
+  let data = Payment.aggregate([{
       $match: {
         status: 'Paid',
       },
@@ -308,7 +333,10 @@ const aggregateFindStaffSalary = (selector, rateSalary) => {
       },
     },
     {
-      $unwind: { path: '$typeDoc', preserveNullAndEmptyArrays: true },
+      $unwind: {
+        path: '$typeDoc',
+        preserveNullAndEmptyArrays: true
+      },
     },
     {
       $lookup: {
@@ -342,18 +370,31 @@ const aggregateFindStaffSalary = (selector, rateSalary) => {
     {
       $group: {
         _id: '$classId',
-        classId: { $last: '$classDoc._id' },
-        roomName: { $last: '$roomDoc.roomName' },
-        staffId: { $last: '$staffDoc._id' },
-        staffName: { $last: '$staffDoc.name' },
-        gender: { $last: '$staffDoc.gender' },
-        position: { $last: '$positionDoc.position' },
+        classId: {
+          $last: '$classDoc._id'
+        },
+        roomName: {
+          $last: '$roomDoc.roomName'
+        },
+        staffId: {
+          $last: '$staffDoc._id'
+        },
+        staffName: {
+          $last: '$staffDoc.name'
+        },
+        gender: {
+          $last: '$staffDoc.gender'
+        },
+        position: {
+          $last: '$positionDoc.position'
+        },
         // typeId: { $last: '$typeDoc._id' },
-        type: { $last: '$type' },
+        type: {
+          $last: '$type'
+        },
         total: {
           $sum: {
-            $divide: [
-              {
+            $divide: [{
                 $multiply: [
                   '$totalPay',
                   {
@@ -374,13 +415,25 @@ const aggregateFindStaffSalary = (selector, rateSalary) => {
     {
       $group: {
         _id: '$staffId',
-        classId: { $last: '$classId' },
+        classId: {
+          $last: '$classId'
+        },
         // roomName:{$last:'$roomName'},
-        staffId: { $last: '$staffId' },
-        staffName: { $last: '$staffName' },
-        gender: { $last: '$gender' },
-        position: { $last: '$position' },
-        type: { $last: '$type' },
+        staffId: {
+          $last: '$staffId'
+        },
+        staffName: {
+          $last: '$staffName'
+        },
+        gender: {
+          $last: '$gender'
+        },
+        position: {
+          $last: '$position'
+        },
+        type: {
+          $last: '$type'
+        },
         totalSalary: {
           $sum: '$total',
         },
@@ -406,5 +459,42 @@ const aggregateFindStaffSalary = (selector, rateSalary) => {
     },
   ])
 
+  return data
+}
+
+// aggregate Staff Report
+const aggregateStaffReport = selector => {
+  selector = selector || {}
+  let data = Staff.aggregate([
+    // {
+    //     $match: selector
+    // },     
+    {
+      $lookup: {
+        from: "position",
+        localField: "positionId",
+        foreignField: "_id",
+        as: "positionDoc"
+      }
+    },
+    {
+      $unwind: {
+        path: '$positionDoc',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $project: {
+        "_id": 1,
+        "name": 1,
+        "gender": 1,
+        "dob": 1,
+        "email": 1,
+        "tel": 1,
+        "positionId": 1,
+        position: '$positionDoc.position'
+      }
+    }
+  ])
   return data
 }

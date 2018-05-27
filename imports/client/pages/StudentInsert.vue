@@ -134,8 +134,10 @@ export default {
           insertStudent
             .callPromise({ doc: this.form })
             .then(result => {
-              Msg.success()
-              this.resetForm()
+              if (result) {
+                Msg.success()
+                this.handelresetForm()
+              }
             })
             .catch(error => {
               Notify.error({ message: error })
@@ -149,8 +151,8 @@ export default {
     handleClose() {
       this.$emit('modal-close')
     },
-    resetForm() {
-      this.$refs['form'].resetFileds()
+    handelresetForm() {
+      this.$refs['form'].resetFields()
     },
   },
 }

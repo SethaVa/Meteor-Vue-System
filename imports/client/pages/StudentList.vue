@@ -154,7 +154,7 @@ export default {
           this.tableData = result
         })
         .catch(err => {
-          console.log(err.reason)
+          Notify.error({ message: err })
         })
     },
     handleCommand(command) {

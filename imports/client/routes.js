@@ -46,6 +46,9 @@ import ExchangeClass from './pages/ExchangeClassList.vue'
 import AllStudent from './reports/AllStudent'
 import DailyInEx from './reports/DailyReportInEx.vue';
 import MonthlyInEx from './reports/MonthlyReport.vue';
+import StaffReport from './reports/Staff.vue'
+import SubjectReport from './reports/Subject.vue';
+
 const routes = [
   //Notfound
   {
@@ -194,6 +197,17 @@ const routes = [
         name: 'student-all',
         component: AllStudent,
       },
+      {
+        path: 'staff-report',
+        name: 'staff-report',
+        component: StaffReport,
+      },
+      {
+        path: 'subject-report',
+        name: 'subject-report',
+        component: SubjectReport,
+      },
+      //
       {
         path: 'daily-report',
         name: 'daily',
