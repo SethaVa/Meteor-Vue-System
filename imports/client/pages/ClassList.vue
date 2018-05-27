@@ -111,6 +111,17 @@ export default {
               this.currentModal = ClassInsert
             },
           },
+          {
+            name: 'Finish Class',
+            icon: 'el-icon-plus',
+            buttonProps: {
+              size: 'mini',
+            },
+            handler: () => {
+              // this.modalVisible = true
+              // this.currentModal = ClassInsert
+            },
+          },
         ],
       },
     }
