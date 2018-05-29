@@ -77,13 +77,12 @@
           </span>
           <el-row :gutter="10">
             <el-col :span="12">
-              <el-form-item label="Base On :">
-            <!-- style="margin-left:100px;"  -->
+              <!-- <el-form-item label="Base On :">
               <el-radio-group @change="handleBaseOnChange" v-model="checkBaseOn">
                 <el-radio label="usd">USD</el-radio>
                 <el-radio label="khr">KHR</el-radio>
               </el-radio-group>
-            </el-form-item>
+            </el-form-item> -->
               <el-form-item label="Fee"
                             prop="fee">
                 <el-input style="width:100%"

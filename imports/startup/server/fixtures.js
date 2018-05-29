@@ -52,48 +52,69 @@ if (Meteor.isDevelopment) {
 
   // User
   const users = [{
-      username: 'admin',
-      email: 'admin@bad.com',
-      password: 'admin',
+      username: "super",
+      email: "super@super.com",
+      password: "123456",
       profile: {
-        fullName: 'Admin',
-        branchPermissions: ['001'],
-        roleGroup: 'administrator',
+        fullName: "Super",
+        branchPermissions: ["001"]
       },
-      roles: ['companyUpdate'],
+      roles: "super"
     },
     {
-      username: 'vy',
-      email: 'vy@gmail.com',
-      password: '123456',
+      username: "admin",
+      email: "admin@admin.com",
+      password: "123456",
       profile: {
-        fullName: 'Vy',
-        branchPermissions: ['001'],
-        roleGroup: 'user',
+        fullName: "Admin",
+        branchPermissions: ["001"]
       },
-      roles: ['companyUpdate'],
-    },
+      roles: "admin"
+    }
   ]
 
-  users.forEach(({
-    username,
-    email,
-    password,
-    profile,
-    roles
-  }) => {
-    const userExists = Meteor.users.findOne({
-      'emails.address': email
-    })
+  // users.forEach(({
+  //   username,
+  //   email,
+  //   password,
+  //   profile,
+  //   roles
+  // }) => {
+  //   const userExists = Meteor.users.findOne({
+  //     'emails.address': email
+  //   })
 
-    if (!userExists) {
-      const userId = Accounts.createUser({
-        username,
-        email,
-        password,
-        profile
-      })
-      Roles.addUsersToRoles(userId, roles)
-    }
-  })
+  //   if (!userExists) {
+  //     const userId = Accounts.createUser({
+  //       username,
+  //       email,
+  //       password,
+  //       profile
+  //     })
+  //     Roles.addUsersToRoles(userId, roles)
+  //   }
+  // })
+  // User
+  if (Meteor.users.find().count() === 0) {
+    // const data = EJSON.parse(Assets.getText('user-account.json'))
+    users.forEach(({
+      username,
+      email,
+      password,
+      profile,
+      roles
+    }) => {
+      const userExists = Accounts.findUserByUsername(username)
+
+      if (!userExists) {
+        const userId = Accounts.createUser({
+          username,
+          email,
+          password,
+          profile,
+        })
+        Roles.addUsersToRoles(userId, roles)
+      }
+    })
+  }
 }

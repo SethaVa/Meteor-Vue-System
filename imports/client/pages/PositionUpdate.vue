@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="Edit Teacher"
+    <el-dialog title="Edit Position"
                width="80%"
                :visible="visible"
                :before-close="handleClose">

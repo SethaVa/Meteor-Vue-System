@@ -28,7 +28,7 @@
           <el-button class="btn-login"
                      @click="submitForm"
                      type="primary">
-          <i class="fa fa-sign-in"></i>&nbsp;&nbsp;&nbsp;Login</el-button>
+          <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;&nbsp;Login</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -38,14 +38,40 @@
 <script>
 import { Meteor } from 'meteor/meteor'
 import { Session } from 'meteor/session'
+import Vuex from 'vuex'
 import _ from 'lodash'
 import { appLog } from '../../api/app-logs/methods.js'
 import { mapState } from 'vuex'
+
+// import Vue from 'vue'
+// import Vuex from 'vuex'
+
+// Vue.use(Vuex)
+
+// const share = new Vuex.Store({
+//   // modules: {
+//   //   app: app,
+//   // },
+//   state:{
+//     counter:1
+//   },
+//   getters:{
+//     getCounter(state){
+//       return counter++;
+//     }
+//   },
+//   mutations:{
+//     updateCurrentCounter (state, count) {
+//       state.counter = count
+//     },
+//   }
+// })
+
 export default {
   name: 'Login',
   data() {
     return {
-      userName:'',
+      userName: '',
       form: {
         email: '',
         password: '',
@@ -61,14 +87,14 @@ export default {
     }),
   },
   watch: {
-    currentUser(val) {
-      // Check user logged in
-      if (val) {
-        this.finishProgress('success', 1000)
-      }
-    },
+    // currentUser(val) {
+    //   // Check user logged in
+    //   if (val) {
+    //     this.finishProgress('success', 1000)
+    //   }
+    // },
   },
-  Meteor:{
+  Meteor: {
     // Session.set('username',this.userName);
   },
   methods: {
@@ -91,14 +117,11 @@ export default {
             //   .then(result => {
             //     if (result) {
             // console.log(result)
-            // console.log(Meteor.user())
-            // // console.log(Meteor.user().username)
-            // Session.set('UserDoc', Meteor.user())
-            // this.userName= Meteor.user().username
-            this.$store.commit('app/updateCurrentUser', Meteor.user())
+            
+            this.$store.commit('updateCurrentUser', Meteor.user())
             this.$message.success('You are login!')
             this.$router.push({ name: 'home' })
-            // console.log(Session.get('username'))
+            // // console.log(Session.get('username'))
             //   }
             // })
             // .catch(err => {
@@ -132,14 +155,14 @@ export default {
     }
   }
 }
-.btn-login{
-    width: 100%;
-    border: none;
-    border-radius: 3px;
-    font-size: 14 px;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
+.btn-login {
+  width: 100%;
+  border: none;
+  border-radius: 3px;
+  font-size: 14 px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
 /* .image{
     width: 30%;
     margin: 0 auto;

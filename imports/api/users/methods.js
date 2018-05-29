@@ -1,293 +1,182 @@
-import { Meteor } from 'meteor/meteor';
-import { Accounts } from 'meteor/accounts-base';
-import { Roles } from 'meteor/alanning:roles';
-import { ValidatedMethod } from 'meteor/mdg:validated-method';
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin';
-import SimpleSchema from 'simpl-schema';
-import _ from 'lodash';
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  Accounts
+} from 'meteor/accounts-base'
+import {
+  check
+} from 'meteor/check'
+import {
+  Roles
+} from 'meteor/alanning:roles'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
+import SimpleSchema from 'simpl-schema'
 
-import UserGroups from '../user-groups/user-groups';
+// import { userIsInRole, throwError } from '../../utils/security'
+// import rateLimit from '../../utils/rate-limit'
 
-// Schema
-let validateSchema = new SimpleSchema({
-    username: {
-        type: String,
-        min: 3
-    },
-    email: {
-        type: String
-    },
-    password: {
-        type: String,
-        min: 6
-    },
-    profile: {
-        type: Object
-    },
-    'profile.fullName': {
-        type: String
-    },
-    'profile.branchPermissions': {
-        type: Array
-    },
-    'profile.branchPermissions.$': {
-        type: String
-    },
-    'profile.roleGroup': {
-        type: String
-    },
-    roles: {
-        type: Array
-    },
-    'roles.$': {
-        type: String
-    },
-});
-
-// Datatable
-// export const userList = new ValidatedMethod({
-//     name: 'userList',
-//     mixins: [RestMethodMixin],
-//     validate: null,
-//     restOptions: {
-//         url: 'user-list',
-//         httpMethod: 'get',
-//         getArgsFromRequest: (req) => getArgsForDatatable(req)
-//     },
-//     run({ selector, options }) {
-//         if (!this.isSimulation) {
-//             // Meteor._sleepForMs(500);
-
-//             return {
-//                 count: Meteor.users.find(selector).count(),
-//                 data: Meteor.users.find(selector, options).fetch(),
-//             };
-//         }
-//     }
-// });
-
-// Find current user
-export const currentUser = new ValidatedMethod({
-    name: 'currentUser',
-    mixins: [CallPromiseMixin],
-    validate: null,
-    run() {
-        if (Meteor.isServer) {
-            // Meteor._sleepForMs(500);
-            return Meteor.user();
-        }
-    }
-});
-
+import {
+  UserInsertSchema,
+  UserUpdateSchema
+} from './users'
 
 // Find
-export const findOneUser = new ValidatedMethod({
-    name: 'findOneUser',
-    mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
-        _id: { type: String }
-    }).validator(),
-    run({ _id }) {
-        if (Meteor.isServer) {
-            // Meteor._sleepForMs(500);
-            return Meteor.users.findOne(_id);
-        }
+export const findUsers = new ValidatedMethod({
+  name: 'app.findUsers',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true,
+    },
+    options: {
+      type: Object,
+      blackbox: true,
+      optional: true,
+    },
+  }).validator(),
+  run({
+    selector,
+    options
+  }) {
+    if (Meteor.isServer) {
+      Meteor._sleepForMs(100)
+      return Meteor.users.find(selector, options).fetch()
     }
-});
+  },
+})
 
+// Find One
+export const findOneUser = new ValidatedMethod({
+  name: 'app.findOneUser',
+  mixins: [CallPromiseMixin],
+  validate(_id) {
+    check(_id, String)
+  },
+  run(_id) {
+    if (Meteor.isServer) {
+      Meteor._sleepForMs(100)
+      return Meteor.users.findOne(_id)
+    }
+  },
+})
 
 // Insert
 export const insertUser = new ValidatedMethod({
-    name: 'insertUser',
-    mixins: [CallPromiseMixin],
-    // validate: Users.schema.validator(),
-    validate: null,
-    run(doc) {
-        if (!this.isSimulation) {
-            // Check role
-            if (Roles.userIsInRole(Meteor.userId(), 'userInsert')) {
-                const user = {
-                    username: doc.username,
-                    email: doc.email,
-                    password: doc.password,
-                    profile: {
-                        fullName: doc.fullName,
-                        branchPermissions: doc.branchPermissions,
-                        roleGroup: doc.roleGroup,
-                    },
-                };
+  name: 'app.insertUser',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    user: UserInsertSchema,
+  }).validator(),
+  run({
+    user
+  }) {
+    if (Meteor.isServer) {
+      // Check role
+      // userIsInRole(['super', 'admin'])
 
-                const userId = Accounts.createUser(user);
-                Roles.addUsersToRoles(userId, doc.roles);
+      try {
+        // Add new user
+        const userId = Accounts.createUser({
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          profile: {
+            fullName: user.fullName,
+            branchPermissions: user.branchPermissions,
+            status: user.status,
+          },
+        })
+        // Add roles
+        Roles.addUsersToRoles(userId, user.roles)
 
-                return userId;
-            }
-
-            throw new Meteor.Error(403, "Access denied")
-        }
+        return userId
+      } catch (e) {
+        throwError(e)
+      }
     }
-});
+  },
+})
 
 // Update
 export const updateUser = new ValidatedMethod({
-    name: 'updateUser',
-    mixins: [CallPromiseMixin],
-    // validate: Users.schema.validator(),
-    validate: null,
-    run(doc) {
-        if (!this.isSimulation) {
-            // Check role
-            if (Roles.userIsInRole(Meteor.userId(), 'userUpdate')) {
-                let modifier = {
-                    username: doc.username,
-                    'emails.0.address': doc.email,
-                    profile: {
-                        fullName: doc.fullName,
-                        branchPermissions: doc.branchPermissions,
-                        roleGroup: doc.roleGroup,
-                    },
-                };
+  name: 'app.updateUser',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    user: UserUpdateSchema,
+  }).validator(),
+  run({
+    user
+  }) {
+    if (Meteor.isServer) {
+      // Check role
+      // userIsInRole(['super', 'admin'])
 
-                // Update user
-                Meteor.users.update({ _id: doc._id }, { $set: modifier });
+      try {
+        // Update user
+        Meteor.users.update({
+          _id: user._id
+        }, {
+          $set: {
+            username: user.username,
+            'emails.0.address': user.email,
+            profile: {
+              fullName: user.fullName,
+              branchPermissions: user.branchPermissions,
+              status: user.status,
+            },
+          },
+        })
+        // Update roles
+        Roles.setUserRoles(user._id, user.roles)
 
-                // Update password
-                Accounts.setPassword(doc._id, doc.password);
-
-                // Update roles
-                Roles.setUserRoles(doc._id, doc.roles);
-
-                return 'success';
-            }
-
-            throw new Meteor.Error(403, "Access denied")
+        // Update password
+        Accounts.setPassword(user._id, user.password, {
+          logout: false
+        })
+        if (user._id === Meteor.userId()) {
+          return 'logout'
         }
+
+        return 'success'
+      } catch (e) {
+        // throwError(e)
+      }
     }
-});
+  },
+})
 
 export const removeUser = new ValidatedMethod({
-    name: 'removeUser',
-    mixins: [CallPromiseMixin],
-    // validate: null,
-    validate: new SimpleSchema({
-        _id: { type: String },
-    }).validator(),
-    run(selector) {
-        if (!this.isSimulation) {
-            // return Users.remove(selector);
-        }
+  name: 'app.removeUser',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    _id: {
+      type: String
+    },
+  }).validator(),
+  run({
+    _id
+  }) {
+    if (Meteor.isServer) {
+      // Check role
+      // userIsInRole(['super'])
+
+      try {
+        return Meteor.users.remove(_id)
+      } catch (e) {
+        throwError(e)
+      }
     }
-});
-
-// Check unique username/email
-export const uniqueUser = new ValidatedMethod({
-    name: 'uniqueUser',
-    mixins: [CallPromiseMixin],
-    validate: null,
-    // validate: new SimpleSchema({
-    //     _id: {type: String},
-    // }).validator(),
-    run(selector) {
-        if (!this.isSimulation) {
-            let count = Meteor.users.find(selector).count();
-            if (count > 0) {
-                throw new Meteor.Error('Unique', 'Must be unique');
-            }
-
-            return 'not unique';
-        }
-    }
-});
-
-// Update profile
-export const updateUserProfile = new ValidatedMethod({
-    name: 'updateUserProfile',
-    mixins: [CallPromiseMixin],
-    // validate: Users.schema.validator(),
-    validate: null,
-    run(doc) {
-        if (!this.isSimulation) {
-            let modifier = {
-                username: doc.username,
-                'emails.0.address': doc.email,
-                'profile.fullName': doc.fullName,
-            };
-
-            // Update user
-            Meteor.users.update({ _id: doc._id }, { $set: modifier });
-
-            return 'success';
-        }
-
-    }
-});
-
-// Check user password
-export const checkUserPassword = new ValidatedMethod({
-    name: 'checkUserPassword',
-    mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
-        password: { type: String }
-    }).validator(),
-    run({ password }) {
-        if (!this.isSimulation) {
-            console.log(password);
-
-            let digest = Package.sha.SHA256(password);
-
-            let user = Meteor.user();
-            let passwordOpts = { digest: digest, algorithm: 'sha-256' };
-            let result = Accounts._checkPassword(user, passwordOpts);
-
-            return result;
-        }
-    }
-});
-
-// Update user password
-export const updateUserPassword = new ValidatedMethod({
-    name: 'updateUserPassword',
-    mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
-        password: { type: String }
-    }).validator(),
-    run({ password }) {
-        if (!this.isSimulation) {
-            console.log(password);
-
-            let digest = Package.sha.SHA256(password);
-
-            let user = Meteor.user();
-            let passwordOpts = { digest: digest, algorithm: 'sha-256' };
-            let result = Accounts._checkPassword(user, passwordOpts);
-
-            return result;
-        }
-    }
-});
-
-// Check user is in role
-export const userIsInRole = new ValidatedMethod({
-    name: 'userIsInRole',
-    mixins: [CallPromiseMixin],
-    validate: new SimpleSchema({
-        role: { type: String },
-    }).validator(),
-    run({ role }) {
-        if (!this.isSimulation) {
-            if (Roles.userIsInRole(Meteor.userId(), role)) {
-                return true;
-            }
-            throw new Meteor.Error(403, "Access denied")
-        }
-    }
-});
+  },
+})
 
 // rateLimit({
-//     methods: [
-//         insertUser,
-//         updateUser,
-//         removeUser,
-//         userIsInRole
-//     ],
-// });
+//   methods: [findUsers, findOneUser, insertUser, updateUser, removeUser],
+// })
