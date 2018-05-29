@@ -32,22 +32,35 @@
         <!-- Header Menu -->
         <span style="float: right;">
           <!-- <span>{{fullName}}</span> -->
-          <component :is="currentHeaderMenu"></component>
+          <!-- <component :is="currentHeaderMenu"></component> -->
           <el-dropdown @command="handleUser"
                        class="header-item-margin">
             <span class="el-dropdown-link">
-              <div class="user-img">
-                <img src="/images/user.png"
-                     alt=""
-                     class="avatar"> {{ userFullName }}
-                <i class="el-icon-arrow-down el-icon-right"></i>
-              </div>
+              <avatar :username="userFullName" :size="40" background-color="#FFC107" color="#EBEEF5"></avatar>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <!-- <el-dropdown-item>Profile</el-dropdown-item>
-                            <el-dropdown-item>EN - KH</el-dropdown-item> -->
-              <el-dropdown-item @click.native="_logout"
-                                divided="">Logout</el-dropdown-item>
+              <el-dropdown-item
+                disabled
+                class="username"
+              >
+                <i class="fa fa-user"></i> {{ userFullName }}
+              </el-dropdown-item>
+              <el-dropdown-item
+                command="profile"
+                divided
+              >
+                Profile
+              </el-dropdown-item>
+              <el-dropdown-item command="lang">
+                EN - KH
+              </el-dropdown-item>
+              <el-dropdown-item
+                class="logout"
+                @click.native="_logout"
+              >
+                <i class="fas fa-sign-out-alt"></i> 
+                Logout
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </span>
@@ -82,12 +95,16 @@ import { Session } from 'meteor/session'
 
 import { appLog } from '../../api/app-logs/methods.js'
 import { mapState } from 'vuex'
+
+import Avatar from 'vue-avatar'
+
 export default {
   name: 'MainLayout',
   components: {
     AsideMenu,
     HeaderMenu,
     AsideMenuUser,
+    Avatar
   },
   data() {
     return {
@@ -106,7 +123,7 @@ export default {
       },
     }),
     userFullName() {
-      return this.$store.getters['app/userFullName']
+      return this.$store.getters['userFullName']
     },
     headerTitle() {
       let title = 'No TiTle'
@@ -135,19 +152,22 @@ export default {
       this.$Message.info('Prfile is clicked')
     },
     _logout() {
-      appLog
-        .callPromise({ title: 'LOG', level: 'LOGOUT', data: { logout: true } })
-        .then(result => {
-          if (result) {
-            Meteor.logout(() => {
-              this.$message.success('You are logout!')
-              this.$router.push({ name: 'login' })
-            })
-          }
-        })
-        .catch(err => {
-          this.$notify.error(err.reason)
-        })
+      // this.$store.clear
+      localStorage.removeItem('vuex')
+      this.$store.commit('logout', this)
+      // appLog
+      //   .callPromise({ title: 'LOG', level: 'LOGOUT', data: { logout: true } })
+      //   .then(result => {
+      //     if (result) {
+      //       Meteor.logout(() => {
+      //         this.$message.success('You are logout!')
+      //         this.$router.push({ name: 'login' })
+      //       })
+      //     }
+      //   })
+      //   .catch(err => {
+      //     this.$notify.error(err.reason)
+      //   })
     },
   },
   //   $(function() {

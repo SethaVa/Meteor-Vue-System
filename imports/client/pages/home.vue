@@ -120,7 +120,22 @@
     <h1>Home Page</h1>
     <el-button type="primary"
                @click="handleExport">Export Data</el-button>
+    <br>
     <label>{{ userFullName }}</label>
+    <br>
+    <label>{{ userFullName }}</label>
+    <br>
+    <h3>Current User</h3>
+    <vue-json-pretty
+      :data="currentUser"
+      :deep="1"
+    />
+    <br>
+    <!-- <avatar username="Darth Vader"
+            initials="AS"
+            :size="100">
+    </avatar> -->
+    <avatar :username="userFullName" :size="40" background-color="#FFC107" color="#EBEEF5"></avatar>
     <!-- <label>Branch : {{ currentBranch }}</label> -->
 
     <ve-pie :data="chartData"
@@ -140,10 +155,23 @@ import json2csv from 'json2csv'
 import moment from 'moment'
 import { mapState } from 'vuex'
 import { Session } from 'meteor/session'
+// Json Pretty
+import VueJsonPretty from 'vue-json-pretty'
+import Avatar from 'vue-avatar'
 //==================================================
 import { countStudents } from '../../api/students/methods'
 export default {
   name: 'Home',
+  components: {
+    VueJsonPretty,
+    Avatar
+  },
+  props: {
+    doc: {
+      type: Object,
+      default: null,
+    },
+  },
   data() {
     const item = {
       date: '2016-05-02',
@@ -163,17 +191,15 @@ export default {
   computed: {
     ...mapState({
       currentUser(state) {
-        return state.app.currentUser // object
-      },
+        return state.currentUser // object
+      }
     }),
-    // currentBranch(state) {
-    //   const branch = state.app.currentBranch
-    //   // console.log(branch)
-    //   return branch
-    //   // && branch.shortName
-    // },
     userFullName() {
-      return this.$store.getters['app/userFullName']
+      return this.$store.getters['userFullName']
+    },
+    userIsInRole() {
+      return this.$store.getters['userIsInRole']
+      // return this.$store.getters['userIsInRole'](['pos'])
     },
   },
   created() {
@@ -215,7 +241,6 @@ export default {
       countStudents
         .callPromise({})
         .then(result => {
-          console.log(result)
           this.totalStudent = result
         })
         .catch(error => {

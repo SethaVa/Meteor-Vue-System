@@ -4,7 +4,7 @@
              @select="handleMenuSelect"
              text-color="#fff">
       <el-menu-item index="home">
-        <i class="fa fa-tachometer"></i>
+        <i class="fas fa-tachometer-alt"></i>
         <span>Dashboad</span>
       </el-menu-item>
       <!-- //======================== // Student //======================== -->
@@ -35,7 +35,7 @@
       <!-- //===============================// Payment //===================== -->
       <el-submenu index="payment">
         <template slot="title">
-          <i class="fa fa-money"></i>
+          <i class="fas fa-money-bill-alt"></i>
           Payment
         </template>
         <el-menu-item index="payment">
@@ -143,6 +143,12 @@
 export default {
   name: 'AsideMenu',
   props: ['activeMenu'],
+  computed: {
+    userIsInRole() {
+      return this.$store.getters['userIsInRole'](['pos'])
+    },
+  },
+
   methods: {
     handleMenuSelect(name) {
       this.$router.push({ name: name })

@@ -21,6 +21,10 @@ Vue.use(ElementUI, {
   locale,
   size: 'medium',
 })
+//--------------Vue X---------------------
+// import Vuex from 'vuex'
+
+// Vue.use(Vuex)
 //-------------Vue Chart------------------
 import VCharts from 'v-charts'
 Vue.use(VCharts)
@@ -34,12 +38,14 @@ import Meta from 'vue-meta'
 Vue.use(Meta)
 
 // Router Sync
-import {
-  sync
-} from 'vuex-router-sync'
+// import {
+//   sync
+// } from 'vuex-router-sync'
 
 //---------- Vuex Store ----------
-import store from '../../client/store/index'
+import {
+  store
+} from '../../client/store/index'
 
 //---------- NProgress ----------
 import NProgress from 'nprogress'
@@ -52,9 +58,11 @@ const router = new VueRouter({
   routes: routes,
 })
 
+//  Font Awesome 5
+import '/imports/client/styles/fontawesome-all.css'
 
 // Sync the router with the vuex store
-sync(store, router)
+// sync(store, router)
 
 // --------------App layout component---------------
 

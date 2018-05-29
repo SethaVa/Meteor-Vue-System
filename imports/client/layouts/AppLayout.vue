@@ -36,22 +36,8 @@ export default {
     // console.log(this.branches());
   },
   meteor: {
-    $subscribe: {
-      branches() {
-        let branches = this.currentUser
-          ? this.currentUser.profile.branchPermissions
-          : []
-        return [{ _id: { $in: branches } }]
-      },
-    },
     meteorUser() {
-      this.$store.commit('app/updateCurrentUser', Meteor.user())
-    },
-    // company() {
-    //   this.$store.commit("app/updateCompany", Company.findOne());
-    // },
-    branches() {
-      this.$store.commit('app/updateCurrentBranches', Branches.find().fetch())
+      this.$store.commit('updateCurrentUser', Meteor.user())
     },
   },
 }

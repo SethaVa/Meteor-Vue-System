@@ -202,21 +202,24 @@ export default {
   },
   mounted() {
     this.getDataUpdate()
-    this.getStudentLastExChange()
+    // this.getStudentLastExChange()
   },
   methods: {
     getDataUpdate() {
       this.loading = true
       findOneExchangeClass
-        .callPromise({ id: this.updateId })
+        .callPromise({ id: { _id: this.updateId } })
         .then(result => {
-          console.log(result.classFromId)
-          this.form = result
-          this.classId = result.classFromId
+          if (result) {
+            // console.log(result)
+            this.form = result
+            this.classId = result.classFromId
+          }
           this.loading = false
         })
         .catch(error => {
           Notify.error({ message: error })
+          console.log(error.reason)
         })
     },
     handleTypeChange(val) {
@@ -305,7 +308,6 @@ export default {
         .callPromise({ selector: classSelector })
         .then(result => {
           if (result) {
-            console.log(result)
             this.studentOpts = result[0].classDetail
           } else {
             this.studentOpts = []
