@@ -73,27 +73,6 @@ if (Meteor.isDevelopment) {
     }
   ]
 
-  // users.forEach(({
-  //   username,
-  //   email,
-  //   password,
-  //   profile,
-  //   roles
-  // }) => {
-  //   const userExists = Meteor.users.findOne({
-  //     'emails.address': email
-  //   })
-
-  //   if (!userExists) {
-  //     const userId = Accounts.createUser({
-  //       username,
-  //       email,
-  //       password,
-  //       profile
-  //     })
-  //     Roles.addUsersToRoles(userId, roles)
-  //   }
-  // })
   // User
   if (Meteor.users.find().count() === 0) {
     // const data = EJSON.parse(Assets.getText('user-account.json'))

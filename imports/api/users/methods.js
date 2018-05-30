@@ -99,7 +99,8 @@ export const insertUser = new ValidatedMethod({
 
         return userId
       } catch (e) {
-        throwError(e)
+        console.log(e.reason)
+        // throwError(e)
       }
     }
   },
@@ -147,6 +148,7 @@ export const updateUser = new ValidatedMethod({
 
         return 'success'
       } catch (e) {
+        console.log(e.reason);
         // throwError(e)
       }
     }
@@ -171,7 +173,8 @@ export const removeUser = new ValidatedMethod({
       try {
         return Meteor.users.remove(_id)
       } catch (e) {
-        throwError(e)
+        // throwError(e)
+        console.log(e.reason)
       }
     }
   },
