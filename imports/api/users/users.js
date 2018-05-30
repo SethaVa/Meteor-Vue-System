@@ -21,6 +21,7 @@ export const UserInsertSchema = new SimpleSchema({
   },
   branchPermissions: {
     type: Array,
+    optional: true
   },
   'branchPermissions.$': {
     type: String,
@@ -57,6 +58,7 @@ export const UserUpdateSchema = new SimpleSchema({
   },
   branchPermissions: {
     type: Array,
+    optional: true
   },
   'branchPermissions.$': {
     type: String,

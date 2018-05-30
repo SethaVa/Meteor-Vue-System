@@ -36,29 +36,26 @@
           <el-dropdown @command="handleUser"
                        class="header-item-margin">
             <span class="el-dropdown-link">
-              <avatar :username="userFullName" :size="40" background-color="#FFC107" color="#EBEEF5"></avatar>
+              <avatar :username="userFullName"
+                      :size="40"></avatar>
+                      <!-- background-color="#FFC107"
+                      color="#EBEEF5" -->
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                disabled
-                class="username"
-              >
+              <el-dropdown-item disabled
+                                class="username">
                 <i class="fa fa-user"></i> {{ userFullName }}
               </el-dropdown-item>
-              <el-dropdown-item
-                command="profile"
-                divided
-              >
+              <el-dropdown-item @click.native="_profile"
+                                divided>
                 Profile
               </el-dropdown-item>
-              <el-dropdown-item command="lang">
+              <!-- <el-dropdown-item command="lang">
                 EN - KH
-              </el-dropdown-item>
-              <el-dropdown-item
-                class="logout"
-                @click.native="_logout"
-              >
-                <i class="fas fa-sign-out-alt"></i> 
+              </el-dropdown-item> -->
+              <el-dropdown-item class="logout"
+                                @click.native="_logout">
+                <i class="fas fa-sign-out-alt"></i>
                 Logout
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -104,7 +101,7 @@ export default {
     AsideMenu,
     HeaderMenu,
     AsideMenuUser,
-    Avatar
+    Avatar,
   },
   data() {
     return {
@@ -119,7 +116,7 @@ export default {
   computed: {
     ...mapState({
       currentUser(state) {
-        return state.app.currentUser // object
+        return state.currentUser // object
       },
     }),
     userFullName() {
@@ -141,16 +138,18 @@ export default {
   },
 
   methods: {
-    // handleMenuSelect(name) {
-    //   this.$router.push({ name });
-    // },
     handleUser(name) {
       // console.log(name);
       // this[name]();
     },
     _profile() {
-      this.$Message.info('Prfile is clicked')
+      console.log(this.currentUser)
+      this.$router.push({
+        name: 'profile',
+        params: { _id: this.currentUser._id },
+      })
     },
+
     _logout() {
       // this.$store.clear
       localStorage.removeItem('vuex')

@@ -112,6 +112,10 @@
         <template slot="title">
           <i class="fa fa-cogs"></i>Setting
         </template>
+        <el-menu-item index="user">
+          <i class="fa fa-clock-o"></i>
+          <span>User</span>
+        </el-menu-item>
         <el-menu-item index="time">
           <i class="fa fa-clock-o"></i>
           <span>Time</span>
@@ -145,7 +149,7 @@ export default {
   props: ['activeMenu'],
   computed: {
     userIsInRole() {
-      return this.$store.getters['userIsInRole'](['pos'])
+      return this.$store.getters['userIsInRole'](['user'])
     },
   },
 

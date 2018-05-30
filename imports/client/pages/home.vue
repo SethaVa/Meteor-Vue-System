@@ -121,9 +121,11 @@
     <el-button type="primary"
                @click="handleExport">Export Data</el-button>
     <br>
+    <h3>Full Name</h3>
     <label>{{ userFullName }}</label>
     <br>
-    <label>{{ userFullName }}</label>
+    <h3>Check User is in roles</h3>
+    ['super', 'admin']: {{ userIsInRole }}
     <br>
     <h3>Current User</h3>
     <vue-json-pretty
@@ -144,7 +146,7 @@
     <ve-histogram :data="chartData"
                   :settings="chartSettings1"></ve-histogram>
 
-  </div>
+  </h3></div>
 </template>
 
 <script>
@@ -198,7 +200,7 @@ export default {
       return this.$store.getters['userFullName']
     },
     userIsInRole() {
-      return this.$store.getters['userIsInRole']
+      return this.$store.getters['userIsInRole'](['admin','super'])
       // return this.$store.getters['userIsInRole'](['pos'])
     },
   },

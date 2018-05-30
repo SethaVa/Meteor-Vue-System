@@ -9,6 +9,11 @@ import StudentList from './pages/StudentList.vue'
 // import StudentInsert from './pages/StudentInsert.vue';
 // import StudentUpdate from './pages/StudentUpdate.vue';
 
+//user
+import UserList from './pages/User.vue'
+
+//Profile
+import Profile from './pages/UserProfile.vue'
 // Staff
 import Staff from './pages/Staff.vue'
 // Position
@@ -87,6 +92,18 @@ const routes = [
         path: 'welocme',
         name: 'welcome',
         component: welcome,
+      },
+      // User List
+      {
+        path: 'user',
+        name: 'user',
+        component: UserList,
+      },
+      // User Profile
+      {
+        path: 'profile/:_id',
+        name: 'profile',
+        component: Profile,
       },
       // Staff
       {
@@ -185,7 +202,7 @@ const routes = [
         name: 'exchange',
         component: Exchange,
       },
-      // Exchange
+      // Rate Salary
       {
         path: 'salary-rate',
         name: 'salary-rate',
