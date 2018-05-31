@@ -73,11 +73,31 @@
                  :action-col-def="actionColDef"
                  :actions-def="actionsDef"
                  :table-props="tableProps">
-      <el-table-column v-for="title in titles"
-                       :key="title.value"
-                       :label="title.label"
-                       :prop="title.prop"
-                       :sortable="title.sort"></el-table-column>
+
+      <el-table-column prop="profile.fullName"
+                       label="Full Name"
+                       sortable="custom">
+      </el-table-column>
+
+      <el-table-column prop="username"
+                       label="Username"
+                       sortable="custom">
+      </el-table-column>
+
+      <el-table-column prop="emails[0].address"
+                       label="Email"
+                       sortable="custom">
+      </el-table-column>
+
+      <el-table-column prop="profile.status"
+                       label="Status"
+                       sortable="custom">
+      </el-table-column>
+
+      <el-table-column prop="roles"
+                       label="Roles"
+                       :formatter="arrFormatter">
+      </el-table-column>
 
     </data-tables>
   </div>
@@ -183,10 +203,10 @@ export default {
       return this.$route.meta.routerView
     },
     userIsInSuperRole() {
-      return this.$store.getters['app/userIsInRole'](['super'])
+      return this.$store.getters['userIsInRole'](['super'])
     },
     userIsInSuperAdminRole() {
-      return this.$store.getters['app/userIsInRole'](['super', 'admin'])
+      return this.$store.getters['userIsInRole'](['super', 'admin'])
     },
   },
   watch: {
@@ -225,39 +245,8 @@ export default {
           Notify.error({ message: error })
         })
     },
-
-    // Column formatter, class
-    softRemoveClassName(removed) {
-      return removed ? 'soft-remove' : ''
-    },
     arrFormatter(row, column, cellValue) {
       return JSON.stringify(cellValue)
-    },
-
-    // Add new
-    addNew() {
-      this.$router.push({ name: 'app.userNew' })
-    },
-
-    // Action
-    handleAction(com) {
-      this[com.action](com.row)
-    },
-    edit(row) {
-      this.$router.push({
-        name: 'app.userEdit',
-        params: { _id: row._id },
-      })
-    },
-    changePassword(row) {},
-    remove(row) {
-      this.$_removeMixin({
-        meteorMethod: removeUser,
-        selector: { _id: row._id },
-        successMethod: 'getData',
-        loading: 'loading',
-        title: row.code,
-      })
     },
     handleClose() {
       this.getData()

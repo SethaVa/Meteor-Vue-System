@@ -87,8 +87,10 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
+                   size="mini"
                    @click="submitForm">Save</el-button>
-        <el-button @click="handleClose">Cancel</el-button>
+        <el-button @click="handleClose"
+                   size="mini">Cancel</el-button>
       </span>
     </el-dialog>
   </div>
@@ -102,63 +104,63 @@ import Notify from '/imports/client/libs/notify'
 import LookupValue from '../libs/Lookup-Value'
 
 // import { lookupRole, lookupBranch } from '../../utils/lookup-methods'
-// import { validateUserExist } from '../../utils/validate-methods'
+import { validateUserExist } from '../../libs/validate-methods'
 import { insertUser } from '../../api/users/methods'
 
 export default {
   name: 'UserNew',
   data() {
     // Custom validate
-    // const validateUsername = (rule, value, callback) => {
-    //   if (value) {
-    //     validateUserExist
-    //       .callPromise({ username: value })
-    //       .then(result => {
-    //         if (result) {
-    //           callback(new Error('Username exist'))
-    //         } else {
-    //           callback()
-    //         }
-    //       })
-    //       .catch(error => {
-    //         Notify.error({ message: error })
-    //       })
-    //   }
-    // }
+    const validateUsername = (rule, value, callback) => {
+      if (value) {
+        validateUserExist
+          .callPromise({ username: value })
+          .then(result => {
+            if (result) {
+              callback(new Error('Username exist'))
+            } else {
+              callback()
+            }
+          })
+          .catch(error => {
+            Notify.error({ message: error })
+          })
+      }
+    }
 
-    // const validateEmail = (rule, value, callback) => {
-    //   if (value) {
-    //     validateUserExist
-    //       .callPromise({ emails: { $elemMatch: { address: value } } })
-    //       .then(result => {
-    //         if (result) {
-    //           callback(new Error('Email exist'))
-    //         } else {
-    //           callback()
-    //         }
-    //       })
-    //       .catch(error => {
-    //         Notify.error({ message: error })
-    //       })
-    //   }
-    // }
+    const validateEmail = (rule, value, callback) => {
+      if (value) {
+        validateUserExist
+          .callPromise({ emails: { $elemMatch: { address: value } } })
+          .then(result => {
+            if (result) {
+              callback(new Error('Email exist'))
+            } else {
+              callback()
+            }
+          })
+          .catch(error => {
+            Notify.error({ message: error })
+          })
+      }
+    }
 
-    // const validatePassword = (rule, value, callback) => {
-    //   if (value) {
-    //     if (this.form.confirmPassword !== '') {
-    //       this.$refs.form.validateField('confirmPassword')
-    //     }
-    //     callback()
-    //   }
-    // }
+    const validatePassword = (rule, value, callback) => {
+      if (value) {
+        if (this.form.confirmPassword !== '') {
+          this.$refs.form.validateField('confirmPassword')
+        }
+        callback()
+      }
+    }
 
-    // const validateConfirmPassword = (rule, value, callback) => {
-    //   if (value && value !== this.form.password) {
-    //     callback(new Error("The password don't match!"))
-    //   } else {
-    //     callback()
-    //   }
-    // }
+    const validateConfirmPassword = (rule, value, callback) => {
+      if (value && value !== this.form.password) {
+        callback(new Error("The password don't match!"))
+      } else {
+        callback()
+      }
+    }
 
     return {
       loading: false,
@@ -185,12 +187,12 @@ export default {
             message: 'Length should be 5 to 20',
             trigger: 'blur',
           },
-          // { validator: validateUsername, trigger: 'blur' },
+          { validator: validateUsername, trigger: 'blur' },
         ],
         email: [
           { required: true, message: 'Email is required' },
           { type: 'email', message: 'Email is not a valid email' },
-          // { validator: validateEmail, trigger: 'blur' },
+          { validator: validateEmail, trigger: 'blur' },
         ],
         status: [{ required: true, message: 'Status is required' }],
         password: [
@@ -200,7 +202,7 @@ export default {
             message: 'Length should be greater than 6',
             trigger: 'blur',
           },
-          // { validator: validatePassword, trigger: 'blur' },
+          { validator: validatePassword, trigger: 'blur' },
         ],
         confirmPassword: [
           { required: true, message: 'Confirm password is required' },
@@ -209,7 +211,7 @@ export default {
             message: 'Length should be greater than 6',
             trigger: 'blur',
           },
-          // { validator: validateConfirmPassword, trigger: 'blur' },
+          { validator: validateConfirmPassword, trigger: 'blur' },
         ],
         branchPermissions: [
           { required: true, message: 'Branches is required' },

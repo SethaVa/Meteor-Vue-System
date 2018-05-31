@@ -138,12 +138,7 @@ export default {
   },
 
   methods: {
-    handleUser(name) {
-      // console.log(name);
-      // this[name]();
-    },
     _profile() {
-      console.log(this.currentUser)
       this.$router.push({
         name: 'profile',
         params: { _id: this.currentUser._id },
@@ -154,19 +149,6 @@ export default {
       // this.$store.clear
       localStorage.removeItem('vuex')
       this.$store.commit('logout', this)
-      // appLog
-      //   .callPromise({ title: 'LOG', level: 'LOGOUT', data: { logout: true } })
-      //   .then(result => {
-      //     if (result) {
-      //       Meteor.logout(() => {
-      //         this.$message.success('You are logout!')
-      //         this.$router.push({ name: 'login' })
-      //       })
-      //     }
-      //   })
-      //   .catch(err => {
-      //     this.$notify.error(err.reason)
-      //   })
     },
   },
   //   $(function() {

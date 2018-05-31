@@ -26,7 +26,7 @@ import {
 
 // Use exist
 export const validateUserExist = new ValidatedMethod({
-  name: 'app.validateUserExist',
+  name: 'validateUserExist',
   mixins: [CallPromiseMixin],
   validate(selector) {
     check(selector, Object)
@@ -36,8 +36,8 @@ export const validateUserExist = new ValidatedMethod({
       try {
         return Meteor.users.findOne(selector)
       } catch (e) {
-        // throwError(e)
-        console.log(e.reason)
+        throwError(e)
+        //console.log(e.reason)
       }
     }
   },
@@ -45,7 +45,7 @@ export const validateUserExist = new ValidatedMethod({
 
 // User password
 export const validateUserPassword = new ValidatedMethod({
-  name: 'app.validateUserPassword',
+  name: 'validateUserPassword',
   mixins: [CallPromiseMixin],
   validate(password) {
     check(password, String)
