@@ -1,7 +1,15 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
+import {
+  RestMethodMixin
+} from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
 import Subject from './subjects'
@@ -11,7 +19,10 @@ export const findSubject = new ValidatedMethod({
   name: 'findSubject',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector, options }) {
+  run({
+    selector,
+    options
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       options = options || {}
@@ -22,12 +33,35 @@ export const findSubject = new ValidatedMethod({
   },
 })
 
+// Find
+export const countSubject = new ValidatedMethod({
+  name: 'countSubject',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector,
+    options
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      options = options || {}
+
+      // return aggregateSubject(selector)
+      return Subject.find(selector, options).count()
+    }
+  },
+})
+
+
 //find for Options
 export const findSubjectOpts = new ValidatedMethod({
   name: 'findSubjectOpts',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector, options }) {
+  run({
+    selector,
+    options
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       options = options || {}
@@ -49,7 +83,10 @@ export const findOneSubject = new ValidatedMethod({
   name: 'findOneSubject',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector, options }) {
+  run({
+    selector,
+    options
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       options = options || {}
@@ -78,7 +115,11 @@ export const updateSubject = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return Subject.update({ _id: doc._id }, { $set: doc })
+      return Subject.update({
+        _id: doc._id
+      }, {
+        $set: doc
+      })
     }
   },
 })
@@ -96,8 +137,7 @@ export const removeSubject = new ValidatedMethod({
 })
 
 const aggregateSubject = selector => {
-  let data = Subject.aggregate([
-    {
+  let data = Subject.aggregate([{
       $match: selector,
     },
     {

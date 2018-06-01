@@ -6,36 +6,37 @@
              :inline="true"
              size="mini">
 
-      <el-form-item label="Option"
-                    prop="opt">
-        <el-select v-model="form.opt"
-                   @change="handleOptChange">
-          <el-option v-for="doc in opts"
+      <el-form-item label="Type"
+                    prop="type">
+        <el-select v-model="form.type"
+                   @change="handleTypeChange">
+          <el-option v-for="doc in typeOpts"
                      :key="doc.value"
                      :label="doc.label"
                      :value="doc.value"></el-option>
         </el-select>
       </el-form-item>
-      <slot v-if="itemProp">
-        <el-form-item label="Subject"
-                      prop="classId">
-          
-          <el-select v-model="form.classId"
-                     clearable
-                     placeholder="Select Class">
-            <el-option v-for="doc in classIdOpts"
-                       :key="doc.value"
-                       :label="doc.label"
-                       :value="doc.value">
-              <span style="float: left">{{ doc.label }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ doc.labelRight }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </slot>
+
+      <el-form-item label="Class"
+                    prop="classId">
+
+        <el-select v-model="form.classId"
+                   clearable
+                   placeholder="Select Class">
+          <el-option v-for="doc in classIdOpts"
+                     :key="doc.value"
+                     :label="doc.label"
+                     :value="doc.value">
+            <span style="float: left">{{ doc.label }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ doc.labelRight }}</span>
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="">
         <el-button type="primary"
-                   @click="handleSubmit">Submit</el-button>
+                   @click="handleSubmit">
+        <i class="fas fa-sync-alt"></i> Submit</el-button>
       </el-form-item>
     </el-form>
     <el-card class="box-card">
@@ -44,13 +45,13 @@
         <!-- <span>Card name</span> -->
         <div style="float: right; padding: 3px 0">
           <el-button size="mini"
-                     type="text"
+                     type="primary"
                      @click="handlePrint">
             <i class="el-icon-printer"> Print</i>
           </el-button>
-          <el-button size="mini"
+          <!-- <el-button size="mini"
                      type="text"
-                     @click="getData()">GetData</el-button>
+                     @click="getData()">GetData</el-button> -->
         </div>
 
       </div>
@@ -128,6 +129,7 @@ import _ from 'lodash'
 import moment from 'moment'
 
 import Notify from '/imports/client/libs/notify'
+import Lookup from '../../client/libs/Lookup-Value'
 import { lookupClass } from '/imports/libs/lookup-methods'
 import { findClassForStudenDetails } from '../../api/payment/methods'
 import { Printd } from 'printd'
@@ -139,6 +141,7 @@ export default {
     return {
       loading: false,
       tableData: [],
+      typeOpts: Lookup.type,
       titles: [
         { label: 'Student', prop: 'student' },
         { label: 'Gender', prop: 'gender', width: '100px' },
@@ -151,24 +154,20 @@ export default {
       roomName: '',
       subjectName: '',
       timeStudy: [],
-      opts: [
-        { label: 'All Student', value: '1' },
-        { label: 'By Class', value: '2' },
-      ],
       classIdOpts: [],
       form: {
         opt: '',
         classId: '',
       },
       rules: {
-        opts: [{ required: true }],
+        type: [{ required: true }],
         classId: [{ required: true }],
       },
     }
   },
   mounted() {
     this.d = new Printd()
-    this.getClassData()
+    // this.getClassData()
   },
   methods: {
     // getData() {
@@ -182,14 +181,25 @@ export default {
     //     })
     //   }
     // },
-    handleOptChange(val) {
-      if (val === '2') {
-        this.itemProp = true
-      } else {
-        this.itemProp = false
+    handleTypeChange(val) {
+      let selector = {
+        type: val,
       }
+      this.classIdOpts = []
+      this.form.classId = ''
+      lookupClass
+        .callPromise({ selector })
+        .then(result => {
+          if (result) {
+            this.classIdOpts = result
+          }
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
     },
     getClassData() {
+      let selector = {}
       lookupClass
         .callPromise({})
         .then(result => {
@@ -200,36 +210,42 @@ export default {
         })
     },
     handleSubmit() {
-      this.loading = true
-      let selector = {
-        classId: this.form.classId,
-        status: { $ne: 'Closed' },
-      }
-      findClassForStudenDetails
-        .callPromise({ selector })
-        .then(result => {
-          if (result.length > 0) {
-            _.forEach(result, o => {
-              this.teacherName = o.teacher
-              this.roomName = o.room
-              this.subjectName = o.subject
-              this.timeStudy = o.time
-
-              this.tableData = o.classDetail
-            })
-          } else {
-            this.teacherName = ''
-            this.roomName = ''
-            this.subjectName = ''
-            this.timeStudy = []
-
-            this.tableData = []
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          this.loading = true
+          let selector = {
+            classId: this.form.classId,
+            status: { $ne: 'Closed' },
           }
-          this.loading = false
-        })
-        .catch(error => {
-          Notify.error({ message: error })
-        })
+          findClassForStudenDetails
+            .callPromise({ selector })
+            .then(result => {
+              if (result.length > 0) {
+                _.forEach(result, o => {
+                  this.teacherName = o.teacher
+                  this.roomName = o.room
+                  this.subjectName = o.subject
+                  this.timeStudy = o.time
+
+                  this.tableData = o.classDetail
+                })
+              } else {
+                this.teacherName = ''
+                this.roomName = ''
+                this.subjectName = ''
+                this.timeStudy = []
+
+                this.tableData = []
+              }
+              this.loading = false
+            })
+            .catch(error => {
+              Notify.error({ message: error })
+            })
+        } else {
+          return false
+        }
+      })
     },
     handlePrint() {
       // font-family: Times New Roman, Times, serif;

@@ -1,7 +1,15 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
+import {
+  RestMethodMixin
+} from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import Room from './room'
@@ -21,12 +29,33 @@ export const findRoom = new ValidatedMethod({
   },
 })
 
+// Find All Data
+export const countRoom = new ValidatedMethod({
+  name: 'countRoom',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector,
+    option
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      option = option || {}
+
+      return Room.find(selector, option).count()
+    }
+  },
+})
+
+
 // find One
 export const findOneRoom = new ValidatedMethod({
   name: 'findOneRoom',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ _id }) {
+  run({
+    _id
+  }) {
     if (Meteor.isServer) {
       return Room.findOne(_id)
     }
@@ -73,7 +102,11 @@ export const updateRoom = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return Room.update({ _id: doc._id }, { $set: doc })
+      return Room.update({
+        _id: doc._id
+      }, {
+        $set: doc
+      })
     }
   },
 })
@@ -83,7 +116,9 @@ export const removeRoom = new ValidatedMethod({
   name: 'removeRoom',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    _id: { type: String },
+    _id: {
+      type: String
+    },
   }).validator(),
   run(selector) {
     if (Meteor.isServer) {

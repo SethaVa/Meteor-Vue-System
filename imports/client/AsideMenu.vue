@@ -22,12 +22,12 @@
           <span>Register</span>
         </el-menu-item>
         <el-menu-item index="classStudy">
-          <i class="el-icon-menu"></i>
+          <i class="fa fa-door-closed"></i>
           <span>Class Study</span>
         </el-menu-item>
 
         <el-menu-item index="exchange-class">
-          <i class="fa fa-exchange"></i>
+          <i class="fas fa-exchange-alt"></i>
           <span>Change Class</span>
         </el-menu-item>
       </el-submenu>
@@ -69,7 +69,7 @@
           <span>Position</span>
         </el-menu-item>
         <el-menu-item index="staff">
-          <i class="fa fa-user-plus"></i>
+          <i class="fas fa-user-tie"></i>
           <span>Staff</span>
         </el-menu-item>
       </el-submenu>
@@ -113,7 +113,7 @@
           <i class="fa fa-cogs"></i>Setting
         </template>
         <el-menu-item index="user">
-          <i class="fa fa-clock-o"></i>
+          <i class="fas fa-users"></i>
           <span>User</span>
         </el-menu-item>
         <el-menu-item index="time">
@@ -121,7 +121,7 @@
           <span>Time</span>
         </el-menu-item>
         <el-menu-item index="exchange">
-          <i class="fa fa-exchange"></i>
+          <i class="fas fa-exchange-alt"></i>
           <span>Exchange</span>
         </el-menu-item>
         <el-menu-item index="salary-rate">

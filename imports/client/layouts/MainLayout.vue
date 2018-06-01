@@ -33,8 +33,7 @@
         <span style="float: right;">
           <!-- <span>{{fullName}}</span> -->
           <!-- <component :is="currentHeaderMenu"></component> -->
-          <el-dropdown @command="handleUser"
-                       class="header-item-margin">
+          <el-dropdown class="header-item-margin">
             <span class="el-dropdown-link">
               <avatar :username="userFullName"
                       :size="40"></avatar>
@@ -193,8 +192,20 @@ a:-webkit-any-link {
 }
 .header-menu {
   // background-color: #409eff;
-  background-color: rgb(26, 170, 236);
-  color: #ffffff;
+  // background-color: rgb(26, 170, 236);
+  background: #c9d6ff; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #e2e2e2,
+    #c9d6ff
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #e2e2e2,
+    #c9d6ff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  color: #606266;
   line-height: 55px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   height: 55px !important;

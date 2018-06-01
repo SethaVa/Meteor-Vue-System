@@ -46,7 +46,9 @@
               <el-dropdown-item :command="{action: 'remove', row: scope.row}">
                 Remove
               </el-dropdown-item>
-
+              <el-dropdown-item :command="{action: 'finish', row: scope.row}">
+                Finish
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -177,6 +179,15 @@ export default {
             //   message: 'Cacel Delete',
             //   type: 'error',
             // })
+          })
+      } else if (command.action === 'finish') {
+        this.$confirm('Are you sure ?', 'Warning', { type: 'warning' })
+          .then(result => {
+            let id = command.row._id
+            console.log(id)
+          })
+          .catch(error => {
+            Notify.error({ message: error })
           })
       }
     },
