@@ -127,7 +127,7 @@ export default {
         { label: 'End Date', prop: 'endPayDate' },
       ],
       form: {
-        opts: '',
+        opts: moment().toDate(),
       },
       rules: {
         opts: [{ required: true }],

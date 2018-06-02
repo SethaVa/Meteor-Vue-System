@@ -90,8 +90,10 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
+                   size="mini"
                    @click="handleSave">Save</el-button>
-        <el-button @click="handleClose">Cancel</el-button>
+        <el-button @click="handleClose"
+                   size="mini">Cancel</el-button>
       </span>
     </el-dialog>
   </div>
@@ -112,6 +114,7 @@ import {
 } from '../../api/salary-rate/methods'
 import lookupValue from '../../client/libs/Lookup-Value'
 import LookUp from '../../client/libs/Lookup-Value'
+import moment from 'moment'
 
 export default {
   name: 'ClassStudyInsert',

@@ -13,6 +13,11 @@
                size="mini">
         <el-row :gutter="20">
           <el-col :span="12">
+            <el-form-item label="Date"
+                          prop="registerDate">
+              <el-date-picker v-model="form.registerDate"
+                              style="width:100%"></el-date-picker>
+            </el-form-item>
             <el-form-item label="Type"
                           prop="type">
               <el-select v-model="form.type">
@@ -58,8 +63,10 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
+                   size="mini"
                    @click="handleSave">Save</el-button>
-        <el-button @click="handleClose">Cancel</el-button>
+        <el-button @click="handleClose"
+                   size="mini">Cancel</el-button>
       </span>
     </el-dialog>
   </div>
@@ -72,7 +79,7 @@ import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import lookupValue from '/imports/client/libs/Lookup-Value'
 import _ from 'lodash'
 import { updateStudent } from '../../api/students/methods.js'
-
+import moment from 'moment'
 export default {
   name: 'StudentUpdate',
   props: {
@@ -92,6 +99,9 @@ export default {
 
       form: this.updateDoc,
       rules: {
+        registerDate: [
+          { required: true, message: 'Date is required', trigger: 'change' },
+        ],
         khName: [
           {
             required: true,
@@ -121,12 +131,15 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.form.dob = wrapCurrentTime(this.form.dob)
+          this.form.registerDate = wrapCurrentTime(this.form.registerDate)
           // console.log(this.form)
           updateStudent
             .callPromise({ doc: this.form })
             .then(result => {
-              Msg.success()
-              this.handleClose()
+              if (result) {
+                Msg.success()
+                this.handleClose()
+              }
             })
             .catch(error => {
               Notify.error({ message: error })

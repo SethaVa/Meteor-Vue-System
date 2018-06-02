@@ -103,6 +103,29 @@ export const removeClassStudy = new ValidatedMethod({
   },
 })
 
+// finish the class
+export const finishClassStudy = new ValidatedMethod({
+  name: 'finishClassStudy',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    _id: {
+      type: String
+    },
+  }).validator(),
+  run({
+    _id
+  }) {
+    if (Meteor.isServer) {
+      ClassStudy.update(_id, {
+        $set: {
+          status: 'Closed'
+        }
+      })
+      return 'Success'
+    }
+  },
+})
+
 const aggregateFindClassStudy = selector => {
   let data = ClassStudy.aggregate([{
       $match: selector,

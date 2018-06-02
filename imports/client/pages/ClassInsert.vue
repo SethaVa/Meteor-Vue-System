@@ -91,8 +91,10 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
+                   size="mini"
                    @click="handleSave">Save</el-button>
-        <el-button @click="handleClose">Cancel</el-button>
+        <el-button @click="handleClose"
+                   size="mini">Cancel</el-button>
       </span>
     </el-dialog>
   </div>
