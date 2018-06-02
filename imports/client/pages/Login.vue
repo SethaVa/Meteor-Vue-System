@@ -104,8 +104,12 @@ export default {
       } else {
         Meteor.loginWithPassword(this.form.email, this.form.password, err => {
           if (err) {
-            this.$message.error('Username/Email or Password is invalid!')
+            //  this.$refs['form'].resetFields();
+            this.form.email = ''
+            this.form.password=''
             this.$refs.email.$el.querySelector('input').focus()
+            this.$message.error('Username/Email or Password is invalid!')
+           
           } else {
             // log
             // appLog

@@ -103,40 +103,9 @@ export default {
           },
         ],
       },
-      // actionColDef: {
-      //   label: 'Action',
-      //   width: '100px',
-      //   tableColProps: {
-      //     align: 'center',
-      //   },
-      //   def: [
-      //     {
-      //       icon: 'el-icon-edit',
-      //       handler: row => {
-      //         this.updateDoc = row
-      //         this.modalVisible = true
-      //         this.currentModal = StudentUpdate
-      //         // this.$router.push({
-      //         //   name: 'studentUpdate',
-      //         //   params: { _id: row._id },
-      //         // })
-      //       },
-      //     },
-      //     {
-      //       icon: 'el-icon-delete',
-      //       handler: row => {
-      //         this.handleRemove(row)
-      //       },
-      //     },
-      //   ],
-      // },
     }
   },
-  // computed: {
-  //   routerView() {
-  //     return this.$route.meta.routerView
-  //   },
-  // },
+
   mounted() {
     this.getData()
   },
@@ -197,8 +166,10 @@ export default {
           removeStudent
             .callPromise({ _id })
             .then(result => {
-              Msg.success()
-              this.getData()
+              if (result) {
+                Msg.success()
+                this.getData()
+              }
             })
             .catch(err => {
               Notify.error({ message: err })

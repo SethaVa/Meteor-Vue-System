@@ -25,6 +25,9 @@
           <span v-else-if="title.prop === 'timeStudy'">
             {{ formatTime(scope.row.timeStudy) }}
           </span>
+          <!-- <span v-else-if="title.prop[title.prop] === 'Closed'">
+            {{ 1+1 }}
+          </span> -->
           <span v-else>{{ scope.row[title.prop] }}</span>
 
         </template>
@@ -62,7 +65,11 @@ import MsgBox from '/imports/client/libs/message'
 import Notify from '/imports/client/libs/notify'
 import ClassInsert from './ClassInsert'
 import ClassUpdate from './ClassUpdate'
-import { findClassStudy, removeClassStudy } from '../../api/classStudy/methods'
+import {
+  findClassStudy,
+  removeClassStudy,
+  finishClassStudy,
+} from '../../api/classStudy/methods'
 import moment from 'moment'
 import _ from 'lodash'
 export default {
@@ -183,8 +190,18 @@ export default {
       } else if (command.action === 'finish') {
         this.$confirm('Are you sure ?', 'Warning', { type: 'warning' })
           .then(result => {
-            let id = command.row._id
-            console.log(id)
+            let _id = command.row._id
+            finishClassStudy
+              .callPromise({ _id })
+              .then(result => {
+                if (result) {
+                  MsgBox.success()
+                  this.getData()
+                }
+              })
+              .catch(error => {
+                Notify.error({ message: error })
+              })
           })
           .catch(error => {
             Notify.error({ message: error })

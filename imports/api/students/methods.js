@@ -113,11 +113,12 @@ export const updateStudent = new ValidatedMethod({
     doc
   }) {
     if (Meteor.isServer) {
-      return Students.update({
+      Students.update({
         _id: doc._id,
       }, {
         $set: doc,
       })
+      return 'Success'
     }
   },
 })
@@ -135,13 +136,14 @@ export const removeStudent = new ValidatedMethod({
     _id
   }) {
     if (Meteor.isServer) {
-      return Students.update({
+      Students.update({
         _id: _id,
       }, {
         $set: {
           remove: true,
         },
       })
+      return 'Success'
       // return Students.remove(selector)
     }
   },
