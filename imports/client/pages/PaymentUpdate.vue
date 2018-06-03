@@ -65,7 +65,7 @@
                 <el-col :span="12">
                   <el-form-item class="info"
                                 label="Late Date :">
-                    <label> {{ 0 }}</label>
+                    <label style="color:red;font-weight:600"> {{ -1*lateDay +' days' }}</label>
                   </el-form-item>
                   <el-form-item class="info"
                                 label="End Date :">
@@ -158,7 +158,7 @@ export default {
       itemsProp: this.initItems(),
       saveEvent: 0,
       exchangeRate: 0,
-
+      lateDay: 0,
       form: {},
       // form: this.updateDoc,
       // form: {
@@ -269,39 +269,7 @@ export default {
           Notify.error({ message: error })
         })
     },
-    // getPaymentData() {
-    //   let selector = {
-    //     // classId: this.form.classId,
-    //     status: { $in: ['Expires', '$classDetail'] },
-    //   }
-    //   this.loading = true
-    //   findPaymentForClass
-    //     .callPromise({ selector: selector })
-    //     .then(result => {
-    //       if (result.length > 0) {
-    //         this.dataTable = []
-    //         _.forEach(result[0].classDetail, o => {
-    //           this.dataTable = result[0].classDetail
-    //         })
-    //       } else {
-    //         this.dataTable = []
-    //       }
-    //       this.loading = false
-    //     })
-    //     .catch(error => {
-    //       Notify.error({ message: error.reason })
-    //     })
-    // },
-    // getTypeData() {
-    //   lookupType
-    //     .callPromise()
-    //     .then(result => {
-    //       this.typeOpts = result
-    //     })
-    //     .catch(error => {
-    //       Notify.error({ message: error })
-    //     })
-    // },
+
     handlePaymentChange(item) {
       this.itemsProp = item
     },
@@ -332,6 +300,8 @@ export default {
         })
     },
     handleStudentChange(val) {
+      let currentDate = moment().toDate()
+
       let selector = {
         studentId: val,
       }
@@ -348,6 +318,8 @@ export default {
             this.form.payDate = result[0].classDetail[0].endPayDate
             this.form.classId = result[0].classDetail[0].classId
             this.form.lastId = result[0].classDetail[0]._id
+            this.lateDay = moment(this.form.payDate).diff(currentDate, 'day')
+
             // this.dataTable = []
             // _.forEach(result[0].classDetail, o => {
             //   this.studentIdOpts.push({
@@ -475,7 +447,7 @@ export default {
 
 <style lang="scss" scoped >
 .legend-style {
-  font-weight: 400;
+  font-weight: 600;
   color: red;
   font-size: 18px;
 }

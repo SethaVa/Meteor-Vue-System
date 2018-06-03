@@ -33,24 +33,6 @@ export const findSubject = new ValidatedMethod({
   },
 })
 
-// Find
-export const countSubject = new ValidatedMethod({
-  name: 'countSubject',
-  mixins: [CallPromiseMixin],
-  validate: null,
-  run({
-    selector,
-    options
-  }) {
-    if (Meteor.isServer) {
-      selector = selector || {}
-      options = options || {}
-
-      // return aggregateSubject(selector)
-      return Subject.find(selector, options).count()
-    }
-  },
-})
 
 
 //find for Options

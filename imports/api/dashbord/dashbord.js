@@ -10,6 +10,10 @@ import {
 
 
 import Students from '../students/students'
+import Staff from '../Staffs/staff'
+import Room from '../rooms/room'
+import Subject from '../subject/subjects'
+import ClassStudy from '../classStudy/classStudy'
 
 // Find Student to show in dash bord
 export const findStudentByType = new ValidatedMethod({
@@ -21,6 +25,93 @@ export const findStudentByType = new ValidatedMethod({
       // selector = selector || {}
       // return ClassStudy.find(selector).fetch()
       return aggregateStudentByType()
+    }
+  },
+})
+
+//count Class
+export const countClass = new ValidatedMethod({
+  name: 'countClass',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      // return ClassStudy.find(selector).fetch()
+      return ClassStudy.find(selector).count()
+    }
+  },
+})
+
+
+
+// Count Staff
+export const countStaff = new ValidatedMethod({
+  name: 'countStaff',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run() {
+    if (Meteor.isServer) {
+
+      return Staff.find({}).count()
+    }
+  },
+})
+
+// Find All Data
+export const countRoom = new ValidatedMethod({
+  name: 'countRoom',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector,
+    option
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      option = option || {}
+
+      return Room.find(selector, option).count()
+    }
+  },
+})
+
+
+// Find All Data
+export const countStudents = new ValidatedMethod({
+  name: 'countStudents',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {
+        remove: false
+      }
+
+      return Students.find(selector).count()
+    }
+  },
+})
+
+// Find
+export const countSubject = new ValidatedMethod({
+  name: 'countSubject',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector,
+    options
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      options = options || {}
+
+      // return aggregateSubject(selector)
+      return Subject.find(selector, options).count()
     }
   },
 })
