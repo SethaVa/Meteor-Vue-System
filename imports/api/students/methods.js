@@ -34,24 +34,6 @@ export const findStudents = new ValidatedMethod({
 })
 
 // Find All Data
-export const countStudents = new ValidatedMethod({
-  name: 'countStudents',
-  mixins: [CallPromiseMixin],
-  validate: null,
-  run({
-    selector
-  }) {
-    if (Meteor.isServer) {
-      selector = selector || {
-        remove: false
-      }
-
-      return Students.find(selector).count()
-    }
-  },
-})
-
-// Find All Data
 export const findStudentsByDate = new ValidatedMethod({
   name: 'findStudentsByDate',
   mixins: [CallPromiseMixin],

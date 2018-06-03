@@ -30,18 +30,7 @@ export const findStaff = new ValidatedMethod({
   },
 })
 
-// Count Staff
-export const countStaff = new ValidatedMethod({
-  name: 'countStaff',
-  mixins: [CallPromiseMixin],
-  validate: null,
-  run() {
-    if (Meteor.isServer) {
 
-      return Staff.find({}).count()
-    }
-  },
-})
 
 // Find Staff Detail for Position Teacher
 export const findOneStaffDetails = new ValidatedMethod({

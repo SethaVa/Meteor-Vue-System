@@ -92,11 +92,11 @@
           <el-card :body-style="{ padding: '0px' }"
                    style="background-color:pink">
             <div class="box-info clearfix">
-              <span class="title">Student</span>
+              <span class="title">Payment</span>
 
               <div class="bottom">
                 <span class="time">Total </span>
-                <span class="info">{{ totalStudent }}</span>
+                <span class="info">{{ totalPayment }}</span>
               </div>
 
             </div>
@@ -176,17 +176,23 @@ import compareDate from '/imports/libs/compare-date'
 import json2csv from 'json2csv'
 import moment from 'moment'
 import { mapState } from 'vuex'
-import { Session } from 'meteor/session'
 // Json Pretty
 import VueJsonPretty from 'vue-json-pretty'
 import Avatar from 'vue-avatar'
 //==================================================
-import { countStudents } from '../../api/students/methods'
-import { countStaff } from '../../api/Staffs/methods'
-import { countRoom } from '../../api/rooms/methods'
-import { countSubject } from '../../api/subject/methods'
-import { countClass } from '../../api/classStudy/methods'
-import { findStudentByType } from '../../api/dashbord/dashbord'
+// import { countStudents } from '../../api/students/methods'
+// import { countStaff } from '../../api/Staffs/methods'
+// import { countRoom } from '../../api/rooms/methods'
+// import { countSubject } from '../../api/subject/methods'
+// import { countClass } from '../../api/classStudy/methods'
+import {
+  findStudentByType,
+  countStudents,
+  countStaff,
+  countRoom,
+  countClass,
+  countSubject,
+} from '../../api/dashbord/dashbord'
 
 // var rowData = []
 // for (let i = 1; i < 500; i++) {
@@ -228,6 +234,7 @@ export default {
       totalRoom: 0,
       totalSubject: 0,
       totalClass: 0,
+      totalPayment: 0,
       rowData: [],
       chartStudentData: [],
       chartStudentSettings: {},
@@ -248,7 +255,6 @@ export default {
       // return this.$store.getters['userIsInRole'](['pos'])
     },
   },
-  beforeMount() {},
   mounted() {
     this.getStudentData()
     this.getStaffAmount()
@@ -256,6 +262,7 @@ export default {
     this.getSubjectAmount()
     this.getClassAmount()
     this.getStudentShowChart()
+    console.log(moment().toDate())
 
     // check student on time to pay
     compareDate()

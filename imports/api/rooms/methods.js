@@ -29,23 +29,6 @@ export const findRoom = new ValidatedMethod({
   },
 })
 
-// Find All Data
-export const countRoom = new ValidatedMethod({
-  name: 'countRoom',
-  mixins: [CallPromiseMixin],
-  validate: null,
-  run({
-    selector,
-    option
-  }) {
-    if (Meteor.isServer) {
-      selector = selector || {}
-      option = option || {}
-
-      return Room.find(selector, option).count()
-    }
-  },
-})
 
 
 // find One

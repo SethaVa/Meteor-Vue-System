@@ -29,21 +29,6 @@ export const findClassStudy = new ValidatedMethod({
   },
 })
 
-export const countClass = new ValidatedMethod({
-  name: 'countClass',
-  mixins: [CallPromiseMixin],
-  validate: null,
-  run({
-    selector
-  }) {
-    if (Meteor.isServer) {
-      selector = selector || {}
-      // return ClassStudy.find(selector).fetch()
-      return ClassStudy.find(selector).count()
-    }
-  },
-})
-
 
 export const findOneClassStudy = new ValidatedMethod({
   name: 'findOneClassStudy',
