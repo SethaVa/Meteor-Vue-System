@@ -39,7 +39,7 @@
           Payment
         </template>
         <el-menu-item index="payment">
-          <i class="el-icon-menu"></i>
+          <i class="fas fa-money"></i>
           <span>Payment</span>
         </el-menu-item>
         <el-menu-item index="refund">
@@ -51,10 +51,10 @@
       <!-- //========================// Accounting //====================== -->
       <el-submenu index="account">
         <template slot="title">
-          <i class="fa fa-home"></i>Account
+          <i class="fas fa-chart-line"></i>Account
         </template>
         <el-menu-item index="income">
-          <i class="fa fa-home"></i>
+          <i class="fas fa-chart-bar"></i>
           <span>Income</span>
         </el-menu-item>
       </el-submenu>
