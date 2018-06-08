@@ -217,7 +217,8 @@ export default {
         }
         .header >.headerKhmer {
         
-            font-size: 33px;
+            font-size: 30px;
+             color: darkgray;
             font-weight: 500;
             padding-top: 10px;
             font-family: 'Moul', PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;

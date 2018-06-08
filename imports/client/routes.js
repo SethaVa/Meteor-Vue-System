@@ -53,6 +53,9 @@ import DailyInEx from './reports/DailyReportInEx.vue';
 import MonthlyInEx from './reports/MonthlyReport.vue';
 import StaffReport from './reports/Staff.vue'
 import SubjectReport from './reports/Subject.vue';
+import TeacherDetails from './reports/TeacherDetails.vue'
+import StudentDebt from './reports/StudentDebt.vue'
+
 
 const routes = [
   //Notfound
@@ -239,6 +242,18 @@ const routes = [
         path: 'exchange-class',
         name: 'exchange-class',
         component: ExchangeClass,
+      },
+      // Rpt TeacherDetails
+      {
+        path: 'rpt-teacher',
+        name: 'teacher-details',
+        component: TeacherDetails,
+      },
+      // Rpt StudentDebt
+      {
+        path: 'rpt-debt',
+        name: 'student-debt',
+        component: StudentDebt,
       },
     ],
   },

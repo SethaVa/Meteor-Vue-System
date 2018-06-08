@@ -82,9 +82,17 @@
           <i class="fa fa-home"></i>
           <span>All Student</span>
         </el-menu-item>
+        <el-menu-item index="student-debt">
+          <i class="fa fa-home"></i>
+          <span>Student Debt</span>
+        </el-menu-item>
         <el-menu-item index="classDetails">
           <i class="fa fa-home"></i>
           <span>Class Details</span>
+        </el-menu-item>
+        <el-menu-item index="teacher-details">
+          <i class="fa fa-home"></i>
+          <span>Teacher Details</span>
         </el-menu-item>
         <el-menu-item index="subject-report">
           <i class="fa fa-book"></i>

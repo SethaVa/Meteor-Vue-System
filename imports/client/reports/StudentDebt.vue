@@ -8,11 +8,21 @@
                :inline="true"
                size="mini">
 
-        <el-form-item label="Start"
+        <!-- <el-form-item label="Start"
                       prop="start">
           <el-date-picker v-model="form.start"
                           placeholder="Select Date"
                           :picker-options="optionStart"></el-date-picker>
+        </el-form-item> -->
+        <el-form-item label="Type"
+                      prop="status">
+          <el-select v-model="form.status"
+                     placeholder="Please Selecte">
+            <el-option v-for="doc in statusOpts"
+                       :key="doc.value"
+                       :label="doc.label"
+                       :value="doc.value"></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="Type"
@@ -112,9 +122,10 @@
                 <th>Code</th>
                 <th>Name</th>
                 <th>Gender</th>
-                <th>Register Date</th>
-                <th>DOB</th>
-                <th>Telphone</th>
+                <th>Subject</th>
+                <th>Room</th>
+                <th>Time</th>
+                <th>End Date</th>
                 <th>Type</th>
               </tr>
             </thead>
@@ -123,11 +134,13 @@
                   :key="index">
                 <td>{{ index + 1 }}</td>
                 <td>{{ doc._id }}</td>
-                <td>{{ doc.enName }}</td>
+                <td>{{ doc.studentName }}</td>
                 <td>{{ doc.gender }}</td>
-                <td>{{ formatDate (doc.registerDate) }}</td>
+                <td>{{ doc.subject }}</td>
+                <!-- <td>{{ formatDate (doc.registerDate) }}</td> -->
+                <td>{{ doc.roomName }}</td>
+                <td>{{ formatTime(doc.timeStudy) }}</td>
                 <td>{{ formatDate( doc.dob) }}</td>
-                <td>{{ doc.tel }}</td>
                 <td>{{ doc.type }}</td>
               </tr>
             </tbody>
@@ -155,22 +168,27 @@ import Notify from '/imports/client/libs/notify'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import Lookup from '../libs/Lookup-Value'
 import { lookupClass } from '/imports/libs/lookup-methods'
-import { findStudentsByDate, findStudents } from '../../api/students/methods'
+import { findStudentDebt } from '../../api/report/studentDebt'
 import { Printd } from 'printd'
 import toCss from 'to-css'
 // const toCss = require('to-css')
 import reportCSS from '../styles/reportCss'
 
 export default {
-  name: 'StudentAll',
+  name: 'StudentDebt',
   data() {
     return {
       totalAll: 0,
       totalFemale: 0,
       typeOpts: Lookup.type,
       reportDate: moment().toDate(),
+      statusOpts: [
+        { label: 'Not Paid', value: 'Expire' },
+        { label: 'Debt', value: 'Debt' },
+        { label: 'Paid', value: 'Paid' },
+      ],
       form: {
-        start: moment().toDate(),
+        status: '',
         type: '',
       },
       optionStart: {
@@ -220,10 +238,13 @@ export default {
       loading: false,
       tableData: [],
       titles: [
-        { label: 'Student', prop: 'student' },
+        { label: 'Student', prop: 'studentName' },
         { label: 'Gender', prop: 'gender', width: '100px' },
-        { label: 'Pay Date', prop: 'payDate' },
+        { label: 'Subject', prop: 'subject' },
+        { label: 'Room', prop: 'roomName' },
+        { label: 'Time', prop: 'timeStudy' },
         { label: 'End Date', prop: 'endPayDate' },
+        { label: 'Type', prop: 'type' },
       ],
       itemProp: false,
       infoShow: false,
@@ -281,21 +302,18 @@ export default {
         if (valid) {
           this.loading = true
 
-          this.form.start = wrapCurrentTime(this.form.start)
-          this.reportDate = this.form.start
-          // this.form.start = moment(this.form.start).format('YYYY-MM-DD')
           let selector = {
             type: { $in: this.form.type },
-            registerDate: { $lte: this.form.start },
+            status: this.form.status,
           }
           this.totalAll = 0
           this.totalFemale = 0
-          findStudents
+          findStudentDebt
             .callPromise({ selector })
             .then(result => {
               if (result.length > 0) {
                 this.tableData = result
-
+                console.log(result)
                 _.forEach(result, o => {
                   this.totalAll += 1
                   if (o.gender == 'Female') {

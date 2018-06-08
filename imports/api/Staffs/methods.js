@@ -254,20 +254,6 @@ const aggregatefindStaffDetails = selector => {
       },
     },
     {
-      $lookup: {
-        from: 'types',
-        localField: 'typeId',
-        foreignField: '_id',
-        as: 'typeDoc',
-      },
-    },
-    {
-      $unwind: {
-        path: '$typeDoc',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
       $group: {
         _id: '$staffId',
         name: {
@@ -287,22 +273,22 @@ const aggregatefindStaffDetails = selector => {
             room: '$roomDoc.roomName',
             subject: '$subjectDoc.title',
             time: '$timeDoc.timeStudy',
-            type: '$typeDoc.type',
+            type: '$type',
             status: '$status',
           },
         },
       },
     },
-    {
-      $project: {
-        _id: 1,
-        name: 1,
-        gender: 1,
-        email: 1,
-        tel: 1,
-        teacherDetail: 1,
-      },
-    },
+    // {
+    //   $project: {
+    //     _id: 1,
+    //     name: 1,
+    //     gender: 1,
+    //     email: 1,
+    //     tel: 1,
+    //     teacherDetail: 1,
+    //   },
+    // },
   ])
   return data
 }
