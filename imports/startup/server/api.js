@@ -68,3 +68,6 @@ import '../../api/exchange-class/server/index'
 
 //Dashbord
 import '../../api/dashbord/index.js'
+
+// Report
+import '../../api/report/index.js'

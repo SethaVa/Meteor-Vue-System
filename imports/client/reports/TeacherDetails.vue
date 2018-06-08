@@ -16,9 +16,9 @@
                      @click="handlePrint">
             <i class="el-icon-printer"> Print</i>
           </el-button>
-          <el-button size="mini"
+          <!-- <el-button size="mini"
                      type="text"
-                     @click="getData()">GetData</el-button>
+                     @click="getData()">GetData</el-button> -->
         </div>
 
       </div>
@@ -48,15 +48,15 @@
                 <!-- <th>Code</th> -->
                 <th>Name</th>
                 <th>Gender</th>
-                <th>Data Of Birth</th>
+                <!-- <th>Data Of Birth</th> -->
                 <th>Emaile</th>
                 <th>Telphone</th>
-                <th>Position</th>
+                <!-- <th>Position</th> -->
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="(doc, index) in tableData"
-                  :key="index">
+            <tbody v-for="(doc, index) in tableData"
+                   :key="index">
+              <tr>
                 <td>{{ index + 1 }}</td>
                 <!-- <td>{{ doc._id }}</td> -->
                 <td>{{ doc.name }}</td>
@@ -65,8 +65,26 @@
                 <!-- <td>{{ formatDate( doc.dob) }}</td> -->
                 <td>{{ doc.email }}</td>
                 <td>{{ doc.tel }}</td>
-                <td>{{ doc.position }}</td>
+                <!-- <td>{{ doc.position }}</td>
+                <td>{{ $_.repeat(doc.details) }}</td> -->
               </tr>
+              <tr>
+                <th>#</th>
+                <th>Room</th>
+                <th>Subject</th>
+                <th>Time</th>
+                <th>Type</th>
+              </tr>
+
+              <tr v-for="(sub,index) in doc.teacherDetail"
+                  :key="index">
+                <td>{{ index +1 }}</td>
+                <td>{{ sub.room }}</td>
+                <td>{{ sub.subject }}</td>
+                <td>{{ formatTime(sub.time) }}</td>
+                <td>{{ sub.type }}</td>
+              </tr>
+
             </tbody>
 
           </table>
@@ -92,8 +110,7 @@ import moment from 'moment'
 import Notify from '/imports/client/libs/notify'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import Lookup from '../libs/Lookup-Value'
-import { lookupClass } from '/imports/libs/lookup-methods'
-import { findStaff } from '../../api/Staffs/methods'
+import { findTeacherDetails } from '../../api/report/teacherDetails'
 import { Printd } from 'printd'
 import toCss from 'to-css'
 // const toCss = require('to-css')
@@ -135,8 +152,8 @@ export default {
 
       this.totalAll = 0
       this.totalFemale = 0
-      findStaff
-        .callPromise()
+      findTeacherDetails
+        .callPromise({})
         .then(result => {
           if (result.length > 0) {
             this.tableData = result
@@ -185,9 +202,10 @@ export default {
         }
         .header >.headerKhmer {
         
-            font-size: 33px;
+            font-size: 30px;
             font-weight: 500;
             padding-top: 10px;
+            color: darkgray;
             font-family: 'Moul', PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif !important;
         }
         .header >.headerEn {
