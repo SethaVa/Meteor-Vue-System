@@ -24,6 +24,7 @@ export const findSubject = new ValidatedMethod({
     options
   }) {
     if (Meteor.isServer) {
+      Meteor._sleepForMs(500)
       selector = selector || {}
       options = options || {}
 

@@ -24,6 +24,7 @@ export const findStudentDebt = new ValidatedMethod({
     selector
   }) {
     if (Meteor.isServer) {
+      Meteor._sleepForMs(500)
       selector = selector || {}
       return aggregateStudentDebt(selector)
     }

@@ -86,6 +86,10 @@
           <i class="fa fa-home"></i>
           <span>Student Debt</span>
         </el-menu-item>
+        <el-menu-item index="student-exchange">
+          <i class="fa fa-home"></i>
+          <span>Student Change</span>
+        </el-menu-item>
         <el-menu-item index="classDetails">
           <i class="fa fa-home"></i>
           <span>Class Details</span>

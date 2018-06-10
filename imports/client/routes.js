@@ -55,7 +55,7 @@ import StaffReport from './reports/Staff.vue'
 import SubjectReport from './reports/Subject.vue';
 import TeacherDetails from './reports/TeacherDetails.vue'
 import StudentDebt from './reports/StudentDebt.vue'
-
+import StudentExchangeRpt from './reports/ExchangeStudent.vue'
 
 const routes = [
   //Notfound
@@ -254,6 +254,12 @@ const routes = [
         path: 'rpt-debt',
         name: 'student-debt',
         component: StudentDebt,
+      },
+      // Rpt StudentDebt
+      {
+        path: 'rpt-exchangeStudent',
+        name: 'student-exchange',
+        component: StudentExchangeRpt,
       },
     ],
   },
