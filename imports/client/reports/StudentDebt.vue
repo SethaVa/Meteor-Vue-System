@@ -1,20 +1,14 @@
 <template>
   <div>
-    <fieldset>
-      <legend>Option</legend>
+    <!-- <fieldset>
+      <legend>Option</legend> -->
       <el-form :model="form"
                ref="form"
                :rules="rules"
                :inline="true"
                size="mini">
 
-        <!-- <el-form-item label="Start"
-                      prop="start">
-          <el-date-picker v-model="form.start"
-                          placeholder="Select Date"
-                          :picker-options="optionStart"></el-date-picker>
-        </el-form-item> -->
-        <el-form-item label="Type"
+        <el-form-item label="Filter"
                       prop="status">
           <el-select v-model="form.status"
                      placeholder="Please Selecte">
@@ -39,30 +33,25 @@
           </el-select>
         </el-form-item>
 
-        <!-- <el-form-item label="To"
-                      prop="end">
-          <el-date-picker v-model="form.end"
-                          placeholder="Select Date"
-                          :picker-options="optionStart"></el-date-picker>
-        </el-form-item> -->
-
-        <!-- <slot v-if="itemProp">
-          <el-form-item label="Subject"
-                        prop="classId">
-            <el-select v-model="form.classId">
-              <el-option v-for="doc in classIdOpts"
-                         :key="doc.value"
-                         :label="doc.label"
-                         :value="doc.value"></el-option>
-            </el-select>
-          </el-form-item>
-        </slot> -->
+       <el-form-item label="Date"
+                      prop="dateOpt">
+          
+          <el-date-picker v-model="form.dateOpt"
+                          type="daterange"
+                          align="right"
+                          unlink-panels
+                          range-separator="To"
+                          start-placeholder="Start date"
+                          end-placeholder="End date"
+                          :picker-options="pickerOptions">
+          </el-date-picker>
+      </el-form-item> 
         <el-form-item label="">
           <el-button type="primary"
                      @click="handleSubmit">Submit</el-button>
         </el-form-item>
       </el-form>
-    </fieldset>
+    <!-- </fieldset> -->
 
     <el-card class="box-card">
       <div slot="header"
@@ -140,7 +129,7 @@
                 <!-- <td>{{ formatDate (doc.registerDate) }}</td> -->
                 <td>{{ doc.roomName }}</td>
                 <td>{{ formatTime(doc.timeStudy) }}</td>
-                <td>{{ formatDate( doc.dob) }}</td>
+                <td>{{ formatDate( doc.endPayDate) }}</td>
                 <td>{{ doc.type }}</td>
               </tr>
             </tbody>
@@ -190,47 +179,44 @@ export default {
       form: {
         status: '',
         type: '',
+        optDate:''
       },
-      optionStart: {
+      pickerOptions: {
         shortcuts: [
-          {
-            text: 'Today',
-            onClick(picker) {
-              picker.$emit('pick', new Date())
-            },
-          },
           {
             text: 'Yesterday',
             onClick(picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24)
-              picker.$emit('pick', date)
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
+              picker.$emit('pick', [start, end])
             },
           },
           {
-            text: 'A week ago',
+            text: 'Last week',
             onClick(picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', date)
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
             },
           },
           {
             text: 'Last month',
             onClick(picker) {
-              // const end = new Date()
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', date)
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
             },
           },
           {
             text: 'Last 3 months',
             onClick(picker) {
-              // const end = new Date()
+              const end = new Date()
               const start = new Date()
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', start)
+              picker.$emit('pick', [start, end])
             },
           },
         ],
@@ -259,8 +245,9 @@ export default {
       //   end: '',
       // },
       rules: {
-        start: [{ required: true }],
+        status: [{ required: true }],
         type: [{ required: true }],
+        dateOpt:[{required:true}]
       },
     }
   },
@@ -301,10 +288,16 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.loading = true
+          let dateF = moment(this.form.dateOpt[0]).startOf('day').toDate()
+          let dateT = moment(this.form.dateOpt[1]).endOf('day').toDate() 
 
           let selector = {
             type: { $in: this.form.type },
             status: this.form.status,
+            tranDate:{
+              $gte:dateF,
+              $lte:dateT
+            }
           }
           this.totalAll = 0
           this.totalFemale = 0
