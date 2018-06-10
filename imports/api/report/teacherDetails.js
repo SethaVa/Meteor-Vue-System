@@ -24,6 +24,7 @@ export const findTeacherDetails = new ValidatedMethod({
     selector
   }) {
     if (Meteor.isServer) {
+      Meteor._sleepForMs(500)
       selector = selector || {}
       return aggregateTeacherDetails(selector)
     }
