@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="aside-menu-layout">
     <el-menu :default-active="activeMenu"
              @select="handleMenuSelect"
              text-color="#fff">
@@ -7,9 +7,9 @@
         <i class="fa fa-home"></i>
         <span>Home</span>
       </el-menu-item>
-      <el-menu-item index="book">
-        <i class="fa fa-home"></i>
-        <span>Book</span>
+      <el-menu-item index="subject">
+        <i class="fa fa-book"></i>
+        <span>Subject</span>
       </el-menu-item>
       <!-- <el-menu-item index="teacher">
         <i class="fa fa-home"></i>
@@ -32,6 +32,11 @@
 export default {
   name: 'aside-menuUser',
   props: ['activeMenu'],
+  computed: {
+    userIsInRole() {
+      return this.$store.getters['userIsInRole'](['user'])
+    },
+  },
   methods: {
     handleMenuSelect(name) {
       this.$router.push({ name: name })
@@ -41,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// @import '~imports/client/styles/menu.scss';
+@import '~imports/client/styles/aside-menu.scss';
 </style>
  
 

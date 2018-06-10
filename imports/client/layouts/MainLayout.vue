@@ -9,20 +9,20 @@
              class="logo-img">
       </div>
 
-      <!-- <span v-if="true">
+      <span v-if="userIsInRoleUser">
         <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
-        <component :is="currentAsideMenu"
-                   :active-menu="linkActiveClass"></component>
+        <!-- <component :is="currentAsideMenu"
+                   :active-menu="linkActiveClass"></component> -->
       </span>
-      <span v-else>
+      <span v-else-if="userIsInRoleAdmin">
         <aside-menu :active-menu="linkActiveClass"></aside-menu>
-        <component :is="currentAsideMenu"
-                   :active-menu="linkActiveClass"></component>
-      </span> -->
+        <!-- <component :is="currentAsideMenu"
+                   :active-menu="linkActiveClass"></component> -->
+      </span>
       <!-- @select="handleHomeSelect" -->
 
-      <component :is="currentAsideMenu"
-                 :active-menu="linkActiveClass"></component>
+      <!-- <component :is="currentAsideMenu"
+                 :active-menu="linkActiveClass"></component> -->
 
     </el-aside>
     <el-container>
@@ -120,6 +120,14 @@ export default {
     }),
     userFullName() {
       return this.$store.getters['userFullName']
+    },
+    userIsInRoleUser() {
+      return this.$store.getters['userIsInRole'](['user'])
+    },
+    userIsInRoleAdmin() {
+      return this.$store.getters['userIsInRole'](['admin'])
+      // (['admin', 'super','user'])
+      // return this.$store.getters['userIsInRole'](['pos'])
     },
     headerTitle() {
       let title = 'No TiTle'

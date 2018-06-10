@@ -36,7 +36,8 @@ export const store = new Vuex.Store({
     },
     logout(state, self) {
       Meteor.logout(() => {
-        Session.clear()
+        // Session.clear()
+        localStorage.removeItem('vuex')
         self.$nextTick(() => {
           Msg.success('You are logout!')
           self.$router.push({
