@@ -145,6 +145,8 @@
     <h3>Check User is in roles</h3>
     ['super', 'admin']: {{ userIsInRole }}
     <br>
+    <h3>{{userIsInRole}}</h3>
+    <br>
     <h3>Current User</h3>
     <vue-json-pretty :data="currentUser"
                      :deep="1" />
@@ -251,7 +253,8 @@ export default {
       return this.$store.getters['userFullName']
     },
     userIsInRole() {
-      return this.$store.getters['userIsInRole'](['admin', 'super'])
+      return this.$store.getters['userIsInRole'](['user'])
+      // (['admin', 'super'])
       // return this.$store.getters['userIsInRole'](['pos'])
     },
   },
