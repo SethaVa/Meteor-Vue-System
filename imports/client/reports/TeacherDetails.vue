@@ -78,7 +78,7 @@
 
               <tr v-for="(sub,index) in doc.teacherDetail"
                   :key="index">
-                <td>{{ index +1 }}</td>
+                <td>{{ $_.repeat('&nbsp',7) }}{{ index +1 }}</td>
                 <td>{{ sub.room }}</td>
                 <td>{{ sub.subject }}</td>
                 <td>{{ formatTime(sub.time) }}</td>

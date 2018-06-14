@@ -69,6 +69,7 @@ import {
   findClassStudy,
   removeClassStudy,
   finishClassStudy,
+  updateClassStudyStatus,
 } from '../../api/classStudy/methods'
 import moment from 'moment'
 import _ from 'lodash'
@@ -120,17 +121,17 @@ export default {
               this.currentModal = ClassInsert
             },
           },
-          {
-            name: 'Finish Class',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              // this.modalVisible = true
-              // this.currentModal = ClassInsert
-            },
-          },
+          // {
+          //   name: 'Finish Class',
+          //   icon: 'el-icon-plus',
+          //   buttonProps: {
+          //     size: 'mini',
+          //   },
+          //   handler: () => {
+          //     // this.modalVisible = true
+          //     // this.currentModal = ClassInsert
+          //   },
+          // },
         ],
       },
     }
@@ -191,8 +192,9 @@ export default {
         this.$confirm('Are you sure ?', 'Warning', { type: 'warning' })
           .then(result => {
             let _id = command.row._id
-            finishClassStudy
-              .callPromise({ _id })
+            let status = 'Closed'
+            updateClassStudyStatus
+              .callPromise({ _id, status })
               .then(result => {
                 if (result) {
                   MsgBox.success()

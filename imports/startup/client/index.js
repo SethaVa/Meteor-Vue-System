@@ -60,7 +60,13 @@ const router = new VueRouter({
 
 //  Font Awesome 5
 import '/imports/client/styles/fontawesome-all.css'
-
+//plugin
+import VueLodash from '/imports/client/plugins/vue-lodash'
+Vue.use(VueLodash)
+import VueMoment from '/imports/client/plugins/vue-moment'
+Vue.use(VueMoment)
+import VueNumeral from '/imports/client/plugins/vue-numeral'
+Vue.use(VueNumeral)
 // Sync the router with the vuex store
 // sync(store, router)
 

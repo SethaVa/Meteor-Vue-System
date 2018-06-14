@@ -20,7 +20,8 @@
       <el-form-item label="Class"
                     prop="classId">
 
-        <el-select v-model="form.classId"
+        <el-select style="width:100%"
+                   v-model="form.classId"
                    clearable
                    placeholder="Select Class">
           <el-option v-for="doc in classIdOpts"
@@ -36,7 +37,7 @@
       <el-form-item label="">
         <el-button type="primary"
                    @click="handleSubmit">
-        <i class="fas fa-sync-alt"></i> Submit</el-button>
+          <i class="fas fa-sync-alt"></i> Submit</el-button>
       </el-form-item>
     </el-form>
     <el-card class="box-card">
@@ -82,7 +83,7 @@
           </div>
           <div class="clRight">
             <label>Time : {{ formatTime( timeStudy ) }}</label><br><br>
-            <label>Room : {{ roomName }}</label>
+            <label>Date : {{ formatDate(currentDate) }}</label>
           </div>
         </div>
         <!-- </slot> -->
@@ -114,7 +115,11 @@
             </tbody>
 
           </table>
-
+          <div style="width: 30%; float: right; display: inline-block;margin-top:3%;margin-bottom:3%;">
+            <span class="title">Total All : {{ totalAll }}</span>
+            <br>
+            <span class="title">Female : {{ totalFemale }}</span>
+          </div>
         </div>
 
       </div>
@@ -148,6 +153,7 @@ export default {
         { label: 'Pay Date', prop: 'payDate' },
         { label: 'End Date', prop: 'endPayDate' },
       ],
+      currentDate: moment().toDate(),
       itemProp: false,
       infoShow: false,
       teacherName: '',
@@ -155,6 +161,9 @@ export default {
       subjectName: '',
       timeStudy: [],
       classIdOpts: [],
+      totalAll: 0,
+      totalFemale: 0,
+
       form: {
         opt: '',
         classId: '',
@@ -212,6 +221,8 @@ export default {
     handleSubmit() {
       this.$refs['form'].validate(valid => {
         if (valid) {
+          this.totalAll = 0
+          this.totalFemale = 0
           this.loading = true
           let selector = {
             classId: this.form.classId,
@@ -228,6 +239,12 @@ export default {
                   this.timeStudy = o.time
 
                   this.tableData = o.classDetail
+                  _.forEach(o.classDetail, o => {
+                    this.totalAll += 1
+                    if (o.gender == 'Female') {
+                      this.totalFemale += 1
+                    }
+                  })
                 })
               } else {
                 this.teacherName = ''

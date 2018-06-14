@@ -71,6 +71,30 @@ export const updateClassStudy = new ValidatedMethod({
   },
 })
 
+export const updateClassStudyStatus = new ValidatedMethod({
+  name: 'updateClassStudyStatus',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    _id: String,
+    status: String
+  }).validator(),
+  run({
+    _id,
+    status
+  }) {
+    if (Meteor.isServer) {
+      return ClassStudy.update({
+        _id: _id
+      }, {
+        $set: {
+          status: status
+        }
+      })
+    }
+  },
+})
+
+
 export const removeClassStudy = new ValidatedMethod({
   name: 'removeClassStudy',
   mixins: [CallPromiseMixin],

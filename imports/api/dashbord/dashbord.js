@@ -14,6 +14,8 @@ import Staff from '../Staffs/staff'
 import Room from '../rooms/room'
 import Subject from '../subject/subjects'
 import ClassStudy from '../classStudy/classStudy'
+import Payment from '../payment/payment'
+
 
 // Find Student to show in dash bord
 export const findStudentByType = new ValidatedMethod({
@@ -112,6 +114,22 @@ export const countSubject = new ValidatedMethod({
 
       // return aggregateSubject(selector)
       return Subject.find(selector, options).count()
+    }
+  },
+})
+
+// Find
+export const countPayment = new ValidatedMethod({
+  name: 'countPayment',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+
+      return Payment.find(selector).count()
     }
   },
 })
