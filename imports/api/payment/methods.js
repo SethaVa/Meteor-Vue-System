@@ -64,6 +64,7 @@ export const findClassForStudenDetails = new ValidatedMethod({
     selector,
   }) {
     if (Meteor.isServer) {
+      Meteor._sleepForMs(500)
       selector = selector || {}
       return aggregatePayment(selector)
     }

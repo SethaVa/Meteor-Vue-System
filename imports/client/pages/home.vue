@@ -68,7 +68,7 @@
               </div>
 
             </div>
-            <i class="fa fa-door-open"></i>
+            <i class="fa fa-line-chart"></i>
 
           </el-card>
         </el-col>
@@ -84,7 +84,7 @@
               </div>
 
             </div>
-            <i class="fa fa-user-plus"></i>
+            <i class="fa fa-chart-bar"></i>
 
           </el-card>
         </el-col>
@@ -100,7 +100,7 @@
               </div>
 
             </div>
-            <i class="fa fa-user-plus"></i>
+            <i class="fa fa-pie-chart"></i>
 
           </el-card>
         </el-col>
@@ -145,7 +145,7 @@
     <h3>Check User is in roles</h3>
     ['super', 'admin']: {{ userIsInRole }}
     <br>
-    <h3>{{userIsInRole}}</h3>
+    <h3>{{ userIsInRole }}</h3>
     <br>
     <h3>Current User</h3>
     <vue-json-pretty :data="currentUser"
@@ -194,6 +194,7 @@ import {
   countRoom,
   countClass,
   countSubject,
+  countPayment,
 } from '../../api/dashbord/dashbord'
 
 // var rowData = []
@@ -265,7 +266,8 @@ export default {
     this.getSubjectAmount()
     this.getClassAmount()
     this.getStudentShowChart()
-    console.log(moment().toDate())
+    this.getPayment()
+    // console.log(moment().toDate())
 
     // check student on time to pay
     compareDate()
@@ -362,6 +364,27 @@ export default {
         .callPromise({ selector })
         .then(result => {
           this.totalClass = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
+    // Room
+    getPayment() {
+      let selector = {
+        tranDate: {
+          $gte: moment()
+            .startOf('day')
+            .toDate(),
+          $lt: moment()
+            .endOf('day')
+            .toDate(),
+        },
+      }
+      countPayment
+        .callPromise({ selector })
+        .then(result => {
+          this.totalPayment = result
         })
         .catch(error => {
           Notify.error({ message: error })
