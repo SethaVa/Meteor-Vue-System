@@ -51,7 +51,7 @@
             <el-form-item label="Roles"
                           prop="roles">
               <el-select v-model="form.roles"
-                         multiple
+                         clearable
                          style="width: 100%">
                 <el-option v-for="item in roleOpts"
                            :key="item.value"
@@ -175,7 +175,7 @@ export default {
         confirmPassword: '',
         status: '',
         // branchPermissions: [],
-        roles: [],
+        roles: '',
       },
       rules: {
         fullName: [{ required: true, message: 'Full name is required' }],

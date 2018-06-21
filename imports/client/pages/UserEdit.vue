@@ -51,7 +51,7 @@
             <el-form-item label="Roles"
                           prop="roles">
               <el-select v-model="form.roles"
-                         multiple
+                         clearable
                          style="width: 100%">
                 <el-option v-for="item in roleOpts"
                            :key="item.value"
@@ -193,7 +193,7 @@ export default {
         password: '',
         confirmPassword: '',
         branchPermissions: [],
-        roles: [],
+        roles: '',
       },
       rules: {
         fullName: [{ required: true, message: 'Full name is required' }],
@@ -280,7 +280,7 @@ export default {
             password: '',
             confirmPassword: '',
             branchPermissions: result.profile.branchPermissions,
-            roles: result.roles,
+            roles: result.roles[0],
           }
           this.loading = false
         })
@@ -297,7 +297,6 @@ export default {
           // Make data
           const data = _.clone(this.form)
           delete data.confirmPassword
-
           updateUser
             .callPromise({ user: data })
             .then(result => {
@@ -307,7 +306,7 @@ export default {
                   this.$store.commit('logout', this)
                 } else {
                   Msg.success()
-                  this.handleCancel()
+                  this.handleClose()
                 }
               }
             })

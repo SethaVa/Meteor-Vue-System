@@ -135,7 +135,7 @@
         </el-table-column>
       </data-tables> -->
 
-    <h1>Home Page</h1>
+    <!-- <h1>Home Page</h1>
     <el-button type="primary"
                @click="handleExport">Export Data</el-button>
     <br>
@@ -150,15 +150,15 @@
     <h3>Current User</h3>
     <vue-json-pretty :data="currentUser"
                      :deep="1" />
-    <br>
+    <br> -->
     <!-- <avatar username="Darth Vader"
             initials="AS"
             :size="100">
     </avatar> -->
-    <avatar :username="userFullName"
+    <!-- <avatar :username="userFullName"
             :size="40"
             background-color="#FFC107"
-            color="#EBEEF5"></avatar>
+            color="#EBEEF5"></avatar> -->
     <!-- <label>Branch : {{ currentBranch }}</label> -->
 
     <!-- <ve-pie :data="chartData"
@@ -167,7 +167,6 @@
     <ve-histogram :data="chartData"
                   :settings="chartSettings1"></ve-histogram> -->
 
-    </h3>
   </div>
 </template>
 

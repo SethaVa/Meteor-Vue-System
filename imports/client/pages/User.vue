@@ -1,68 +1,5 @@
 <template>
   <div>
-    <!-- route outlet -->
-    <!-- <router-view v-if="routerView"></router-view>
-
-    <div v-else>
-      <data-tables :data="tableData"
-                   :table-props="tableProps"
-                   :actions-def="tableActionsDef"
-                   :loading="loading">
-        <el-table-column prop="profile.fullName"
-                         label="Full Name"
-                         sortable="custom">
-        </el-table-column>
-
-        <el-table-column prop="username"
-                         label="Username"
-                         sortable="custom">
-        </el-table-column>
-
-        <el-table-column prop="emails[0].address"
-                         label="Email"
-                         sortable="custom">
-        </el-table-column>
-
-        <el-table-column prop="profile.status"
-                         label="Status"
-                         sortable="custom">
-        </el-table-column>
-
-        <el-table-column prop="roles"
-                         label="Roles"
-                         :formatter="arrFormatter">
-        </el-table-column>
-
-        <el-table-column prop="profile.branchPermissions"
-                         label="Branch Permiss"
-                         :formatter="arrFormatter">
-        </el-table-column>
-
-        <el-table-column label="Actions"
-                         align="center"
-                         fixed="right"
-                         width="65">
-          <template slot-scope="scope">
-            <el-dropdown trigger="click"
-                         @command="handleAction">
-              <span class="el-dropdown-link">
-                <i class="fa fa-bars"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item :command="{action: 'edit', row: scope.row}">
-                  Edit
-                </el-dropdown-item>
-                <el-dropdown-item v-if="userIsInSuperRole"
-                                  :command="{action: 'remove', row: scope.row}"
-                                  class="remove-action">
-                  Remove
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </template>
-        </el-table-column>
-      </data-tables>
-    </div> -->
     <component :is="currentDialog"
                :visible="visibleDialog"
                :update-id="updateId"
@@ -93,10 +30,9 @@
                        label="Status"
                        sortable="custom">
       </el-table-column>
-
+      <!-- :formatter="arrFormatter" -->
       <el-table-column prop="roles"
-                       label="Roles"
-                       :formatter="arrFormatter">
+                       label="Roles">
       </el-table-column>
 
     </data-tables>
@@ -104,11 +40,6 @@
 </template>
 
 <script>
-// Mixin
-// import dataTablesMixin from '/imports/client/mixins/data-tables'
-// import softRemoveMixin from '/imports/client/mixins/soft-remove'
-// import restoreMixin from '/imports/client/mixins/restore'
-// import removeMixin from '/imports/client/mixins/remove'
 import Notify from '/imports/client/libs/notify'
 
 import { findUsers, removeUser } from '../../api/users/methods'
@@ -173,8 +104,8 @@ export default {
               let id = row._id
               this.$confirm('Do you want delete this record?', 'Warning')
                 .then(result => {
-                  removeType
-                    .callPromise({ id: id })
+                  removeUser
+                    .callPromise({ _id: id })
                     .then(result => {
                       this.$message({
                         message: 'Delete Successfull',
@@ -233,7 +164,7 @@ export default {
 
       findUsers
         .callPromise({
-          selector: { username: { $ne: 'super' } },
+          selector: { username: { $ne: 'admin' } },
           options: { sort: { fullName: 1 } },
         })
         .then(result => {

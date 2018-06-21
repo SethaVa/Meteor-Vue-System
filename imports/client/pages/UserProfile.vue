@@ -232,7 +232,7 @@ export default {
             password: '',
             confirmPassword: '',
             branchPermissions: result.profile.branchPermissions,
-            roles: result.roles,
+            roles: result.roles[0],
           }
           this.$nextTick(() => (this.loading = false))
         })
