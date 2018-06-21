@@ -11,13 +11,12 @@
 
       <span v-if="userIsInRoleUser">
         <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
-        <!-- <component :is="currentAsideMenu"
-                   :active-menu="linkActiveClass"></component> -->
       </span>
       <span v-else-if="userIsInRoleAdmin">
         <aside-menu :active-menu="linkActiveClass"></aside-menu>
-        <!-- <component :is="currentAsideMenu"
-                   :active-menu="linkActiveClass"></component> -->
+      </span>
+      <span v-else-if="userIsInRoleManager">
+        <aside-menu-manager :active-menu="linkActiveClass"></aside-menu-manager>
       </span>
       <!-- @select="handleHomeSelect" -->
 
@@ -87,6 +86,8 @@ import _ from 'lodash'
 import AsideMenu from '../AsideMenu.vue'
 import HeaderMenu from '../HeaderMenu.vue'
 import AsideMenuUser from '../AsideMenuUser.vue'
+import AsideMenuManager from '../AsideMenuManager.vue'
+
 import { Session } from 'meteor/session'
 
 import { appLog } from '../../api/app-logs/methods.js'
@@ -100,6 +101,7 @@ export default {
     AsideMenu,
     HeaderMenu,
     AsideMenuUser,
+    AsideMenuManager,
     Avatar,
   },
   data() {
@@ -122,12 +124,15 @@ export default {
       return this.$store.getters['userFullName']
     },
     userIsInRoleUser() {
-      return this.$store.getters['userIsInRole'](['user'])
+      return this.$store.getters['userIsInRole'](['receipt'])
     },
     userIsInRoleAdmin() {
       return this.$store.getters['userIsInRole'](['admin'])
       // (['admin', 'super','user'])
       // return this.$store.getters['userIsInRole'](['pos'])
+    },
+    userIsInRoleManager() {
+      return this.$store.getters['userIsInRole'](['manager'])
     },
     headerTitle() {
       let title = 'No TiTle'

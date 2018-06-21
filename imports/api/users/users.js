@@ -27,11 +27,11 @@ export const UserInsertSchema = new SimpleSchema({
     type: String,
   },
   roles: {
-    type: Array,
-  },
-  'roles.$': {
     type: String,
   },
+  // 'roles.$': {
+  //   type: String,
+  // },
 })
 
 export const UserUpdateSchema = new SimpleSchema({
@@ -64,9 +64,9 @@ export const UserUpdateSchema = new SimpleSchema({
     type: String,
   },
   roles: {
-    type: Array,
-  },
-  'roles.$': {
     type: String,
   },
+  // 'roles.$': {
+  //   type: String,
+  // },
 })

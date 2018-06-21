@@ -31,16 +31,16 @@ const LookupValue = {
     },
   ],
   roles: [{
-      label: 'super',
-      value: 'super'
-    },
-    {
       label: 'admin',
       value: 'admin'
     },
     {
-      label: 'user',
-      value: 'user'
+      label: 'manager',
+      value: 'manager'
+    },
+    {
+      label: 'receipt',
+      value: 'receipt'
     },
 
   ],
