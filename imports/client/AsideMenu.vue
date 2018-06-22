@@ -10,6 +10,7 @@
       <!-- //======================== // Student //======================== -->
       <el-submenu index="student">
         <template slot="title">
+          <i class="fa fa-graduation-cap"></i>
           Student
         </template>
         <el-menu-item index="student">
