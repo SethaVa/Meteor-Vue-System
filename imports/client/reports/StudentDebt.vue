@@ -63,9 +63,9 @@
                      @click="handlePrint">
             <i class="el-icon-printer"> Print</i>
           </el-button>
-          <el-button size="mini"
+          <!-- <el-button size="mini"
                      type="text"
-                     @click="getData()">GetData</el-button>
+                     @click="getData()">GetData</el-button> -->
         </div>
 
       </div>
@@ -121,7 +121,7 @@
             <tbody>
               <tr v-for="(doc, index) in tableData"
                   :key="index">
-                <td>{{ index + 1 }}</td>
+                <td align="center">{{ index + 1 }}</td>
                 <td>{{ doc._id }}</td>
                 <td>{{ doc.studentName }}</td>
                 <td>{{ doc.gender }}</td>
@@ -160,6 +160,8 @@ import { lookupClass } from '/imports/libs/lookup-methods'
 import { findStudentDebt } from '../../api/report/studentDebt'
 import { Printd } from 'printd'
 import toCss from 'to-css'
+import { dateRangePickerOpts } from '/imports/client/libs/date-range-picker-opts'
+
 // const toCss = require('to-css')
 import reportCSS from '../styles/reportCss'
 
@@ -174,53 +176,16 @@ export default {
       statusOpts: [
         { label: 'Not Paid', value: 'Expire' },
         { label: 'Debt', value: 'Debt' },
-        { label: 'Paid', value: 'Paid' },
+        // { label: 'Paid', value: 'Paid' },
       ],
       form: {
         status: '',
         type: '',
-        optDate:''
+        dateOpt:[moment().toDate(), moment().toDate()],
+
       },
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: 'Yesterday',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: 'Last week',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: 'Last month',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: 'Last 3 months',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            },
-          },
-        ],
-      },
+      pickerOptions:dateRangePickerOpts,
+     
       loading: false,
       tableData: [],
       titles: [
@@ -306,7 +271,6 @@ export default {
             .then(result => {
               if (result.length > 0) {
                 this.tableData = result
-                console.log(result)
                 _.forEach(result, o => {
                   this.totalAll += 1
                   if (o.gender == 'Female') {
@@ -427,6 +391,11 @@ export default {
             font-size: 14px;
             font-weight: 500;
             font-style: initial oblique;
+        }
+        // hide repeat header
+        thead
+        {
+            display: table-row-group;
         }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)

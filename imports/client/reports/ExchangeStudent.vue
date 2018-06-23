@@ -82,7 +82,7 @@
             <tbody>
               <tr v-for="(doc, index) in tableData"
                   :key="index">
-                <td>{{ index + 1 }}</td>
+                <td align="center">{{ index + 1 }}</td>
                 <td>{{ formatDate(doc.tranDate) }}</td>
                 <td>{{ doc.name }}</td>
                 <td>{{ doc.gender }}</td>
@@ -128,6 +128,7 @@ import Lookup from '../libs/Lookup-Value'
 import { lookupType } from '/imports/libs/lookup-methods'
 //
 import { findExchangeStudents } from '../../api/report/exchangeStudent'
+import { dateRangePickerOpts } from '/imports/client/libs/date-range-picker-opts'
 
 const numeral = require('numeral')
 export default {
@@ -146,42 +147,12 @@ export default {
         { label: 'End Date', prop: 'endPayDate' },
       ],
       form: {
-        opts: moment().toDate(),
+        opts:[ moment().toDate(),moment().toDate()],
       },
       rules: {
         opts: [{ required: true }],
       },
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: 'Last week',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: 'Last month',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: 'Last 3 months',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            },
-          },
-        ],
-      },
+      pickerOptions: dateRangePickerOpts
     }
   },
   mounted() {
@@ -338,6 +309,11 @@ export default {
             font-size: 14px;
             font-weight: 500;
             font-style: initial oblique;
+        }
+        // hide repeat header
+        thead
+        {
+            display: table-row-group;
         }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)

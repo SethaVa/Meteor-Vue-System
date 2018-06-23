@@ -109,7 +109,7 @@
               <tbody>
                 <tr v-for="(doc, index) in tableInEx"
                     :key="index">
-                  <td>{{ index + 1 }}</td>
+                  <td align="center">{{ index + 1 }}</td>
                   <td>{{ doc.name }}</td>
                   <td>{{ doc.referenceType }}</td>
                   <td>{{ formatDate(doc.endPayDate) }}</td>
@@ -361,6 +361,11 @@ export default {
             font-size: 14px;
             font-weight: 500;
             font-style: initial oblique;
+        }
+        // hide repeat header
+        thead
+        {
+            display: table-row-group;
         }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)
