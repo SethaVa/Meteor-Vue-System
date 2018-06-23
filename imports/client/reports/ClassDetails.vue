@@ -37,7 +37,7 @@
       <el-form-item label="">
         <el-button type="primary"
                    @click="handleSubmit">
-          <i class="fas fa-sync-alt"></i> Submit</el-button>
+        <i class="fas fa-sync-alt"></i> Submit</el-button>
       </el-form-item>
     </el-form>
     <el-card class="box-card">
@@ -104,7 +104,7 @@
             <tbody>
               <tr v-for="(doc, index) in tableData"
                   :key="index">
-                <td>{{ index + 1 }}</td>
+                <td align="center">{{ index + 1 }}</td>
                 <td>{{ doc._id }}</td>
                 <td>{{ doc.student }}</td>
                 <td>{{ doc.gender }}</td>
@@ -367,6 +367,11 @@ export default {
             font-size: 14px;
             font-weight: 500;
             font-style: initial oblique;
+        }
+        // hide repeat header
+        thead
+        {
+            display: table-row-group;
         }
       `
       this.d.print(document.getElementById('tableStudent'), reportCSS)

@@ -57,7 +57,7 @@
             <tbody v-for="(doc, index) in tableData"
                    :key="index">
               <tr>
-                <td>{{ index + 1 }}</td>
+                <td align="center">{{ index + 1 }}</td>
                 <!-- <td>{{ doc._id }}</td> -->
                 <td>{{ doc.name }}</td>
                 <td>{{ doc.gender }}</td>
@@ -68,18 +68,20 @@
                 <!-- <td>{{ doc.position }}</td>
                 <td>{{ $_.repeat(doc.details) }}</td> -->
               </tr>
-              <tr>
-                <th>#</th>
-                <th>Room</th>
+              <tr style="font-style: italic;">
+                <!-- <th></th> -->
+                <th colspan="2">Room</th>
                 <th>Subject</th>
                 <th>Time</th>
                 <th>Type</th>
               </tr>
-
+<!-- style="font-size:13px;" -->
               <tr v-for="(sub,index) in doc.teacherDetail"
-                  :key="index">
-                <td>{{ $_.repeat('&nbsp',7) }}{{ index +1 }}</td>
-                <td>{{ sub.room }}</td>
+                  :key="index" >
+                <!-- {{ $_.repeat('&nbsp',7) }}{{ index +1 }} -->
+                <!-- <td></td> -->
+                <td align="center"
+                    colspan="2">{{ sub.room }}</td>
                 <td>{{ sub.subject }}</td>
                 <td>{{ formatTime(sub.time) }}</td>
                 <td>{{ sub.type }}</td>
@@ -247,7 +249,7 @@ export default {
       }
       .tableShow {
           font-family: sans-serif;
-          font-size: 12px;
+          // font-size: 12px;
           
       }
        .tableShow .table-content,
@@ -279,6 +281,17 @@ export default {
             font-weight: 500;
             font-style: initial oblique;
         }
+        // hide repeat header
+        thead
+        {
+            display: table-row-group;
+        }
+        // header-sub
+        .header-sub th{
+          font-size:12px;
+          font-style: italic;
+          color:red;
+        }
       `
       // const callback = (win, doc, node, launchPrint) => {
       //   // trigger the printing
@@ -303,6 +316,13 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scope="scss">
 @import '../styles/report.scss';
+</style>
+<style>
+.header-sub{
+  font-size:12px;
+  font-style: italic;
+  color:red;
+}
 </style>
