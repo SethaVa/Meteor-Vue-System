@@ -19,9 +19,9 @@
         <el-menu-item index="registerList">
           <span>Register</span>
         </el-menu-item>
-        <el-menu-item index="classStudy">
+        <!-- <el-menu-item index="classStudy">
           <span>Class Study</span>
-        </el-menu-item>
+        </el-menu-item> -->
 
         <el-menu-item index="exchange-class">
           <span>Change Class</span>
