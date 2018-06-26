@@ -1,8 +1,11 @@
 <template>
   <el-container class="container">
-    <el-aside width="260px"
+
+    <el-aside v-if="toggle"
+              width="260px"
               id="menu-side"
               class="aside">
+      <!-- <span v-show="toggle"> -->
       <!-- Aside Menu -->
       <div class="logo">
         <img src="/img/logo.png"
@@ -22,11 +25,33 @@
 
       <!-- <component :is="currentAsideMenu"
                  :active-menu="linkActiveClass"></component> -->
+      <!-- </span> -->
 
     </el-aside>
+    <div v-else
+         class="aside-menu-mini">
+      <!-- <aside-menu-mini :active-menu="linkActiveClass"></aside-menu-mini> -->
+      <span v-if="userIsInRoleUser">
+        <aside-menu-user-mini :active-menu="linkActiveClass"></aside-menu-user-mini>
+      </span>
+      <span v-else-if="userIsInRoleAdmin">
+        <aside-menu-mini :active-menu="linkActiveClass"></aside-menu-mini>
+      </span>
+      <span v-else-if="userIsInRoleManager">
+        <aside-menu-manager-mini :active-menu="linkActiveClass"></aside-menu-manager-mini>
+      </span>
+    </div>
+
     <el-container>
       <!-- Heder -->
       <el-header class="header-menu">
+        <i class="fas fa-align-justify"
+           id="toggle-menu"
+           @click="_toggleMenu"></i>
+        <!-- <el-button type="success"
+                   icon="fas fa-align-justify"
+                   circle
+                   @click="_toggleMenu"></el-button> -->
         <span class="header-title">{{ headerTitle }}</span>
         <!-- Header Menu -->
         <span style="float: right;">
@@ -84,9 +109,12 @@ import moment from 'moment'
 import _ from 'lodash'
 
 import AsideMenu from '../AsideMenu.vue'
+import AsideMenuMini from '../AsideMenuMini.vue'
 import HeaderMenu from '../HeaderMenu.vue'
 import AsideMenuUser from '../AsideMenuUser.vue'
+import AsideMenuUserMini from '../AsideMenuUserMini.vue'
 import AsideMenuManager from '../AsideMenuManager.vue'
+import AsideMenuManagerMini from '../AsideMenuManagerMini.vue'
 
 import { Session } from 'meteor/session'
 
@@ -99,14 +127,19 @@ export default {
   name: 'MainLayout',
   components: {
     AsideMenu,
+    AsideMenuMini,
     HeaderMenu,
     AsideMenuUser,
+    AsideMenuUserMini,
     AsideMenuManager,
+    AsideMenuManagerMini,
     Avatar,
   },
   data() {
     return {
       // userFullName: Session.get('username'),
+      isCollapse: true,
+      toggle: false,
       title: this.headerTitle,
       currentAsideMenu: AsideMenu,
       currentHeaderMenu: HeaderMenu,
@@ -150,6 +183,10 @@ export default {
   },
 
   methods: {
+    _toggleMenu() {
+      this.toggle = !this.toggle
+      // this.isCollapse = !this.isCollapse
+    },
     _profile() {
       this.$router.push({
         name: 'profile',
@@ -171,7 +208,17 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+#toggle-menu {
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 20px;
+}
+#toggle-menu:hover {
+  color: #303133;
+}
+// @import '~imports/client/styles/aside-menu.scss';
+
 a:-webkit-any-link {
   color: white;
   text-decoration: none;
@@ -250,4 +297,10 @@ a:-webkit-any-link {
     padding: 15px 0 10px;
   }
 }
+
+.aside-menu-mini {
+  background-color: #303133;
+  min-height: 100vh;
+}
 </style>
+
