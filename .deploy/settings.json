@@ -1,0 +1,6 @@
+{
+  "somePrivateKey": "123456789",
+  "public": {
+    "somePublicKey": "987654321"
+  }
+}
