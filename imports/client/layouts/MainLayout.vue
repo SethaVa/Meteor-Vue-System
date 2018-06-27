@@ -138,15 +138,23 @@ export default {
   data() {
     return {
       // userFullName: Session.get('username'),
-      isCollapse: true,
-      toggle: false,
+      collapse: 'success',
+      windowWidth: window.innerWidth,
+      // toggle: false,
       title: this.headerTitle,
       currentAsideMenu: AsideMenu,
       currentHeaderMenu: HeaderMenu,
       copyright: `${moment().format('DD-MM-YYYY')}`,
     }
   },
+  // watch(){
+  //   H(val){
 
+  //   }
+  // },
+  // mounted() {
+  //   console.log(document.documentElement.clientWidth)
+  // },
   computed: {
     ...mapState({
       currentUser(state) {
@@ -180,12 +188,36 @@ export default {
         ? this.$route.meta.linkActiveClass
         : this.$route.name
     },
+    toggle() {
+      return this.collapse !== 'success' ? true : false
+    },
+  },
+  watch: {
+    // resize width
+    windowWidth(newWidth) {
+      if (newWidth < 1024) {
+        this.collapse = 'success'
+      } else if (newWidth > 1024) {
+        this.collapse = 'error'
+      }
+    },
   },
 
+  mounted() {
+    // resize window
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        this.windowWidth = window.innerWidth
+      })
+    })
+  },
   methods: {
     _toggleMenu() {
-      this.toggle = !this.toggle
-      // this.isCollapse = !this.isCollapse
+      if (this.collapse == 'error') {
+        this.collapse = 'success'
+      } else if (this.collapse == 'success') {
+        this.collapse = 'error'
+      }
     },
     _profile() {
       this.$router.push({
@@ -200,11 +232,6 @@ export default {
       this.$store.commit('logout', this)
     },
   },
-  //   $(function() {
-  //   $('#menu-side').slimScroll({
-  //     height: '200px',
-  //   })
-  // })
 }
 </script>
 
