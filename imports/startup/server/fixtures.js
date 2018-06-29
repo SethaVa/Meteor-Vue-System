@@ -11,7 +11,7 @@ import {
 import Branches from '../../api/branches/branches'
 // import Groups from '../../api/user-groups/user-groups';
 
-if (Meteor.isDevelopment) {
+// if (Meteor.isDevelopment) {
   // Company
   // if (Company.find().count() === 0) {
   //     const data = {
@@ -59,7 +59,7 @@ if (Meteor.isDevelopment) {
         fullName: "Super",
         branchPermissions: ["001"]
       },
-      roles: "super"
+      roles: "admin"
     },
     {
       username: "admin",
@@ -96,4 +96,4 @@ if (Meteor.isDevelopment) {
       }
     })
   }
-}
+// }
