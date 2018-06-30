@@ -214,10 +214,15 @@ export default {
       ]
     },
     getExchangeRate() {
+      this.exchangeRate = 0
       findExchanges
         .callPromise({})
         .then(result => {
-          this.exchangeRate = result[0].khr
+          if (result.length > 0) {
+            this.exchangeRate = result[0].khr
+          } else {
+            this.exchangeRate = 0
+          }
         })
         .catch(error => {
           Notify.error({ message: error })

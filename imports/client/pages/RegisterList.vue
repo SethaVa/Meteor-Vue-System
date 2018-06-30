@@ -98,7 +98,7 @@ export default {
       ],
       tableProps: {
         size: 'mini',
-        // border: false,
+        border: false,
       },
       actionsDef: {
         colProps: {

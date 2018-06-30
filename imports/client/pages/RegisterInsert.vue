@@ -73,7 +73,7 @@
       <el-tabs type="card">
         <el-tab-pane>
           <span slot="label">
-            <i class="fa fa-money"></i> Payment
+            <i class="fas fa-money-bill-alt"></i> Payment
           </span>
           <el-row :gutter="10">
             <el-col :span="12">
@@ -147,8 +147,9 @@
     <span slot="footer"
           class="dialog-footer">
       <el-button type="primary"
+                  size="mini"
                  @click="handleSave">Save</el-button>
-      <el-button @click="handleClose">Cancel</el-button>
+      <el-button @click="handleClose" size="mini">Cancel</el-button>
     </span>
   </el-dialog>
 </template>
@@ -254,6 +255,7 @@ export default {
         this.type = val
         let selector = {
           type: val,
+          status:'Active'
         }
         lookupClass
           .callPromise({ selector })
@@ -273,10 +275,16 @@ export default {
       console.log(val)
     },
     getExchangeRate() {
+      this.exchangeRate=0
       findExchanges
         .callPromise({})
         .then(result => {
-          this.exchangeRate = result[0].khr
+          
+          if(result.length>0){
+            this.exchangeRate = result[0].khr
+          }else{
+            this.exchangeRate=0
+          }
         })
         .catch(error => {
           Notify.error({ message: error })
@@ -285,6 +293,7 @@ export default {
     getStudentData(val) {
       let selector = {
         type: val,
+        remove:false
       }
       lookupStudent
         .callPromise({ selector })
@@ -309,7 +318,12 @@ export default {
           if (this.form.remaining != 0) {
             this.form.status = 'Debt'
           }
-          let totalRecieve = this.form.usd + this.form.khr / this.exchangeRate
+          let recieveKhr = this.form.khr / this.recieveKhr
+
+          isNaN(recieveKhr) == true ? recieveKhr=0 : recieveKhr=recieveKhr
+          
+          let totalRecieve = this.form.usd + recieveKhr +this.form.discountVal
+          
           let doc = {
             tranDate: this.form.tranDate,
             classId: this.form.classId,
