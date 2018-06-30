@@ -318,7 +318,7 @@ export default {
           if (this.form.remaining != 0) {
             this.form.status = 'Debt'
           }
-          let recieveKhr = this.form.khr / this.recieveKhr
+          let recieveKhr = this.form.khr / this.exchangeRate
 
           isNaN(recieveKhr) == true ? recieveKhr=0 : recieveKhr=recieveKhr
           
