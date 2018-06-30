@@ -66,7 +66,7 @@
 
 <script>
 import moment from 'moment'
-
+import _ from 'lodash'
 import Notify from '/imports/client/libs/notify'
 import Msg from '/imports/client/libs/message'
 import RefundInsert from './RefundInsert.vue'
@@ -98,7 +98,7 @@ export default {
       ],
       tableProps: {
         size: 'mini',
-        // border: false,
+        border: false,
       },
       actionsDef: {
         colProps: {
@@ -133,25 +133,31 @@ export default {
   methods: {
     getData() {
       this.loading = true
+      // this.exchangeRate = 0
+      // findExchanges
+      //   .callPromise({})
+      //   .then(result => {
+      //     console.log(result)
+      //     if (result) {
+      //       this.exchangeRate = result[0].khr
+      //     }
+      //   })
+      //   .catch(error => {
+      //     Notify.error({ message: error })
+      //   })
 
-      findExchanges
-        .callPromise({})
-        .then(result => {
-          this.exchangeRate = result[0].khr
-        })
-        .catch(error => {
-          Notify.error({ message: error })
-        })
       findRefund
         .callPromise({
           option: { sort: { _id: -1 } },
         })
         .then(result => {
-          _.forEach(result, o => {
-            o.totalRecieve = o.usd + o.khr / this.exchangeRate
-          })
-          this.loading = false
-          this.tableData = result
+          if (result) {
+            // _.forEach(result, o => {
+            //   o.totalRecieve = o.usd + o.khr / this.exchangeRate
+            // })
+            this.loading = false
+            this.tableData = result
+          }
         })
         .catch(err => {
           this.$message(err.reason)

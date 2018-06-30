@@ -121,7 +121,7 @@ export const insertStaff = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      console.log(doc)
+
       return Staff.insert(doc)
     }
   },

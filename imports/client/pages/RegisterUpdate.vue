@@ -65,14 +65,14 @@
       <el-tabs type="card">
         <el-tab-pane>
           <span slot="label">
-            <i class="fa fa-money"></i> Payment
+            <i class="fas fa-money-bill-alt"></i> Payment
           </span>
           <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="Fee"
                             prop="fee">
                 <el-input style="width:100%"
-                                v-model="form.fee"></el-input>
+                          v-model="form.fee"></el-input>
               </el-form-item>
               <el-form-item label="Pay Date"
                             prop="payDate">
@@ -82,21 +82,21 @@
               <el-form-item label="Duration"
                             prop="duration">
                 <el-select v-model="form.duration">
-                <el-option v-for="doc in 12 "
-                           :key="doc"
-                           :label="doc + ' months'"
-                           :value="doc"></el-option>
-              </el-select>
+                  <el-option v-for="doc in 12 "
+                             :key="doc"
+                             :label="doc + ' months'"
+                             :value="doc"></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="Total Pay "
                             prop="totalPay">
                 <el-input type="number"
                           v-model.number="form.totalPay"></el-input>
               </el-form-item>
-              
+
             </el-col>
             <el-col :span="12">
-                <el-form-item label="Dis Val"
+              <el-form-item label="Dis Val"
                             prop="discountVal">
                 <el-input type="discountVal"
                           v-model.number="form.discountVal">
@@ -130,8 +130,8 @@
     <span slot="footer"
           class="dialog-footer">
       <el-button type="primary"
-                 @click="handleSave">Save</el-button>
-      <el-button @click="handleClose">Cancel</el-button>
+                 @click="handleSave" size="mini">Save</el-button>
+      <el-button @click="handleClose" size="mini">Cancel</el-button>
     </span>
   </el-dialog>
 </template>
@@ -144,7 +144,7 @@ import moment from 'moment'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { lookupClass, lookupStudent } from '/imports/libs/lookup-methods'
 import { updatePayementForNew } from '../../api/payment/methods'
-import {findExchanges} from '../../api/exchanges/methods'
+import { findExchanges } from '../../api/exchanges/methods'
 
 const numeral = require('numeral')
 export default {
@@ -167,8 +167,8 @@ export default {
       genderOpts: Lookup.gender,
       studentIdOpts: [],
       remaining: 0,
-      exchangeRate:0,
-      type:'',
+      exchangeRate: 0,
+      type: '',
       form: this.updateDoc,
 
       rules: {
@@ -178,9 +178,7 @@ export default {
         type: [
           { required: true, message: 'Type is Required', trigger: 'change' },
         ],
-        fee: [
-          { required: true, message: 'Fee is Required', trigger: 'blure' },
-        ],
+        fee: [{ required: true, message: 'Fee is Required', trigger: 'blure' }],
         classId: [
           { required: true, message: 'Class is Required', trigger: 'change' },
         ],
@@ -233,7 +231,7 @@ export default {
     //   this.handleTypeChange(val)
     // }
   },
-  
+
   mounted() {
     this.getExchangeRate()
     this.handleTypeChange(this.form.type)
@@ -243,6 +241,7 @@ export default {
       if (val) {
         let selector = {
           type: val,
+          status:'Active'
         }
         lookupClass
           .callPromise({ selector })
@@ -252,26 +251,35 @@ export default {
           .catch(error => {
             Notify.error({ message: error })
           })
-          this.type = val
-          this.getStudentData(val)
+        this.type = val
+        this.getStudentData(val)
       } else {
         this.form.classId = ''
         this.classIdOpts = []
       }
     },
-    getExchangeRate(){
-      findExchanges.callPromise({}).then(result=>{
-        this.exchangeRate = result[0].khr
-      }).catch(error=>{
-        Notify.error({message:error})
-      })
+    getExchangeRate() {
+      this.exchangeRate=0
+      findExchanges
+        .callPromise({})
+        .then(result => {
+          if(result.length>0){
+            this.exchangeRate = result[0].khr
+          }else{
+            this.exchangeRate=0
+          }
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
     },
     getStudentData(val) {
       let selector = {
-        type:val
+        type: val,
+        remove: false,
       }
       lookupStudent
-        .callPromise({selector})
+        .callPromise({ selector })
         .then(result => {
           this.studentIdOpts = result
         })
@@ -291,19 +299,44 @@ export default {
           )
           if (this.form.remaining !== 0) {
             this.form.status = 'Debt'
-          }else{
-            this.form.status='Paid'
+          } else {
+            this.form.status = 'Paid'
           }
-          this.form.totalRecieve = this.form.usd + (this.form.khr/this.exchangeRate)
-          updatePayementForNew
-            .callPromise({ doc: this.form })
-            .then(result => {
-              Msg.success()
-              this.handleClose()
-            })
-            .catch(error => {
-              Notify.error({ message: error })
-            })
+          let recieveKhr = this.form.khr / this.exchangeRate
+          
+          isNaN(recieveKhr) == true ? recieveKhr=0 : recieveKhr=recieveKhr
+          
+          let totalRecieve = this.form.usd + recieveKhr + this.form.discountVal
+          let doc = {
+            _id:this.form._id,
+            tranDate: this.form.tranDate,
+            classId: this.form.classId,
+            studentId: this.form.studentId,
+            refType: 'New',
+            payDate: this.form.payDate,
+            duration: this.form.duration,
+            endPayDate: this.form.endPayDate,
+            usd: this.form.usd,
+            discountVal: this.form.discountVal,
+            totalPay: this.form.totalPay,
+            khr: this.form.khr,
+            remaining: this.form.remaining,
+            status: this.form.status,
+            type: this.form.type,
+            fee: parseInt(this.form.fee),
+            totalRecieve: totalRecieve,
+          }
+          console.log(doc)
+
+          // updatePayementForNew
+          //   .callPromise({ doc: this.form })
+          //   .then(result => {
+          //     Msg.success()
+          //     this.handleClose()
+          //   })
+          //   .catch(error => {
+          //     Notify.error({ message: error })
+          //   })
         } else {
           return false
         }
@@ -311,15 +344,15 @@ export default {
     },
     remoteMethod(query) {
       let selector = {
-            type:this.type
-          }
+        type: this.type,
+      }
       if (query !== '') {
         this.loading = true
         setTimeout(() => {
           this.loading = false
-          
+
           lookupStudent
-            .callPromise({selector})
+            .callPromise({ selector })
             .then(result => {
               this.studentIdOpts = result.filter(item => {
                 return (
@@ -334,7 +367,7 @@ export default {
       } else {
         this.loading = true
         lookupStudent
-          .callPromise({selector})
+          .callPromise({ selector })
           .then(result => {
             this.studentIdOpts = result
             this.loading = false
@@ -359,5 +392,4 @@ export default {
 </script>
 
 <style>
-
 </style>

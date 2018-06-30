@@ -260,10 +260,15 @@ export default {
       ]
     },
     getExchangeRate() {
+      this.exchangeRate = 0
       findExchanges
         .callPromise({})
         .then(result => {
-          this.exchangeRate = result[0].khr
+          if (result.length > 0) {
+            this.exchangeRate = result[0].khr
+          } else {
+            this.exchangeRate = 0
+          }
         })
         .catch(error => {
           Notify.error({ message: error })
@@ -362,8 +367,14 @@ export default {
           if (this.itemsProp[0].remaining != 0) {
             this.form.status = 'Debt'
           }
-          let totalRecieve =
-            this.itemsProp[0].usd + this.itemsProp[0].khr / this.exchangeRate
+          let recieveKhr = this.itemsProp[0].khr / this.exchangeRate
+
+          isNaN(recieveKhr) == true ? recieveKhr=0 : recieveKhr=recieveKhr
+          
+          let totalRecieve = this.itemsProp[0].usd + recieveKhr +this.itemsProp[0].discountVal
+
+          // let totalRecieve =
+          //   this.itemsProp[0].usd + totalRecieve
 
           let Payment = {
             _id: this.updateDoc._id,
@@ -385,7 +396,6 @@ export default {
             fee: parseInt(this.form.fee),
             totalRecieve: parseInt(totalRecieve),
           }
-          console.log(Payment)
           // console.log(Payment)
           updatePaymentForPayment
             .callPromise({ doc: Payment })

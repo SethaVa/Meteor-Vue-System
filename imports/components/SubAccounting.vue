@@ -8,7 +8,7 @@
                 size="mini"
                 style="width: 100%">
         <el-table-column prop="name"
-                         label="name">
+                         label="Name">
           <template slot-scope="scope">
             <el-form-item :key="scope.$index + '.name'"
                           :prop="'items.' + scope.$index +'.name'"
@@ -71,12 +71,12 @@
           <template slot-scope="scope">
             <el-button v-if="form.items.length > 1"
                        type="text"
-                       icon="el-icon-delete"
+                       icon="fas fa-trash"
                        @click="deleteItem(scope.row)">
             </el-button>
             <el-button v-if="(form.items.length - 1) === scope.$index"
                        type="text"
-                       icon="el-icon-plus"
+                       icon="fas fa-plus-circle"
                        @click="addItem">
             </el-button>
           </template>
