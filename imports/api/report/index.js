@@ -1,3 +1,5 @@
 import './teacherDetails.js'
 import './studentDebt.js'
 import './exchangeStudent'
+import './salary'
+import './all-student'
