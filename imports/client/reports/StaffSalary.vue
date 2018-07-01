@@ -6,7 +6,20 @@
                :rules="rules"
                :inline="true"
                size="mini">
-        <el-form-item label="Option"
+               <el-form-item label="Date"
+                      prop="dateOpt">
+          
+          <el-date-picker v-model="form.dateOpt"
+                          type="daterange"
+                          align="right"
+                          unlink-panels
+                          range-separator="To"
+                          start-placeholder="Start date"
+                          end-placeholder="End date"
+                          :picker-options="pickerOptions">
+          </el-date-picker>
+      </el-form-item>
+        <!-- <el-form-item label="Option"
                       prop="opts">
           <el-date-picker v-model="form.opts"
                           multiple
@@ -14,11 +27,11 @@
                           clearable
                           placeholder="select">
           </el-date-picker>
-          <el-form-item>
+        </el-form-item> -->
+        <el-form-item>
             <el-button type="primary"
                        @click="handleSubmit">Submit</el-button>
           </el-form-item>
-        </el-form-item>
       </el-form>
     </div>
     <el-card class="box-card">
@@ -52,7 +65,7 @@
           </div>
         </div>
         <div class="info-header">
-          <span>Date : {{ formatDateReport(reportDate) }}</span>
+          <span>Date : {{ reportDate }}</span>
         </div>
         <!-- Info Class -->
         <!-- <div class="info-class">
@@ -89,14 +102,14 @@
                 <td>{{ doc.gender }}</td>
                 <td>{{ doc.position }}</td>
                 <!-- <td>{{ doc.type }}</td> -->
-                <td style="text-align:center;font-weight:400;">{{ formatNum(doc.totalSalary) }}</td>
+                <td style="font-weight:400;" align="right">{{ formatNum(doc.totalSalary) }}</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
                 <td colspan="4"
                     class="title">Total</td>
-                <td class="title">{{ formatNum(totalSalary) +' $' }}</td>
+                <td class="title" align="right">{{ formatNum(totalSalary) +' $' }}</td>
               </tr>
             </tfoot>
 
@@ -120,7 +133,8 @@ import Notify from '/imports/client/libs/notify'
 import Lookup from '../libs/Lookup-Value'
 import { lookupType } from '/imports/libs/lookup-methods'
 //
-import { findSalary } from '../../api/payment/methods'
+import { findSalary } from '../../api/report/salary'
+import { dateRangePickerOpts } from '/imports/client/libs/date-range-picker-opts'
 
 const numeral = require('numeral')
 
@@ -130,19 +144,25 @@ export default {
       loading: false,
       tableData: [],
       totalSalary: 0,
-      reportDate: moment().toDate(),
+      // reportDate: moment().toDate(),
       titles: [
         { label: 'Student', prop: 'student' },
         { label: 'Gender', prop: 'gender', width: '100px' },
         { label: 'Pay Date', prop: 'payDate' },
         { label: 'End Date', prop: 'endPayDate' },
       ],
+      pickerOptions:dateRangePickerOpts,
       form: {
-        opts: moment().toDate(),
+        dateOpt:[moment().toDate(), moment().toDate()],
       },
       rules: {
-        opts: [{ required: true }],
+        dateOpt: [{ required: true }],
       },
+    }
+  },
+  computed:{
+    reportDate(){
+      return `${moment(this.form.dateOpt[0]).format('DD/MM/YYYY')}-${moment(this.form.dateOpt[1]).format('DD/MM/YYYY')}`
     }
   },
   mounted() {
@@ -153,22 +173,11 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.loading = true
-          let sDate = wrapCurrentDate(moment(this.form.opts))
-          this.reportDate = sDate
-          sDate = moment(sDate).format('YYYY-MM')
-          let eDate = wrapCurrentDate(moment(this.form.opts).add(1, 'months'))
-          eDate = moment(eDate).format('YYYY-MM')
-          let selector = {
-            payDate: {
-              $gte: new Date(sDate),
-              $lte: new Date(eDate),
-            },
-          }
-
+          
           this.totalSalary = 0
 
           findSalary
-            .callPromise({ selector })
+            .callPromise({ selector:this.form.dateOpt })
             .then(result => {
               if (result) {
                 _.forEach(result, o => {

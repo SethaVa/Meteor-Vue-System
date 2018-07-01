@@ -3,12 +3,14 @@
     <el-form :model="form"
              ref="form"
              :rules="rules"
-             :inline="true"
+             label-position="left"
+             label-width="80px"
              size="mini">
-
-      <el-form-item label="Type"
+      <el-row :guter="10">
+        <el-col :span="8">
+          <el-form-item label="Type"
                     prop="type">
-        <el-select v-model="form.type"
+        <el-select style="width:100%" v-model="form.type"
                    @change="handleTypeChange">
           <el-option v-for="doc in typeOpts"
                      :key="doc.value"
@@ -16,8 +18,10 @@
                      :value="doc.value"></el-option>
         </el-select>
       </el-form-item>
+          </el-col>
 
-      <el-form-item label="Class"
+          <el-col :span="8">
+            <el-form-item label="Class"
                     prop="classId">
 
         <el-select style="width:100%"
@@ -33,12 +37,18 @@
           </el-option>
         </el-select>
       </el-form-item>
+          </el-col>
 
-      <el-form-item label="">
+          <el-col :span="8">
+<el-form-item label="">
         <el-button type="primary"
                    @click="handleSubmit">
         <i class="fas fa-sync-alt"></i> Submit</el-button>
       </el-form-item>
+          </el-col>
+      </el-row>
+      
+      
     </el-form>
     <el-card class="box-card">
       <div slot="header"

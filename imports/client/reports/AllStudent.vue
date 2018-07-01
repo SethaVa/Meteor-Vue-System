@@ -8,12 +8,25 @@
                :inline="true"
                size="mini">
 
-        <el-form-item label="Start"
+        <!-- <el-form-item label="Start"
                       prop="start">
           <el-date-picker v-model="form.start"
                           placeholder="Select Date"
                           :picker-options="optionStart"></el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
+        <el-form-item label="Date"
+                      prop="dateOpt">
+          
+          <el-date-picker v-model="form.dateOpt"
+                          type="daterange"
+                          align="right"
+                          unlink-panels
+                          range-separator="To"
+                          start-placeholder="Start date"
+                          end-placeholder="End date"
+                          :picker-options="pickerOptions">
+          </el-date-picker>
+      </el-form-item>
 
         <el-form-item label="Type"
                       prop="type">
@@ -29,24 +42,6 @@
           </el-select>
         </el-form-item>
 
-        <!-- <el-form-item label="To"
-                      prop="end">
-          <el-date-picker v-model="form.end"
-                          placeholder="Select Date"
-                          :picker-options="optionStart"></el-date-picker>
-        </el-form-item> -->
-
-        <!-- <slot v-if="itemProp">
-          <el-form-item label="Subject"
-                        prop="classId">
-            <el-select v-model="form.classId">
-              <el-option v-for="doc in classIdOpts"
-                         :key="doc.value"
-                         :label="doc.label"
-                         :value="doc.value"></el-option>
-            </el-select>
-          </el-form-item>
-        </slot> -->
         <el-form-item label="">
           <el-button type="primary"
                      @click="handleSubmit">Submit</el-button>
@@ -64,9 +59,7 @@
                      @click="handlePrint">
             <i class="el-icon-printer"> Print</i>
           </el-button>
-          <el-button size="mini"
-                     type="text"
-                     @click="getData()">GetData</el-button>
+         
         </div>
 
       </div>
@@ -86,24 +79,9 @@
         </div>
         <!-- Info Class -->
         <div class="info-header">
-          <span>Date : {{ formatDate(reportDate) }}</span>
+          <span>Date : {{ reportDate }}</span>
         </div>
-        <!-- <slot v-show="infoShow">
-          <div class="info-class">
-            <div class="clLeft">
-              <label>Teacher : {{ teacherName }}</label><br><br>
-              <label>Room : {{ roomName }}</label>
-            </div>
-
-            <div class="clCenter">
-              <label>Subject : {{ subjectName }}</label>
-            </div>
-            <div class="clRight">
-              <label>Time : {{ formatTime( timeStudy ) }}</label><br><br>
-              <label>Room : {{ roomName }}</label>
-            </div>
-          </div>
-        </slot> -->
+       <!-- report Body -->
         <div class="tableShow">
           <table class="table-content">
             <thead>
@@ -119,7 +97,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(doc, index) in tableData"
+              <tr v-for="(doc, index) in reportData"
                   :key="index" >
                 <td align="center">{{ index + 1 }}</td>
                 <td>{{ doc._id }}</td>
@@ -134,7 +112,7 @@
 
           </table>
           <div style="width: 30%; float: right; display: inline-block;margin-top:3%;margin-bottom:3%;">
-            <span class="title">Total All : {{ totalAll }}</span>
+            <span class="title">Total All : {{ totalAll }}</span><br><br>
             <span class="title">Female : {{ totalFemale }}</span>
           </div>
 
@@ -155,7 +133,9 @@ import Notify from '/imports/client/libs/notify'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import Lookup from '../libs/Lookup-Value'
 import { lookupClass } from '/imports/libs/lookup-methods'
-import { findStudentsByDate, findStudents } from '../../api/students/methods'
+import { reportStudents } from '../../api/report/all-student'
+import { dateRangePickerOpts } from '/imports/client/libs/date-range-picker-opts'
+
 import { Printd } from 'printd'
 import toCss from 'to-css'
 // const toCss = require('to-css')
@@ -168,79 +148,30 @@ export default {
       totalAll: 0,
       totalFemale: 0,
       typeOpts: Lookup.type,
-      reportDate: moment().toDate(),
+      // reportDate: moment().toDate(),
+      pickerOptions:dateRangePickerOpts,
       form: {
-        start: moment().toDate(),
-        type: '',
-      },
-      optionStart: {
-        shortcuts: [
-          {
-            text: 'Today',
-            onClick(picker) {
-              picker.$emit('pick', new Date())
-            },
-          },
-          {
-            text: 'Yesterday',
-            onClick(picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24)
-              picker.$emit('pick', date)
-            },
-          },
-          {
-            text: 'A week ago',
-            onClick(picker) {
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', date)
-            },
-          },
-          {
-            text: 'Last month',
-            onClick(picker) {
-              // const end = new Date()
-              const date = new Date()
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', date)
-            },
-          },
-          {
-            text: 'Last 3 months',
-            onClick(picker) {
-              // const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', start)
-            },
-          },
-        ],
+        dateOpt:[moment().toDate(), moment().toDate()],
+        type: [],
       },
       loading: false,
-      tableData: [],
+      reportData: [],
       titles: [
         { label: 'Student', prop: 'student' },
         { label: 'Gender', prop: 'gender', width: '100px' },
         { label: 'Pay Date', prop: 'payDate' },
         { label: 'End Date', prop: 'endPayDate' },
       ],
-      itemProp: false,
-      infoShow: false,
-      teacherName: '',
-      roomName: '',
-      subjectName: '',
-      timeStudy: [],
-
-      // classIdOpts: [],
-      // form: {
-      //   start: '',
-      //   end: '',
-      // },
+          
       rules: {
-        start: [{ required: true }],
+        dateOpt: [{ required: true }],
         type: [{ required: true }],
       },
+    }
+  },
+  computed:{
+    reportDate(){
+      return `${moment(this.form.dateOpt[0]).format('DD/MM/YYYY')}-${moment(this.form.dateOpt[1]).format('DD/MM/YYYY')}`
     }
   },
   mounted() {
@@ -248,53 +179,18 @@ export default {
     // this.getClassData()
   },
   methods: {
-    getData() {
-      this.tableData = []
-      for (let i = 1; i <= 100; i++) {
-        this.tableData.push({
-          student: 'Logn Dara' + i,
-          gender: 'Male',
-          payDate: '12/03/2018',
-          endPayDate: '2018/2/' + i,
-        })
-      }
-    },
-    handleOptChange(val) {
-      if (val === '2') {
-        this.itemProp = true
-      } else {
-        this.itemProp = false
-      }
-    },
-    getClassData() {
-      lookupClass
-        .callPromise({})
-        .then(result => {
-          this.classIdOpts = result
-        })
-        .catch(error => {
-          Notify.error({ message: error })
-        })
-    },
     handleSubmit() {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.loading = true
 
-          this.form.start = wrapCurrentTime(this.form.start)
-          this.reportDate = this.form.start
-          // this.form.start = moment(this.form.start).format('YYYY-MM-DD')
-          let selector = {
-            type: { $in: this.form.type },
-            registerDate: { $lte: this.form.start },
-          }
           this.totalAll = 0
           this.totalFemale = 0
-          findStudents
-            .callPromise({ selector })
+          reportStudents
+            .callPromise({ periodDate:this.form.dateOpt,type:this.form.type })
             .then(result => {
               if (result.length > 0) {
-                this.tableData = result
+                this.reportData = result
 
                 _.forEach(result, o => {
                   this.totalAll += 1
@@ -303,7 +199,7 @@ export default {
                   }
                 })
               } else {
-                this.tableData = []
+                this.reportData = []
                 this.totalAll = 0
                 this.totalFemale = 0
               }
