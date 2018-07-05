@@ -280,7 +280,7 @@ export default {
         findClassForStudenDetails
           .callPromise({ selector: classSelector })
           .then(result => {
-            if (result.length > 0) {
+            if (result.length>0) {
               this.studentOpts = result[0].classDetail
             } else {
               this.studentOpts = []
