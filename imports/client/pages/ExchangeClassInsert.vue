@@ -202,6 +202,7 @@ export default {
         this.studentOpts = []
         let selector = {
           type: val,
+          status: { $ne: 'Closed' },
         }
         lookupClass
           .callPromise({ selector })
@@ -232,7 +233,7 @@ export default {
         lookupClass
           .callPromise({ selector })
           .then(result => {
-            if (result) {
+            if (result.length > 0) {
               this.classToIdOpts = result
             } else {
               this.classToIdOpts = []
@@ -249,7 +250,7 @@ export default {
         findClassForStudenDetails
           .callPromise({ selector: classSelector })
           .then(result => {
-            if (result) {
+            if (result.length > 0) {
               this.studentOpts = result[0].classDetail
             } else {
               this.studentOpts = []
