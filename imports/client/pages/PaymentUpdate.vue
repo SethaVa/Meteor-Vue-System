@@ -13,6 +13,16 @@
                label-width="90px">
         <el-row :gutter="10">
           <el-col :span="12">
+            <el-form-item label="No # "
+                            prop="receiptCode">
+                <el-input v-model="form.receiptCode"
+                          :placeholder="refNumLoading">
+                  <el-button slot="append"
+                             icon=" fa fa-barcode"
+                             @click="getNextRefNum">
+                  </el-button>
+                </el-input>
+            </el-form-item>
             <el-form-item label="Type"
                           prop="type">
               <el-select v-model="form.type"
@@ -120,11 +130,12 @@ import moment from 'moment'
 import _ from 'lodash'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import Lookup from '/imports/client/libs/Lookup-Value'
+import { getNextRef } from '/imports/libs/get-next-ref'
 import {
   findPaymentForClass,
   findOnePayment,
 } from '/imports/api/payment/methods'
-import { updatePaymentForPayment } from '../../api/payment/methods'
+import { updatePaymentForPayment,findOnePaymentByCode } from '../../api/payment/methods'
 import { findExchanges } from '../../api/exchanges/methods'
 
 import SubPayment from '../../components/subPayment'
@@ -142,7 +153,33 @@ export default {
     },
   },
   data() {
+    // Check Code
+    const validateCode = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('Code is requiered'))
+      }
+      setTimeout(() => {
+        let selector = {
+          receiptCode: value,
+          _id:{$ne:this.updateDoc._id}
+        }
+        findOnePaymentByCode
+          .callPromise({ selector })
+          .then(result => {
+            if (result) {
+              callback(new Error('This code is exist'))
+            } else {
+              callback()
+            }
+          })
+          .catch(error => {
+            Notify.error({ message: error })
+          })
+      }, 1000)
+    }
     return {
+      loading: false,
+      refNumLoading: 'eg. 1',
       type: '',
       typeOpts: Lookup.type,
       currentModal: null,
@@ -172,6 +209,7 @@ export default {
       // },
 
       rules: {
+        receiptCode: [{ validator: validateCode, trigger: 'change' }],
         studentId: [
           { required: true, message: 'Student is Required', trigger: 'change' },
         ],
@@ -209,6 +247,31 @@ export default {
   },
 
   methods: {
+    getNextRefNum() {
+      this.refNumLoading = 'Loading....'
+      getNextRef
+        .callPromise({
+          collectionName: 'payment',
+          opts: {
+            field: 'receiptCode',
+            // selector: {},
+            paddingType: 'start',
+            paddingLength: 5,
+            paddingChar: '0',
+            prefix: '',
+          },
+        })
+        .then(result => {
+          if (result) {
+            this.form.receiptCode = result
+          }
+        })
+        .catch(error => {
+          this.refNumLoading = 'eg. 1'
+          Notify.error({ message: error })
+        })
+    },
+    // get data for update
     getDataForUpdate() {
       findOnePayment
         .callPromise({ _id: this.updateDoc._id })
@@ -378,6 +441,7 @@ export default {
 
           let Payment = {
             _id: this.updateDoc._id,
+            receiptCode:this.form.receiptCode,
             tranDate: moment().toDate(),
             refType: this.form.refType,
             classId: this.form.classId,

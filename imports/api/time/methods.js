@@ -1,7 +1,15 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
+import {
+  RestMethodMixin
+} from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
 import moment from 'moment'
@@ -11,10 +19,16 @@ export const findTimeStudy = new ValidatedMethod({
   name: 'findTimeStudy',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      return TimeStudy.find(selector).fetch()
+      return TimeStudy.find(selector, {
+        sort: {
+          _id: -1
+        }
+      }).fetch()
     }
   },
 })
@@ -23,7 +37,9 @@ export const findTimeStudyOpts = new ValidatedMethod({
   name: 'findTimeStudyOpts',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector }) {
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
       let data = []
@@ -45,9 +61,13 @@ export const findOneTimeStudy = new ValidatedMethod({
   name: 'findOneTimeStudy',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ id }) {
+  run({
+    id
+  }) {
     if (Meteor.isServer) {
-      return TimeStudy.findOne({ _id: id })
+      return TimeStudy.findOne({
+        _id: id
+      })
     }
   },
 })
@@ -69,7 +89,11 @@ export const updateTimeStudy = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return TimeStudy.update({ _id: doc._id }, { $set: doc })
+      return TimeStudy.update({
+        _id: doc._id
+      }, {
+        $set: doc
+      })
     }
   },
 })
@@ -78,9 +102,13 @@ export const removeTimeStudy = new ValidatedMethod({
   name: 'removeTimeStudy',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    _id: { type: String },
+    _id: {
+      type: String
+    },
   }).validator(),
-  run({ _id }) {
+  run({
+    _id
+  }) {
     if (Meteor.isServer) {
       return TimeStudy.remove(_id)
     }

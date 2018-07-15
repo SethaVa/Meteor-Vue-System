@@ -8,6 +8,7 @@
                      :rules="rules"
                      ref="form"
                      label-position="left"
+                     size="mini"
                      label-width="150px">
                 <el-row :gutter="10">
                     <el-col :span="12">
@@ -27,7 +28,7 @@
                         <el-form-item label="Date of Birth"
                                       prop="dob">
                             <el-date-picker v-model="form.dob"
-                                            type="date"></el-date-picker>
+                                            type="date" style="width:100%"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -41,7 +42,7 @@
                         </el-form-item>
                         <el-form-item label="Position"
                                       prop="positionId">
-                            <el-select v-model="form.positionId">
+                            <el-select v-model="form.positionId" multiple clearable>
                                 <el-option v-for="doc in positionIdOpts"
                                            :key="doc._id"
                                            :label="doc.position"
@@ -54,8 +55,8 @@
             <span slot="footer"
                   class="dialog-footer">
                 <el-button type="primary"
-                           @click="handleSave">Save</el-button>
-                <el-button @click="handleClose">Cancel</el-button>
+                           @click="handleSave" size="mini">Save</el-button>
+                <el-button @click="handleClose" size="mini">Cancel</el-button>
             </span>
         </el-dialog>
     </div>
@@ -92,7 +93,7 @@ export default {
         ],
         gender: [{ required: true }],
         dob: [{ required: true }],
-        email: [{ required: true }],
+        // email: [{ required: true }],
         tel: [{ required: true }]
       }
     }
@@ -149,7 +150,7 @@ export default {
         .callPromise({ selector: selector })
         .then(result => {
           this.positionIdOpts = result
-          console.log(result)
+          
         })
         .catch(error => {
           this.$message.error(error.reason)

@@ -27,7 +27,8 @@
                        @click="handleSave">{{ formType }}</el-button>
             <el-button type="danger"
                        size="small"
-                       @click="handleCancel">Cancel</el-button>
+                       @click="handleCancel"
+                       v-if="formType=='Update'">Cancel</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -119,7 +120,8 @@ export default {
       })
     },
     resetForm() {
-      this.$refs['form'].resetFields()
+      // this.$refs['form'].resetFields()
+      this.form.timeStudy = moment().toDate()
     },
     handleCancel() {
       this.resetForm()
@@ -134,5 +136,4 @@ export default {
 </script>
 
 <style>
-
 </style>

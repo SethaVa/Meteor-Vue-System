@@ -161,32 +161,48 @@ const aggregateStaff = () => {
 
   let data = Staff.aggregate([
     // {
-    //     $match:{selector}
-    // },
+    //     $match: selector
+    // }, 
+    {
+      $unwind: {
+        path: '$positionId',
+        preserveNullAndEmptyArrays: true
+      }
+    },
     {
       $lookup: {
-        from: 'position',
-        localField: 'positionId',
-        foreignField: '_id',
-        as: 'Position',
-      },
+        from: "position",
+        localField: "positionId",
+        foreignField: "_id",
+        as: "positionDoc"
+      }
     },
     {
       $unwind: {
-        path: '$Position',
-        preserveNullAndEmptyArrays: true,
-      },
+        path: '$positionDoc',
+        preserveNullAndEmptyArrays: true
+      }
     },
     {
-      $project: {
-        name: '$name',
-        gender: '$gender',
-        dob: '$dob',
-        email: '$email',
-        tel: '$tel',
-        position: '$Position.position',
-      },
-    },
+      $group: {
+        "_id": "$_id",
+        "name": {$last:'$name'},
+        "gender":{$last:'$gender'},
+        "dob": {$last:'$dob'},
+        "email": {$last:'$email'},
+        "tel": {$last:'$tel'},
+        "positionId": {
+            $addToSet:{
+                positionId:'$positionId'
+            }
+        },
+        position: {
+            $addToSet:{
+                position:'$positionDoc'
+            }
+        }
+      }
+    }
   ])
 
   return data

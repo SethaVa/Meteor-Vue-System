@@ -19,12 +19,15 @@ export const findRoom = new ValidatedMethod({
   name: 'findRoom',
   mixins: [CallPromiseMixin],
   validate: null,
-  run(selector, option) {
+  run({
+    selector,
+    options
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      option = option || {}
+      options = options || {}
 
-      return Room.find(selector, option).fetch()
+      return Room.find(selector, options).fetch()
     }
   },
 })

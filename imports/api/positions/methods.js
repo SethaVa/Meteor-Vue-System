@@ -1,7 +1,15 @@
-import { Meteor } from 'meteor/meteor'
-import { ValidatedMethod } from 'meteor/mdg:validated-method'
-import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
-import { RestMethodMixin } from 'meteor/simple:rest-method-mixin'
+import {
+  Meteor
+} from 'meteor/meteor'
+import {
+  ValidatedMethod
+} from 'meteor/mdg:validated-method'
+import {
+  CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin'
+import {
+  RestMethodMixin
+} from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 
 import Position from './position'
@@ -10,12 +18,15 @@ export const findPosition = new ValidatedMethod({
   name: 'findPosition',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ selector, option }) {
+  run({
+    selector,
+    options
+  }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      option = option || {}
+      options = options || {}
 
-      return Position.find(selector, option).fetch()
+      return Position.find(selector, options).fetch()
     }
   },
 })
@@ -25,7 +36,9 @@ export const findOnePosition = new ValidatedMethod({
   name: 'findOnePosition',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({ _id }) {
+  run({
+    _id
+  }) {
     if (Meteor.isServer) {
       return Position.findOne(_id)
     }
@@ -51,7 +64,11 @@ export const updatePosition = new ValidatedMethod({
   validate: null,
   run(doc) {
     if (Meteor.isServer) {
-      return Position.update({ _id: doc._id }, { $set: doc })
+      return Position.update({
+        _id: doc._id
+      }, {
+        $set: doc
+      })
     }
   },
 })
@@ -61,9 +78,13 @@ export const removePosition = new ValidatedMethod({
   name: 'removePosition',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    _id: { type: String },
+    _id: {
+      type: String
+    },
   }).validator(),
-  run({ _id }) {
+  run({
+    _id
+  }) {
     if (Meteor.isServer) {
       return Position.remove(_id)
     }

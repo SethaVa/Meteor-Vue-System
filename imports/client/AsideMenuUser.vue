@@ -45,10 +45,10 @@
       <!-- //========================// Accounting //====================== -->
       <el-submenu index="account">
         <template slot="title">
-          <i class="fas fa-chart-line"></i>Account
+          <i class="fas fa-chart-line"></i>Income Statement
         </template>
         <el-menu-item index="income">
-          <span>Income</span>
+          <span>Income/Expend</span>
         </el-menu-item>
       </el-submenu>
 

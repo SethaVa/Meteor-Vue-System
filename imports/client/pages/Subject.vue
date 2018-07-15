@@ -51,7 +51,7 @@ export default {
         },
         def: [
           {
-            name: 'new',
+            name: 'New',
             icon: 'el-icon-plus',
             buttonProps: {
               size: 'mini',
@@ -110,7 +110,7 @@ export default {
   methods: {
     getData() {
       findSubject
-        .callPromise({})
+        .callPromise({ selector: {}, options: { sort: { _id: -1 } } })
         .then(result => {
           this.tableData = result
         })
@@ -130,6 +130,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>
 

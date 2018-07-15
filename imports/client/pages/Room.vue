@@ -108,7 +108,7 @@ export default {
   methods: {
     getData() {
       findRoom
-        .callPromise({})
+        .callPromise({ selector: {}, options: { sort: { _id: -1 } } })
         .then(result => {
           this.tableData = result
         })
@@ -128,6 +128,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>
 

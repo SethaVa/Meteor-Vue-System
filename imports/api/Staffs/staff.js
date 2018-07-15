@@ -17,12 +17,16 @@ Staff.schema = new SimpleSchema({
         required:true
     },
     email:{
-        type:String
+        type:String,
+        optional:true
     },
     tel:{
         type:String
     },
     positionId:{
+        type:Array
+    },
+    'positionId.$':{
         type:String
     }
 });
