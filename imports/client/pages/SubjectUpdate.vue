@@ -19,10 +19,10 @@
         <el-form-item label="Level"
                       prop="level">
           <el-select v-model="form.level">
-            <el-option v-for="doc in 12"
-                       :key="doc"
-                       :label="doc"
-                       :value="doc">
+            <el-option v-for="doc in levelOpts"
+                       :key="doc.value"
+                       :label="doc.label"
+                       :value="doc.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -83,7 +83,7 @@ export default {
   data() {
     return {
       typeIdOpts: Lookup.type,
-
+      levelOpts: Lookup.level,
       statusOpts: Lookup.status,
       form: this.updateDoc,
       rules: {

@@ -10,6 +10,9 @@ Payment.schema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  receiptCode:{
+    type: String,
+  },
   tranDate: {
     type: Date,
   },

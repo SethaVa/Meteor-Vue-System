@@ -18,6 +18,16 @@
                label-width="90px">
         <el-row :gutter="10">
           <el-col :span="12">
+             <el-form-item label="No # "
+                            prop="receiptCode">
+                <el-input v-model="form.receiptCode"
+                          :placeholder="refNumLoading">
+                  <el-button slot="append"
+                             icon=" fa fa-barcode"
+                             @click="getNextRefNum">
+                  </el-button>
+                </el-input>
+              </el-form-item>
             <el-form-item label="Type"
                           prop="type">
               <el-select v-model="form.type"
@@ -52,6 +62,10 @@
               <el-date-picker style="width:100%"
                               v-model="form.payDate"></el-date-picker>
             </el-form-item>
+
+          </el-col>
+          <el-col :span="12">
+          
             <el-form-item label="Duration"
                           prop="duration">
               <el-select v-model="form.duration">
@@ -61,15 +75,14 @@
                            :value="doc"></el-option>
               </el-select>
             </el-form-item>
-
-          </el-col>
-          <el-col :span="12">
             <fieldset>
               <legend class="legend-style">Info</legend>
               <el-row>
+              
                 <el-col :span="12">
+              
                   <el-form-item class="info"
-                                label="Late Daty :">
+                                label="Late Day :">
                     <label style="color:red;font-weight:600"> {{ -1*lateDay +' days' }}</label>
                   </el-form-item>
                   <el-form-item class="info"
@@ -127,7 +140,8 @@ import _ from 'lodash'
 import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import compareDate from '/imports/libs/compare-date'
 import Lookup from '/imports/client/libs/Lookup-Value'
-import { findPaymentForClass } from '/imports/api/payment/methods'
+import { getNextRef } from '/imports/libs/get-next-ref'
+import { findPaymentForClass,findOnePaymentByCode } from '/imports/api/payment/methods'
 import { insertPayment } from '../../api/payment/methods'
 import { findExchanges } from '../../api/exchanges/methods'
 //
@@ -143,7 +157,33 @@ export default {
     },
   },
   data() {
+    // Check Code
+    const validateCode = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('Code is requiered'))
+      }
+      setTimeout(() => {
+        let selector = {
+          receiptCode: value,
+        }
+        findOnePaymentByCode
+          .callPromise({ selector })
+          .then(result => {
+            if (result) {
+              callback(new Error('This code is exist'))
+            } else {
+              callback()
+            }
+          })
+          .catch(error => {
+            Notify.error({ message: error })
+          })
+      }, 1000)
+    }
+
     return {
+      loading: false,
+      refNumLoading: 'eg. 1',
       type: '',
       typeOpts: Lookup.type,
       currentModal: null,
@@ -161,6 +201,7 @@ export default {
       saveEvent: 0,
       lateDay: 0,
       form: {
+        receiptCode:'',
         fee: 0,
         refType: 'Payment',
         classId: '',
@@ -172,6 +213,7 @@ export default {
       },
 
       rules: {
+        receiptCode: [{ validator: validateCode, trigger: 'change' }],
         studentId: [
           { required: true, message: 'Student is Required', trigger: 'change' },
         ],
@@ -200,8 +242,33 @@ export default {
   mounted() {
     compareDate
     this.getExchangeRate()
+    this.getNextRefNum()
   },
   methods: {
+    getNextRefNum() {
+      this.refNumLoading = 'Loading....'
+      getNextRef
+        .callPromise({
+          collectionName: 'payment',
+          opts: {
+            field: 'receiptCode',
+            // selector: {},
+            paddingType: 'start',
+            paddingLength: 5,
+            paddingChar: '0',
+            prefix: '',
+          },
+        })
+        .then(result => {
+          if (result) {
+            this.form.receiptCode = result
+          }
+        })
+        .catch(error => {
+          this.refNumLoading = 'eg. 1'
+          Notify.error({ message: error })
+        })
+    },
     initItems() {
       return [
         {
@@ -299,12 +366,15 @@ export default {
           }
           let recieveKhr = this.itemsProp[0].khr / this.exchangeRate
 
-          isNaN(recieveKhr) == true ? recieveKhr=0 : recieveKhr=recieveKhr
-          
-          let totalRecieve = this.itemsProp[0].usd + recieveKhr +this.itemsProp[0].discountVal
-          
+          isNaN(recieveKhr) == true
+            ? (recieveKhr = 0)
+            : (recieveKhr = recieveKhr)
+
+          let totalRecieve =
+            this.itemsProp[0].usd + recieveKhr + this.itemsProp[0].discountVal
 
           let Payment = {
+            receiptCode:this.form.receiptCode,
             tranDate: moment().toDate(),
             refType: this.form.refType,
             classId: this.form.classId,
@@ -329,7 +399,7 @@ export default {
             .then(result => {
               if (result) {
                 Msg.success()
-                this.handleClose()
+                this.resetForm()
               }
             })
             .catch(error => {
@@ -339,6 +409,10 @@ export default {
           return false
         }
       })
+    },
+    resetForm() {
+      this.$refs['form'].resetFields()
+      this.itemsProp= this.initItems()
     },
     handleClose() {
       this.$emit('modal-close')

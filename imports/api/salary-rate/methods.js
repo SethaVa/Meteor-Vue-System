@@ -25,7 +25,7 @@ export const findSalaryRate = new ValidatedMethod({
         sort: {
           _id: -1
         },
-        limit: 1
+        // limit: 1
       }).fetch()
     }
   },
@@ -45,7 +45,7 @@ export const findSalaryRatePartTimeOpts = new ValidatedMethod({
         sort: {
           _id: -1
         },
-        limit: 1
+        limit: 8
       }).fetch()
 
       _.forEach(salaryRate, o => {
@@ -75,7 +75,7 @@ export const findSalaryRateFullTimeTimeOpts = new ValidatedMethod({
         sort: {
           _id: -1
         },
-        limit: 1
+        limit: 8
       }).fetch()
 
       _.forEach(salaryRate, o => {

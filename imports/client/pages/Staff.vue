@@ -18,6 +18,9 @@
           <span v-if="title.prop === 'dob'">
             {{ formatDate(scope.row.dob) }}
           </span>
+          <span v-else-if="title.prop === 'position'">
+            {{ formateArr(scope.row.position) }}
+          </span>
           <span v-else>{{ scope.row[title.prop] }}</span>
         </template>
       </el-table-column>
@@ -155,6 +158,12 @@ export default {
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')
     },
+    formateArr(val){
+      
+      return val.map(val => {
+        return val.position.position
+      })
+    }
   },
 }
 </script>

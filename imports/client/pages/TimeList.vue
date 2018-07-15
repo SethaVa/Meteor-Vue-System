@@ -129,17 +129,16 @@ export default {
       return moment(val).format('DD/MM/YYYY')
     },
     formatTime(val) {
-      let data = val
+      return val
         .map(o => {
           return moment(o).format('hh:mm a')
         })
         .join('-')
-      return data
+      // return data
     },
   },
 }
 </script>
 
 <style>
-
 </style>

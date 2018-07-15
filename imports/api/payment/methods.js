@@ -85,6 +85,20 @@ export const findOnePayment = new ValidatedMethod({
   },
 })
 
+// find One
+export const findOnePaymentByCode = new ValidatedMethod({
+  name: 'findOnePaymentByCode',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector
+  }) {
+    if (Meteor.isServer) {
+      return Payment.findOne(selector)
+    }
+  },
+})
+
 // Find Data For Options
 export const findPaymentOpts = new ValidatedMethod({
   name: 'findPaymentOpts',

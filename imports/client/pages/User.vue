@@ -164,7 +164,7 @@ export default {
 
       findUsers
         .callPromise({
-          selector: { username: { $ne: 'admin' } },
+          selector: { roles: { $ne: 'admin' } },
           options: { sort: { fullName: 1 } },
         })
         .then(result => {

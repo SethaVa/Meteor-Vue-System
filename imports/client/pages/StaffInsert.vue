@@ -7,7 +7,6 @@
       <el-form :model="form"
                :rules="rules"
                ref="form"
-               size="mini"
                label-position="left"
                label-width="100px">
         <el-row :gutter="10">
@@ -45,7 +44,7 @@
             </el-form-item>
             <el-form-item label="Position"
                           prop="positionId">
-              <el-select v-model="form.positionId">
+              <el-select v-model="form.positionId" multiple clearable>
                 <el-option v-for="doc in positionIdOpts"
                            :key="doc._id"
                            :label="doc.position"
@@ -58,8 +57,8 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
-                   @click="handleSave">Save</el-button>
-        <el-button @click="handleClose">Cancel</el-button>
+                   @click="handleSave" size="mini">Save</el-button>
+        <el-button @click="handleClose" size="mini">Cancel</el-button>
       </span>
     </el-dialog>
   </div>
@@ -107,7 +106,7 @@ export default {
         ],
         gender: [{ required: true }],
         dob: [{ required: true }],
-        email: [{ required: true }],
+        // email: [{ required: true }],
         tel: [{ required: true }],
       },
     }

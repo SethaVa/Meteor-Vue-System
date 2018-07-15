@@ -117,8 +117,8 @@ export default {
         })
     },
     // Format
-    dateFormatter(row, column, cellValue) {
-      return moment(cellValue).format('DD/MM/YYYY')
+    dateFormatter(val) {
+      return moment(val).format('DD/MM/YYYY')
     },
     handleFormChange() {
       this.formType = 'New'

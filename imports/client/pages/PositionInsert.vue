@@ -40,8 +40,8 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
-                   @click="handleSave">Save</el-button>
-        <el-button @click="handleClose">Cancel</el-button>
+                   @click="handleSave" size="mini">Save</el-button>
+        <el-button @click="handleClose" size="mini">Cancel</el-button>
       </span>
     </el-dialog>
   </div>
@@ -76,6 +76,13 @@ export default {
             trigger: 'blur',
           },
         ],
+        status:[
+          {
+            required: true,
+            message: 'Please Input First Name',
+            trigger: 'blur',
+          }
+        ]
       },
     }
   },

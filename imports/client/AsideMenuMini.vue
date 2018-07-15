@@ -53,7 +53,7 @@
         <span slot="title">Account</span>
       </template>
       <el-menu-item index="income">
-        <span>Income</span>
+        <span>Income/Expend</span>
       </el-menu-item>
     </el-submenu>
 

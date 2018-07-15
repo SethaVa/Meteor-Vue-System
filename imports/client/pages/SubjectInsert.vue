@@ -19,10 +19,10 @@
         <el-form-item label="Level"
                       prop="level">
           <el-select v-model="form.level">
-            <el-option v-for="item in 12"
-                       :key="item"
-                       :label="item"
-                       :value="item">
+            <el-option v-for="item in levelOpts"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       typeIdOpts: Lookup.type,
-      levelOpts: [],
+      levelOpts: Lookup.level,
       statusOpts: Lookup.status,
       form: {
         title: '',
