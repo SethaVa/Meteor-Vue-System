@@ -48,7 +48,7 @@
                 <!-- <th>Code</th> -->
                 <th>Name</th>
                 <th>Gender</th>
-                <th>Data Of Birth</th>
+                <!-- <th>Data Of Birth</th> -->
                 <th>Emaile</th>
                 <th>Telphone</th>
                 <th>Position</th>
@@ -61,11 +61,11 @@
                 <!-- <td>{{ doc._id }}</td> -->
                 <td>{{ doc.name }}</td>
                 <td>{{ doc.gender }}</td>
-                <td>{{ formatDate (doc.dob) }}</td>
+                <!-- <td>{{ formatDate (doc.dob) }}</td> -->
                 <!-- <td>{{ formatDate( doc.dob) }}</td> -->
                 <td>{{ doc.email }}</td>
                 <td>{{ doc.tel }}</td>
-                <td>{{ doc.position }}</td>
+                <td>{{ formateArr(doc.position) }}</td>
               </tr>
             </tbody>
 
@@ -287,6 +287,12 @@ export default {
         .join('-')
       return data
     },
+    formateArr(val){
+      
+      return val.map(val => {
+        return val.position.position
+      }).join(',')
+    }
   },
 }
 </script>

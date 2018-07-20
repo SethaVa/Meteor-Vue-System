@@ -80,7 +80,7 @@
         <span>All Student</span>
       </el-menu-item>
       <el-menu-item index="student-debt">
-        <span>Student Debt</span>
+        <span>Debt/Late Pay</span>
       </el-menu-item>
       <el-menu-item index="student-exchange">
         <span>Student Change</span>
