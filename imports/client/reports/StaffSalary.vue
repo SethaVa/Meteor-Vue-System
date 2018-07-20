@@ -89,7 +89,7 @@
                 <th style="width:20px;">No</th>
                 <th>Name</th>
                 <th style="width:30px;">Gender</th>
-                <th>Position</th>
+                <!-- <th>Position</th> -->
                 <!-- <th>Type</th> -->
                 <th style="text-align:center">Salary</th>
               </tr>
@@ -100,14 +100,14 @@
                 <td align="center">{{ index + 1 }}</td>
                 <td>{{ doc.name }}</td>
                 <td>{{ doc.gender }}</td>
-                <td>{{ doc.position }}</td>
+                <!-- <td>{{ doc.position }}</td> -->
                 <!-- <td>{{ doc.type }}</td> -->
                 <td style="font-weight:400;" align="right">{{ formatNum(doc.totalSalary) }}</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="4"
+                <td colspan="3"
                     class="title">Total</td>
                 <td class="title" align="right">{{ formatNum(totalSalary) +' $' }}</td>
               </tr>
