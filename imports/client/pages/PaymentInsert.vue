@@ -18,16 +18,16 @@
                label-width="90px">
         <el-row :gutter="10">
           <el-col :span="12">
-             <el-form-item label="No # "
-                            prop="receiptCode">
-                <el-input v-model="form.receiptCode"
-                          :placeholder="refNumLoading">
-                  <el-button slot="append"
-                             icon=" fa fa-barcode"
-                             @click="getNextRefNum">
-                  </el-button>
-                </el-input>
-              </el-form-item>
+            <el-form-item label="No # "
+                          prop="receiptCode">
+              <el-input v-model="form.receiptCode"
+                        :placeholder="refNumLoading">
+                <el-button slot="append"
+                           icon=" fa fa-barcode"
+                           @click="getNextRefNum">
+                </el-button>
+              </el-input>
+            </el-form-item>
             <el-form-item label="Type"
                           prop="type">
               <el-select v-model="form.type"
@@ -65,7 +65,7 @@
 
           </el-col>
           <el-col :span="12">
-          
+
             <el-form-item label="Duration"
                           prop="duration">
               <el-select v-model="form.duration">
@@ -78,9 +78,9 @@
             <fieldset>
               <legend class="legend-style">Info</legend>
               <el-row>
-              
+
                 <el-col :span="12">
-              
+
                   <el-form-item class="info"
                                 label="Late Day :">
                     <label style="color:red;font-weight:600"> {{ -1*lateDay +' days' }}</label>
@@ -141,7 +141,10 @@ import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
 import compareDate from '/imports/libs/compare-date'
 import Lookup from '/imports/client/libs/Lookup-Value'
 import { getNextRef } from '/imports/libs/get-next-ref'
-import { findPaymentForClass,findOnePaymentByCode } from '/imports/api/payment/methods'
+import {
+  findPaymentForClass,
+  findOnePaymentByCode,
+} from '/imports/api/payment/methods'
 import { insertPayment } from '../../api/payment/methods'
 import { findExchanges } from '../../api/exchanges/methods'
 //
@@ -201,7 +204,7 @@ export default {
       saveEvent: 0,
       lateDay: 0,
       form: {
-        receiptCode:'',
+        receiptCode: '',
         fee: 0,
         refType: 'Payment',
         classId: '',
@@ -374,7 +377,7 @@ export default {
             this.itemsProp[0].usd + recieveKhr + this.itemsProp[0].discountVal
 
           let Payment = {
-            receiptCode:this.form.receiptCode,
+            receiptCode: this.form.receiptCode,
             tranDate: moment().toDate(),
             refType: this.form.refType,
             classId: this.form.classId,
@@ -393,7 +396,6 @@ export default {
             fee: parseInt(this.form.fee),
             totalRecieve: totalRecieve,
           }
-
           insertPayment
             .callPromise({ doc: Payment })
             .then(result => {
@@ -412,7 +414,11 @@ export default {
     },
     resetForm() {
       this.$refs['form'].resetFields()
-      this.itemsProp= this.initItems()
+      this.itemsProp[0].totalPay = 0
+      this.itemsProp[0].discountVal = 0
+      this.itemsProp[0].usd = 0
+      this.itemsProp[0].khr = 0
+      this.itemsProp[0].remaining = 0
     },
     handleClose() {
       this.$emit('modal-close')

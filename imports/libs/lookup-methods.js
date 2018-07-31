@@ -15,10 +15,12 @@ import {
   findClassStudy
 } from '/imports/api/classStudy/methods'
 import Students from '../api/students/students'
+import Categories from '../api/categories/categories'
 import {
-
   findPaymentForClass,
 } from '/imports/api/payment/methods'
+
+
 export const lookupType = new ValidatedMethod({
   name: 'lookupType',
   mixins: [CallPromiseMixin],
@@ -52,8 +54,7 @@ export const lookupClass = new ValidatedMethod({
         selector: selector
       })
       _.forEach(classStudy, o => {
-        let timeStudy = _.map(o.timeStudy)
-          .map(o => {
+        let timeStudy = _.map(o => {
             return moment(o).format('LT')
           })
           .join('-')
@@ -61,6 +62,29 @@ export const lookupClass = new ValidatedMethod({
           value: o._id,
           label: o.subject,
           labelRight: timeStudy,
+        })
+      })
+
+      return list
+    }
+  },
+})
+
+export const lookupCategories = new ValidatedMethod({
+  name: 'lookupCategories',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run({
+    selector
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      let list = []
+      let categories = Categories.find(selector).fetch()
+      _.forEach(categories, o => {
+        list.push({
+          value: o._id,
+          label: o.name,
         })
       })
 

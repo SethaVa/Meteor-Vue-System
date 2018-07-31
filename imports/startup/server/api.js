@@ -65,7 +65,10 @@ import '../../api/register/server/index'
 import '../../api/Refund/server/index'
 //Exchange class
 import '../../api/exchange-class/server/index'
-
+// categories
+import '../../api/categories/server/index'
+// items
+import '../../api/items/server/index'
 //Dashbord
 import '../../api/dashbord/index.js'
 
