@@ -47,6 +47,12 @@ import Exchange from './pages/Exchange.vue'
 import SalaryRate from './pages/SalaryRate.vue'
 // Exchange Class 
 import ExchangeClass from './pages/ExchangeClassList.vue'
+// Category 
+import CategoryList from './pages/CategoryList.vue'
+// items
+import ItemList from './pages/ItemList.vue'
+// items
+import StockList from './pages/StockList.vue'
 // Report
 import AllStudent from './reports/AllStudent'
 import DailyInEx from './reports/DailyReportInEx.vue';
@@ -210,6 +216,24 @@ const routes = [
         path: 'salary-rate',
         name: 'salary-rate',
         component: SalaryRate,
+      },
+      // Category List
+      {
+        path: 'category-list',
+        name: 'category-list',
+        component: CategoryList,
+      },
+      // Item List
+      {
+        path: 'item-list',
+        name: 'item-list',
+        component: ItemList,
+      },
+      // Stock List
+      {
+        path: 'stock-list',
+        name: 'stock-list',
+        component: StockList,
       },
       // Report
       {
