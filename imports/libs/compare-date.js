@@ -32,20 +32,15 @@ const compareDate = function () {
     })
     .then(result => {
       _.forEach(result, obj => {
-        //   let compareDate = moment(currentDate).isSame(
-        //     moment(obj.endPayDate).format('L')
-        //   )
 
-        if (compareDate) {
-          let value = 'Expires'
-          updatePaymentStatus
-            .callPromise({
-              _id: obj._id,
-              value
-            })
-            .then(result => {})
-            .catch(error => {})
-        }
+        let value = 'Expires'
+        updatePaymentStatus
+          .callPromise({
+            _id: obj._id,
+            value
+          })
+          .then(result => {})
+          .catch(error => {})
       })
     })
     .catch(error => {

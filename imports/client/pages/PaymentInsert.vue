@@ -243,7 +243,7 @@ export default {
     },
   },
   mounted() {
-    compareDate
+    compareDate()
     this.getExchangeRate()
     this.getNextRefNum()
   },
