@@ -69,6 +69,8 @@ import '../../api/exchange-class/server/index'
 import '../../api/categories/server/index'
 // items
 import '../../api/items/server/index'
+// stock
+import '../../api/stocks/server/index'
 //Dashbord
 import '../../api/dashbord/index.js'
 

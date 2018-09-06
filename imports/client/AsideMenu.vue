@@ -124,7 +124,7 @@
           <span>Room</span>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index="category-list">
+      <!-- <el-menu-item index="category-list">
         <span>Category</span>
       </el-menu-item>
       <el-menu-item index="item-list">
@@ -132,7 +132,7 @@
       </el-menu-item>
       <el-menu-item index="stock-list">
         <span>Stock</span>
-      </el-menu-item>
+      </el-menu-item> -->
     </el-menu>
   </div>
 </template>
