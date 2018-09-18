@@ -1,18 +1,18 @@
 <template>
   <el-container class="container">
-
-    <el-aside v-if="toggle"
-              width="260px"
-              id="menu-side"
-              class="aside">
+    <!-- v-if="toggle" -->
+    <el-aside
+      width="260px"
+      id="menu-side"
+      class="aside">
       <!-- <span v-show="toggle"> -->
       <!-- Aside Menu -->
       <div class="logo">
         <img src="/img/logo.png"
              class="logo-img">
       </div>
-
-      <span v-if="userIsInRoleUser">
+      <aside-menu :active-menu="linkActiveClass"></aside-menu>
+      <!-- <span v-if="userIsInRoleUser">
         <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
       </span>
       <span v-else-if="userIsInRoleAdmin">
@@ -20,7 +20,7 @@
       </span>
       <span v-else-if="userIsInRoleManager">
         <aside-menu-manager :active-menu="linkActiveClass"></aside-menu-manager>
-      </span>
+      </span> -->
       <!-- @select="handleHomeSelect" -->
 
       <!-- <component :is="currentAsideMenu"
@@ -28,9 +28,9 @@
       <!-- </span> -->
 
     </el-aside>
-    <div v-else
+    <!-- <div v-else
          class="aside-menu-mini">
-      <!-- <aside-menu-mini :active-menu="linkActiveClass"></aside-menu-mini> -->
+      <aside-menu-mini :active-menu="linkActiveClass"></aside-menu-mini>
       <span v-if="userIsInRoleUser">
         <aside-menu-user-mini :active-menu="linkActiveClass"></aside-menu-user-mini>
       </span>
@@ -40,7 +40,7 @@
       <span v-else-if="userIsInRoleManager">
         <aside-menu-manager-mini :active-menu="linkActiveClass"></aside-menu-manager-mini>
       </span>
-    </div>
+    </div> -->
 
     <el-container>
       <!-- Heder -->
