@@ -1,10 +1,10 @@
 <template>
   <div>
 
-    <component :is="currentDialog"
+    <!-- <component :is="currentDialog"
                :visible="visibleDialog"
                :update-doc="updateDoc"
-               @modal-close="handleClose"></component>
+               @modal-close="handleClose"></component> -->
 
     <!-- Table Data -->
     <!-- :action-col-def="actionColDef" -->
@@ -112,8 +112,9 @@ export default {
               size: 'mini',
             },
             handler: () => {
-              this.visibleDialog = true
-              this.currentDialog = RegisterInsert
+              // this.$router.push({name:'registerEdit',params:{id:100}})
+              // this.$router.push({name:'registerNew'})
+              this.$router.push({name:'registerEdit',params:{id:'100'}})
             },
           },
           // {
@@ -197,9 +198,10 @@ export default {
             message: 'This recorde is ' + command.row.status + " can't edit!",
           })
         } else {
-          this.updateDoc = command.row
-          this.visibleDialog = true
-          this.currentDialog = RegisterUpdate
+          // this.updateDoc = command.row
+          // this.visibleDialog = true
+          // this.currentDialog = RegisterUpdate
+          this.$router.push({name:'registerEdit',params:{id:command.row}})
         }
       } else if (command.action === 'remove') {
         if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {

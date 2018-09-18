@@ -28,7 +28,7 @@
           <el-button class="btn-login"
                      @click="submitForm"
                      type="primary">
-          <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;&nbsp;Login</el-button>
+            <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;&nbsp;Login</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -106,32 +106,13 @@ export default {
           if (err) {
             //  this.$refs['form'].resetFields();
             this.form.email = ''
-            this.form.password=''
-            this.$refs.email.$el.querySelector('input').focus()
+            this.form.password = ''
+            // this.$refs.email.$el.querySelector('input').focus()
             this.$message.error('Username/Email or Password is invalid!')
-           
           } else {
-            // log
-            // appLog
-            //   .callPromise({
-            //     level: 'LOGIN',
-            //     title: 'LOG',
-            //     data: { login: true },
-            //   })
-            //   .then(result => {
-            //     if (result) {
-            // console.log(result)
-            
             this.$store.commit('updateCurrentUser', Meteor.user())
             this.$message.success('You are login!')
             this.$router.push({ name: 'home' })
-            // // console.log(Session.get('username'))
-            //   }
-            // })
-            // .catch(err => {
-            //   console.log(err.reason)
-            //   this.$notify.error(err.reason)
-            // })
           }
         })
       }

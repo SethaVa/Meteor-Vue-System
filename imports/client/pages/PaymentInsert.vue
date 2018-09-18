@@ -6,121 +6,129 @@
                @modal-close="handleClose">
     </component> -->
     <!-- <legend>Filter</legend> -->
-    <el-dialog title="New Income"
+    <!-- <el-dialog title="New Income"
                width="80%"
                :visible="visible"
-               :before-close="handleClose">
-      <el-form :model="form"
-               ref="form"
-               :rules="rules"
-               size="mini"
-               label-position="left"
-               label-width="90px">
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-form-item label="No # "
-                          prop="receiptCode">
-              <el-input v-model="form.receiptCode"
-                        :placeholder="refNumLoading">
-                <el-button slot="append"
-                           icon=" fa fa-barcode"
-                           @click="getNextRefNum">
-                </el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="Type"
-                          prop="type">
-              <el-select v-model="form.type"
-                         clearable
-                         placeholder="select type"
-                         @change="handleTypeChange">
-                <el-option v-for="doc in typeOpts"
-                           :key="doc.value"
-                           :label="doc.label"
-                           :value="doc.value"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="Student"
-                          prop="studentId">
-              <el-select v-model="form.studentId"
-                         @change="handleStudentChange"
-                         placeholder="Please Select Student">
-                <el-option v-for="doc in studentIdOpts"
-                           :key="doc.value"
-                           :label="doc.label"
-                           :value="doc.value"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="Fee"
-                          prop="fee">
-              <el-input v-model="form.fee">
+               :before-close="handleClose"> -->
+    <el-form :model="form"
+             ref="form"
+             :rules="rules"
+             size="mini"
+             label-position="left"
+             label-width="90px">
+      <el-row :gutter="10">
+        <el-col :span="12">
+          <el-form-item label="No # "
+                        prop="receiptCode">
+            <el-input v-model="form.receiptCode"
+                      :placeholder="refNumLoading">
+              <el-button slot="append"
+                         icon=" fa fa-barcode"
+                         @click="getNextRefNum">
+              </el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Type"
+                        prop="type">
+            <el-select v-model="form.type"
+                       clearable
+                       placeholder="select type"
+                       @change="handleTypeChange">
+              <el-option v-for="doc in typeOpts"
+                         :key="doc.value"
+                         :label="doc.label"
+                         :value="doc.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Student"
+                        prop="studentId">
+            <el-select v-model="form.studentId"
+                       @change="handleStudentChange"
+                       placeholder="Please Select Student">
+              <el-option v-for="doc in studentIdOpts"
+                         :key="doc.value"
+                         :label="doc.label"
+                         :value="doc.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Fee"
+                        prop="fee">
+            <el-input v-model="form.fee">
 
-              </el-input>
-            </el-form-item>
-            <el-form-item label="Pay Date"
-                          prop="payDate">
-              <el-date-picker style="width:100%"
-                              v-model="form.payDate"></el-date-picker>
-            </el-form-item>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Pay Date"
+                        prop="payDate">
+            <el-date-picker style="width:100%"
+                            v-model="form.payDate"></el-date-picker>
+          </el-form-item>
 
-          </el-col>
-          <el-col :span="12">
+        </el-col>
+        <el-col :span="12">
 
-            <el-form-item label="Duration"
-                          prop="duration">
-              <el-select v-model="form.duration">
-                <el-option v-for="doc in 12 "
-                           :key="doc"
-                           :label="doc + ' months'"
-                           :value="doc"></el-option>
-              </el-select>
-            </el-form-item>
-            <fieldset>
-              <legend class="legend-style">Info</legend>
-              <el-row>
+          <el-form-item label="Duration"
+                        prop="duration">
+            <el-select v-model="form.duration">
+              <el-option v-for="doc in 12 "
+                         :key="doc"
+                         :label="doc + ' months'"
+                         :value="doc"></el-option>
+            </el-select>
+          </el-form-item>
+          <fieldset>
+            <legend class="legend-style">Info</legend>
+            <el-row>
 
-                <el-col :span="12">
+              <el-col :span="12">
 
-                  <el-form-item class="info"
-                                label="Late Day :">
-                    <label style="color:red;font-weight:600"> {{ -1*lateDay +' days' }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="End Date :">
-                    <label>{{ formatDate(endDate) }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="Room :">
-                    <label>{{ room }}</label>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item class="info"
-                                label="Teacher :">
-                    <label> {{ teacher }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="Subject :">
-                    <label>{{ subject }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="Time :">
-                    <label>{{ formatTime(timeStudy) }}</label>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </fieldset>
+                <el-form-item class="info"
+                              label="Late Day :">
+                  <label style="color:red;font-weight:600"> {{ -1*lateDay +' days' }}</label>
+                </el-form-item>
+                <el-form-item class="info"
+                              label="End Date :">
+                  <label>{{ formatDate(endDate) }}</label>
+                </el-form-item>
+                <el-form-item class="info"
+                              label="Room :">
+                  <label>{{ room }}</label>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item class="info"
+                              label="Teacher :">
+                  <label> {{ teacher }}</label>
+                </el-form-item>
+                <el-form-item class="info"
+                              label="Subject :">
+                  <label>{{ subject }}</label>
+                </el-form-item>
+                <el-form-item class="info"
+                              label="Time :">
+                  <label>{{ formatTime(timeStudy) }}</label>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </fieldset>
 
-          </el-col>
-        </el-row>
-        <sub-payment @save-form="saveForm"
-                     :total-pay-prop="true"
-                     :save-event="saveEvent"
-                     :items-prop="itemsProp"
-                     @sub-payment="handlePaymentChange"></sub-payment>
+        </el-col>
+      </el-row>
+      <sub-payment @save-form="saveForm"
+                   :total-pay-prop="true"
+                   :save-event="saveEvent"
+                   :items-prop="itemsProp"
+                   @sub-payment="handlePaymentChange"></sub-payment>
 
-      </el-form>
-      <span slot="footer"
+      <el-form-item>
+        <el-button type="primary"
+                   @click="saveEvent++"
+                   size="mini">Save</el-button>
+        <el-button @click="handleClose"
+                   size="mini">Cancel</el-button>
+      </el-form-item>
+
+    </el-form>
+    <!-- <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
                    @click="saveEvent++"
@@ -128,7 +136,7 @@
         <el-button @click="handleClose"
                    size="mini">Cancel</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -421,7 +429,7 @@ export default {
       this.itemsProp[0].remaining = 0
     },
     handleClose() {
-      this.$emit('modal-close')
+      this.$router.go(-1)
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')

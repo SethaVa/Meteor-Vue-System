@@ -1,9 +1,10 @@
 <template>
-  <el-dialog :visible="visible"
+<div>
+  <!-- <el-dialog :visible="visible"
              :before-close="handleClose"
              width="80%">
     <span slot="title">
-    <i class="fa fa-user"></i> Student</span>
+    <i class="fa fa-user"></i> Student</span> -->
     <el-form :model="form"
              :rules="rules"
              ref="form"
@@ -21,7 +22,7 @@
       <fieldset>
         <legend>New Student</legend>
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="Type"
                           prop="type">
               <el-select v-model="form.type"
@@ -34,24 +35,6 @@
                            :value="doc.value"></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="Subject"
-                          prop="classId">
-              <el-select v-model="form.classId"
-                         clearable
-                         placeholder="Select Class">
-                <el-option v-for="doc in classIdOpts"
-                           :key="doc.value"
-                           :label="doc.label"
-                           :value="doc.value">
-                  <span style="float: left">{{ doc.label }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ doc.labelRight }}</span>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="Student"
                           prop="studentId">
               <el-select v-model="form.studentId"
@@ -67,10 +50,29 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="Subject"
+                          prop="classId">
+              <el-select v-model="form.classId"
+                         clearable
+                         placeholder="Select Class">
+                <el-option v-for="doc in classIdOpts"
+                           :key="doc.value"
+                           :label="doc.label"
+                           :value="doc.value">
+                  <span style="float: left">{{ doc.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ doc.labelRight }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <!-- <el-col :span="8">
+            
+          </el-col> -->
         </el-row>
       </fieldset>
 
-      <el-tabs type="card">
+      <el-tabs type="border-card">
         <el-tab-pane>
           <span slot="label">
             <!-- <i class="fas fa-money-bill-alt"></i> -->
@@ -116,14 +118,15 @@
                 </el-select>
 
               </el-form-item>
+              
+
+            </el-col>
+            <el-col :span="12">
               <el-form-item label="Total Pay "
                             prop="totalPay">
                 <el-input type="number"
                           v-model.number="form.totalPay"></el-input>
               </el-form-item>
-
-            </el-col>
-            <el-col :span="12">
               <el-form-item label="Dis Val"
                             prop="discountVal">
                 <el-input type="discountVal"
@@ -136,13 +139,13 @@
                 <el-input type="number"
                           v-model.number="form.usd"></el-input>
               </el-form-item>
-              <el-form-item label="KHR"
+              <!-- <el-form-item label="KHR"
                             prop="khr">
                 <el-input type="number"
                           v-model.number="form.khr">
 
                 </el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="Remaining"
                             prop="remaining">
                 <el-input type="khr"
@@ -154,9 +157,15 @@
 
         </el-tab-pane>
       </el-tabs>
-
+<el-form-item >
+  <el-button type="primary"
+                 size="mini"
+                 @click="handleSave">Save</el-button>
+      <el-button @click="handleClose"
+                 size="mini">Cancel</el-button>
+  </el-form-item>
     </el-form>
-    <span slot="footer"
+    <!-- <span slot="footer"
           class="dialog-footer">
       <el-button type="primary"
                  size="mini"
@@ -164,7 +173,8 @@
       <el-button @click="handleClose"
                  size="mini">Cancel</el-button>
     </span>
-  </el-dialog>
+  </el-dialog> -->
+  </div>
 </template>
 
 <script>
@@ -466,7 +476,8 @@ export default {
       }
     },
     handleClose() {
-      this.$emit('modal-close')
+      // this.$emit('modal-close')
+      this.$router.go(-1)
     },
     resetForm() {
       this.$refs['form'].resetFields()
