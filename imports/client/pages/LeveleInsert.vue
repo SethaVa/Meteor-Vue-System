@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="New Levele"
+    <el-dialog :close-on-click-modal="false" title="New Levele"
                :visible="true"
                :before-close="handleClose">
       <el-form label-position="left"
@@ -30,7 +30,7 @@
                    @click="handleSave">Save</el-button>
         <el-button @click="handleClose">Cancel</el-button>
       </span>
-    </el-dialog>
+    </el-dialog :close-on-click-modal="false">
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="Staff Detail"
+  <el-dialog :close-on-click-modal="false" title="Staff Detail"
              width="80%"
              :before-close="handleClose"
              :visible="visible">
@@ -33,7 +33,7 @@
         </template>
       </el-table-column>
     </el-table>
-  </el-dialog>
+  </el-dialog :close-on-click-modal="false">
 </template>
 
 <script>

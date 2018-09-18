@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="Edit Staff"
+        <el-dialog :close-on-click-modal="false" title="Edit Staff"
                    width="80%"
                    :visible="true"
                    :before-close="handleClose">
@@ -58,7 +58,7 @@
                            @click="handleSave" size="mini">Save</el-button>
                 <el-button @click="handleClose" size="mini">Cancel</el-button>
             </span>
-        </el-dialog>
+        </el-dialog :close-on-click-modal="false">
     </div>
 
 </template>

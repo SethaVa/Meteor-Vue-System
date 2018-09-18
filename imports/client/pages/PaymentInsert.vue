@@ -6,7 +6,7 @@
                @modal-close="handleClose">
     </component> -->
     <!-- <legend>Filter</legend> -->
-    <!-- <el-dialog title="New Income"
+    <!-- <el-dialog :close-on-click-modal="false" title="New Income"
                width="80%"
                :visible="visible"
                :before-close="handleClose"> -->
@@ -136,7 +136,7 @@
         <el-button @click="handleClose"
                    size="mini">Cancel</el-button>
       </span>
-    </el-dialog> -->
+    </el-dialog :close-on-click-modal="false"> -->
   </div>
 </template>
 

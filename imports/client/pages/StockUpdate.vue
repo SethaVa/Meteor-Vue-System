@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="Edit Item In Stock"
+    <el-dialog :close-on-click-modal="false" title="Edit Item In Stock"
                width="80%"
                :visible="visible"
                :before-close="handleClose">
@@ -62,7 +62,7 @@
         <el-button @click="handleClose"
                    size="mini">Cancel</el-button>
       </span>
-    </el-dialog>
+    </el-dialog :close-on-click-modal="false">
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible="visible"
+  <el-dialog :close-on-click-modal="false" :visible="visible"
              width="80%"
              :before-close="handleClose">
     <span slot="title">
@@ -68,7 +68,7 @@
       <el-button size="mini"
                  @click="handleClose">Cancel</el-button>
     </span>
-  </el-dialog>
+  </el-dialog :close-on-click-modal="false">
 </template>
 
 <script>
