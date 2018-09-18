@@ -32,9 +32,11 @@ import ClassDetails from './reports/ClassDetails.vue'
 //Register
 import RegisterList from './pages/RegisterList'
 import RegisterInsert from './pages/RegisterInsert.vue'
+import RegisterUpdate from './pages/RegisterUpdate.vue'
 //Payment
-import Payment from './pages/PaymentInsert.vue'
 import PaymentList from './pages/PaymentList.vue'
+import PaymentInsert from './pages/PaymentInsert.vue'
+import PaymentUpdate from './pages/PaymentUpdate.vue'
 //Refund
 import Refund from './pages/RefundList.vue'
 //Staff Salary
@@ -157,12 +159,27 @@ const routes = [
         name: 'registerList',
         component: RegisterList,
       },
-      //Register
+      //Register new
       {
         path: 'register-new',
-        name: 'register-new',
+        name: 'registerNew',
         component: RegisterInsert,
+        meta:{
+          pageTitle: 'Register New',
+          linkActiveClass: 'registerList',
+        }
       },
+      // Register update
+      {
+        path: 'register-edit/:id',
+        name: 'registerEdit',
+        component: RegisterUpdate,
+        meta: {
+          pageTitle: 'Register Edit',
+          linkActiveClass: 'registerList',
+        },
+      },
+
       //Payment
       {
         path: 'payment',
@@ -171,9 +188,23 @@ const routes = [
       },
       //Payment New
       {
-        path: 'new-Payment',
-        name: 'NewPayment',
-        component: Payment,
+        path: 'new-payment',
+        name: 'newPayment',
+        component: PaymentInsert,
+        meta: {
+          pageTitle: 'New Payment',
+          linkActiveClass: 'payment',
+        },
+      },
+      //Payment New
+      {
+        path: 'edit-payment/:id',
+        name: 'editPayment',
+        component: PaymentUpdate,
+        meta: {
+          pageTitle: 'Edit Payment',
+          linkActiveClass: 'payment',
+        },
       },
       // Student
       {

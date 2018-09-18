@@ -1,125 +1,120 @@
 <template>
   <div>
 
-    <el-dialog title="New Income"
-               width="80%"
-               :visible="visible"
-               :before-close="handleClose">
-      <el-form :model="form"
-               ref="form"
-               :rules="rules"
-               size="mini"
-               label-position="left"
-               label-width="90px">
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-form-item label="No # "
-                            prop="receiptCode">
-                <el-input v-model="form.receiptCode"
-                          :placeholder="refNumLoading">
-                  <el-button slot="append"
-                             icon=" fa fa-barcode"
-                             @click="getNextRefNum">
-                  </el-button>
-                </el-input>
-            </el-form-item>
-            <el-form-item label="Type"
-                          prop="type">
-              <el-select v-model="form.type"
-                         clearable
-                         placeholder="select type"
-                         @change="handleTypeChange">
-                <el-option v-for="doc in typeOpts"
-                           :key="doc.value"
-                           :label="doc.label"
-                           :value="doc.value"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="Student"
-                          prop="studentId">
-              <el-select v-model="form.studentId"
-                         @change="handleStudentChange"
-                         placeholder="Please Select Student">
-                <el-option v-for="doc in studentIdOpts"
-                           :key="doc.value"
-                           :label="doc.label"
-                           :value="doc.value"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="Fee"
-                          prop="fee">
-              <el-input v-model="form.fee">
+    <el-form :model="form"
+             ref="form"
+             :rules="rules"
+             size="mini"
+             label-position="left"
+             label-width="90px">
+      <el-row :gutter="10">
+        <el-col :span="12">
+          <el-form-item label="No # "
+                        prop="receiptCode">
+            <el-input v-model="form.receiptCode"
+                      :placeholder="refNumLoading">
+              <el-button slot="append"
+                         icon=" fa fa-barcode"
+                         @click="getNextRefNum">
+              </el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Type"
+                        prop="type">
+            <el-select v-model="form.type"
+                       clearable
+                       placeholder="select type"
+                       @change="handleTypeChange">
+              <el-option v-for="doc in typeOpts"
+                         :key="doc.value"
+                         :label="doc.label"
+                         :value="doc.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Student"
+                        prop="studentId">
+            <el-select v-model="form.studentId"
+                       @change="handleStudentChange"
+                       placeholder="Please Select Student">
+              <el-option v-for="doc in studentIdOpts"
+                         :key="doc.value"
+                         :label="doc.label"
+                         :value="doc.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Fee"
+                        prop="fee">
+            <el-input v-model="form.fee">
 
-              </el-input>
-            </el-form-item>
-            <el-form-item label="Pay Date"
-                          prop="payDate">
-              <el-date-picker style="width:100%"
-                              v-model="form.payDate"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="Duration"
-                          prop="duration">
-              <el-select v-model="form.duration">
-                <el-option v-for="doc in 12 "
-                           :key="doc"
-                           :label="doc + ' months'"
-                           :value="doc"></el-option>
-              </el-select>
-            </el-form-item>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Pay Date"
+                        prop="payDate">
+            <el-date-picker style="width:100%"
+                            v-model="form.payDate"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="Duration"
+                        prop="duration">
+            <el-select v-model="form.duration">
+              <el-option v-for="doc in 12 "
+                         :key="doc"
+                         :label="doc + ' months'"
+                         :value="doc"></el-option>
+            </el-select>
+          </el-form-item>
 
-          </el-col>
-          <el-col :span="12">
-            <fieldset>
-              <legend class="legend-style">Info</legend>
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item class="info"
-                                label="Late Date :">
-                    <label style="color:red;font-weight:600"> {{ -1*lateDay +' days' }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="End Date :">
-                    <label>{{ formatDate(endDate) }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="Room :">
-                    <label>{{ room }}</label>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item class="info"
-                                label="Teacher :">
-                    <label> {{ teacher }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="Subject :">
-                    <label>{{ subject }}</label>
-                  </el-form-item>
-                  <el-form-item class="info"
-                                label="Time :">
-                    <label>{{ formatTime(timeStudy) }}</label>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </fieldset>
-          </el-col>
-        </el-row>
-        <sub-payment @save-form="saveForm"
-                     :total-pay-prop="true"
-                     :save-event="saveEvent"
-                     :items-prop="itemsProp"
-                     @sub-payment="handlePaymentChange"></sub-payment>
-
-      </el-form>
-      <span slot="footer"
-            class="dialog-footer">
+        </el-col>
+        <el-col :span="12">
+          <fieldset>
+            <legend class="legend-style">Info</legend>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item class="info"
+                              label="Late Date :">
+                  <label style="color:red;font-weight:600"> {{ -1*lateDay +' days' }}</label>
+                </el-form-item>
+                <el-form-item class="info"
+                              label="End Date :">
+                  <label>{{ formatDate(endDate) }}</label>
+                </el-form-item>
+                <el-form-item class="info"
+                              label="Room :">
+                  <label>{{ room }}</label>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item class="info"
+                              label="Teacher :">
+                  <label> {{ teacher }}</label>
+                </el-form-item>
+                <el-form-item class="info"
+                              label="Subject :">
+                  <label>{{ subject }}</label>
+                </el-form-item>
+                <el-form-item class="info"
+                              label="Time :">
+                  <label>{{ formatTime(timeStudy) }}</label>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </fieldset>
+        </el-col>
+      </el-row>
+      <sub-payment @save-form="saveForm"
+                   :total-pay-prop="true"
+                   :save-event="saveEvent"
+                   :items-prop="itemsProp"
+                   @sub-payment="handlePaymentChange"></sub-payment>
+      <el-form-item>
         <el-button type="primary"
                    @click="saveEvent++"
                    size="mini">Save</el-button>
         <el-button @click="handleClose"
                    size="mini">Cancel</el-button>
-      </span>
-    </el-dialog>
+        </span>
+      </el-form-item>
+    </el-form>
+
   </div>
 </template>
 
@@ -135,7 +130,10 @@ import {
   findPaymentForClass,
   findOnePayment,
 } from '/imports/api/payment/methods'
-import { updatePaymentForPayment,findOnePaymentByCode } from '../../api/payment/methods'
+import {
+  updatePaymentForPayment,
+  findOnePaymentByCode,
+} from '../../api/payment/methods'
 import { findExchanges } from '../../api/exchanges/methods'
 
 import SubPayment from '../../components/subPayment'
@@ -161,7 +159,7 @@ export default {
       setTimeout(() => {
         let selector = {
           receiptCode: value,
-          _id:{$ne:this.updateDoc._id}
+          _id: { $ne: this.updateDoc._id },
         }
         findOnePaymentByCode
           .callPromise({ selector })
@@ -242,8 +240,9 @@ export default {
     },
   },
   mounted() {
-    this.getExchangeRate()
-    this.getDataForUpdate()
+    console.log(this.$route.params.id)
+    // this.getExchangeRate()
+    // this.getDataForUpdate()
   },
 
   methods: {
@@ -432,16 +431,19 @@ export default {
           }
           let recieveKhr = this.itemsProp[0].khr / this.exchangeRate
 
-          isNaN(recieveKhr) == true ? recieveKhr=0 : recieveKhr=recieveKhr
-          
-          let totalRecieve = this.itemsProp[0].usd + recieveKhr +this.itemsProp[0].discountVal
+          isNaN(recieveKhr) == true
+            ? (recieveKhr = 0)
+            : (recieveKhr = recieveKhr)
+
+          let totalRecieve =
+            this.itemsProp[0].usd + recieveKhr + this.itemsProp[0].discountVal
 
           // let totalRecieve =
           //   this.itemsProp[0].usd + totalRecieve
 
           let Payment = {
             _id: this.updateDoc._id,
-            receiptCode:this.form.receiptCode,
+            receiptCode: this.form.receiptCode,
             tranDate: moment().toDate(),
             refType: this.form.refType,
             classId: this.form.classId,
@@ -478,7 +480,8 @@ export default {
       })
     },
     handleClose() {
-      this.$emit('modal-close')
+      // this.$emit('modal-close')
+      this.$router.go(-1)
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')

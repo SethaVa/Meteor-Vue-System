@@ -1,18 +1,19 @@
 <template>
   <el-container class="container">
     <!-- v-if="toggle" -->
-    <el-aside
-      width="260px"
-      id="menu-side"
-      class="aside">
-      <!-- <span v-show="toggle"> -->
-      <!-- Aside Menu -->
-      <div class="logo">
-        <img src="/img/logo.png"
-             class="logo-img">
-      </div>
-      <aside-menu :active-menu="linkActiveClass"></aside-menu>
-      <!-- <span v-if="userIsInRoleUser">
+    <transition name="fade"
+                mode="out-in">
+      <el-aside width="260px"
+                id="menu-side"
+                class="aside">
+        <!-- <span v-show="toggle"> -->
+        <!-- Aside Menu -->
+        <div class="logo">
+          <img src="/img/logo.png"
+               class="logo-img">
+        </div>
+        <aside-menu :active-menu="linkActiveClass"></aside-menu>
+        <!-- <span v-if="userIsInRoleUser">
         <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
       </span>
       <span v-else-if="userIsInRoleAdmin">
@@ -21,13 +22,16 @@
       <span v-else-if="userIsInRoleManager">
         <aside-menu-manager :active-menu="linkActiveClass"></aside-menu-manager>
       </span> -->
-      <!-- @select="handleHomeSelect" -->
+        <!-- @select="handleHomeSelect" -->
 
-      <!-- <component :is="currentAsideMenu"
+        <!-- <component :is="currentAsideMenu"
                  :active-menu="linkActiveClass"></component> -->
-      <!-- </span> -->
+        <!-- </span> -->
 
-    </el-aside>
+      </el-aside>
+      <!-- <component :is="currentLayout"></component> -->
+    </transition>
+
     <!-- <div v-else
          class="aside-menu-mini">
       <aside-menu-mini :active-menu="linkActiveClass"></aside-menu-mini>
@@ -61,7 +65,7 @@
             <span class="el-dropdown-link">
               <avatar :username="userFullName"
                       :size="40"></avatar>
-                      <!-- background-color="#FFC107"
+              <!-- background-color="#FFC107"
                       color="#EBEEF5" -->
             </span>
             <el-dropdown-menu slot="dropdown">
@@ -89,7 +93,12 @@
       <el-main class="content">
 
         <div class="layout-content">
-          <router-view></router-view>
+          <transition name="fade-transform"
+                      mode="out-in">
+            <!-- <router-view></router-view> -->
+            <router-view></router-view>
+          </transition>
+
         </div>
 
         <div class="layout-footer">
