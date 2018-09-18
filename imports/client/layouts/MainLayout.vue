@@ -8,10 +8,10 @@
                 class="aside">
         <!-- <span v-show="toggle"> -->
         <!-- Aside Menu -->
-        <div class="logo">
+        <!-- <div class="logo">
           <img src="/img/logo.png"
                class="logo-img">
-        </div>
+        </div> -->
         <aside-menu :active-menu="linkActiveClass"></aside-menu>
         <!-- <span v-if="userIsInRoleUser">
         <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
@@ -65,7 +65,7 @@
             <span class="el-dropdown-link">
               <avatar :username="userFullName"
                       :size="40"></avatar>
-              <!-- background-color="#FFC107"
+                      <!-- background-color="#FFC107"
                       color="#EBEEF5" -->
             </span>
             <el-dropdown-menu slot="dropdown">

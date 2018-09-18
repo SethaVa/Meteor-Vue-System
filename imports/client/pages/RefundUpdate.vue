@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="Update Refund"
+    <el-dialog :close-on-click-modal="false" title="Update Refund"
                width="80%"
                :visible="visible"
                :before-close="handleClose">
@@ -87,7 +87,7 @@
         <el-button @click="handleClose"
                    size="mini">Cancel</el-button>
       </span>
-    </el-dialog>
+    </el-dialog :close-on-click-modal="false">
   </div>
 </template>
 

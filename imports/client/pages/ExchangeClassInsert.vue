@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="New ExchangeClass"
+    <el-dialog :close-on-click-modal="false" title="New ExchangeClass"
                width="80%"
                :visible="visible"
                :before-close="handleClose">
@@ -125,7 +125,7 @@
         <el-button size="mini"
                    @click="handleClose">Cancel</el-button>
       </span>
-    </el-dialog>
+    </el-dialog :close-on-click-modal="false">
   </div>
 </template>
 

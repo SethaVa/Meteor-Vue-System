@@ -26,7 +26,7 @@ const Schema = new SimpleSchema({
     optional: true,
   },
   'opts.seq': {
-    type: String,
+    type: Number,
     optional: true,
   },
   'opts.paddingType': {
@@ -49,7 +49,7 @@ const Schema = new SimpleSchema({
 
 /*** Client ***/
 export const getNextRef = new ValidatedMethod({
-  name: 'getNextRef',
+  name: 'app.getNextRef',
   mixins: [CallPromiseMixin],
   validate: Schema.validator(),
   run({
@@ -57,6 +57,7 @@ export const getNextRef = new ValidatedMethod({
     opts
   }) {
     if (Meteor.isServer) {
+      Meteor._sleepForMs(300)
       return makeNextRef({
         collectionName,
         opts
@@ -92,20 +93,31 @@ const makeNextRef = ({
   opts = opts || {}
 
   _.defaults(opts, {
-    // field: 'refNo',
+    field: 'refNo',
     selector: {},
     seq: 1,
-    paddingType: null, // start, end
+    paddingType: '', // start, end
     paddingLength: 0,
     paddingChar: '0',
     prefix: '',
   })
+  const Collection = MongoInternals.defaultRemoteCollectionDriver().open(collectionName)
 
-  const Collection = MongoInternals.defaultRemoteCollectionDriver().open(
-    collectionName
-  )
+  // Check prefix
+  if (opts.prefix) {
+    let strPrefix = opts.prefix.match(/[a-zA-Z]+/g)
+    let numPrefix = opts.prefix.replace(strPrefix, '')
+    let prefixLength = opts.paddingLength + numPrefix.length
 
-  //lookup highest value
+    opts.selector[opts.field] = {
+      $regex: strPrefix ? `^${strPrefix}[0-9]{${prefixLength}}.*` : `^[0-9]{${prefixLength}}.*`,
+    }
+  } else {
+    opts.selector[opts.field] = {
+      $regex: `^[0-9]{${opts.paddingLength}}.*`
+    }
+  }
+  // Get last
   let ref = 0
   let sort = {
     [opts.field]: -1
@@ -114,8 +126,11 @@ const makeNextRef = ({
     sort
   })
   if (doc) {
+    // Slice string
+    let slice = doc[opts.field].slice(opts.prefix.length)
+
     // Extract numbers from a string
-    let exNumber = doc[opts.field].match(/\d+/g)
+    let exNumber = slice.match(/\d+/g)
     ref = _.toNumber(_.last(exNumber))
   }
   ref += opts.seq
@@ -129,6 +144,8 @@ const makeNextRef = ({
       ref = _.padEnd(ref, opts.paddingLength, opts.paddingChar)
       break
   }
+
+  // Check prefix
   ref = opts.prefix ? `${opts.prefix}${ref}` : ref
 
   return ref
