@@ -60,11 +60,11 @@
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
-import MsgBox from '/imports/client/libs/message'
+import Notify from '/imports/client/lib/notify'
+import MsgBox from '/imports/client/lib/message'
 import { insertSubject } from '../../api/subject/methods.js'
 
-import Lookup from '../libs/Lookup-Value.js'
+import Lookup from '../lib/Lookup-Value.js'
 export default {
   name: 'BookNew',
   data() {

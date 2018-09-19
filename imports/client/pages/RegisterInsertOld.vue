@@ -139,16 +139,16 @@
 
 <script>
 import _ from 'lodash'
-import Notify from '/imports/client/libs/notify'
-import Msg from '/imports/client/libs/message'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import Notify from '/imports/client/lib/notify'
+import Msg from '/imports/client/lib/message'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import moment from 'moment'
-import Lookup from '/imports/client/libs/Lookup-Value'
+import Lookup from '/imports/client/lib/Lookup-Value'
 import {
   lookupClass,
   lookupStudent,
   lookupStudentForExpire,
-} from '/imports/libs/lookup-methods'
+} from '/imports/lib/lookup-methods'
 import {
   insertPayementForNew,
   findPaymentForClass,

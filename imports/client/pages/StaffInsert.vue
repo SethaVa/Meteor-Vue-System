@@ -68,7 +68,7 @@
 <script>
 import { insertStaff } from '../../api/Staffs/methods.js'
 import { findPosition } from '../../api/positions/methods'
-import Lookup from '../libs/Lookup-Value.js'
+import Lookup from '../lib/Lookup-Value.js'
 export default {
   name: 'EmployeeInsert',
   props: {

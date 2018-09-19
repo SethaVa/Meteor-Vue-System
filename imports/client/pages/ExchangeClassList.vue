@@ -7,10 +7,12 @@
     </component>
     <!-- Table Data -->
     <!-- :action-col-def="actionColDef" -->
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables :data="tableData"
                  v-loading="loading"
-                 :actions-def="actionsDef"
-                 :table-size="tableSize"
+                 :filters="tableFilters"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
@@ -30,44 +32,47 @@
 
         </template>
       </el-table-column>
-      <el-table-column width="60px"
-                       label="Action">
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
         <template slot-scope="scope">
-          <el-dropdown trigger="click"
-                       @command="handleCommand">
-            <span class="el-dropdown-link">
-              <i class="fa fa-align-justify"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-
-              <el-dropdown-item :command="{action: 'edit', row: scope.row}">
-                Edit
-              </el-dropdown-item>
-
-              <el-dropdown-item :command="{action: 'remove', row: scope.row}">
-                Remove
-              </el-dropdown-item>
-
-            </el-dropdown-menu>
-          </el-dropdown>
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
         </template>
       </el-table-column>
+
     </data-tables>
   </div>
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
-import MsgBox from '/imports/client/libs/message'
+import Notify from '/imports/client/lib/notify'
+import MsgBox from '/imports/client/lib/message'
 import moment from 'moment'
 //
 import ExchangeClassInsert from '../pages/ExchangeClassInsert.vue'
 import ExchangeClassUpdate from '../pages/ExchangeClassUpdate.vue'
+
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
+
 import {
   findExchangeClass,
   removeExchangeClass,
 } from '../../api/exchange-class/methods'
 export default {
+  components: {
+    ExchangeClassInsert,
+    ExchangeClassUpdate,
+    TableToolbar,
+    TableAction,
+  },
+  mixins: [removeMixin],
   data() {
     return {
       loading: false,
@@ -94,30 +99,21 @@ export default {
           order: 'ascending',
         },
       },
-      actionsDef: {
-        colProps: {
-          span: 19,
+      tableFilters: [
+        {
+          prop: ['name', 'tranDate'],
+          value: '',
         },
-        def: [
-          {
-            name: 'New',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.modalVisible = true
-              this.currentModal = ExchangeClassInsert
-            },
-          },
-        ],
-      },
+      ],
     }
   },
   mounted() {
     this.getData()
   },
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       this.loading = true
       findExchangeClass
@@ -130,42 +126,34 @@ export default {
           Notify.error({ message: error })
         })
     },
-    handleCommand(command) {
-      if (command.action === 'edit') {
-        // this.route({ name: 'register-new' })
-        this.updateId = command.row._id
-        this.modalVisible = true
-        this.currentModal = ExchangeClassUpdate
-
-        // this.modalVisible = true
-        // this.currentModal = ClassUpdate
-        // this.updateId = command.row._id
-        // this.currentDialog = RegisterUpdate
-      } else if (command.action === 'remove') {
-        this.$confirm('Do you want delete this record?', 'Warning', {
-          type: 'warning',
-        })
-          .then(result => {
-            if (result) {
-              let id = command.row._id
-              removeExchangeClass
-                .callPromise({ _id: id })
-                .then(result => {
-                  if (result) {
-                    MsgBox.success()
-                  }
-                })
-                .catch(err => {
-                  Notify.error({ message: err.reason + 'Error' })
-                })
-              this.getData()
-            }
-          })
-          .catch(err => {
-            Notify.error({ message: err.reason })
-          })
-      }
+    // Add new
+    addNew() {
+      this.modalVisible = true
+      this.currentModal = ExchangeClassInsert
     },
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      this.updateId = row._id
+      this.modalVisible = true
+      this.currentModal = ExchangeClassUpdate
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removeExchangeClass,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
+      })
+    },
+
     handleModalClose() {
       this.getData()
       this.modalVisible = false

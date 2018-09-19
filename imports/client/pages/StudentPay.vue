@@ -72,10 +72,10 @@
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
-import Msg from '/imports/client/libs/message'
+import Notify from '/imports/client/lib/notify'
+import Msg from '/imports/client/lib/message'
 const numeral = require('numeral')
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import _ from 'lodash'
 import moment from 'moment'
 import { insertPayment } from '../../api/payment/methods'

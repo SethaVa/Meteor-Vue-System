@@ -50,7 +50,7 @@
 
 <script>
 import { insertPosition } from '../../api/positions/methods'
-import lookupValue from '../../client/libs/Lookup-Value'
+import lookupValue from '../../client/lib/Lookup-Value'
 
 export default {
   name: 'PositionInsert',

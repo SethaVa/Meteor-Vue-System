@@ -30,8 +30,8 @@
 <script>
 import moment from 'moment'
 
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 
 import ExchangeForm from '/imports/client/pages/ExchangeForm'
 import { findExchanges, removeExchange } from '../../api/exchanges/methods'

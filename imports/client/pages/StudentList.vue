@@ -4,12 +4,15 @@
                :update-doc="updateDoc"
                :visible="modalVisible"
                @modal-close="handleModalClose"></component>
+
     <!-- table Data -->
     <!-- :action-col-def="actionColDef" -->
-
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables v-loading="loading"
                  :data="tableData"
-                 :actions-def="actionsDef"
+                 :filters="tableFilters"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
@@ -23,26 +26,15 @@
           <span v-else>{{ scope.row[title.prop] }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="60px"
-                       label="Action">
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
         <template slot-scope="scope">
-          <el-dropdown trigger="click"
-                       @command="handleCommand">
-            <span class="el-dropdown-link">
-              <i class="fa fa-align-justify"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-
-              <el-dropdown-item :command="{action: 'edit', row: scope.row}">
-                Edit
-              </el-dropdown-item>
-
-              <el-dropdown-item :command="{action: 'remove', row: scope.row}">
-                Remove
-              </el-dropdown-item>
-
-            </el-dropdown-menu>
-          </el-dropdown>
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
         </template>
       </el-table-column>
     </data-tables>
@@ -50,11 +42,16 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import { findStudents, removeStudent } from '../../api/students/methods.js'
 import StudentInsert from './StudentInsert.vue'
 import StudentUpdate from './StudentUpdate.vue'
+
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
 
 import moment from 'moment'
 
@@ -63,10 +60,13 @@ export default {
   meta: {
     headerTitle: 'Student',
   },
-  component: {
+  components: {
     StudentInsert,
     StudentUpdate,
+    TableAction,
+    TableToolbar,
   },
+  mixins: [removeMixin],
   data() {
     return {
       loading: false,
@@ -85,24 +85,12 @@ export default {
         border: false,
         size: 'mini',
       },
-      actionsDef: {
-        colProps: {
-          span: 19,
+      tableFilters: [
+        {
+          prop: ['enName', 'khName', 'gender'],
+          value: '',
         },
-        def: [
-          {
-            name: 'New Student',
-            icon: 'el-icon-circle-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.modalVisible = true
-              this.currentModal = StudentInsert
-            },
-          },
-        ],
-      },
+      ],
     }
   },
 
@@ -111,6 +99,9 @@ export default {
   },
 
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       this.loading = true
       let selector = {
@@ -126,61 +117,32 @@ export default {
           Notify.error({ message: err })
         })
     },
-    handleCommand(command) {
-      if (command.action === 'edit') {
-        // this.route({ name: 'register-new' })
-        this.updateDoc = command.row
-        this.modalVisible = true
-        this.currentModal = StudentUpdate
-      } else if (command.action === 'remove') {
-        this.$confirm('Do you want delete this record?', 'Warning', {
-          type: 'warning',
-        })
-          .then(result => {
-            if (result) {
-              let id = command.row._id
-              removeStudent
-                .callPromise({ _id: id })
-                .then(result => {
-                  if (result) {
-                    Msg.success()
-                  }
-                })
-                .catch(err => {
-                  Notify.error({ message: err.reason + ' Error' })
-                })
-              this.getData()
-            }
-          })
-          .catch(err => {
-            Notify.error({ message: err.reason })
-          })
-      }
+    // Add new
+    addNew() {
+      this.modalVisible = true
+      this.currentModal = StudentInsert
     },
-    handleRemove(row) {
-      let _id = row._id
-      this.$confirm('Do you want to delete this record?', 'Warning', {
-        type: 'warning',
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      this.updateDoc = row
+      this.modalVisible = true
+      this.currentModal = StudentUpdate
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removeStudent,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
       })
-        .then(() => {
-          removeStudent
-            .callPromise({ _id })
-            .then(result => {
-              if (result) {
-                Msg.success()
-                this.getData()
-              }
-            })
-            .catch(err => {
-              Notify.error({ message: err })
-            })
-        })
-        .catch(() => {
-          this.$message({
-            message: 'Delete is Cancel',
-            type: 'error',
-          })
-        })
     },
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')

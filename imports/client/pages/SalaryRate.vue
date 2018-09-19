@@ -31,8 +31,8 @@
 <script>
 import moment from 'moment'
 
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 
 import SalaryRateForm from '/imports/client/pages/SalaryRateForm.vue'
 import { findSalaryRate, removeSalaryRate } from '../../api/salary-rate/methods'

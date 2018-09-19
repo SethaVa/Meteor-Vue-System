@@ -88,11 +88,11 @@
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
+import Notify from '/imports/client/lib/notify'
 import _ from 'lodash'
 const numeral = require('numeral')
 export default {
-  name: 'SubForm',
+  // name: 'SubForm',
   props: {
     itemsProp: {
       type: Array,

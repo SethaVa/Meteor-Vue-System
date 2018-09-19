@@ -55,13 +55,13 @@
 <script>
 import _ from 'lodash'
 import Avatar from 'vue-avatar'
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 
 import {
   validateUserExist,
   validateUserPassword,
-} from '../../libs/validate-methods.js'
+} from '../../lib/validate-methods.js'
 import { findOneUser, updateUser } from '../../api/users/methods'
 
 export default {

@@ -108,19 +108,19 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import moment from 'moment'
 import _ from 'lodash'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
-import compareDate from '/imports/libs/compare-date'
-import Lookup from '/imports/client/libs/Lookup-Value'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
+import compareDate from '/imports/lib/compare-date'
+import Lookup from '/imports/client/lib/Lookup-Value'
 import { findPaymentForClass } from '/imports/api/payment/methods'
 import { insertRefund } from '../../api/Refund/methods'
 import { findExchanges } from '../../api/exchanges/methods'
 
 import StudentPay from './StudentPay.vue'
-import SubPayment from '../../components/subPayment'
+import SubPayment from '../components/subPayment'
 export default {
   name: 'Payment',
   components: { StudentPay, SubPayment },
@@ -380,11 +380,11 @@ export default {
 </style>
 
 //
-// import Msg from '/imports/client/libs/message'
-// import Notify from '/imports/client/libs/notify'
+// import Msg from '/imports/client/lib/message'
+// import Notify from '/imports/client/lib/notify'
 // import moment from 'moment'
 // import _ from 'lodash'
-// import { lookupClass, lookupType } from '/imports/libs/lookup-methods'
+// import { lookupClass, lookupType } from '/imports/lib/lookup-methods'
 // import { findPaymentForClass } from '/imports/api/payment/methods'
 // import StudentRefund from './StudentRefund.vue'
 // export default {

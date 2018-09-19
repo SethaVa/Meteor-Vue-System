@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import { findIncome, removeIncome } from '../../api/Income/methods'
 import StockInsert from './StockInsert.vue'
 import StockUpdate from './StockUpdate.vue'

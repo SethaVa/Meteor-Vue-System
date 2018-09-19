@@ -5,7 +5,7 @@ import {
   Session
 } from 'meteor/session'
 import _ from 'lodash'
-import Msg from '../libs/message'
+import Msg from '../lib/message'
 
 import Vue from 'vue'
 import Vuex from 'vuex'

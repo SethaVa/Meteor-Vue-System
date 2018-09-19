@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
+import Msg from '/imports/client/lib/message'
 import SubTimeForm from './TimeForm'
 import PositionUpdate from './PositionUpdate.vue'
 import { findTimeStudy, removeTimeStudy } from '../../api/time//methods'

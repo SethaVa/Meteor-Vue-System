@@ -1,7 +1,7 @@
-import AutoId from '../../../libs/auto-id';
+import AutoId from '../../../lib/auto-id';
 import Subject from '../subjects';
 
-// import AutoId from '/imports/libs/auto-id';
+// import AutoId from '/imports/lib/auto-id';
 // // Collection
 // import Subject from '../payment-term';
 

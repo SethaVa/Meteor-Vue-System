@@ -130,12 +130,12 @@
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
-import MsgBox from '/imports/client/libs/message'
+import Notify from '/imports/client/lib/notify'
+import MsgBox from '/imports/client/lib/message'
 import moment from 'moment'
-import Lookup from '/imports/client/libs/Lookup-Value'
+import Lookup from '/imports/client/lib/Lookup-Value'
 //
-import { lookupClass } from '/imports/libs/lookup-methods'
+import { lookupClass } from '/imports/lib/lookup-methods'
 import { findClassForStudenDetails } from '../../api/payment/methods'
 import { findOnePayment } from '../../api/payment/methods'
 import {

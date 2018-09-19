@@ -71,15 +71,15 @@
 <script>
 import _ from 'lodash'
 import moment from 'moment'
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
-import SubItemForm from '../../components/SubItemForm.vue'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
+import SubItemForm from '../components/SubItemForm.vue'
 const numeral = require('numeral')
 //=============================================================
 import { insertIncome } from '../../api/Income/methods'
 export default {
-  name: 'StockInsert',
+  // name: 'StockInsert',
   components: { SubItemForm },
   props: {
     visible: {

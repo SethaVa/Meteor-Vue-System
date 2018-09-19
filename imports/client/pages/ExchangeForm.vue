@@ -68,14 +68,14 @@
 <script>
 import moment from 'moment'
 
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 
 import { insertExchange, updateExchange } from '../../api/exchanges/methods'
 
 export default {
-  name: 'ExchangeNew',
+  // name: 'ExchangeNew',
   props: {
     formType: {
       type: String,

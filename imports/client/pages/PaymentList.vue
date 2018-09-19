@@ -1,16 +1,14 @@
 <template>
   <div>
 
-    <!-- <component :is="currentDialog"
-               :visible="visibleDialog"
-               :update-doc="updateDoc"
-               @modal-close="handleClose"></component> -->
-
     <!-- Table Data -->
     <!-- :action-col-def="actionColDef" -->
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables v-loading="loading"
                  :data="tableData"
-                 :actions-def="actionsDef"
+                 :filters="tableFilters"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.value"
@@ -37,26 +35,15 @@
 
         </template>
       </el-table-column>
-      <el-table-column width="60px"
-                       label="Action">
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
         <template slot-scope="scope">
-          <el-dropdown trigger="click"
-                       @command="handleCommand">
-            <span class="el-dropdown-link">
-              <i class="fa fa-align-justify"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-
-              <el-dropdown-item :command="{action: 'edit', row: scope.row}">
-                Edit
-              </el-dropdown-item>
-
-              <el-dropdown-item :command="{action: 'remove', row: scope.row}">
-                Remove
-              </el-dropdown-item>
-
-            </el-dropdown-menu>
-          </el-dropdown>
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
         </template>
       </el-table-column>
 
@@ -67,21 +54,33 @@
 <script>
 import moment from 'moment'
 
-import Notify from '/imports/client/libs/notify'
-import Msg from '/imports/client/libs/message'
+import Notify from '/imports/client/lib/notify'
+import Msg from '/imports/client/lib/message'
 import PaymentInsert from './PaymentInsert.vue'
 import PaymentUpdate from './PaymentUpdate.vue'
 import Refund from './RefundInsert.vue'
 import StudentPayUpdate from './StudentPayUpdate.vue'
-import compareDate from '/imports/libs/compare-date'
+import compareDate from '/imports/lib/compare-date'
 
 import { findPayment, removePayment } from '../../api/payment/methods'
 
-var numeral = require('numeral')
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
+
+import numeral from 'numeral'
 
 export default {
   name: 'PaymentList',
-  components: { PaymentInsert, PaymentUpdate, Refund },
+  components: {
+    PaymentInsert,
+    PaymentUpdate,
+    Refund,
+    TableToolbar,
+    TableAction,
+  },
+  mixins: [removeMixin],
   data() {
     return {
       loading: false,
@@ -102,53 +101,21 @@ export default {
         size: 'mini',
         border: false,
       },
-      actionsDef: {
-        colProps: {
-          span: 19,
+      tableFilters: [
+        {
+          prop: ['studentId', 'payDate'],
+          value: '',
         },
-        def: [
-          {
-            name: 'New',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              // this.visibleDialog = true
-              // this.currentDialog = PaymentInsert
-              // compareDate()
-              this.$router.push({ name: 'newPayment' })
-            //   this.$router.push({
-            // name: 'editPayment',
-            // params: { id: '100' },
-          // })
-            },
-          },
-          // {
-          //   name: 'Refund',
-          //   // icon: 'el-icon-plus',
-          //   buttonProps: {
-          //     size: 'mini',
-          //   },
-          //   handler: () => {
-          //     this.visibleDialog = true
-          //     this.currentDialog = Refund
-          //     compareDate()
-          //     // this.$router.push({ name: 'NewPayment' })
-          //   },
-          // },
-        ],
-      },
-      actionColDef: {
-        label: 'Action',
-        width: '100',
-      },
+      ],
     }
   },
   mounted() {
     this.getData()
   },
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       this.loading = true
       findPayment
@@ -164,67 +131,46 @@ export default {
           this.$message(err.reason)
         })
     },
-    handleCommand(command) {
-      if (command.action === 'edit') {
-        if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {
-          Notify.warning({
-            message: 'This recorde is ' + command.row.status + " can't edit!",
-          })
-        } else {
-          // this.updateDoc = command.row
-          // this.visibleDialog = true
-          // this.currentDialog = PaymentUpdate
-          this.$router.push({
-            name: 'editPayment',
-            params: { id: command.row },
-          })
-        }
-      } else if (command.action === 'remove') {
-        if (command.row.status !== 'Paid' && command.row.status !== 'Debt') {
-          Notify.warning({
-            message: 'This recorde is ' + command.row.status + " can't remove!",
-          })
-        } else {
-          this.$confirm('Do you want delete this record?', 'Warning', {
-            type: 'warning',
-          })
-            .then(result => {
-              if (result) {
-                let id = command.row._id
-                let lastId = command.row.lastId
-                removePayment
-                  .callPromise({
-                    selector: {
-                      _id: id,
-                      referenceType: 'Payment',
-                      lastId: lastId,
-                    },
-                  })
-                  .then(result => {
-                    if (result) {
-                      Msg.success()
-                      this.getData()
-                    }
-                  })
-                  .catch(err => {
-                    Notify.error({ message: err.reason + 'Error' })
-                  })
-                this.getData()
-              }
-            })
-            .catch(err => {
-              Notify.error({ message: err })
-            })
-        }
+    // Add new
+    addNew() {
+      this.$router.push({ name: 'newPayment' })
+    },
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      if (row.status !== 'Paid' && row.status !== 'Debt') {
+        Notify.warning({
+          message: 'This recorde is ' + row.status + " can't edit!",
+        })
+      } else {
+        this.$router.push({
+          name: 'editPayment',
+          params: { id: row },
+        })
       }
     },
-    handleClose() {
-      this.getData()
-      this.visibleDialog = false
-      this.$nextTick(() => {
-        this.currentDialog = null
-      })
+    remove(row) {
+      if (row.status !== 'Paid' && row.status !== 'Debt') {
+        Notify.warning({
+          message: 'This recorde is ' + row.status + " can't remove!",
+        })
+      } else {
+        this.$_removeMixin({
+          meteorMethod: removePayment,
+          selector: { _id: row._id },
+          successMethod: 'getData',
+          loading: 'loading',
+          title: row.title,
+        })
+      }
     },
+
     formatDate(val) {
       return moment(val).format('DD/MM/YYYY')
     },

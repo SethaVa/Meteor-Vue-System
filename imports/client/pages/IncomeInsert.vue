@@ -69,15 +69,15 @@
 <script>
 import _ from 'lodash'
 import moment from 'moment'
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
-import SubAcc from '../../components/SubAccounting.vue'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
+import SubAcc from '../components/SubAccounting.vue'
 const numeral = require('numeral')
 //=============================================================
 import { insertIncome } from '../../api/Income/methods'
 export default {
-  name: 'IncomeInsert',
+  // name: 'IncomeInsert',
   components: { SubAcc },
   props: {
     visible: {
