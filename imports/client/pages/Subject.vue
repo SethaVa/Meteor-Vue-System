@@ -7,29 +7,51 @@
                @modal-close="handleClose"></component>
 
     <!-- Table Data -->
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables :data="tableData"
-                 :action-col-def="actionColDef"
-                 :actions-def="actionsDef"
+                 :filters="tableFilters"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.value"
                        :label="title.label"
                        :prop="title.prop"
-                       :sortable="title.sort"></el-table-column>
+                       :sortable="title.sort">
+      </el-table-column>
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
+        <template slot-scope="scope">
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
+        </template>
+      </el-table-column>
 
     </data-tables>
   </div>
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
-import MsgBox from '/imports/client/libs/message'
+import Notify from '/imports/client/lib/notify'
+import MsgBox from '/imports/client/lib/message'
 import SubjectInsert from './SubjectInsert.vue'
 import SubjectUpdate from './SubjectUpdate.vue'
+
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
+// import TableToolbar from '../components/TableToolbar'
+// import TableAction from '../components/TableAction'
+
 import { findSubject, removeSubject } from '../../api/subject/methods.js'
 export default {
   name: 'Subject',
-  components: { SubjectInsert },
+  components: { SubjectInsert, TableAction, TableToolbar },
+  mixins: [removeMixin],
   data() {
     return {
       currentDialog: null,
@@ -37,7 +59,6 @@ export default {
       updateDoc: null,
       tableData: [],
       titles: [
-        { label: 'ID', prop: '_id', sort: 'custom' },
         { label: 'Title', prop: 'title', sort: 'custom' },
         { label: 'Level', prop: 'level' },
         { label: 'Type', prop: 'type' },
@@ -45,69 +66,21 @@ export default {
       tableProps: {
         size: 'mini',
       },
-      actionsDef: {
-        colProps: {
-          span: 19,
+      tableFilters: [
+        {
+          prop: ['title'],
+          value: '',
         },
-        def: [
-          {
-            name: 'New',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.visibleDialog = true
-              this.currentDialog = SubjectInsert
-            },
-          },
-        ],
-      },
-      actionColDef: {
-        label: 'Action',
-        width: '100',
-        def: [
-          {
-            icon: 'el-icon-edit',
-            handler: row => {
-              this.updateDoc = row
-              this.visibleDialog = true
-              this.currentDialog = SubjectUpdate
-            },
-          },
-          {
-            icon: 'el-icon-delete',
-            handler: row => {
-              let id = row._id
-              this.$confirm('Do you want delete this record?', 'Warning')
-                .then(result => {
-                  if (result) {
-                    removeSubject
-                      .callPromise(id)
-                      .then(result => {
-                        if (result) {
-                          MsgBox.success('Delete Success')
-                        }
-                      })
-                      .catch(err => {
-                        this.$message(err.reason)
-                      })
-                    this.getData()
-                  }
-                })
-                .catch(err => {
-                  MsgBox.warning('Delete has been ' + err)
-                })
-            },
-          },
-        ],
-      },
+      ],
     }
   },
   mounted() {
     this.getData()
   },
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       findSubject
         .callPromise({ selector: {}, options: { sort: { _id: -1 } } })
@@ -117,6 +90,33 @@ export default {
         .catch(error => {
           Notify.error({ message: error })
         })
+    },
+    // Add new
+    addNew() {
+      this.visibleDialog = true
+      this.currentDialog = SubjectInsert
+    },
+    // Table Action
+    actionsList(row) {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      this.updateDoc = row
+      this.visibleDialog = true
+      this.currentDialog = SubjectUpdate
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removeSubject,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
+      })
     },
     handleClose() {
       this.getData()

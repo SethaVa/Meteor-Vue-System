@@ -7,8 +7,12 @@
     </component>
     <!-- Table Data -->
     <!-- :action-col-def="actionColDef" -->
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables :data="tableData"
                  :actions-def="actionsDef"
+                 :filters="tableFilters"
                  :table-size="tableSize"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
@@ -32,37 +36,25 @@
 
         </template>
       </el-table-column>
-      <el-table-column width="60px"
-                       label="Action">
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
         <template slot-scope="scope">
-          <el-dropdown trigger="click"
-                       @command="handleCommand">
-            <span class="el-dropdown-link">
-              <i class="fa fa-align-justify"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-
-              <el-dropdown-item :command="{action: 'edit', row: scope.row}">
-                Edit
-              </el-dropdown-item>
-
-              <el-dropdown-item :command="{action: 'remove', row: scope.row}">
-                Remove
-              </el-dropdown-item>
-              <el-dropdown-item :command="{action: 'finish', row: scope.row}">
-                Finish
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
         </template>
       </el-table-column>
+
     </data-tables>
   </div>
 </template>
 
 <script>
-import MsgBox from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import MsgBox from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import ClassInsert from './ClassInsert'
 import ClassUpdate from './ClassUpdate'
 import {
@@ -71,6 +63,12 @@ import {
   finishClassStudy,
   updateClassStudyStatus,
 } from '../../api/classStudy/methods'
+
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
+
 import moment from 'moment'
 import _ from 'lodash'
 export default {
@@ -78,7 +76,10 @@ export default {
   component: {
     ClassInsert,
     ClassUpdate,
+    TableAction,
+    TableToolbar,
   },
+  mixins: [removeMixin],
   data() {
     return {
       currentModal: null,
@@ -105,41 +106,21 @@ export default {
           order: 'ascending',
         },
       },
-      actionsDef: {
-        colProps: {
-          span: 19,
+      tableFilters: [
+        {
+          prop: ['roomName', 'teacher','timeStudy','type'],
+          value: '',
         },
-        def: [
-          {
-            name: 'New',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.modalVisible = true
-              this.currentModal = ClassInsert
-            },
-          },
-          // {
-          //   name: 'Finish Class',
-          //   icon: 'el-icon-plus',
-          //   buttonProps: {
-          //     size: 'mini',
-          //   },
-          //   handler: () => {
-          //     // this.modalVisible = true
-          //     // this.currentModal = ClassInsert
-          //   },
-          // },
-        ],
-      },
+      ],
     }
   },
   mounted() {
     this.getData()
   },
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       findClassStudy
         .callPromise({})
@@ -150,65 +131,32 @@ export default {
           this.$message.error(err.reason)
         })
     },
-    handleCommand(command) {
-      if (command.action === 'edit') {
-        // this.route({ name: 'register-new' })
-        this.updateDoc = command.row
-        this.modalVisible = true
-        this.currentModal = ClassUpdate
-
-        // this.modalVisible = true
-        // this.currentModal = ClassUpdate
-        // this.updateId = command.row._id
-        // this.currentDialog = RegisterUpdate
-      } else if (command.action === 'remove') {
-        this.$confirm('Do you want delete this record?', 'Warning', {
-          type: 'warning',
-        })
-          .then(result => {
-            if (result) {
-              let id = command.row._id
-              removeClassStudy
-                .callPromise({ _id: id })
-                .then(result => {
-                  if (result) {
-                    MsgBox.success()
-                  }
-                })
-                .catch(err => {
-                  Notify.error({ message: err.reason + 'Error' })
-                })
-              this.getData()
-            }
-          })
-          .catch(err => {
-            Notify.error({ message: 'Cacel Delete' })
-            // this.$message({
-            //   message: 'Cacel Delete',
-            //   type: 'error',
-            // })
-          })
-      } else if (command.action === 'finish') {
-        this.$confirm('Are you sure ?', 'Warning', { type: 'warning' })
-          .then(result => {
-            let _id = command.row._id
-            let status = 'Closed'
-            updateClassStudyStatus
-              .callPromise({ _id, status })
-              .then(result => {
-                if (result) {
-                  MsgBox.success()
-                  this.getData()
-                }
-              })
-              .catch(error => {
-                Notify.error({ message: error })
-              })
-          })
-          .catch(error => {
-            Notify.error({ message: error })
-          })
-      }
+    // Add new
+    addNew() {
+      this.modalVisible = true
+      this.currentModal = ClassInsert
+    },
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      this.updateDoc = row
+      this.modalVisible = true
+      this.currentModal = ClassUpdate
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removeClassStudy,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
+      })
     },
     dialog() {
       this.$message.error(this.currentModal)

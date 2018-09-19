@@ -92,16 +92,16 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import moment from 'moment'
 import _ from 'lodash'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
-import Lookup from '/imports/client/libs/Lookup-Value'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
+import Lookup from '/imports/client/lib/Lookup-Value'
 import { findPaymentForClass } from '/imports/api/payment/methods'
 import { updateRefund, findOneRefund } from '../../api/Refund/methods'
 import StudentPay from './StudentPay.vue'
-import SubPayment from '../../components/subPayment'
+import SubPayment from '../components/subPayment'
 export default {
   name: 'Payment',
   components: { StudentPay, SubPayment },

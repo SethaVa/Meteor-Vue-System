@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
+import Msg from '/imports/client/lib/message'
 import SubCategoryForm from './CategoryForm'
 import PositionUpdate from './PositionUpdate.vue'
 import { findCategories, removeCategories } from '../../api/categories/methods'

@@ -109,12 +109,12 @@
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
+import Notify from '/imports/client/lib/notify'
 import _ from 'lodash'
 const numeral = require('numeral')
 import { findItems } from '/imports/api/items/methods'
 export default {
-  name: 'SubItemForm',
+  // name: 'SubItemForm',
   props: {
     itemsProp: {
       type: Array,

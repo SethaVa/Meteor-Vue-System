@@ -5,7 +5,7 @@
 //   Session
 // } from 'meteor/session'
 // import _ from 'lodash'
-// import Msg from '../libs/message'
+// import Msg from '../lib/message'
 // const app = {
 //   namespaced: true,
 //   state: {

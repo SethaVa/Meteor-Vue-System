@@ -7,15 +7,28 @@
                @modal-close="handleClose"></component>
 
     <!-- Table Data -->
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables :data="tableData"
-                 :action-col-def="actionColDef"
-                 :actions-def="actionsDef"
+                 :filters="tableFilters"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.value"
                        :label="title.label"
                        :prop="title.prop"
                        :sortable="title.sort"></el-table-column>
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
+        <template slot-scope="scope">
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
+        </template>
+      </el-table-column>
 
     </data-tables>
   </div>
@@ -25,9 +38,16 @@
 import RoomInsert from './RoomInsert.vue'
 import RoomUpdate from './RoomUpdate.vue'
 import { findRoom, removeRoom } from '../../api/rooms/methods.js'
+
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
+
 export default {
   name: 'Room',
-  components: { RoomInsert, RoomUpdate },
+  components: { RoomInsert, RoomUpdate, TableToolbar, TableAction },
+  minxns: [removeMixin],
   data() {
     return {
       currentDialog: null,
@@ -35,7 +55,6 @@ export default {
       updateId: null,
       tableData: [],
       titles: [
-        { label: 'ID', prop: '_id', sort: 'custom' },
         { label: 'Name', prop: 'roomName', sort: 'custom' },
         { label: 'Describe', prop: 'des' },
       ],
@@ -43,69 +62,21 @@ export default {
         size: 'mini',
         border: false,
       },
-      actionsDef: {
-        colProps: {
-          span: 19,
+      tableFilters: [
+        {
+          prop: ['roomName'],
+          value: '',
         },
-        def: [
-          {
-            name: 'New',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.currentDialog = RoomInsert
-            },
-          },
-        ],
-      },
-      actionColDef: {
-        label: 'Action',
-        width: '100',
-        def: [
-          {
-            icon: 'el-icon-edit',
-            handler: row => {
-              this.updateId = row._id
-              this.currentDialog = RoomUpdate
-            },
-          },
-          {
-            icon: 'el-icon-delete',
-            handler: row => {
-              let id = row._id
-              this.$confirm('Do you want delete this record?', 'Warning')
-                .then(result => {
-                  removeRoom
-                    .callPromise(id)
-                    .then(result => {
-                      this.$message({
-                        message: 'Delete Successfull',
-                        type: 'success',
-                      })
-                    })
-                    .catch(err => {
-                      this.$message(err.reason)
-                    })
-                  this.getData()
-                })
-                .catch(err => {
-                  this.$message({
-                    message: 'Cacel Delete',
-                    type: 'error',
-                  })
-                })
-            },
-          },
-        ],
-      },
+      ],
     }
   },
   mounted() {
     this.getData()
   },
   methods: {
+      renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       findRoom
         .callPromise({ selector: {}, options: { sort: { _id: -1 } } })
@@ -115,6 +86,31 @@ export default {
         .catch(err => {
           this.$message(err.reason)
         })
+    },
+    // Add new
+    addNew() {
+      this.currentDialog = RoomInsert
+    },
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      this.updateId = row._id
+      this.currentDialog = RoomUpdate
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removeRoom,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
+      })
     },
     handleClose() {
       this.getData()

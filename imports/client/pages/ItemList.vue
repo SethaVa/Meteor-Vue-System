@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
+import Msg from '/imports/client/lib/message'
 import SubItemForm from './ItemForm'
 import PositionUpdate from './PositionUpdate.vue'
 import { findItems, removeItems } from '../../api/items/methods'

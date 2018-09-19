@@ -5,9 +5,11 @@
                :visible="modalVisible"
                @modal-close="handleModalClose"></component>
     <!-- table Data -->
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables :data="tableData"
-                 :action-col-def="actionColDef"
-                 :actions-def="actionsDef"
+                 :filters="tableFilters"
                  :table-props="tableProps"
                  v-loading="loading">
       <el-table-column v-for="title in titles"
@@ -28,28 +30,49 @@
           <span v-else>{{ scope.row[title.prop] }}</span>
         </template>
       </el-table-column>
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
+        <template slot-scope="scope">
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
+        </template>
+      </el-table-column>
     </data-tables>
   </div>
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import { findIncome, removeIncome } from '../../api/Income/methods'
 import IncomeInsert from './IncomeInsert.vue'
 import IncomeUpdate from './IncomeUpdate.vue'
+
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
+
 import _ from 'lodash'
 import moment from 'moment'
-const numeral = require('numeral')
+import numeral from 'numeral'
+
 export default {
   name: 'IncomeList',
   meta: {
     headerTitle: 'Student',
   },
-  component: {
+  components: {
     IncomeInsert,
     IncomeUpdate,
+    TableAction,
+    TableToolbar,
   },
+  mixins: [removeMixin],
   data() {
     return {
       loading: false,
@@ -67,6 +90,12 @@ export default {
         border: false,
         size: 'mini',
       },
+      tableFilters: [
+        {
+          prop: ['tranDate', 'referenceType'],
+          value: '',
+        },
+      ],
       actionsDef: {
         colProps: {
           span: 19,
@@ -85,38 +114,7 @@ export default {
           },
         ],
       },
-      actionColDef: {
-        label: 'Action',
-        width: '100px',
-        tableColProps: {
-          align: 'center',
-        },
-        def: [
-          {
-            icon: 'el-icon-edit',
-            handler: row => {
-              if (
-                row.referenceType !== 'Income' &&
-                row.referenceType !== 'Expend'
-              ) {
-                Notify.warning({
-                  message: 'This recorde is not Income or Expend !',
-                })
-              } else {
-                this.updateId = row._id
-                this.modalVisible = true
-                this.currentModal = IncomeUpdate
-              }
-            },
-          },
-          {
-            icon: 'el-icon-delete',
-            handler: row => {
-              this.handleRemove(row)
-            },
-          },
-        ],
-      },
+
     }
   },
   mounted() {
@@ -124,6 +122,9 @@ export default {
   },
 
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       this.loading = true
       let options = {
@@ -146,31 +147,41 @@ export default {
           Notify.error({ message: err })
         })
     },
-    handleRemove(row) {
+    // Add new
+    addNew() {
+      this.modalVisible = true
+      this.currentModal = IncomeInsert
+    },
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      if (row.referenceType !== 'Income' && row.referenceType !== 'Expend') {
+        Notify.warning({
+          message: 'This recorde is not Income or Expend !',
+        })
+      } else {
+        this.updateId = row._id
+        this.modalVisible = true
+        this.currentModal = IncomeUpdate
+      }
+    },
+    remove(row) {
       if (row.referenceType !== 'Income' && row.referenceType !== 'Expend') {
         Notify.warning({ message: 'This recorde is not Income or Expend !' })
       } else {
-        let _id = row._id
-        this.$confirm('Do you want to delete this record?', 'Warning', {
-          type: 'warning',
+        this.$_removeMixin({
+          meteorMethod: removeIncome,
+          selector: { _id: row._id },
+          successMethod: 'getData',
+          loading: 'loading',
+          title: row.title,
         })
-          .then(() => {
-            removeIncome
-              .callPromise({ _id })
-              .then(result => {
-                Msg.success()
-                this.getData()
-              })
-              .catch(err => {
-                Notify.error({ message: err })
-              })
-          })
-          .catch(() => {
-            this.$message({
-              message: 'Delete is Cancel',
-              type: 'error',
-            })
-          })
       }
     },
     formatDate(val) {
@@ -191,5 +202,4 @@ export default {
 </script>
 
 <style>
-
 </style>

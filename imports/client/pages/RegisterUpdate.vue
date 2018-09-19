@@ -149,13 +149,13 @@
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
-import Msg from '/imports/client/libs/message'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import Notify from '/imports/client/lib/notify'
+import Msg from '/imports/client/lib/message'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import moment from 'moment'
-import Lookup from '/imports/client/libs/Lookup-Value'
-import { getNextRef } from '/imports/libs/get-next-ref'
-import { lookupClass, lookupStudent } from '/imports/libs/lookup-methods'
+import Lookup from '/imports/client/lib/Lookup-Value'
+import { getNextRef } from '/imports/lib/get-next-ref'
+import { lookupClass, lookupStudent } from '/imports/lib/lookup-methods'
 import { updatePayementForNew,findOnePaymentByCode } from '../../api/payment/methods'
 import { findExchanges } from '../../api/exchanges/methods'
 

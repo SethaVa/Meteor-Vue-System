@@ -50,7 +50,7 @@
 
 <script>
 import { updatePosition } from '../../api/positions/methods.js'
-import lookupValue from '../../client/libs/Lookup-Value'
+import lookupValue from '../../client/lib/Lookup-Value'
 import _ from 'lodash'
 export default {
   name: 'PositionUpdate',

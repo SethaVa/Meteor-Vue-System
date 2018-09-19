@@ -100,13 +100,13 @@
 
 <script>
 import _ from 'lodash'
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
-// Libs
-import LookupValue from '../libs/Lookup-Value'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
+// lib
+import LookupValue from '../lib/Lookup-Value'
 
 // import { lookupRole, lookupBranch } from '../../utils/lookup-methods'
-import { validateUserExist } from '../../libs/validate-methods'
+import { validateUserExist } from '../../lib/validate-methods'
 import { findOneUser, updateUser } from '../../api/users/methods'
 
 export default {

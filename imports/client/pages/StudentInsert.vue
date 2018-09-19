@@ -74,10 +74,10 @@
 
 <script>
 import moment from 'moment'
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
-import lookupValue from '/imports/client/libs/Lookup-Value'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
+import lookupValue from '/imports/client/lib/Lookup-Value'
 import _ from 'lodash'
 import { insertStudent } from '../../api/students/methods.js'
 
@@ -130,6 +130,9 @@ export default {
         ],
         type: [
           { required: true, message: 'Please Select Type', trigger: 'blur' },
+        ],
+         dob: [
+          { required: true, message: 'Date of birth is required!', trigger: 'blur' },
         ],
       },
     }

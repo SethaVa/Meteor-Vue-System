@@ -101,8 +101,8 @@
 </template>
 
 <script>
-import MsgBox from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import MsgBox from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import { findTimeStudyOpts } from '../../api/time/methods'
 import { updateClassStudy } from '../../api/classStudy/methods'
 import { findRoomOpts } from '../../api/rooms/methods'
@@ -112,8 +112,8 @@ import {
   findSalaryRatePartTimeOpts,
   findSalaryRateFullTimeTimeOpts,
 } from '../../api/salary-rate/methods'
-import lookupValue from '../../client/libs/Lookup-Value'
-import LookUp from '../../client/libs/Lookup-Value'
+import lookupValue from '../../client/lib/Lookup-Value'
+import LookUp from '../../client/lib/Lookup-Value'
 import moment from 'moment'
 
 export default {

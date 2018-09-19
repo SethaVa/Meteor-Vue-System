@@ -129,12 +129,12 @@
 import _ from 'lodash'
 import moment from 'moment'
 
-import Notify from '/imports/client/libs/notify'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
-import Lookup from '../libs/Lookup-Value'
-import { lookupClass } from '/imports/libs/lookup-methods'
+import Notify from '/imports/client/lib/notify'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
+import Lookup from '../lib/Lookup-Value'
+import { lookupClass } from '/imports/lib/lookup-methods'
 import { reportStudents } from '../../api/report/all-student'
-import { dateRangePickerOpts } from '/imports/client/libs/date-range-picker-opts'
+import { dateRangePickerOpts } from '/imports/client/lib/date-range-picker-opts'
 
 import { Printd } from 'printd'
 import toCss from 'to-css'

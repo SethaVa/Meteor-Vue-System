@@ -34,15 +34,15 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import _ from 'lodash'
 import moment from 'moment'
 import {
   insertCategories,
   updateCategories,
 } from '../../api/categories/methods'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 export default {
   name: 'TimeForm',
   props: {

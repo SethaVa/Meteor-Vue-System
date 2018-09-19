@@ -60,9 +60,9 @@
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
-import MsgBox from '/imports/client/libs/message'
-import Lookup from '../libs/Lookup-Value.js'
+import Notify from '/imports/client/lib/notify'
+import MsgBox from '/imports/client/lib/message'
+import Lookup from '../lib/Lookup-Value.js'
 
 import { updateSubject } from '../../api/subject/methods.js'
 export default {

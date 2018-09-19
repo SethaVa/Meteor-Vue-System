@@ -109,9 +109,9 @@
 import _ from 'lodash'
 import moment from 'moment'
 
-import Notify from '/imports/client/libs/notify'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
-import Lookup from '../libs/Lookup-Value'
+import Notify from '/imports/client/lib/notify'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
+import Lookup from '../lib/Lookup-Value'
 import { findTeacherDetails } from '../../api/report/teacherDetails'
 import { Printd } from 'printd'
 import toCss from 'to-css'

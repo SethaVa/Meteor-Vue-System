@@ -38,13 +38,13 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import _ from 'lodash'
 import moment from 'moment'
 import { insertTimeStudy, updateTimeStudy } from '../../api/time/methods'
-import lookupValue from '../../client/libs/Lookup-Value'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import lookupValue from '../../client/lib/Lookup-Value'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 export default {
   name: 'TimeForm',
   props: {

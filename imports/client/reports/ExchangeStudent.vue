@@ -121,14 +121,14 @@
 <script>
 import _ from 'lodash'
 import moment from 'moment'
-import wrapCurrentDate from '/imports/client/libs/wrap-current-time'
+import wrapCurrentDate from '/imports/client/lib/wrap-current-time'
 import { Printd } from 'printd'
-import Notify from '/imports/client/libs/notify'
-import Lookup from '../libs/Lookup-Value'
-import { lookupType } from '/imports/libs/lookup-methods'
+import Notify from '/imports/client/lib/notify'
+import Lookup from '../lib/Lookup-Value'
+import { lookupType } from '/imports/lib/lookup-methods'
 //
 import { findExchangeStudents } from '../../api/report/exchangeStudent'
-import { dateRangePickerOpts } from '/imports/client/libs/date-range-picker-opts'
+import { dateRangePickerOpts } from '/imports/client/lib/date-range-picker-opts'
 
 const numeral = require('numeral')
 export default {

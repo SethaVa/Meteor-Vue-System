@@ -6,16 +6,28 @@
                @modal-close="handleModalClose">
     </component>
     <!-- Table Data -->
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables :data="tableData"
-                 :actions-def="actionsDef"
-                 :action-col-def="actionColDef"
-                 :table-size="tableSize"
+                 :filters="tableFilters"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
                        :prop="title.prop"
                        :label="title.label"
                        :sortable="title.sort">
+      </el-table-column>
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
+        <template slot-scope="scope">
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
+        </template>
       </el-table-column>
     </data-tables>
   </div>
@@ -25,14 +37,23 @@
 import PositionInsert from './PositionInsert.vue'
 import PositionUpdate from './PositionUpdate.vue'
 import { findPosition, removePosition } from '../../api/positions/methods'
+
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
+
 import moment from 'moment'
 import _ from 'lodash'
 export default {
   name: 'Position',
-  component: {
+  components: {
     PositionInsert,
     PositionUpdate,
+    TableToolbar,
+    TableAction,
   },
+  mixins: [removeMixin],
   data() {
     return {
       currentModal: null,
@@ -49,69 +70,21 @@ export default {
       tableProps: {
         size: 'small',
       },
-      actionsDef: {
-        colProps: {
-          span: 19,
+      tableFilters: [
+        {
+          prop: ['position'],
+          value: '',
         },
-        def: [
-          {
-            name: 'New',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.modalVisible = true
-              this.currentModal = PositionInsert
-            },
-          },
-        ],
-      },
-      actionColDef: {
-        label: 'Action',
-        def: [
-          {
-            icon: 'el-icon-edit',
-            handler: row => {
-              this.updateDoc = row
-              this.modalVisible = true
-              this.currentModal = PositionUpdate
-            },
-          },
-          {
-            icon: 'el-icon-delete',
-            handler: row => {
-              this.$confirm('Do you want to Delete this record?', 'Warning')
-                .then(() => {
-                  let id = row._id
-                  removePosition
-                    .callPromise({ _id: id })
-                    .then(result => {
-                      if (result) {
-                        this.$message.success('Delete Successfull')
-                        this.getData()
-                      }
-                    })
-                    .catch(err => {
-                      this.$message.error(err.reason)
-                    })
-                })
-                .catch(() => {
-                  this.$message({
-                    message: 'Delete Cancel',
-                    type: 'error',
-                  })
-                })
-            },
-          },
-        ],
-      },
+      ],
     }
   },
   mounted() {
     this.getData()
   },
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       findPosition
         .callPromise({ selector: {}, options: { sort: { _id: -1 } } })
@@ -121,6 +94,33 @@ export default {
         .catch(err => {
           this.$message.error(err.reason)
         })
+    },
+    // Add new
+    addNew() {
+      this.modalVisible = true
+      this.currentModal = PositionInsert
+    },
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      this.updateDoc = row
+      this.modalVisible = true
+      this.currentModal = PositionUpdate
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removePosition,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
+      })
     },
     dialog() {
       this.$message.error(this.currentModal)

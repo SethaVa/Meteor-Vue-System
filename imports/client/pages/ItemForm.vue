@@ -60,14 +60,14 @@
 </template>
 
 <script>
-import Msg from '/imports/client/libs/message'
-import Notify from '/imports/client/libs/notify'
+import Msg from '/imports/client/lib/message'
+import Notify from '/imports/client/lib/notify'
 import _ from 'lodash'
 import moment from 'moment'
-import LookUp from '../libs/Lookup-Value'
-import { lookupCategories } from '/imports/libs/lookup-methods'
+import LookUp from '../lib/Lookup-Value'
+import { lookupCategories } from '/imports/lib/lookup-methods'
 import { insertItems, updateItems } from '../../api/items/methods'
-import wrapCurrentTime from '/imports/client/libs/wrap-current-time'
+import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 export default {
   name: 'ItemForm',
   props: {

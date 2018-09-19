@@ -4,11 +4,13 @@
                :visible="visibleDialog"
                :update-id="updateId"
                @modal-close="handleClose"></component>
-
+    <!-- Table  -->
+    <TableToolbar v-model="tableFilters"
+                  @new="addNew">
+    </TableToolbar>
     <data-tables v-loading="loading"
                  :data="tableData"
-                 :action-col-def="actionColDef"
-                 :actions-def="actionsDef"
+                 :filters="tableFilters"
                  :table-props="tableProps">
 
       <el-table-column prop="profile.fullName"
@@ -34,23 +36,39 @@
       <el-table-column prop="roles"
                        label="Roles">
       </el-table-column>
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
+        <template slot-scope="scope">
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
+        </template>
+      </el-table-column>
 
     </data-tables>
   </div>
 </template>
 
 <script>
-import Notify from '/imports/client/libs/notify'
+import Notify from '/imports/client/lib/notify'
 
 import { findUsers, removeUser } from '../../api/users/methods'
 
 import UserNew from './UserNew.vue'
 import UserEdit from './UserEdit.vue'
 
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
+
 export default {
   name: 'User',
-  component: { UserNew, UserEdit },
-  // mixins: [dataTablesMixin, softRemoveMixin, restoreMixin, removeMixin],
+  components: { UserNew, UserEdit, TableAction, TableToolbar },
+  mixins: [removeMixin],
   data() {
     return {
       loading: false,
@@ -69,64 +87,12 @@ export default {
         size: 'mini',
         border: false,
       },
-      actionsDef: {
-        colProps: {
-          span: 19,
+      tableFilters: [
+        {
+          prop: ['username', 'profile.status', 'profile.fullName'],
+          value: '',
         },
-        def: [
-          {
-            name: 'Add New',
-            icon: 'el-icon-plus',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: () => {
-              this.currentDialog = UserNew
-            },
-          },
-        ],
-      },
-      actionColDef: {
-        label: 'Action',
-        width: '100',
-        def: [
-          {
-            icon: 'fas fa-edit',
-            handler: row => {
-              this.updateId = row._id
-              this.visibleDialog = true
-              this.currentDialog = UserEdit
-            },
-          },
-          {
-            icon: 'fas fa-trash',
-            handler: row => {
-              let id = row._id
-              this.$confirm('Do you want delete this record?', 'Warning')
-                .then(result => {
-                  removeUser
-                    .callPromise({ _id: id })
-                    .then(result => {
-                      this.$message({
-                        message: 'Delete Successfull',
-                        type: 'success',
-                      })
-                    })
-                    .catch(err => {
-                      this.$message(err.reason)
-                    })
-                  this.getData()
-                })
-                .catch(err => {
-                  this.$message({
-                    message: 'Cacel Delete',
-                    type: 'error',
-                  })
-                })
-            },
-          },
-        ],
-      },
+      ],
     }
   },
   computed: {
@@ -158,6 +124,9 @@ export default {
     this.getData()
   },
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     // Get data
     getData() {
       this.loading = true
@@ -175,6 +144,32 @@ export default {
           this.loading = false
           Notify.error({ message: error })
         })
+    },
+    // Add new
+    addNew() {
+      this.currentDialog = UserNew
+    },
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      this.updateId = row._id
+      this.visibleDialog = true
+      this.currentDialog = UserEdit
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removeUser,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
+      })
     },
     arrFormatter(row, column, cellValue) {
       return JSON.stringify(cellValue)
