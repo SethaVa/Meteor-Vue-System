@@ -9,12 +9,12 @@
 
 <script>
 import { Meteor } from 'meteor/meteor'
-import _ from 'lodash'
-import moment from 'moment'
 import { mapState } from 'vuex'
 
-// import Company from "../../api/company/company";
+import Company from "../../api/company/company";
 import Branches from '../../api/branches/branches'
+
+import {findBranches} from '../../api/branches/methods'
 
 import MainLayout from './MainLayout.vue'
 import LoginLayout from './LoginLayout.vue'
@@ -24,10 +24,42 @@ export default {
     MainLayout,
     LoginLayout,
   },
+    meteor: {
+    $subscribe: {
+      ['company']: [],
+      ['branches']() {
+        let branches = this.currentUser
+          ? this.currentUser.profile.allowedBranches
+          : []
+        return [{ _id: { $in: branches } }]
+      },
+    },
+    company() {
+      const val = Company.findOne()
+      this.$store.commit('app/updateCompany', val)
+      return val
+    },
+    branches() {
+      const val = Branches.find().fetch()
+      this.$store.dispatch('app/updateAllowedBranches', val)
+      // this.$store.commit('app/updateAllowedBranches', val)
+      return val
+    },
+    // meteorUser() {
+    //   this.$store.commit('updateCurrentUser', Meteor.user())
+    // },
+  },
   computed: {
     ...mapState({
-      currentUser: state => state.app.currentUser,
+      currentUser: state => state.app.currentUser,  
+      // currentUser(state){
+      //   return state.app.currentUser
+      // }
     }),
+  },
+   created() {
+    //  this.$store.dispatch('updateAllowedBranches', ['001'])
+    this.$store.dispatch('app/loadCurrentUser')
   },
   mounted() {
     // this.branches();
@@ -35,11 +67,7 @@ export default {
     // this.branches();
     // console.log(this.branches());
   },
-  meteor: {
-    meteorUser() {
-      this.$store.commit('updateCurrentUser', Meteor.user())
-    },
-  },
+
 }
 </script>
 

@@ -124,6 +124,12 @@
           <span>Room</span>
         </el-menu-item>
       </el-submenu>
+      <el-menu-item index="branch">
+        <span>Branch</span>
+      </el-menu-item>
+      <el-menu-item index="company">
+        <span>Company</span>
+      </el-menu-item>
       <!-- <el-menu-item index="category-list">
         <span>Category</span>
       </el-menu-item>
@@ -133,6 +139,7 @@
       <el-menu-item index="stock-list">
         <span>Stock</span>
       </el-menu-item> -->
+      
     </el-menu>
   </div>
 </template>

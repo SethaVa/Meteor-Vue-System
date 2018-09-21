@@ -19,19 +19,18 @@ export const UserInsertSchema = new SimpleSchema({
   status: {
     type: String,
   },
-  branchPermissions: {
+  allowedBranches: {
     type: Array,
-    optional: true
   },
-  'branchPermissions.$': {
+  'allowedBranches.$': {
     type: String,
   },
   roles: {
     type: String,
   },
-  // 'roles.$': {
-  //   type: String,
-  // },
+  'roles.$': {
+    type: String,
+  },
 })
 
 export const UserUpdateSchema = new SimpleSchema({
@@ -56,17 +55,16 @@ export const UserUpdateSchema = new SimpleSchema({
   status: {
     type: String,
   },
-  branchPermissions: {
+  allowedBranches: {
     type: Array,
-    optional: true
   },
-  'branchPermissions.$': {
+  'allowedBranches.$': {
     type: String,
   },
   roles: {
+    type: Array,
+  },
+  'roles.$': {
     type: String,
   },
-  // 'roles.$': {
-  //   type: String,
-  // },
 })

@@ -11,9 +11,7 @@
                   @new="addNew">
     </TableToolbar>
     <data-tables :data="tableData"
-                 :actions-def="actionsDef"
                  :filters="tableFilters"
-                 :table-size="tableSize"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
@@ -73,7 +71,7 @@ import moment from 'moment'
 import _ from 'lodash'
 export default {
   name: 'ClassList',
-  component: {
+  components: {
     ClassInsert,
     ClassUpdate,
     TableAction,

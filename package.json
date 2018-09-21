@@ -35,7 +35,7 @@
     "vue-json-pretty": "^1.3.4",
     "vue-letter-avatar": "^0.1.4",
     "vue-meta": "^1.4.0",
-    "vue-meteor-tracker": "^1.2.3",
+    "vue-meteor-tracker": "^2.0.0-beta.3",
     "vue-outside-events": "^1.1.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",

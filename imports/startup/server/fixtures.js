@@ -3,6 +3,7 @@ import { Roles } from 'meteor/alanning:roles'
 import { Accounts } from 'meteor/accounts-base'
 
 import Branches from '../../api/branches/branches'
+import Company from '../../api/company/company'
 // import Groups from '../../api/user-groups/user-groups';
 
 Meteor.startup(function() {
@@ -16,8 +17,8 @@ Meteor.startup(function() {
         // telephone: '053 50 66 777',
         // email: 'banan@gmail.com',mon
         _id: '001',
-        name: 'Head Office',
-        shortName: 'HO',
+        name: 'Baydom Ram',
+        shortName: 'BR',
         address: 'Battambang Province',
         telephone: '08757645',
         email: 'admin@gmail.com',
@@ -28,7 +29,27 @@ Meteor.startup(function() {
       Branches.insert(doc)
     })
   }
+// Company
+if (Company.find().count() === 0) {
+  const data = {
+    _id: '1',
+    name: 'សាលាបង្រៀនភាសាបរទេស ប៊ី អេ ឌី',
+    address: 'ខេត្តបាត់ដំបង',
+    telephone: '070/89 33 44 80',
+    email: 'badschool@gmail.com',
+    website: 'http://bad-school.com',
+    industry: 'IT',
+    setting: {
+      baseCurrency: 'USD',
+      decimalNumber: 2,
+      accountingIntegration: true,
+      dateFormat: 'DD/MM/YYYY H:mm:ss',
+      lang: 'EN',
+    },
+  }
 
+  Company.insert(data)
+}
   // User
   const users = [
     {
@@ -37,9 +58,10 @@ Meteor.startup(function() {
       password: '123456',
       profile: {
         fullName: 'Super',
-        branchPermissions: ['001'],
+        allowedBranches: ['001'],
+          status: 'Active',
       },
-      roles: 'admin',
+      roles: 'super',
     },
     {
       username: 'admin',
@@ -47,7 +69,8 @@ Meteor.startup(function() {
       password: '123456',
       profile: {
         fullName: 'Admin',
-        branchPermissions: ['001'],
+        allowedBranches: ['001'],
+        status: 'Active',
       },
       roles: 'admin',
     },

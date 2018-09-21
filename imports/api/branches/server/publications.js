@@ -1,6 +1,6 @@
-import {Meteor} from 'meteor/meteor';
-import Branches from '../branches.js';
+import { Meteor } from 'meteor/meteor'
+import Branches from '../branches.js'
 
-Meteor.publish('core.branches', (selector = {}, options = {}) => {
-    return Branches.find(selector, options);
-});
+Meteor.publish('branches', (selector = {}, options = {}) => {
+  return Branches.find(selector, options)
+})

@@ -208,7 +208,7 @@ export default {
   },
   computed: {
     userFullName() {
-      return this.$store.getters['userFullName']
+      return this.$store.getters['app/userFullName']
     },
   },
   mounted() {

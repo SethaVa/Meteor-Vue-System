@@ -61,7 +61,7 @@
               </el-select>
             </el-form-item>
 
-            <!-- <el-form-item label="Branch permissions"
+            <el-form-item label="Branch permissions"
                           prop="branchPermissions">
               <el-select v-model="form.branchPermissions"
                          multiple
@@ -72,7 +72,7 @@
                            :value="item.value">
                 </el-option>
               </el-select>
-            </el-form-item> -->
+            </el-form-item>
 
             <!-- <el-form-item>
               <el-button type="primary"
@@ -103,7 +103,7 @@ import Notify from '/imports/client/lib/notify'
 // lib
 import LookupValue from '../lib/Lookup-Value'
 
-// import { lookupRole, lookupBranch } from '../../utils/lookup-methods'
+import { lookupRole, lookupBranch } from '../../lib/lookup-methods'
 import { validateUserExist } from '../../lib/validate-methods'
 import { insertUser } from '../../api/users/methods'
 
@@ -222,7 +222,7 @@ export default {
   },
   mounted() {
     // this.getRoles()
-    // this.getBranches()
+    this.getBranches()
   },
   methods: {
     // getRoles() {
@@ -235,16 +235,16 @@ export default {
     //       Notify.error({ message: error })
     //     })
     // },
-    // getBranches() {
-    //   lookupBranch
-    //     .callPromise({ selector: {} })
-    //     .then(result => {
-    //       this.branchPermissionOpts = result
-    //     })
-    //     .catch(error => {
-    //       Notify.error({ message: error })
-    //     })
-    // },
+    getBranches() {
+      lookupBranch
+        .callPromise({})
+        .then(result => {
+          this.branchPermissionOpts = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     submitForm() {
       this.$refs['form'].validate(valid => {
         if (valid) {
