@@ -16,9 +16,14 @@ import {
 } from '/imports/api/classStudy/methods'
 import Students from '../api/students/students'
 import Categories from '../api/categories/categories'
+import Branches from '../api/branches/branches'
+
 import {
   findPaymentForClass,
 } from '/imports/api/payment/methods'
+import {
+  SimpleSchema
+} from 'simpl-schema/dist/SimpleSchema';
 
 
 export const lookupType = new ValidatedMethod({
@@ -149,6 +154,40 @@ export const lookupStudentForExpire = new ValidatedMethod({
             message: error.reason
           })
         })
+      return list
+    }
+  },
+})
+
+// Branch
+export const lookupBranch = new ValidatedMethod({
+  name: 'app.lookupBranch',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      optional: true,
+      blackbox: true
+    }
+  }).validator(),
+  run({selector}) {
+    if (Meteor.isServer) {
+      Meteor._sleepForMs(100)
+      selector = selector || {}
+
+      let list = []
+      let data = Branches.find(selector, {
+        sort: {
+          _id: 1
+        }
+      }).fetch()
+      data.forEach(o => {
+        list.push({
+          label: o.name,
+          value: o._id
+        })
+      })
+
       return list
     }
   },

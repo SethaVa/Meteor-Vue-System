@@ -13,80 +13,23 @@
                class="logo-img">
         </div> -->
         <aside-menu :active-menu="linkActiveClass"></aside-menu>
-        <!-- <span v-if="userIsInRoleUser">
-        <aside-menu-user :active-menu="linkActiveClass"></aside-menu-user>
-      </span>
-      <span v-else-if="userIsInRoleAdmin">
-        <aside-menu :active-menu="linkActiveClass"></aside-menu>
-      </span>
-      <span v-else-if="userIsInRoleManager">
-        <aside-menu-manager :active-menu="linkActiveClass"></aside-menu-manager>
-      </span> -->
-        <!-- @select="handleHomeSelect" -->
-
-        <!-- <component :is="currentAsideMenu"
-                 :active-menu="linkActiveClass"></component> -->
-        <!-- </span> -->
-
       </el-aside>
       <!-- <component :is="currentLayout"></component> -->
     </transition>
-
-    <!-- <div v-else
-         class="aside-menu-mini">
-      <aside-menu-mini :active-menu="linkActiveClass"></aside-menu-mini>
-      <span v-if="userIsInRoleUser">
-        <aside-menu-user-mini :active-menu="linkActiveClass"></aside-menu-user-mini>
-      </span>
-      <span v-else-if="userIsInRoleAdmin">
-        <aside-menu-mini :active-menu="linkActiveClass"></aside-menu-mini>
-      </span>
-      <span v-else-if="userIsInRoleManager">
-        <aside-menu-manager-mini :active-menu="linkActiveClass"></aside-menu-manager-mini>
-      </span>
-    </div> -->
-
     <el-container>
       <!-- Heder -->
-      <el-header class="header-menu">
-        <i class="fas fa-align-justify"
-           id="toggle-menu"
-           @click="_toggleMenu"></i>
-        <!-- <el-button type="success"
-                   icon="fas fa-align-justify"
-                   circle
-                   @click="_toggleMenu"></el-button> -->
-        <span class="header-title">{{ headerTitle }}</span>
+      <!-- header-menu clearfix -->
+      <el-header class="header header-menu header-menu-layout ">
+        <span class="menu-left">{{ headerTitle }}</span>
         <!-- Header Menu -->
-        <span style="float: right;">
-          <!-- <span>{{fullName}}</span> -->
-          <!-- <component :is="currentHeaderMenu"></component> -->
-          <el-dropdown class="header-item-margin">
-            <span class="el-dropdown-link">
-              <avatar :username="userFullName"
-                      :size="40"></avatar>
-                      <!-- background-color="#FFC107"
-                      color="#EBEEF5" -->
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item disabled
-                                class="username">
-                <i class="fa fa-user"></i> {{ userFullName }}
-              </el-dropdown-item>
-              <el-dropdown-item @click.native="_profile"
-                                divided>
-                Profile
-              </el-dropdown-item>
-              <!-- <el-dropdown-item command="lang">
-                EN - KH
-              </el-dropdown-item> -->
-              <el-dropdown-item class="logout"
-                                @click.native="_logout">
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+        <!-- User Setting -->
+        <span class="menu-right">
+          <!-- branch setting -->
+          <branch-setting></branch-setting>
+          <!-- Admin setting -->
+          <admin-setting></admin-setting>
+          <!-- User seting -->
+          <user-setting></user-setting>
         </span>
       </el-header>
       <!-- Mian Page     -->
@@ -118,31 +61,29 @@ import moment from 'moment'
 import _ from 'lodash'
 
 import AsideMenu from '../AsideMenu.vue'
-import AsideMenuMini from '../AsideMenuMini.vue'
 import HeaderMenu from '../HeaderMenu.vue'
-import AsideMenuUser from '../AsideMenuUser.vue'
-import AsideMenuUserMini from '../AsideMenuUserMini.vue'
-import AsideMenuManager from '../AsideMenuManager.vue'
-import AsideMenuManagerMini from '../AsideMenuManagerMini.vue'
-
+// import AsideMenuMini from '../AsideMenuMini.vue'
+// import AsideMenuUser from '../AsideMenuUser.vue'
+// import AsideMenuUserMini from '../AsideMenuUserMini.vue'
+// import AsideMenuManager from '../AsideMenuManager.vue'
+// import AsideMenuManagerMini from '../AsideMenuManagerMini.vue'
+import UserSetting from './UserSetting'
+import AdminSetting from './AdminSetting';
+import BranchSetting from './BranchSetting'
 import { Session } from 'meteor/session'
 
 import { appLog } from '../../api/app-logs/methods.js'
 import { mapState } from 'vuex'
 
-import Avatar from 'vue-avatar'
 
 export default {
   name: 'MainLayout',
   components: {
     AsideMenu,
-    AsideMenuMini,
     HeaderMenu,
-    AsideMenuUser,
-    AsideMenuUserMini,
-    AsideMenuManager,
-    AsideMenuManagerMini,
-    Avatar,
+    AdminSetting,
+    UserSetting,
+    BranchSetting
   },
   data() {
     return {
@@ -167,23 +108,23 @@ export default {
   computed: {
     ...mapState({
       currentUser(state) {
-        return state.currentUser // object
+        return state.app.currentUser // object
       },
     }),
     userFullName() {
-      return this.$store.getters['userFullName']
+      return this.$store.getters['app/userFullName']
     },
-    userIsInRoleUser() {
-      return this.$store.getters['userIsInRole'](['receipt'])
-    },
-    userIsInRoleAdmin() {
-      return this.$store.getters['userIsInRole'](['admin'])
-      // (['admin', 'super','user'])
-      // return this.$store.getters['userIsInRole'](['pos'])
-    },
-    userIsInRoleManager() {
-      return this.$store.getters['userIsInRole'](['manager'])
-    },
+    // userIsInRoleUser() {
+    //   return this.$store.getters['userIsInRole'](['receipt'])
+    // },
+    // userIsInRoleAdmin() {
+    //   return this.$store.getters['userIsInRole'](['admin'])
+    //   // (['admin', 'super','user'])
+    //   // return this.$store.getters['userIsInRole'](['pos'])
+    // },
+    // userIsInRoleManager() {
+    //   return this.$store.getters['userIsInRole'](['manager'])
+    // },
     headerTitle() {
       let title = 'No TiTle'
       title = this.$route.meta.headerTitle
@@ -228,23 +169,13 @@ export default {
         this.collapse = 'error'
       }
     },
-    _profile() {
-      this.$router.push({
-        name: 'profile',
-        params: { _id: this.currentUser._id },
-      })
-    },
-
-    _logout() {
-      // this.$store.clear
-      localStorage.removeItem('vuex')
-      this.$store.commit('logout', this)
-    },
+    
   },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import '~imports/client/styles/header-menu.scss';
 #toggle-menu {
   cursor: pointer;
   margin-right: 20px;
@@ -286,7 +217,43 @@ a:-webkit-any-link {
     }
   }
 }
-.header-menu {
+/* Header */
+.header {
+  // background-color: #f5f7fa;
+  background: #c9d6ff; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #e2e2e2,
+    #c9d6ff
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #e2e2e2,
+    #c9d6ff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: #303133;
+  line-height: 55px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  height: 55px !important;
+
+  .page-title {
+    font-size: 24px;
+    font-weight: 300;
+    padding-right: 10px;
+    line-height: 50px;
+  }
+
+  .menu-left {
+    position: absolute;
+  }
+
+  .menu-right {
+    float: right;
+    font-size: 24px;
+    font-weight: 500;
+  }
+}
+.header-menu1 {
   // background-color: #409eff;
   // background-color: rgb(26, 170, 236);
   background: #c9d6ff; /* fallback for old browsers */

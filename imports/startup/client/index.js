@@ -29,6 +29,11 @@ Vue.use(ElementUI, {
 import VCharts from 'v-charts'
 Vue.use(VCharts)
 
+// Tracker
+import VueMeteorTracker from 'vue-meteor-tracker'
+Vue.use(VueMeteorTracker)
+Vue.config.meteor.freeze = true
+
 // -------------Data Table---------------
 import DataTables from 'vue-data-tables'
 Vue.use(DataTables)
@@ -38,15 +43,12 @@ import Meta from 'vue-meta'
 Vue.use(Meta)
 
 // Router Sync
-// import {
-//   sync
-// } from 'vuex-router-sync'
+import {
+  sync
+} from 'vuex-router-sync'
 
 //---------- Vuex Store ----------
-import {
-  store
-} from '../../client/store/index'
-
+import store from '/imports/store'
 //---------- NProgress ----------
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'

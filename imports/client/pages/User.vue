@@ -65,6 +65,8 @@ import TableToolbar from '/imports/client/components/TableToolbar.vue'
 import TableAction from '/imports/client/components/TableAction.vue'
 import removeMixin from '/imports/client/mixins/remove'
 
+import { mapState } from 'vuex'
+
 export default {
   name: 'User',
   components: { UserNew, UserEdit, TableAction, TableToolbar },
@@ -96,6 +98,11 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      currentBrachId(state) {
+        return state.currentBranch && state.currentBranch._id // object
+      },
+    }),
     routerView() {
       return this.$route.meta.routerView
     },
@@ -133,7 +140,7 @@ export default {
 
       findUsers
         .callPromise({
-          selector: { roles: { $ne: 'admin' } },
+          selector: { roles: { $ne: 'super' } },
           options: { sort: { fullName: 1 } },
         })
         .then(result => {

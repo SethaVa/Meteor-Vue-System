@@ -10,12 +10,19 @@
                size="medium"
                ref="form">
         <el-form-item>
-          <el-input v-model="form.email"
+          <el-input v-model="form.username"
                     prefix-icon=" fa fa-user"
                     :autofocus="true"
                     placeholder="Username"
                     ref="username"></el-input>
         </el-form-item>
+       <!-- <el-form-item>
+          <el-select v-model="form.allowedBranches"
+                   placeholder="Select">
+          <el-option v-for="doc in branchOpts"
+                     :key="doc._id" :label="doc.name" :value="doc._id"></el-option>
+        </el-select>
+      </el-form-item> -->
         <el-form-item>
           <el-input type="password"
                     v-model="form.password"
@@ -42,7 +49,7 @@ import Vuex from 'vuex'
 import _ from 'lodash'
 import { appLog } from '../../api/app-logs/methods.js'
 import { mapState } from 'vuex'
-
+import {findBranches} from '../../api/branches/methods'
 // import Vue from 'vue'
 // import Vuex from 'vuex'
 
@@ -72,8 +79,9 @@ export default {
   data() {
     return {
       userName: '',
+      branchOpts:[],
       form: {
-        email: '',
+        username: '',
         password: '',
       },
       rules: {},
@@ -94,23 +102,34 @@ export default {
     //   }
     // },
   },
+  created(){
+    this.getBranchOtps()
+  },
   Meteor: {
     // Session.set('username',this.userName);
   },
   methods: {
+    getBranchOtps(){
+      findBranches.callPromise({}).then(result=>{
+        this.branchOpts=result
+      }).catch(error=>{
+        console.log(error.reason)
+      })
+    },
     submitForm() {
-      if (!(this.form.email && this.form.password)) {
-        this.$message.warning('Please input username/email and password!')
+      if (!(this.form.username && this.form.password)) {
+        this.$message.warning('Please input username/username and password!')
       } else {
-        Meteor.loginWithPassword(this.form.email, this.form.password, err => {
+        Meteor.loginWithPassword(this.form.username, this.form.password, err => {
           if (err) {
             //  this.$refs['form'].resetFields();
-            this.form.email = ''
+            this.form.username = ''
             this.form.password = ''
-            // this.$refs.email.$el.querySelector('input').focus()
-            this.$message.error('Username/Email or Password is invalid!')
+            // this.$refs.username.$el.querySelector('input').focus()
+            this.$message.error('Username/username or Password is invalid!')
           } else {
-            this.$store.commit('updateCurrentUser', Meteor.user())
+            // this.$store.commit('updateCurrentUser', Meteor.user())
+            this.$store.dispatch('app/login', this.form)
             this.$message.success('You are login!')
             this.$router.push({ name: 'home' })
           }

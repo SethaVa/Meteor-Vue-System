@@ -4,10 +4,13 @@ import index from './pages/index.vue'
 import Home from './pages/home.vue'
 import welcome from './pages/Welcome.vue'
 import Login from './pages/Login.vue'
+
+// Branch
+import BranchList from './pages/Branch.vue'
+// Company 
+import Company from './pages/Company'
 // Student
 import StudentList from './pages/StudentList.vue'
-// import StudentInsert from './pages/StudentInsert.vue';
-// import StudentUpdate from './pages/StudentUpdate.vue';
 
 //user
 import UserList from './pages/User.vue'
@@ -103,6 +106,18 @@ const routes = [
         path: 'welocme',
         name: 'welcome',
         component: welcome,
+      },
+      // Brach
+      {
+        path: 'branch',
+        name: 'branch',
+        component: BranchList,
+      },
+      // Brach
+      {
+        path: 'company',
+        name: 'company',
+        component: Company,
       },
       // User List
       {

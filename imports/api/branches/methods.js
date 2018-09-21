@@ -1,10 +1,24 @@
-import {Meteor} from 'meteor/meteor';
-import {ValidatedMethod} from 'meteor/mdg:validated-method';
-import {CallPromiseMixin} from 'meteor/didericis:callpromise-mixin';
-import {RestMethodMixin} from 'meteor/simple:rest-method-mixin';
+import {
+    Meteor
+} from 'meteor/meteor';
+import {
+    ValidatedMethod
+} from 'meteor/mdg:validated-method';
+import {
+    CallPromiseMixin
+} from 'meteor/didericis:callpromise-mixin';
+import {
+    RestMethodMixin
+} from 'meteor/simple:rest-method-mixin';
 import SimpleSchema from 'simpl-schema';
 
+import {
+    userIsInRole,
+    throwError
+} from '../../lib/security'
+
 import Branches from './branches';
+
 
 // Find
 export const findBranches = new ValidatedMethod({
@@ -45,7 +59,8 @@ export const insertBranch = new ValidatedMethod({
     // validate: Branches.schema.validator(),
     validate: null,
     run(doc) {
-        if (!this.isSimulation) {
+        if (Meteor.isServer) {
+            userIsInRole(['super'])
             return Branches.insert(doc);
         }
     }
@@ -58,8 +73,18 @@ export const updateBranch = new ValidatedMethod({
     // validate: Branches.schema.validator(),
     validate: null,
     run(doc) {
-        if (!this.isSimulation) {
-            return Branches.update({_id: doc._id}, {$set: doc});
+        if (Meteor.isServer) {
+            userIsInRole(['super', 'admin'])
+            return Branches.update({
+                _id: doc._id
+            }, {
+                $set: doc
+            })
+            // return Branches.update({
+            //     _id: doc._id
+            // }, {
+            //     $set: doc
+            // });
         }
     }
 });
@@ -69,7 +94,9 @@ export const removeBranch = new ValidatedMethod({
     mixins: [CallPromiseMixin],
     // validate: null,
     validate: new SimpleSchema({
-        _id: {type: String},
+        _id: {
+            type: String
+        },
     }).validator(),
     run(selector) {
         if (!this.isSimulation) {

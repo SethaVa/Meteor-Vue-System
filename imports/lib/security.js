@@ -1,25 +1,25 @@
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 
-export const notLoggedIn = () => {
-  if (!Meteor.userId()) {
-    // Throw errors with a specific error code
-    throw new Meteor.Error('NotLoggedIn', 'Must be logged in')
+export const userLoggedIn = () => {
+  if (Meteor.userId()) {
+    return true
   }
+  throw new Meteor.Error('logged-out', 'The user is not login')
 }
-export const notHasRole = role => {
-  if (!Roles.userIsInRole(Meteor.userId(), role)) {
-    // Throw errors with a specific error code
-    throw new Meteor.Error(403, 'Access denied')
+
+
+export const userIsInRole = roles => {
+  const userId = Meteor.userId()
+  if (userId && Roles.userIsInRole(userId, roles)) {
+    return true
   }
+  console.log('User is not in roles')
+  throw new Meteor.Error(403, 'Access denied')
 }
-export const notLoggedInAndRole = role => {
-  notLoggedIn()
-  notHasRole(role)
+
+export const throwError = e => {
+  console.log('Throw Error', e)
+  throw new Meteor.Error('transaction-error', 'Transaction Error', e)
 }
-export const insertError = () => {
-  throw new Meteor.Error('Insert Error', 'Insert is error')
-}
-export const updateError = () => {
-  throw new Meteor.Error('Update Error', 'Update is error')
-}
+

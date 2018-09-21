@@ -90,7 +90,7 @@ export const insertUser = new ValidatedMethod({
           password: user.password,
           profile: {
             fullName: user.fullName,
-            branchPermissions: user.branchPermissions,
+            allowedBranches: user.allowedBranches,
             status: user.status,
           },
         })
