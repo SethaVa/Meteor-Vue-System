@@ -51,7 +51,7 @@
             <el-form-item label="Roles"
                           prop="roles">
               <el-select v-model="form.roles"
-                         clearable
+                         multiple
                          style="width: 100%">
                 <el-option v-for="item in roleOpts"
                            :key="item.value"
@@ -62,8 +62,8 @@
             </el-form-item>
 
             <el-form-item label="Branch permissions"
-                          prop="branchPermissions">
-              <el-select v-model="form.branchPermissions"
+                          prop="allowedBranches">
+              <el-select v-model="form.allowedBranches"
                          multiple
                          style="width: 100%">
                 <el-option v-for="item in branchPermissionOpts"
@@ -164,7 +164,8 @@ export default {
 
     return {
       loading: false,
-      roleOpts: LookupValue.roles,
+      // roleOpts: LookupValue.roles,
+      roleOpts:[],
       statusOpts: LookupValue.status,
       branchPermissionOpts: [],
       form: {
@@ -174,8 +175,8 @@ export default {
         password: '',
         confirmPassword: '',
         status: '',
-        // branchPermissions: [],
-        roles: '',
+        allowedBranches: [],
+        roles: [],
       },
       rules: {
         fullName: [{ required: true, message: 'Full name is required' }],
@@ -213,7 +214,7 @@ export default {
           },
           { validator: validateConfirmPassword, trigger: 'blur' },
         ],
-        branchPermissions: [
+        allowedBranches: [
           { required: true, message: 'Branches is required' },
         ],
         roles: [{ required: true, message: 'Branches is required' }],
@@ -221,20 +222,20 @@ export default {
     }
   },
   mounted() {
-    // this.getRoles()
+    this.getRoles()
     this.getBranches()
   },
   methods: {
-    // getRoles() {
-    //   lookupRole
-    //     .callPromise()
-    //     .then(result => {
-    //       this.roleOpts = result
-    //     })
-    //     .catch(error => {
-    //       Notify.error({ message: error })
-    //     })
-    // },
+    getRoles() {
+      lookupRole
+        .callPromise()
+        .then(result => {
+          this.roleOpts = result
+        })
+        .catch(error => {
+          Notify.error({ message: error })
+        })
+    },
     getBranches() {
       lookupBranch
         .callPromise({})
@@ -265,6 +266,7 @@ export default {
             })
             .catch(error => {
               this.loading = false
+              console.log(error);
               Notify.error({ message: error.reason })
             })
         } else {

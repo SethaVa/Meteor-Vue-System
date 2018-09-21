@@ -10,7 +10,7 @@ import {
 import _ from 'lodash'
 import Msg from '../lib/message'
 
-import createPersistedState from 'vuex-persistedstate'
+// import createPersistedState from 'vuex-persistedstate'
 //Router 
 import router from '/imports/startup/client/routes'
 // export const store = new Vuex.Store({
@@ -68,25 +68,29 @@ export default {
       Session.setAuth('currentBranch', value)
       state.currentBranch = value
     },
-    // logout(state, self) {
-    //   Meteor.logout(() => {
-    //     // Session.clear()
-    //     localStorage.removeItem('vuex')
-    //     self.$nextTick(() => {
-    //       Msg.success('You are logout!')
-    //       self.$router.push({
-    //         name: 'login'
-    //       })
-    //     })
-    //   })
-    // },
-    logout(state) {
-      Session.clearAuth()
-      state.currentUser = null
-      router.push({
-        name: 'login'
+    logout(state, self) {
+      Meteor.logout(() => {
+        // Session.clear()
+        // localStorage.removeItem('vuex')
+        Session.clearAuth()
+        state.currentUser = null
+        self.$nextTick(() => {
+          Msg.success('You are logout!')
+          self.$router.push({
+            name: 'login'
+          })
+        })
       })
     },
+
+    // logout(state) {
+    //   console.log('1', state);
+    //   Session.clearAuth()
+    //   state.currentUser = null
+    //   router.push({
+    //     name: 'login'
+    //   })
+    // },
   },
   actions: {
     login({
@@ -94,7 +98,6 @@ export default {
     }, formData) {
       console.log('Action: login')
 
-      // return new Promise((resolve, reject) => {
       Meteor.loginWithPassword(
         formData.username,
         formData.password,
@@ -102,20 +105,20 @@ export default {
           if (!error) {
             commit('updateCurrentUser', Meteor.user())
           }
-          // else {
-          //   reject(error)
-          //   resolve('success')
-          // }
         }
       )
-      // })
     },
+    // logout({
+    //   commit
+    // }) {
+    //   Meteor.logout(() => {
+    //     console.log('Action: logout')
+    //     commit('logout')
+    //   })
+    // },
     loadCurrentUser({
       commit
     }) {
-      // see https://forums.meteor.com/t/meteor-userid-returns-an-id-but-meteor-user-returns-undefined/18355/5
-
-      //! Meteor.user() will not be ready right away,
       //! it is reactive so we need to wait for it
       Tracker.autorun(() => {
         if (Meteor.user()) {
@@ -135,26 +138,4 @@ export default {
       )
     },
   },
-  // nested modules
-  // modules: {
-  //   //...
-  // }
-  // plugins: [createPersistedState()]
 }
-// })
-// export default store
-
-
-// State
-// import app from './app'
-
-// const store = new Vuex.Store({
-//   // modules: {
-//   app: app,
-//   // },
-// })
-
-// export default store
-//========================================================
-
-// export default app;

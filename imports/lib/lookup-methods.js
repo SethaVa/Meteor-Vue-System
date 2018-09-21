@@ -7,6 +7,7 @@ import {
 import {
   CallPromiseMixin
 } from 'meteor/didericis:callpromise-mixin'
+import { Roles } from 'meteor/alanning:roles'
 
 import _ from 'lodash'
 import moment from 'moment'
@@ -154,6 +155,35 @@ export const lookupStudentForExpire = new ValidatedMethod({
             message: error.reason
           })
         })
+      return list
+    }
+  },
+})
+
+// Roles
+export const lookupRole = new ValidatedMethod({
+  name: 'app.lookupRole',
+  mixins: [CallPromiseMixin],
+  validate: null,
+  run() {
+    if (Meteor.isServer) {
+      Meteor._sleepForMs(100)
+
+      // Check roles
+      let notEqualSelector = ['super']
+      if (!Roles.userIsInRole(Meteor.userId(), 'super')) {
+        notEqualSelector.push('admin')
+      }
+
+      let list = []
+      let data = Meteor.roles.find(
+        { name: { $nin: notEqualSelector } },
+        { sort: { name: 1 } }
+      )
+      data.forEach(o => {
+        list.push({ label: o.name, value: o.name })
+      })
+
       return list
     }
   },

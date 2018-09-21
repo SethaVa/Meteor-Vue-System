@@ -51,7 +51,7 @@
             <el-form-item label="Roles"
                           prop="roles">
               <el-select v-model="form.roles"
-                         clearable
+                         multiple
                          style="width: 100%">
                 <el-option v-for="item in roleOpts"
                            :key="item.value"
@@ -61,9 +61,9 @@
               </el-select>
             </el-form-item>
 
-            <!-- <el-form-item label="Branch permissions"
-                          prop="branchPermissions">
-              <el-select v-model="form.branchPermissions"
+            <el-form-item label="Branch permissions"
+                          prop="allowedBranches">
+              <el-select v-model="form.allowedBranches"
                          multiple
                          style="width: 100%">
                 <el-option v-for="item in branchPermissionOpts"
@@ -72,7 +72,7 @@
                            :value="item.value">
                 </el-option>
               </el-select>
-            </el-form-item> -->
+            </el-form-item>
 
             <!-- <el-form-item>
             <el-button
@@ -105,7 +105,7 @@ import Notify from '/imports/client/lib/notify'
 // lib
 import LookupValue from '../lib/Lookup-Value'
 
-// import { lookupRole, lookupBranch } from '../../utils/lookup-methods'
+import { lookupRole, lookupBranch } from '../../lib/lookup-methods'
 import { validateUserExist } from '../../lib/validate-methods'
 import { findOneUser, updateUser } from '../../api/users/methods'
 
@@ -182,7 +182,8 @@ export default {
     return {
       loading: false,
       statusOpts: LookupValue.status,
-      roleOpts: LookupValue.roles,
+      roleOpts:[], 
+      // LookupValue.roles,
       branchPermissionOpts: [],
       form: {
         _id: '',
@@ -192,8 +193,8 @@ export default {
         status: '',
         password: '',
         confirmPassword: '',
-        branchPermissions: [],
-        roles: '',
+        allowedBranches: [],
+        roles: [],
       },
       rules: {
         fullName: [{ required: true, message: 'Full name is required' }],
@@ -231,7 +232,7 @@ export default {
           },
           { validator: validateConfirmPassword, trigger: 'blur' },
         ],
-        branchPermissions: [
+        allowedBranches: [
           { required: true, message: 'Branches is required' },
         ],
         roles: [{ required: true, message: 'Branches is required' }],
@@ -239,31 +240,31 @@ export default {
     }
   },
   mounted() {
-    // this.getRoles()
-    // this.getBranches()
+    this.getRoles()
+    this.getBranches()
     this.getDataUpdate()
   },
   methods: {
-    // getRoles() {
-    //   lookupRole
-    //     .callPromise()
-    //     .then(result => {
-    //       this.roleOpts = result
-    //     })
-    //     .catch(error => {
-    //       Notify.error({ message: error.reason })
-    //     })
-    // },
-    // getBranches() {
-    //   lookupBranch
-    //     .callPromise({ selector: {} })
-    //     .then(result => {
-    //       this.branchPermissionOpts = result
-    //     })
-    //     .catch(error => {
-    //       Notify.error({ message: error.reason })
-    //     })
-    // },
+    getRoles() {
+      lookupRole
+        .callPromise()
+        .then(result => {
+          this.roleOpts = result
+        })
+        .catch(error => {
+          Notify.error({ message: error.reason })
+        })
+    },
+    getBranches() {
+      lookupBranch
+        .callPromise({ selector: {} })
+        .then(result => {
+          this.branchPermissionOpts = result
+        })
+        .catch(error => {
+          Notify.error({ message: error.reason })
+        })
+    },
     getDataUpdate() {
       this.loading = true
       const _id = this.updateId
@@ -279,8 +280,8 @@ export default {
             status: result.profile.status,
             password: '',
             confirmPassword: '',
-            branchPermissions: result.profile.branchPermissions,
-            roles: result.roles[0],
+            allowedBranches: result.profile.allowedBranches,
+            roles: result.roles,
           }
           this.loading = false
         })
@@ -303,7 +304,7 @@ export default {
               if (result) {
                 this.loading = false
                 if (result === 'logout') {
-                  this.$store.commit('logout', this)
+                  this.$store.commit('app/logout', this)
                 } else {
                   Msg.success()
                   this.handleClose()

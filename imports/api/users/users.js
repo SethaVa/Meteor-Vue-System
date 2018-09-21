@@ -26,7 +26,7 @@ export const UserInsertSchema = new SimpleSchema({
     type: String,
   },
   roles: {
-    type: String,
+    type: Array,
   },
   'roles.$': {
     type: String,
