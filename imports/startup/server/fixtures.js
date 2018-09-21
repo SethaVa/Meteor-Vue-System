@@ -7,6 +7,14 @@ import Company from '../../api/company/company'
 // import Groups from '../../api/user-groups/user-groups';
 
 Meteor.startup(function() {
+  // Roles
+  if (Roles.getAllRoles().count() === 0) {
+    const data = ["super", "admin", "manager", "receipt"]
+    data.forEach(role => {
+      Roles.createRole(role)
+    })
+  }
+
   // Branch
   if (Branches.find().count() == 0) {
     const data = [
@@ -61,7 +69,7 @@ if (Company.find().count() === 0) {
         allowedBranches: ['001'],
           status: 'Active',
       },
-      roles: 'super',
+      roles: ['super'],
     },
     {
       username: 'admin',
@@ -72,7 +80,7 @@ if (Company.find().count() === 0) {
         allowedBranches: ['001'],
         status: 'Active',
       },
-      roles: 'admin',
+      roles: ['admin'],
     },
   ]
 

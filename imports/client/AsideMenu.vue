@@ -108,9 +108,9 @@
         <el-menu-item index="subject">
           <span>Subject</span>
         </el-menu-item>
-        <el-menu-item index="user">
+        <!-- <el-menu-item index="user">
           <span>User</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-menu-item index="time">
           <span>Time</span>
         </el-menu-item>
@@ -124,12 +124,12 @@
           <span>Room</span>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index="branch">
+      <!-- <el-menu-item index="branch">
         <span>Branch</span>
       </el-menu-item>
       <el-menu-item index="company">
         <span>Company</span>
-      </el-menu-item>
+      </el-menu-item> -->
       <!-- <el-menu-item index="category-list">
         <span>Category</span>
       </el-menu-item>
