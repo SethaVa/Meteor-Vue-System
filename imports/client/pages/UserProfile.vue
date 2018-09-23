@@ -220,7 +220,7 @@ export default {
       const _id = this.$route.params._id
 
       findOneUser
-        .callPromise(_id)
+        .callPromise({_id})
         .then(result => {
           this.form = {
             _id: result._id,

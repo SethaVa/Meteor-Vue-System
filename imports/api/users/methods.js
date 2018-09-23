@@ -60,7 +60,7 @@ export const findOneUser = new ValidatedMethod({
   validate:new SimpleSchema({
     _id:String
   }).validator(),
-  run(_id) {
+  run({_id}) {
     if (Meteor.isServer) {
       Meteor._sleepForMs(100)
       return Meteor.users.findOne(_id)

@@ -14,7 +14,7 @@
         </span> -->
     <el-dropdown class="header-item-margin">
       <span class="el-dropdown-link">
-        <i class="el-icon-setting icon-black"></i>
+        <i class="el-icon-setting icon-black"></i>Main
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>Core 1</el-dropdown-item>
