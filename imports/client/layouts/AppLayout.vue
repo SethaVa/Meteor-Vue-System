@@ -1,9 +1,12 @@
 <template>
-  <div v-if="$route.meta.layout === 'login'">
-    <login-layout></login-layout>
-  </div>
-  <div v-else>
-    <main-layout></main-layout>
+  <div>
+  <transition name="fade"
+                mode="out-in" appear>
+    <!-- <login-layout></login-layout> -->
+    <component :is="currentLayout"></component>
+  </transition>
+  <!-- Set progressbar -->
+  <vue-progress-bar></vue-progress-bar>
   </div>
 </template>
 
@@ -50,6 +53,13 @@ export default {
     // },
   },
   computed: {
+    currentLayout(){
+    const currentLayout = this.$route.meta.layout==='login'
+        ? LoginLayout
+        : MainLayout
+
+      return currentLayout
+    },
     ...mapState({
       currentUser: state => state.app.currentUser,  
       // currentUser(state){

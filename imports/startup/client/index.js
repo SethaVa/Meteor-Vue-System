@@ -53,6 +53,23 @@ import store from '/imports/store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
+// Vue Progressbar
+import VueProgressBar from 'vue-progressbar'
+const vProgressOpts = {
+  color: '#409eff',
+  failedColor: '#f56c6c',
+  thickness: '3px',
+  transition: {
+    speed: '0.2s',
+    opacity: '0.6s',
+    termination: 300,
+  },
+  autoRevert: true,
+  location: 'top',
+  inverse: false,
+}
+Vue.use(VueProgressBar, vProgressOpts)
+
 // ---------------create router--------------
 import routes from './routes'
 const router = new VueRouter({

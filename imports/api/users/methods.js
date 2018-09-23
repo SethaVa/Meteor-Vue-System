@@ -130,7 +130,7 @@ export const updateUser = new ValidatedMethod({
             'emails.0.address': user.email,
             profile: {
               fullName: user.fullName,
-              branchPermissions: user.branchPermissions,
+              allowedBranches: user.allowedBranches,
               status: user.status,
             },
           },
