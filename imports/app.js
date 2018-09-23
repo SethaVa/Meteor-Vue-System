@@ -27,12 +27,16 @@ import 'nprogress/nprogress.css'
 
 // --------------App layout component---------------
 import App from '/imports/client/layouts/AppLayout'
-
+// Old
 Meteor.startup(() => {
   // Before each
   router.beforeEach((to, from, next) => {
     NProgress.start()
-
+// console.log('to',to);
+// console.log('frm',from);
+// console.log('next',next);
+// console.log('meta',to.meta.notRequiresAuth);
+// console.log('login',Meteor.loggingIn() ,'User',Meteor.userId());
     if (!to.meta.notRequiresAuth) {
       // Check user
       if (!Meteor.loggingIn() && !Meteor.userId()) {
@@ -59,3 +63,52 @@ Meteor.startup(() => {
     ...App,
   }).$mount('app')
 })
+
+// New
+// Meteor.startup(() => {
+//   // Start the vue app
+//   const app = new Vue({
+//     router,
+//     store,
+//     ...App,
+//   }).$mount('app')
+
+//   // Before each
+//   app.$router.beforeEach((to, from, next) => {
+//     app.$Progress.start()
+// console.log('to',to);
+// console.log('from',from);
+// console.log('next',next);
+// console.log('meta',to.meta.notRequiresAuth);
+//     // if (!to.meta.notRequiresAuth) {
+//     //   console.log('login',Meteor.loggingIn(),'User', !Meteor.userId());
+//     //          // Check user
+//     //   if (!Meteor.loggingIn() && !Meteor.userId()) {
+//     //     next({
+//     //       path: '/login'
+//     //     })
+//     //   } else {
+//     //     next()
+//     //   }
+//     // } else {
+//     //   next()
+//     // } !auth.loggedIn()
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//       if (!Meteor.userId()) {
+//         next({
+//           path: '/login',
+//           query: {
+//             redirect: to.fullPath,
+//           },
+//         });
+//       } else {
+//         next();
+//       }
+//     }
+//   })
+
+//   // // After each
+//   app.$router.afterEach((to, from) => {
+//     app.$Progress.finish()
+//   })
+// })

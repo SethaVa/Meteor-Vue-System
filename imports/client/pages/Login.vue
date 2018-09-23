@@ -9,21 +9,14 @@
                :rules="rules"
                size="medium"
                ref="form">
-        <el-form-item>
+        <el-form-item prop="username">
           <el-input v-model="form.username"
                     prefix-icon=" fa fa-user"
                     :autofocus="true"
                     placeholder="Username"
                     ref="username"></el-input>
         </el-form-item>
-       <!-- <el-form-item>
-          <el-select v-model="form.allowedBranches"
-                   placeholder="Select">
-          <el-option v-for="doc in branchOpts"
-                     :key="doc._id" :label="doc.name" :value="doc._id"></el-option>
-        </el-select>
-      </el-form-item> -->
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input type="password"
                     v-model="form.password"
                     ref="password"
@@ -49,37 +42,13 @@ import Vuex from 'vuex'
 import _ from 'lodash'
 import { appLog } from '../../api/app-logs/methods.js'
 import { mapState } from 'vuex'
-import {findBranches} from '../../api/branches/methods'
-// import Vue from 'vue'
-// import Vuex from 'vuex'
-
-// Vue.use(Vuex)
-
-// const share = new Vuex.Store({
-//   // modules: {
-//   //   app: app,
-//   // },
-//   state:{
-//     counter:1
-//   },
-//   getters:{
-//     getCounter(state){
-//       return counter++;
-//     }
-//   },
-//   mutations:{
-//     updateCurrentCounter (state, count) {
-//       state.counter = count
-//     },
-//   }
-// })
 
 export default {
   name: 'Login',
   data() {
     return {
       userName: '',
-      branchOpts:[],
+      branchOpts: [],
       form: {
         username: '',
         password: '',
@@ -102,39 +71,26 @@ export default {
     //   }
     // },
   },
-  created(){
-    this.getBranchOtps()
-  },
+  created() {},
   Meteor: {
     // Session.set('username',this.userName);
   },
   methods: {
-    getBranchOtps(){
-      findBranches.callPromise({}).then(result=>{
-        this.branchOpts=result
-      }).catch(error=>{
-        console.log(error.reason)
-      })
-    },
     submitForm() {
-      if (!(this.form.username && this.form.password)) {
-        this.$message.warning('Please input username/username and password!')
-      } else {
-        Meteor.loginWithPassword(this.form.username, this.form.password, err => {
-          if (err) {
-            //  this.$refs['form'].resetFields();
-            this.form.username = ''
-            this.form.password = ''
-            // this.$refs.username.$el.querySelector('input').focus()
-            this.$message.error('Username/username or Password is invalid!')
-          } else {
-            // this.$store.commit('updateCurrentUser', Meteor.user())
-            this.$store.dispatch('app/login', this.form)
-            this.$message.success('You are login!')
-            this.$router.push({ name: 'home' })
-          }
+      this.$Progress.start()
+
+      this.$store
+        .dispatch('app/login', this.form)
+        .then(result => {
+          this.$Progress.finish()
+          this.$router.push({ name: 'home' })
         })
-      }
+        .catch(err => {
+          this.$refs['form'].resetFields();
+          this.$refs.username.$el.querySelector('input').focus()
+          this.$Progress.fail()
+          this.$message.error('Username/username or Password is invalid!')
+        })
     },
   },
 }

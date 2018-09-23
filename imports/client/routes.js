@@ -35,18 +35,18 @@ const routes = [
     },
   },
   // Home
-  {
-    path: '/',
-    name: 'welcome',
-    component: Home,
-    meta: {
-      headerTitle: 'Home',
-      // breadcrumb: {
-      //   title: 'Home',
-      //   icon: 'fas fa-home',
-      // },
-    },
-  },
+  // {
+  //   path: '/',
+  //   name: 'welcome',
+  //   component: Home,
+  //   meta: {
+  //     headerTitle: 'Home',
+  //     // breadcrumb: {
+  //     //   title: 'Home',
+  //     //   icon: 'fas fa-home',
+  //     // },
+  //   },
+  // },
   {
     path: '/main',
     component: {
