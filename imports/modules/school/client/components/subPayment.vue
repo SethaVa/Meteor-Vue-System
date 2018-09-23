@@ -153,7 +153,7 @@ const numeral = require('numeral')
 import _ from 'lodash'
 import moment from 'moment'
 export default {
-  // name: 'SubPayment',
+  name: 'SubPayment',
   props: {
     itemsProp: {
       type: Array,

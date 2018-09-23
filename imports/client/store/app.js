@@ -12,7 +12,7 @@ import Msg from '../lib/message'
 
 // import createPersistedState from 'vuex-persistedstate'
 //Router 
-// import router from ''
+import router from '/imports/router'
 // export const store = new Vuex.Store({
 export default {
   namespaced: true,
@@ -28,6 +28,18 @@ export default {
     },
     userFullName(state) {
       return state.currentUser ? state.currentUser.profile.fullName : 'Unknown'
+    },
+    allowedBranchOpts(state) {
+      let opts = []
+      state.allowedBranches.forEach(doc => {
+        opts.push({
+          label: `${doc._id} : ${doc.name}`,
+          value: doc._id,
+          doc
+        })
+      })
+
+      return opts
     },
     userIsInRole: state => roles => {
       roles = _.isString(roles) ? [roles] : roles
@@ -68,29 +80,29 @@ export default {
       Session.setAuth('currentBranch', value)
       state.currentBranch = value
     },
-    logout(state, self) {
-      Meteor.logout(() => {
-        // Session.clear()
-        // localStorage.removeItem('vuex')
-        Session.clearAuth()
-        state.currentUser = null
-        self.$nextTick(() => {
-          Msg.success('You are logout!')
-          self.$router.push({
-            name: 'login'
-          })
-        })
-      })
-    },
-
-    // logout(state) {
-    //   console.log('1', state);
-    //   Session.clearAuth()
-    //   state.currentUser = null
-    //   router.push({
-    //     name: 'login'
+    // logout(state, self) {
+    //   Meteor.logout(() => {
+    //     // Session.clear()
+    //     // localStorage.removeItem('vuex')
+    //     Session.clearAuth()
+    //     state.currentUser = null
+    //     self.$nextTick(() => {
+    //       Msg.success('You are logout!')
+    //       self.$router.push({
+    //         name: 'login'
+    //       })
+    //     })
     //   })
     // },
+
+    logout(state) {
+      Session.clearAuth()
+      state.currentUser = null
+      Msg.success('You are logout!')
+      router.push({
+        name: 'login'
+      })
+    },
   },
   actions: {
     login({
@@ -108,14 +120,14 @@ export default {
         }
       )
     },
-    // logout({
-    //   commit
-    // }) {
-    //   Meteor.logout(() => {
-    //     console.log('Action: logout')
-    //     commit('logout')
-    //   })
-    // },
+    logout({
+      commit
+    }) {
+      Meteor.logout(() => {
+        console.log('Action: logout')
+        commit('logout')
+      })
+    },
     loadCurrentUser({
       commit
     }) {

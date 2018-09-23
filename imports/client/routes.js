@@ -40,7 +40,7 @@ const routes = [
     name: 'welcome',
     component: Home,
     meta: {
-      pageTitle: 'Home',
+      headerTitle: 'Home',
       // breadcrumb: {
       //   title: 'Home',
       //   icon: 'fas fa-home',

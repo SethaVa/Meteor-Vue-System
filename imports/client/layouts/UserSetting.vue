@@ -78,8 +78,9 @@ export default {
     _logout() {
       // this.$store.clear
       // localStorage.removeItem('vuex')
-      this.$store.commit('app/logout',this)
-      // this.$store.dispatch('app/logout')
+      // this.$store.commit('app/logout',this)
+      // this.$store.commit('app/logout')
+      this.$store.dispatch('app/logout')
     },
   },
 }

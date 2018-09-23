@@ -59,3 +59,5 @@ import VueMoment from '/imports/client/plugins/vue-moment'
 Vue.use(VueMoment)
 import VueNumeral from '/imports/client/plugins/vue-numeral'
 Vue.use(VueNumeral)
+import LocalFilters from '/imports/client/plugins/filters'
+Vue.use(LocalFilters)
