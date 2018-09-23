@@ -1,8 +1,7 @@
 <template>
   <el-container class="container">
     <!-- v-if="toggle" -->
-    <transition name="fade"
-                mode="out-in">
+    
       <el-aside width="260px"
                 id="menu-side"
                 class="aside">
@@ -15,14 +14,13 @@
         <aside-menu :active-menu="linkActiveClass"></aside-menu>
       </el-aside>
       <!-- <component :is="currentLayout"></component> -->
-    </transition>
+    
     <el-container>
       <!-- Heder -->
       <!-- header-menu clearfix -->
       <el-header class="header header-menu header-menu-layout ">
         <span class="menu-left">{{ headerTitle }}</span>
         <!-- Header Menu -->
-        <!-- User Setting -->
         <span class="menu-right">
           <!-- branch setting -->
           <branch-setting></branch-setting>
@@ -33,18 +31,18 @@
         </span>
       </el-header>
       <!-- Mian Page     -->
-      <el-main class="content">
+      <el-main class="app-content">
 
-        <div class="layout-content">
+            <!-- <router-view></router-view> -->
+        <div class="router-view">
           <transition name="fade-transform"
                       mode="out-in">
-            <!-- <router-view></router-view> -->
             <router-view></router-view>
           </transition>
 
         </div>
 
-        <div class="layout-footer">
+        <div class="footer">
           {{ copyright }} &copy; B.A.D Forieng Language School
         </div>
 
@@ -114,17 +112,7 @@ export default {
     userFullName() {
       return this.$store.getters['app/userFullName']
     },
-    // userIsInRoleUser() {
-    //   return this.$store.getters['userIsInRole'](['receipt'])
-    // },
-    // userIsInRoleAdmin() {
-    //   return this.$store.getters['userIsInRole'](['admin'])
-    //   // (['admin', 'super','user'])
-    //   // return this.$store.getters['userIsInRole'](['pos'])
-    // },
-    // userIsInRoleManager() {
-    //   return this.$store.getters['userIsInRole'](['manager'])
-    // },
+    
     headerTitle() {
       let title = 'No TiTle'
       title = this.$route.meta.headerTitle
@@ -280,11 +268,42 @@ a:-webkit-any-link {
   }
 }
 /* Content */
-.content {
+// .content {
+//   padding: 15px 20px 0px;
+//   background: #eee;
+//   .layout-content {
+//     min-height: calc(100vh - 189px);
+//     background-color: white;
+//     margin: 0px 0px 0px;
+//     padding: 25px 25px;
+//     position: relative;
+//     border-radius: 0px 0px 4px 4px;
+//     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+//   }
+
+//   .layout-footer {
+//     text-align: center;
+//     font-size: 13px;
+//     color: #97a8be;
+//     padding: 15px 0 10px;
+//   }
+// }
+
+// .aside-menu-mini {
+//   background-color: #303133;
+//   min-height: 100vh;
+// }
+/* Content */
+.app-content {
   padding: 15px 20px 0px;
   background: #eee;
-  .layout-content {
-    min-height: calc(100vh - 189px);
+
+  .breadcrumb {
+    margin: 0px 0px 15px;
+  }
+
+  .router-view {
+    min-height: calc(100vh - 188px);
     background-color: white;
     margin: 0px 0px 0px;
     padding: 25px 25px;
@@ -293,17 +312,12 @@ a:-webkit-any-link {
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
   }
 
-  .layout-footer {
+  .footer {
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
     color: #97a8be;
     padding: 15px 0 10px;
   }
-}
-
-.aside-menu-mini {
-  background-color: #303133;
-  min-height: 100vh;
 }
 </style>
 
