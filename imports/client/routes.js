@@ -87,25 +87,40 @@ const routes = [
       notRequiresAuth: true,
       headerTitle: 'Login',
     },
+    // Login
     // meta: {
     //   layout: 'login',
     //   notRequiresAuth: true,
     //   pageTitle: 'Login',
     // },
   },
-
+  // Home
   {
-    path: '/',
-    component: index,
-    children: [{
-        path: '',
+    path: 'welocme',
+    name: 'welcome',
+    component: welcome,
+    meta: {
+      pageTitle: 'Home',
+      breadcrumb: {
+        title: 'Home',
+        icon: 'fas fa-home',
+      },
+    },
+  },
+  {
+    path: '/m',
+    component: {
+      render(h) {
+        return h('router-view')
+      },
+    },
+    // path: '/',
+    // component: index,
+    children: [
+      {
+        path: 'home',
         name: 'home',
         component: Home,
-      },
-      {
-        path: 'welocme',
-        name: 'welcome',
-        component: welcome,
       },
       // Brach
       {

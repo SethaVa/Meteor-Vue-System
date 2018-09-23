@@ -134,7 +134,7 @@ import Msg from '/imports/client/lib/message'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import moment from 'moment'
 import Lookup from '/imports/client/lib/Lookup-Value'
-import { lookupClass, lookupStudent } from '/imports/lib/lookup-methods'
+import { lookupClass, lookupStudent } from '/imports/util/lookup-methods'
 import { updatePaymentForPayment } from '../../api/payment/methods'
 const numeral = require('numeral')
 export default {

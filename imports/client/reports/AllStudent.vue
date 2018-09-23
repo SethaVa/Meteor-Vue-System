@@ -132,7 +132,7 @@ import moment from 'moment'
 import Notify from '/imports/client/lib/notify'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import Lookup from '../lib/Lookup-Value'
-import { lookupClass } from '/imports/lib/lookup-methods'
+import { lookupClass } from '/imports/util/lookup-methods'
 import { reportStudents } from '../../api/report/all-student'
 import { dateRangePickerOpts } from '/imports/client/lib/date-range-picker-opts'
 

@@ -145,7 +145,7 @@ import moment from 'moment'
 
 import Notify from '/imports/client/lib/notify'
 import Lookup from '../../client/lib/Lookup-Value'
-import { lookupClass } from '/imports/lib/lookup-methods'
+import { lookupClass } from '/imports/util/lookup-methods'
 import { findClassForStudenDetails } from '../../api/payment/methods'
 import { Printd } from 'printd'
 import toCss from 'to-css'

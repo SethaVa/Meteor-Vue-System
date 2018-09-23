@@ -1,4 +1,4 @@
-import AutoId from '../../../lib/auto-id'
+import AutoId from '/imports/util/auto-id'
 import Level from '../level'
 
 Level.before.insert(function(userId, doc) {

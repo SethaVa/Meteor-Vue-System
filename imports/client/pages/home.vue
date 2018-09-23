@@ -173,7 +173,7 @@
 <script>
 import Notify from '/imports/client/lib/notify'
 import _ from 'lodash'
-import compareDate from '/imports/lib/compare-date'
+import compareDate from '/imports/util/compare-date'
 import json2csv from 'json2csv'
 import moment from 'moment'
 import { mapState } from 'vuex'

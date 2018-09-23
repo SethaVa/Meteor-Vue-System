@@ -1,4 +1,4 @@
-import AutoId from '../../../lib/auto-id'
+import AutoId from '/imports/util/auto-id'
 import Payment from '../payment'
 
 Payment.before.insert(function(userId, doc) {

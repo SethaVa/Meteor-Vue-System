@@ -105,8 +105,8 @@ import Notify from '/imports/client/lib/notify'
 // lib
 import LookupValue from '../lib/Lookup-Value'
 
-import { lookupRole, lookupBranch } from '../../lib/lookup-methods'
-import { validateUserExist } from '../../lib/validate-methods'
+import { lookupRole, lookupBranch } from '/imports/util/lookup-methods'
+import { validateUserExist } from '/imports/util/validate-methods'
 import { findOneUser, updateUser } from '../../api/users/methods'
 
 export default {

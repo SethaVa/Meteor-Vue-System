@@ -146,9 +146,9 @@ import Notify from '/imports/client/lib/notify'
 import moment from 'moment'
 import _ from 'lodash'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
-import compareDate from '/imports/lib/compare-date'
+import compareDate from '/imports/util/compare-date'
 import Lookup from '/imports/client/lib/Lookup-Value'
-import { getNextRef } from '/imports/lib/get-next-ref'
+import { getNextRef } from '/imports/util/get-next-ref'
 import {
   findPaymentForClass,
   findOnePaymentByCode,

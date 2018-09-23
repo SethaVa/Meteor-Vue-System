@@ -12,7 +12,7 @@ import Msg from '../lib/message'
 
 // import createPersistedState from 'vuex-persistedstate'
 //Router 
-import router from '/imports/startup/client/routes'
+// import router from ''
 // export const store = new Vuex.Store({
 export default {
   namespaced: true,

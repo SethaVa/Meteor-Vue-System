@@ -18,8 +18,8 @@ import {
 } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
-// import { userIsInRole, throwError } from '../../utils/security'
-// import rateLimit from '../../utils/rate-limit'
+import { userIsInRole, throwError } from '/imports/util/security'
+import rateLimit from '/imports/util/rate-limit'
 
 import {
   UserInsertSchema,
@@ -57,9 +57,9 @@ export const findUsers = new ValidatedMethod({
 export const findOneUser = new ValidatedMethod({
   name: 'app.findOneUser',
   mixins: [CallPromiseMixin],
-  validate(_id) {
-    check(_id, String)
-  },
+  validate:new SimpleSchema({
+    _id:String
+  }).validator(),
   run(_id) {
     if (Meteor.isServer) {
       Meteor._sleepForMs(100)
@@ -79,10 +79,10 @@ export const insertUser = new ValidatedMethod({
     user
   }) {
     if (Meteor.isServer) {
-      // Check role
-      // userIsInRole(['super', 'admin'])
-
       try {
+      // Check role
+      userIsInRole(['super', 'admin'])
+
         // Add new user
         const userId = Accounts.createUser({
           username: user.username,
@@ -99,8 +99,8 @@ export const insertUser = new ValidatedMethod({
 
         return userId
       } catch (e) {
-        console.log(e.reason)
-        // throwError(e)
+        // console.log(e.reason)
+        throwError(e)
       }
     }
   },
@@ -118,9 +118,9 @@ export const updateUser = new ValidatedMethod({
   }) {
     if (Meteor.isServer) {
       // Check role
-      // userIsInRole(['super', 'admin'])
-
       try {
+      userIsInRole(['super', 'admin'])
+
         // Update user
         Meteor.users.update({
           _id: user._id
@@ -148,8 +148,8 @@ export const updateUser = new ValidatedMethod({
 
         return 'success'
       } catch (e) {
-        console.log(e.reason);
-        // throwError(e)
+        // console.log(e.reason);
+        throwError(e)
       }
     }
   },
@@ -168,18 +168,18 @@ export const removeUser = new ValidatedMethod({
   }) {
     if (Meteor.isServer) {
       // Check role
-      // userIsInRole(['super'])
+      userIsInRole(['super'])
 
       try {
         return Meteor.users.remove(_id)
       } catch (e) {
-        // throwError(e)
-        console.log(e.reason)
+        throwError(e)
+        // console.log(e.reason)
       }
     }
   },
 })
 
-// rateLimit({
-//   methods: [findUsers, findOneUser, insertUser, updateUser, removeUser],
-// })
+rateLimit({
+  methods: [findUsers, findOneUser, insertUser, updateUser, removeUser],
+})

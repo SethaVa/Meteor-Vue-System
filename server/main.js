@@ -1,4 +1,4 @@
-// // Server entry point, imports all server code
+// Server entry point, imports all server code
 
-import '/imports/startup/server'
+import '/imports/server'
 // import '/imports/startup/both';
