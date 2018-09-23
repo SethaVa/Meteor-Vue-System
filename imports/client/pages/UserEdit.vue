@@ -269,7 +269,7 @@ export default {
       this.loading = true
       const _id = this.updateId
       findOneUser
-        .callPromise(_id)
+        .callPromise({_id})
         .then(result => {
           // Orange result
           this.form = {

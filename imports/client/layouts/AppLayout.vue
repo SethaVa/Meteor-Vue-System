@@ -1,7 +1,8 @@
 <template>
   <div>
     <transition name="fade"
-                mode="out-in" appear>
+                mode="out-in"
+                appear>
       <!-- <login-layout></login-layout> -->
       <component :is="currentLayout"></component>
     </transition>
@@ -14,15 +15,14 @@
 import { Meteor } from 'meteor/meteor'
 import { mapState } from 'vuex'
 
-import Company from "../../api/company/company";
+import Company from '../../api/company/company'
 import Branches from '../../api/branches/branches'
-
 
 import Layout from '/imports/layout'
 export default {
   name: 'AppLayout',
 
-    meteor: {
+  meteor: {
     $subscribe: {
       ['company']: [],
       ['branches']() {
@@ -47,21 +47,22 @@ export default {
     // },
   },
   computed: {
-    currentLayout(){
-    const currentLayout = this.$route.meta.layout==='login'
-        ? Layout[this.$route.meta.layout]
-        : Layout.main
-
-      return currentLayout
-    },
     ...mapState({
-      currentUser: state => state.app.currentUser,  
+      currentUser: state => state.app.currentUser,
       // currentUser(state){
       //   return state.app.currentUser
       // }
     }),
+    currentLayout() {
+      const currentLayout =
+        this.$route.meta.layout === 'login'
+          ? Layout[this.$route.meta.layout]
+          : Layout.main
+
+      return currentLayout
+    },
   },
-   created() {
+  created() {
     //  this.$store.dispatch('updateAllowedBranches', ['001'])
     this.$store.dispatch('app/loadCurrentUser')
   },
@@ -71,7 +72,6 @@ export default {
     // this.branches();
     // console.log(this.branches());
   },
-
 }
 </script>
 

@@ -98,6 +98,12 @@ export default {
     UserSetting,
     BranchSetting,
   },
+  metaInfo() {
+    return {
+      title: this.headerTitle,
+      // titleTemplate: 'Rabbit - %s',
+    }
+  },
   data() {
     return {
       // userFullName: Session.get('username'),

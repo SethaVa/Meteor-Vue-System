@@ -157,7 +157,7 @@ import { insertPayment } from '/imports/modules/school/api/payment/methods'
 import { findExchanges } from '/imports/modules/school/api/exchanges/methods'
 //
 import StudentPay from './StudentPay.vue'
-import SubPayment from '../components/subPayment'
+import SubPayment from '../components/subPayment.vue'
 export default {
   // name: 'Payment',
   components: { StudentPay, SubPayment },

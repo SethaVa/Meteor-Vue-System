@@ -92,7 +92,7 @@ import Notify from '/imports/client/lib/notify'
 import _ from 'lodash'
 const numeral = require('numeral')
 export default {
-  // name: 'SubForm',
+  name: 'SubAccountingForm',
   props: {
     itemsProp: {
       type: Array,
