@@ -60,7 +60,7 @@ import PaymentInsert from './PaymentInsert.vue'
 import PaymentUpdate from './PaymentUpdate.vue'
 import Refund from './RefundInsert.vue'
 import StudentPayUpdate from './StudentPayUpdate.vue'
-import compareDate from '/imports/lib/compare-date'
+import compareDate from '/imports/util/compare-date'
 
 import { findPayment, removePayment } from '../../api/payment/methods'
 

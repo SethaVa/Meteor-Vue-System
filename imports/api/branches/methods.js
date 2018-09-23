@@ -15,7 +15,7 @@ import SimpleSchema from 'simpl-schema';
 import {
     userIsInRole,
     throwError
-} from '../../lib/security'
+} from '/imports/util/security.js'
 
 import Branches from './branches';
 

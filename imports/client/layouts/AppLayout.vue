@@ -1,12 +1,12 @@
 <template>
   <div>
-  <transition name="fade"
+    <transition name="fade"
                 mode="out-in" appear>
-    <!-- <login-layout></login-layout> -->
-    <component :is="currentLayout"></component>
-  </transition>
-  <!-- Set progressbar -->
-  <vue-progress-bar></vue-progress-bar>
+      <!-- <login-layout></login-layout> -->
+      <component :is="currentLayout"></component>
+    </transition>
+    <!-- Set progressbar -->
+    <vue-progress-bar></vue-progress-bar>
   </div>
 </template>
 
@@ -17,16 +17,11 @@ import { mapState } from 'vuex'
 import Company from "../../api/company/company";
 import Branches from '../../api/branches/branches'
 
-import {findBranches} from '../../api/branches/methods'
 
-import MainLayout from './MainLayout.vue'
-import LoginLayout from './LoginLayout.vue'
+import Layout from '/imports/layout'
 export default {
   name: 'AppLayout',
-  components: {
-    MainLayout,
-    LoginLayout,
-  },
+
     meteor: {
     $subscribe: {
       ['company']: [],
@@ -45,7 +40,6 @@ export default {
     branches() {
       const val = Branches.find().fetch()
       this.$store.dispatch('app/updateAllowedBranches', val)
-      // this.$store.commit('app/updateAllowedBranches', val)
       return val
     },
     // meteorUser() {
@@ -55,8 +49,8 @@ export default {
   computed: {
     currentLayout(){
     const currentLayout = this.$route.meta.layout==='login'
-        ? LoginLayout
-        : MainLayout
+        ? Layout[this.$route.meta.layout]
+        : Layout.main
 
       return currentLayout
     },

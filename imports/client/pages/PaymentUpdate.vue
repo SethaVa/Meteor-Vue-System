@@ -125,7 +125,7 @@ import moment from 'moment'
 import _ from 'lodash'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import Lookup from '/imports/client/lib/Lookup-Value'
-import { getNextRef } from '/imports/lib/get-next-ref'
+import { getNextRef } from '/imports/util/get-next-ref'
 import {
   findPaymentForClass,
   findOnePayment,

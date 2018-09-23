@@ -63,7 +63,7 @@ import Notify from '/imports/client/lib/notify'
 import Msg from '/imports/client/lib/message'
 import RefundInsert from './RefundInsert.vue'
 import RefundUpdate from './RefundUpdate.vue'
-import compareDate from '/imports/lib/compare-date'
+import compareDate from '/imports/util/compare-date'
 
 import { findRefund, removeRefund } from '../../api/Refund/methods'
 import { findExchanges } from '../../api/exchanges/methods'

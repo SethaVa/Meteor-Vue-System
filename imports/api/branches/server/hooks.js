@@ -1,4 +1,4 @@
-import AutoId from '/imports/lib/auto-id'
+import AutoId from '/imports/util/auto-id'
 
 // Collection
 import Branches from '../branches'
