@@ -109,16 +109,23 @@ export default {
       commit
     }, formData) {
       console.log('Action: login')
+      
 
-      Meteor.loginWithPassword(
-        formData.username,
-        formData.password,
-        error => {
-          if (!error) {
-            commit('updateCurrentUser', Meteor.user())
-          }
-        }
-      )
+      return new Promise((resolve, reject) => {
+        Meteor.loginWithPassword(
+          formData.username,
+          formData.password,
+          error => {
+            if (!error) {
+              commit('updateCurrentUser', Meteor.user())
+              resolve('success')
+             
+            }else{
+              reject(error)
+              
+            }
+          })
+      })
     },
     logout({
       commit

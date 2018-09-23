@@ -35,7 +35,7 @@ import VueProgressBar from 'vue-progressbar'
 const vProgressOpts = {
   color: '#409eff',
   failedColor: '#f56c6c',
-  thickness: '3px',
+  thickness: '5px',
   transition: {
     speed: '0.2s',
     opacity: '0.6s',
