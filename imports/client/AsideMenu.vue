@@ -1,5 +1,6 @@
 <template>
   <div class="aside-menu-layout">
+    <div class="aside-menu-group-title">Main</div>
     <el-menu :default-active="activeMenu"
              @select="handleMenuSelect"
              text-color="#fff">
@@ -163,5 +164,4 @@ export default {
 </script>
 
 <style lang="scss">
-// @import '~imports/client/styles/aside-menu.scss';
 </style>

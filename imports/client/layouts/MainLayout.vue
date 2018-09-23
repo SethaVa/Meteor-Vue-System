@@ -1,25 +1,38 @@
 <template>
   <el-container class="container">
     <!-- v-if="toggle" -->
-    
-      <el-aside width="260px"
-                id="menu-side"
-                class="aside">
-        <!-- <span v-show="toggle"> -->
-        <!-- Aside Menu -->
-        <!-- <div class="logo">
+
+    <el-aside width="260px"
+              id="menu-side"
+              class="aside">
+      <!-- <span v-show="toggle"> -->
+      <!-- Aside Menu -->
+      <!-- <div class="logo">
           <img src="/img/logo.png"
                class="logo-img">
         </div> -->
-        <aside-menu :active-menu="linkActiveClass"></aside-menu>
-      </el-aside>
-      <!-- <component :is="currentLayout"></component> -->
-    
+      <!-- <aside-menu :active-menu="linkActiveClass"></aside-menu> -->
+      <component v-for="(aside, index) in asideMenus"
+                 :key="index"
+                 :is="aside"
+                 :active-menu="linkActiveClass"></component>
+    </el-aside>
+    <!-- <component :is="currentLayout"></component> -->
+
     <el-container>
       <!-- Heder -->
       <!-- header-menu clearfix -->
       <el-header class="header header-menu header-menu-layout ">
-        <span class="menu-left">{{ headerTitle }}</span>
+        <span class="page-title">
+          {{ headerTitle }}
+        </span>
+
+        <span class="menu-left">
+          <!-- Module -->
+          <component v-for="(header, index) in headerMenus"
+                     :key="index"
+                     :is="header"></component>
+        </span>
         <!-- Header Menu -->
         <span class="menu-right">
           <!-- branch setting -->
@@ -33,7 +46,7 @@
       <!-- Mian Page     -->
       <el-main class="app-content">
 
-            <!-- <router-view></router-view> -->
+        <!-- <router-view></router-view> -->
         <div class="router-view">
           <transition name="fade-transform"
                       mode="out-in">
@@ -66,13 +79,15 @@ import HeaderMenu from '../HeaderMenu.vue'
 // import AsideMenuManager from '../AsideMenuManager.vue'
 // import AsideMenuManagerMini from '../AsideMenuManagerMini.vue'
 import UserSetting from './UserSetting'
-import AdminSetting from './AdminSetting';
+import AdminSetting from './AdminSetting'
 import BranchSetting from './BranchSetting'
 import { Session } from 'meteor/session'
 
 import { appLog } from '../../api/app-logs/methods.js'
 import { mapState } from 'vuex'
 
+// ------------------------Dynamic modules--------------
+import navigation from '/imports/navigation'
 
 export default {
   name: 'MainLayout',
@@ -81,7 +96,7 @@ export default {
     HeaderMenu,
     AdminSetting,
     UserSetting,
-    BranchSetting
+    BranchSetting,
   },
   data() {
     return {
@@ -90,7 +105,8 @@ export default {
       windowWidth: window.innerWidth,
       // toggle: false,
       title: this.headerTitle,
-      currentAsideMenu: AsideMenu,
+      asideMenus: navigation.aside,
+      headerMenus: navigation.header,
       currentHeaderMenu: HeaderMenu,
       copyright: `${moment().format('DD-MM-YYYY')}`,
     }
@@ -112,7 +128,7 @@ export default {
     userFullName() {
       return this.$store.getters['app/userFullName']
     },
-    
+
     headerTitle() {
       let title = 'No TiTle'
       title = this.$route.meta.headerTitle
@@ -157,13 +173,12 @@ export default {
         this.collapse = 'error'
       }
     },
-    
   },
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~imports/client/styles/header-menu.scss';
+// @import '~imports/client/styles/header-menu.scss';
 #toggle-menu {
   cursor: pointer;
   margin-right: 20px;

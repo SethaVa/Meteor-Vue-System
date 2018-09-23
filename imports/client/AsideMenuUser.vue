@@ -156,5 +156,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~imports/client/styles/aside-menu.scss';
+// @import '~imports/client/styles/aside-menu.scss';
 </style>
