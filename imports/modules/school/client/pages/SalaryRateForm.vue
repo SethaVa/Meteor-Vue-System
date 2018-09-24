@@ -10,50 +10,36 @@
                label-position="left"
                label-width="110px">
         <el-row :gutter="20">
-          <el-col :span="10">
-            <el-form-item label="Date"
-                          prop="exDate">
-              <el-date-picker style="width:100%"
-                              v-model="form.exDate"
-                              type="date"
-                              format="dd/MM/yyyy">
-              </el-date-picker>
+          <el-col :span="6">
+            <el-form-item label="Name"
+                          prop="name">
+              <el-input ref="name"
+                        v-model="form.name"
+                        style="width:100%"></el-input>
             </el-form-item>
           </el-col>
-
-          <el-col :span="14">
-            <el-form-item label="Student"
-                          prop="base">
-              <el-input-number style="width:100%"
-                               v-model="form.base"
-                               disabled
-                               controls-position="right"></el-input-number>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-
-          <el-col :span="8">
-            <el-form-item label="Part Time (%)"
-                          prop="partTime">
-              <el-input-number ref="partTime"
-                               v-model="form.partTime"
-                               controls-position="right"
+          <el-col :span="6">
+            <el-form-item label="Rate"
+                          prop="rate">
+              <el-input-number ref="rate"
+                               v-model="form.rate"
+                               :controls="false"
+                               :min="0"
                                style="width:100%"></el-input-number>
             </el-form-item>
           </el-col>
 
-          <el-col :span="8">
-            <el-form-item label="Full Time($)"
-                          prop="fullTime">
-              <el-input-number v-model="form.fullTime"
-                               controls-position="right"
+          <el-col :span="6">
+            <el-form-item label="Amount"
+                          prop="amount">
+              <el-input-number v-model="form.amount"
+                               :controls="false"
+                               :min="0"
                                style="width:100%"></el-input-number>
             </el-form-item>
           </el-col>
 
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item>
               <el-button type="primary"
                          @click="submitForm">{{ formType }}</el-button>
@@ -67,16 +53,14 @@
 </template>
 
 <script>
-import moment from 'moment'
 
 import Msg from '/imports/client/lib/message'
 import Notify from '/imports/client/lib/notify'
-import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 
 import {
-  insertSalaryRate,
-  updateSalaryRate,
-} from '/imports/modules/school/api/salary-rate/methods'
+  insertRateSalary,
+  updateRateSalary,
+} from '/imports/modules/school/api/rate-salary/methods'
 
 export default {
   name: 'SalaryRateForm',
@@ -94,16 +78,14 @@ export default {
     return {
       loading: false,
       form: {
-        base: '1',
-        exDate: moment().toDate(),
-        partTime: 0,
-        fullTime: 0,
+        name: '',
+        rate: 0,
+        amount: 0,
       },
       rules: {
-        exDate: [{ required: true }],
-        Student: [{ required: true }],
-        partTime: [{ required: true }],
-        fullTime: [{ required: true }],
+        name: [{ required: true }],
+        rate: [{ required: true }],
+        amount: [{ required: true }],
       },
     }
   },
@@ -111,36 +93,27 @@ export default {
     updateDoc(val) {
       if (val) {
         this.form = val
-        this.focusForm('part Time')
       } else {
         this.form = {
-          base: 'Student',
-          exDate: moment().toDate(),
-          Student: 1,
-          partTime: 0,
-          thb: 0,
+          name: '',
+          rate: 0,
+          amount: 0,
         }
       }
     },
   },
   mounted() {
-    this.focusForm('partTime')
+    // this.focusForm('partTime')
   },
   methods: {
-    focusForm(refName) {
-      this.$refs[refName].$el.querySelector('input').focus()
-    },
     submitForm() {
+      this.loading = true
       this.$refs['form'].validate(valid => {
         if (valid) {
-          this.loading = true
-
-          // Pick doc
-          this.form.exDate = wrapCurrentTime(this.form.exDate)
-
+          // Pick do
           if (this.formType === 'New') {
-            insertSalaryRate
-              .callPromise(this.form)
+            insertRateSalary
+              .callPromise({ doc: this.form })
               .then(result => {
                 if (result) {
                   this.loading = false
@@ -152,8 +125,8 @@ export default {
                 Notify.error({ message: error })
               })
           } else if (this.formType === 'Update') {
-            updateSalaryRate
-              .callPromise(this.form)
+            updateRateSalary
+              .callPromise({ doc: this.form })
               .then(result => {
                 if (result) {
                   this.loading = false
@@ -175,7 +148,6 @@ export default {
     },
     handleCancel() {
       this.resetForm()
-      this.focusForm('partTime')
       this.$emit('form-change')
     },
   },
@@ -183,5 +155,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

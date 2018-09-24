@@ -36,7 +36,7 @@ import '/imports/modules/school/api/payment/server/index'
 // Income
 import '/imports/modules/school/api/Income/server/index'
 // Salary Rate
-import '/imports/modules/school/api/salary-rate/server/index'
+import '/imports/modules/school/api/rate-salary/server/index'
 //Register
 import '/imports/modules/school/api/register/server/index'
 //Refund

@@ -15,7 +15,7 @@ import _ from 'lodash'
 import Staff from './staff'
 import ClassStudy from '../classStudy/classStudy'
 import Payment from '../payment/payment'
-import SalaryRate from '../salary-rate/salaryRate'
+// import SalaryRate from '../salary-rate/salaryRate'
 
 // Find
 export const findStaff = new ValidatedMethod({
@@ -98,12 +98,13 @@ export const findStaffSalary = new ValidatedMethod({
   }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      const salaryRate = SalaryRate.find({}, {
-        sort: {
-          _id: -1
-        },
-        limit: 1
-      }).fetch()
+      const salaryRate=[]
+      // const salaryRate = SalaryRate.find({}, {
+      //   sort: {
+      //     _id: -1
+      //   },
+      //   limit: 1
+      // }).fetch()
 
       let partTiemRate = salaryRate[0].partTime
 
