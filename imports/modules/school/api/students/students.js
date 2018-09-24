@@ -1,4 +1,6 @@
-import { Mongo } from 'meteor/mongo'
+import {
+  Mongo
+} from 'meteor/mongo'
 import SimpleSchema from 'simpl-schema'
 
 const Students = new Mongo.Collection('sch_students')
@@ -10,6 +12,9 @@ Students.schema = new SimpleSchema({
   },
   registerDate: {
     type: Date,
+  },
+  code: {
+    type: String
   },
   enName: {
     type: String,
@@ -34,8 +39,8 @@ Students.schema = new SimpleSchema({
   type: {
     type: String,
   },
-  branchId:{
-    type:String
+  branchId: {
+    type: String
   }
 })
 Students.attachSchema(Students.schema)

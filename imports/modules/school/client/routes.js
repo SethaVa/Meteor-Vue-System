@@ -169,8 +169,8 @@ const routes = [
       },
       // Exchange
       {
-        path: 'exchange',
-        name: 'exchange',
+        path: 'ex-class',
+        name: 'ex-class',
         component: ExchangeClass,
       },
       // Rate Salary

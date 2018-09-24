@@ -1,7 +1,7 @@
 <template>
   <div>
     <component :is="currentModal"
-               :update-doc="updateDoc"
+               :update-id="updateId"
                :visible="modalVisible"
                @modal-close="handleModalClose"></component>
 
@@ -45,8 +45,7 @@
 import Msg from '/imports/client/lib/message'
 import Notify from '/imports/client/lib/notify'
 import { findStudents, removeStudent } from '/imports/modules/school/api/students/methods.js'
-import StudentInsert from './StudentInsert.vue'
-import StudentUpdate from './StudentUpdate.vue'
+import StudentForm from './StudentForm.vue'
 
 // Table Action
 import TableToolbar from '/imports/client/components/TableToolbar.vue'
@@ -62,8 +61,7 @@ export default {
     headerTitle: 'Student',
   },
   components: {
-    StudentInsert,
-    StudentUpdate,
+    StudentForm,
     TableAction,
     TableToolbar,
   },
@@ -72,9 +70,10 @@ export default {
     return {
       loading: false,
       currentModal: null,
-      updateDoc: null,
+      updateId: null,
       modalVisible: false,
       titles: [
+        { label: 'Code', prop: 'code' },
         { label: 'Kh Name', prop: 'khName' },
         { label: 'En Name', prop: 'enName' },
         { label: 'Gender', prop: 'gender' },
@@ -88,7 +87,7 @@ export default {
       },
       tableFilters: [
         {
-          prop: ['enName', 'khName', 'gender'],
+          prop: ['code','enName', 'khName', 'gender'],
           value: '',
         },
       ],
@@ -122,13 +121,14 @@ export default {
           this.tableData = result
         })
         .catch(err => {
+          this.loading=false
           Notify.error({ message: err })
         })
     },
     // Add new
     addNew() {
       this.modalVisible = true
-      this.currentModal = StudentInsert
+      this.currentModal = StudentForm
     },
     // Table Action
     actionsList() {
@@ -139,9 +139,9 @@ export default {
     },
     // Edit Data
     edit(row) {
-      this.updateDoc = row
+      this.updateId = row._id
       this.modalVisible = true
-      this.currentModal = StudentUpdate
+      this.currentModal = StudentForm
     },
     remove(row) {
       this.$_removeMixin({
@@ -156,6 +156,7 @@ export default {
       this.getData()
       this.modalVisible = false
       this.$nextTick(() => {
+        this.updateId=null
         this.currentModal = null
       })
     },

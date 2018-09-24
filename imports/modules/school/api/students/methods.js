@@ -1,17 +1,10 @@
-import {
-  Meteor
-} from 'meteor/meteor'
-import {
-  ValidatedMethod
-} from 'meteor/mdg:validated-method'
-import {
-  CallPromiseMixin
-} from 'meteor/didericis:callpromise-mixin'
+import { Meteor } from 'meteor/meteor'
+import { ValidatedMethod } from 'meteor/mdg:validated-method'
+import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
-import {
-  throwError
-} from '/imports/utils/security'
+import { throwError } from '/imports/utils/security'
+import rateLimit from '/imports/utils/rate-limit'
 import getNextSeq from '/imports/utils/get-next-seq'
 
 import Students from './students'
@@ -21,37 +14,12 @@ export const findStudents = new ValidatedMethod({
   name: 'sch.findStudents',
   mixins: [CallPromiseMixin],
   validate: null,
-  run({
-    selector,
-    option
-  }) {
-    if (Meteor.isServer) {
-      selector = selector || {}
-      option = option || {
-        sort: {
-          _id: -1
-        }
-      }
-
-      return Students.find(selector, option).fetch()
-    }
-  },
-})
-
-// Find All Data
-export const findStudentsByDate = new ValidatedMethod({
-  name: 'sch.findStudentsByDate',
-  mixins: [CallPromiseMixin],
-  validate: null,
-  run({
-    selector,
-    option
-  }) {
+  run({ selector, option }) {
     if (Meteor.isServer) {
       selector = selector || {}
       option = option || {}
 
-      return aggregateFindByDate(selector)
+      return Students.find(selector, option).fetch()
     }
   },
 })
@@ -60,10 +28,15 @@ export const findStudentsByDate = new ValidatedMethod({
 export const findOneStudent = new ValidatedMethod({
   name: 'sch.findOneStudent',
   mixins: [CallPromiseMixin],
-  validate: null,
-  run(_id) {
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+    },
+  }).validator(),
+  run({ selector }) {
     if (Meteor.isServer) {
-      return Students.findOne(_id)
+      return Students.findOne(selector)
     }
   },
 })
@@ -75,11 +48,8 @@ export const insertStudent = new ValidatedMethod({
   validate: new SimpleSchema({
     doc: Students.schema,
   }).validator(),
-  run({
-    doc
-  }) {
+  run({ doc }) {
     if (Meteor.isServer) {
-
       const _id = getNextSeq({
         // Mandatory
         _id: `sch_students${doc.branchId}`,
@@ -122,15 +92,16 @@ export const updateStudent = new ValidatedMethod({
   validate: new SimpleSchema({
     doc: Students.schema,
   }).validator(),
-  run({
-    doc
-  }) {
+  run({ doc }) {
     if (Meteor.isServer) {
-      Students.update({
-        _id: doc._id,
-      }, {
-        $set: doc,
-      })
+      Students.update(
+        {
+          _id: doc._id,
+        },
+        {
+          $set: doc,
+        }
+      )
       return 'Success'
     }
   },
@@ -145,48 +116,30 @@ export const removeStudent = new ValidatedMethod({
       type: String,
     },
   }).validator(),
-  run({
-    _id
-  }) {
+  run({ _id }) {
     if (Meteor.isServer) {
-      Students.update({
-        _id: _id,
-      }, {
-        $set: {
-          remove: true,
+      Students.update(
+        {
+          _id: _id,
         },
-      })
+        {
+          $set: {
+            remove: true,
+          },
+        }
+      )
       return 'Success'
       // return Students.remove(selector)
     }
   },
 })
 
-// find student by date
-const aggregateFindByDate = selector => {
-  selector = selector || {}
-  let data = Students.aggregate([{
-      $match: selector,
-    },
-    {
-      $project: {
-        _id: 1,
-        registerDate: {
-          $dateToString: {
-            format: '%Y-%m-%d',
-            date: '$registerDate',
-          },
-        },
-        type: 1,
-        khName: 1,
-        enName: 1,
-        gender: 1,
-        dob: 1,
-        tel: 1,
-        remove: 1,
-      },
-    },
-  ])
-
-  return data
-}
+rateLimit({
+  methods: [
+    findStudents,
+    findOneStudent,
+    insertStudent,
+    updateStudent,
+    removeStudent,
+  ],
+})
