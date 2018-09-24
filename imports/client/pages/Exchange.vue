@@ -8,8 +8,7 @@
     <!-- Data Table -->
     <data-tables v-loading="loading"
                  :data="tableData"
-                 :table-props="tableProps"
-                 :action-col-def="actionColDef">
+                 :table-props="tableProps">
       <el-table-column v-for="title in tableTitles"
                        :prop="title.prop"
                        :label="title.label"
@@ -17,9 +16,20 @@
                        sortable="custom">
         <template slot-scope="scope">
           <span v-if="title.prop === 'exDate'">
-            {{ dateFormatter(scope.row.exDate) }}
+            {{ scope.row.exDate | date }}
           </span>
-          <span v-else>{{ scope.row[title.prop] }}</span>
+          <span v-else>{{ scope.row[title.prop] | number }}</span>
+        </template>
+      </el-table-column>
+      <!-- Action -->
+      <el-table-column :render-header="renderTableMoreHeader"
+                       align="center"
+                       fixed="right"
+                       width="70">
+        <template slot-scope="scope">
+          <table-action :actions="actionsList(scope.row)"
+                        :row="scope.row"
+                        @action-click="tableActionClick"></table-action>
         </template>
       </el-table-column>
     </data-tables>
@@ -34,11 +44,20 @@ import Msg from '/imports/client/lib/message'
 import Notify from '/imports/client/lib/notify'
 
 import ExchangeForm from './ExchangeForm'
-import { findExchanges, removeExchange } from '/imports/modules/school/api/exchanges/methods'
+import {
+  findExchanges,
+  removeExchange,
+} from '/imports/api/exchanges/methods.js'
+
+// Table Action
+import TableToolbar from '/imports/client/components/TableToolbar.vue'
+import TableAction from '/imports/client/components/TableAction.vue'
+import removeMixin from '/imports/client/mixins/remove'
 
 export default {
   // name: 'Exchange',
-  components: { ExchangeForm },
+  components: { ExchangeForm, TableToolbar, TableAction },
+  mixins: [removeMixin],
   data() {
     return {
       loading: false,
@@ -49,52 +68,11 @@ export default {
         { label: 'Date', prop: 'exDate' },
         { label: 'USD', prop: 'usd' },
         { label: 'KHR', prop: 'khr' },
+        { label: 'THB', prop: 'thb' },
       ],
       tableProps: {
         border: false,
         size: 'small',
-      },
-      actionColDef: {
-        label: 'Action',
-        def: [
-          {
-            icon: 'el-icon-edit',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: row => {
-              this.formType = 'Update'
-              this.updateDoc = row
-            },
-          },
-          {
-            icon: 'el-icon-delete',
-            buttonProps: {
-              size: 'mini',
-            },
-            handler: row => {
-              this.$confirm('Are you sur to detlete this record?', {
-                type: 'warning',
-              })
-                .then(result => {
-                  if (result) {
-                    removeExchange
-                      .callPromise({ _id: row._id })
-                      .then(result => {
-                        Msg.success()
-                        this.getData()
-                      })
-                      .catch(error => {
-                        Notify.error({ message: error })
-                      })
-                  }
-                })
-                .catch(error => {
-                  Notify.error({ message: error })
-                })
-            },
-          },
-        ],
       },
     }
   },
@@ -102,6 +80,9 @@ export default {
     this.getData()
   },
   methods: {
+    renderTableMoreHeader(h, { column, $index }) {
+      return h('h2', { class: 'el-icon-menu popover-icon' })
+    },
     getData() {
       this.loading = true
       findExchanges
@@ -114,9 +95,26 @@ export default {
           Notify.error({ message: error })
         })
     },
-    // Format
-    dateFormatter(row, column, cellValue) {
-      return moment(cellValue).format('DD/MM/YYYY')
+    // Table Action
+    actionsList() {
+      return ['edit', 'remove']
+    },
+    tableActionClick(command) {
+      this[command.action](command.row)
+    },
+    // Edit Data
+    edit(row) {
+      this.formType = 'Update'
+      this.updateDoc = row
+    },
+    remove(row) {
+      this.$_removeMixin({
+        meteorMethod: removeExchange,
+        selector: { _id: row._id },
+        successMethod: 'getData',
+        loading: 'loading',
+        title: row.title,
+      })
     },
     handleFormChange() {
       this.formType = 'New'

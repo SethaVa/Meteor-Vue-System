@@ -157,7 +157,7 @@ import Lookup from '/imports/client/lib/Lookup-Value'
 import { getNextRef } from '/imports/utils/get-next-ref'
 import { lookupClass, lookupStudent } from '/imports/utils/lookup-methods'
 import { updatePayementForNew,findOnePaymentByCode } from '/imports/modules/school/api/payment/methods'
-import { findExchanges } from '/imports/modules/school/api/exchanges/methods'
+import { findExchanges } from '/imports/api/exchanges/methods.js'
 
 const numeral = require('numeral')
 export default {

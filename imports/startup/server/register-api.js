@@ -16,11 +16,11 @@ import '../../api/users/server/publications'
 
 // AppLog
 import '../../api/app-logs/methods'
-
-// Branch
 // Counter
 import '../../api/counters/methods'
 import '../../api/counters/server/publications'
+// Exchange
+import '../../api/exchanges/server/index'
 //Student
 // import '../../api/students/server/index.js'
 

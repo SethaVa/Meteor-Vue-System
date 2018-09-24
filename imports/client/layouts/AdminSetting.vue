@@ -14,6 +14,7 @@
         <el-dropdown-item command="company">Company</el-dropdown-item>
         <el-dropdown-item v-if="userIsInRole" command="branch">Branch</el-dropdown-item>
         <el-dropdown-item command="user">User</el-dropdown-item>
+        <el-dropdown-item command="exchange">Exchange</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </el-tooltip>

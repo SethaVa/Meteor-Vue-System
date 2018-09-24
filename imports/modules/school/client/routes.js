@@ -27,8 +27,6 @@ import PaymentUpdate from './pages/PaymentUpdate.vue'
 import Refund from './pages/RefundList.vue'
 // Incomeouting
 import Income from './pages/IncomeList.vue'
-//Exchange
-import Exchange from './pages/Exchange.vue'
 // SalaryRate
 import SalaryRate from './pages/SalaryRate.vue'
 // Exchange Class 
@@ -173,7 +171,7 @@ const routes = [
       {
         path: 'exchange',
         name: 'exchange',
-        component: Exchange,
+        component: ExchangeClass,
       },
       // Rate Salary
       {

@@ -33,10 +33,6 @@ import '/imports/modules/school/api/classStudy/server/'
 import '/imports/modules/school/api/classDetails/server/'
 // Payment
 import '/imports/modules/school/api/payment/server/index'
-//Exchange
-// import '/imports/modules/school/api/exchanges/server/index'
-import '/imports/modules/school/api/exchanges/server/collection-hook'
-import '/imports/modules/school/api/exchanges/methods'
 // Income
 import '/imports/modules/school/api/Income/server/index'
 // Salary Rate
