@@ -1,19 +1,25 @@
-import { Mongo } from 'meteor/mongo';
+import {
+    Mongo
+} from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 
 const Rooms = new Mongo.Collection('sch_rooms');
 
 Rooms.schema = new SimpleSchema({
-    roomName:{
-        type:String
+    _id: {
+        type: String,
+        optional: true
     },
-    des:{
-        type:String,
-        optional:true
+    name: {
+        type: String
     },
-    status:{
-        type:String
-    }
+    des: {
+        type: String,
+        optional: true
+    },
+    // status:{
+    //     type:String
+    // }
 });
 
 Rooms.attachSchema(Rooms.schema);

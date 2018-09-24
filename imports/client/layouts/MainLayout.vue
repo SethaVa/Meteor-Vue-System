@@ -11,11 +11,20 @@
           <img src="/img/logo.png"
                class="logo-img">
         </div> -->
-      <!-- <aside-menu :active-menu="linkActiveClass"></aside-menu> -->
-      <component v-for="(aside, index) in asideMenus"
-                 :key="index"
-                 :is="aside"
-                 :active-menu="linkActiveClass"></component>
+      <el-menu :default-active="linkActiveClass"
+               text-color="#fff"
+               @select="handleAsideSelect">
+        <el-menu-item index="home">
+          <i class="fa fa-home aside-menu-icon"></i>
+          <span>Home</span>
+        </el-menu-item>
+        <!-- <aside-menu :active-menu="linkActiveClass"></aside-menu> -->
+        <!-- Dynamic module -->
+        <component v-for="(aside, index) in asideMenus"
+                   :key="index"
+                   :is="aside"
+                   :active-menu="linkActiveClass"></component>
+      </el-menu>
     </el-aside>
     <!-- <component :is="currentLayout"></component> -->
 
@@ -73,11 +82,7 @@ import _ from 'lodash'
 
 import AsideMenu from '../AsideMenu.vue'
 import HeaderMenu from '../HeaderMenu.vue'
-// import AsideMenuMini from '../AsideMenuMini.vue'
-// import AsideMenuUser from '../AsideMenuUser.vue'
-// import AsideMenuUserMini from '../AsideMenuUserMini.vue'
-// import AsideMenuManager from '../AsideMenuManager.vue'
-// import AsideMenuManagerMini from '../AsideMenuManagerMini.vue'
+
 import UserSetting from './UserSetting'
 import AdminSetting from './AdminSetting'
 import BranchSetting from './BranchSetting'
@@ -172,6 +177,9 @@ export default {
     })
   },
   methods: {
+     handleAsideSelect(index) {
+      this.$router.push({ name: index })
+    },
     _toggleMenu() {
       if (this.collapse == 'error') {
         this.collapse = 'success'

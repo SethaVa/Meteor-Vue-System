@@ -25,7 +25,7 @@ const routes = [
       headerTitle: 'Not Found',
     },
   },
-
+  // Login
   {
     path: '/login',
     name: 'login',
@@ -37,18 +37,18 @@ const routes = [
     },
   },
   // Home
-  // {
-  //   path: '/',
-  //   name: 'welcome',
-  //   component: Home,
-  //   meta: {
-  //     headerTitle: 'Home',
-  //     // breadcrumb: {
-  //     //   title: 'Home',
-  //     //   icon: 'fas fa-home',
-  //     // },
-  //   },
-  // },
+  {
+    path: '/',
+    name: 'home',
+    component: Home,
+    meta: {
+      headerTitle: 'Home',
+      // breadcrumb: {
+      //   title: 'Home',
+      //   icon: 'fas fa-home',
+      // },
+    },
+  },
   {
     path: '/main',
     component: {
@@ -64,8 +64,8 @@ const routes = [
         path: 'branch',
         name: 'branch',
         component: BranchList,
-        meta:{
-          headerTitle:'Branch'
+        meta: {
+          headerTitle: 'Branch'
         }
       },
       // Brach
@@ -73,8 +73,8 @@ const routes = [
         path: 'company',
         name: 'company',
         component: Company,
-        meta:{
-          headerTitle:'Company'
+        meta: {
+          headerTitle: 'Company'
         }
       },
       // User List
@@ -82,8 +82,8 @@ const routes = [
         path: 'user',
         name: 'user',
         component: UserList,
-        meta:{
-          headerTitle:'User'
+        meta: {
+          headerTitle: 'User'
         }
       },
       // User Profile
@@ -91,16 +91,16 @@ const routes = [
         path: 'profile/:_id',
         name: 'profile',
         component: Profile,
-        meta:{
-          headerTitle:'User Profile'
+        meta: {
+          headerTitle: 'User Profile'
         }
       },
       {
         path: 'exchange',
         name: 'exchange',
         component: Exchange,
-        meta:{
-          headerTitle:'Exchange Rate'
+        meta: {
+          headerTitle: 'Exchange Rate'
         }
       }
     ],

@@ -1,17 +1,16 @@
 <template>
   <div>
 
-    <component :is="currentDialog"
-               :visible="visibleDialog"
-               :update-id="updateId"
-               @modal-close="handleClose"></component>
+    <room-form :form-type="formType"
+               :update-doc="updateDoc"
+               @data-change="getData"></room-form>
 
     <!-- Table Data -->
-    <TableToolbar v-model="tableFilters"
+    <!-- <TableToolbar v-model="tableFilters"
                   @new="addNew">
-    </TableToolbar>
+    </TableToolbar> -->
+    <!-- :filters="tableFilters" -->
     <data-tables :data="tableData"
-                 :filters="tableFilters"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.value"
@@ -35,27 +34,29 @@
 </template>
 
 <script>
-import RoomInsert from './RoomInsert.vue'
-import RoomUpdate from './RoomUpdate.vue'
-import { findRoom, removeRoom } from '/imports/modules/school/api/rooms/methods.js'
+import Notify from '/imports/client/lib/notify'
+import {
+  findRoom,
+  removeRoom,
+} from '/imports/modules/school/api/rooms/methods.js'
 
+import RoomForm from './RoomForm.vue'
 // Table Action
-import TableToolbar from '/imports/client/components/TableToolbar.vue'
+// import TableToolbar from '/imports/client/components/TableToolbar.vue'
 import TableAction from '/imports/client/components/TableAction.vue'
 import removeMixin from '/imports/client/mixins/remove'
 
 export default {
   // name: 'Room',
-  components: { RoomInsert, RoomUpdate, TableToolbar, TableAction },
+  components: { RoomForm, TableAction },
   minxns: [removeMixin],
   data() {
     return {
-      currentDialog: null,
-      visibleDialog: false,
-      updateId: null,
+      formType: 'New',
+      updateDoc: null,
       tableData: [],
       titles: [
-        { label: 'Name', prop: 'roomName', sort: 'custom' },
+        { label: 'Name', prop: 'name', sort: 'custom' },
         { label: 'Describe', prop: 'des' },
       ],
       tableProps: {
@@ -74,7 +75,7 @@ export default {
     this.getData()
   },
   methods: {
-      renderTableMoreHeader(h, { column, $index }) {
+    renderTableMoreHeader(h, { column, $index }) {
       return h('h2', { class: 'el-icon-menu popover-icon' })
     },
     getData() {
@@ -82,15 +83,13 @@ export default {
         .callPromise({ selector: {}, options: { sort: { _id: -1 } } })
         .then(result => {
           this.tableData = result
+          this.formType = 'New'
         })
         .catch(err => {
-          this.$message(err.reason)
+          Notify.error({ message: err })
         })
     },
-    // Add new
-    addNew() {
-      this.currentDialog = RoomInsert
-    },
+
     // Table Action
     actionsList() {
       return ['edit', 'remove']
@@ -100,8 +99,9 @@ export default {
     },
     // Edit Data
     edit(row) {
-      this.updateId = row._id
-      this.currentDialog = RoomUpdate
+      // this.updateDoc = row._id
+      this.updateDoc = row
+      this.formType = 'Update'
     },
     remove(row) {
       this.$_removeMixin({
