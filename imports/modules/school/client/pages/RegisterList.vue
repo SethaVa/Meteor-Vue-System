@@ -132,7 +132,7 @@ export default {
     // Add new
     addNew() {
       // this.currentDialog = UserNew
-      this.$router.push({ name: 'registerNew'})
+      this.$router.push({ name: 'sch.registerNew'})
     },
     // Table Action
     actionsList() {
@@ -144,7 +144,7 @@ export default {
     // Edit Data
     edit(row) {
       this.$router.push({
-            name: 'registerEdit',
+            name: 'sch.registerEdit',
             params: { id: row._id },
           })
     },

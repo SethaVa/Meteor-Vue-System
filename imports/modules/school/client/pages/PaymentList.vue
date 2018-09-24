@@ -133,7 +133,7 @@ export default {
     },
     // Add new
     addNew() {
-      this.$router.push({ name: 'newPayment' })
+      this.$router.push({ name: 'sch.newPayment' })
     },
     // Table Action
     actionsList() {
@@ -150,7 +150,7 @@ export default {
         })
       } else {
         this.$router.push({
-          name: 'editPayment',
+          name: 'sch.editPayment',
           params: { id: row },
         })
       }
