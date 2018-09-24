@@ -5,83 +5,86 @@
     <el-menu :default-active="activeMenu"
              @select="handleMenuSelect"
              text-color="#fff">
-      <el-menu-item index="home">
+      <el-menu-item index="sch.home">
         <i class="fas fa-tachometer-alt"></i>
         <span>Dashboad</span>
       </el-menu-item>
       <!-- //======================== // Student //======================== -->
-      <el-submenu index="student">
+      <el-submenu index="sch.student">
         <template slot="title">
           <i class="fa fa-graduation-cap"></i>
           Student
         </template>
-        <el-menu-item index="student">
+        <el-menu-item index="sch.student">
           <span>Student</span>
         </el-menu-item>
-        <el-menu-item index="registerList">
+        <el-menu-item index="sch.registerList">
           <span>Register</span>
         </el-menu-item>
-        <el-menu-item index="classStudy">
+        <el-menu-item index="sch.classStudy">
           <span>Class Study</span>
         </el-menu-item>
 
-        <el-menu-item index="exchange-class">
+        <el-menu-item index="sch.exchange-class">
           <span>Change Class</span>
         </el-menu-item>
       </el-submenu>
 
       <!-- //===============================// Payment //===================== -->
-      <el-submenu index="payment">
+      <el-submenu index="sch.payment">
         <template slot="title">
           <i class="fas fa-money-bill-alt"></i>
           Payment
         </template>
-        <el-menu-item index="payment">
+        <el-menu-item index="sch.payment">
           <span>Payment</span>
         </el-menu-item>
-        <el-menu-item index="refund">
+        <el-menu-item index="sch.refund">
           <span>Refund</span>
         </el-menu-item>
       </el-submenu>
 
       <!-- //========================// Accounting //====================== -->
-      <el-submenu index="account">
+      <el-submenu index="sch.account">
         <template slot="title">
           <i class="fas fa-chart-line"></i>Income Statement
         </template>
-        <el-menu-item index="income">
+        <el-menu-item index="sch.income">
           <span>Income/Expend</span>
         </el-menu-item>
       </el-submenu>
 
       <!-- //==================================// Staff //====================== -->
-      <el-submenu index="staff">
+      <el-submenu index="sch.staff">
         <template slot="title">
           <i class="fa fa-users"></i>staff
         </template>
-        <el-menu-item index="position">
+        <el-menu-item index="sch.position">
           <span>Position</span>
         </el-menu-item>
-        <el-menu-item index="staff">
+        <el-menu-item index="sch.staff">
           <span>Staff</span>
         </el-menu-item>
       </el-submenu>
 
       <!-- //========================== // Setting //========================== -->
-      <el-submenu index="stting">
+      <el-submenu index="sch.stting">
         <template slot="title">
           <i class="fa fa-cogs"></i>Setting
         </template>
-        <el-menu-item index="subject">
+        <el-menu-item index="sch.level">
+          <span>Level</span>
+        </el-menu-item>
+        <el-menu-item index="sch.subject">
           <span>Subject</span>
         </el-menu-item>
-        <el-menu-item index="time">
+        <el-menu-item index="sch.time">
           <span>Time</span>
         </el-menu-item>
-        <el-menu-item index="salary-rate">
+        <el-menu-item index="sch.salary-rate">
           <span>Rate</span>
         </el-menu-item>
-        <el-menu-item index="room">
+        <el-menu-item index="sch.room">
           <span>Room</span>
         </el-menu-item>
       </el-submenu>

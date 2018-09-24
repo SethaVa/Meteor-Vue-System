@@ -1,16 +1,16 @@
 import { Mongo } from 'meteor/mongo'
 import SimpleSchema from 'simpl-schema'
 
-const leveleStudy = new Mongo.Collection('sch_leveleStudy')
+const leveleStudy = new Mongo.Collection('sch_level')
 
 leveleStudy.schema = new SimpleSchema({
-  leveleStudy: {
+  level: {
     type: String,
   },
-  des: {
-    type: String,
-    optional: true,
-  },
+  // des: {
+  //   type: String,
+  //   optional: true,
+  // },
 })
 
 leveleStudy.attachSchema(leveleStudy.schema)
