@@ -12,7 +12,6 @@ import SimpleSchema from 'simpl-schema'
 import Payment from './payment'
 import PaymentDetails from './payment-details'
 import Students from '../students/students'
-import Exchange from '../exchanges/exchanges'
 import _ from 'lodash'
 import moment from 'moment'
 
@@ -21,7 +20,6 @@ import {
   removeIncomeFromOther,
   updateIncomeForPaymentNew,
 } from '../Income/methods'
-import SalaryRate from '../salary-rate/salaryRate'
 
 // Find All Data
 export const findPayment = new ValidatedMethod({

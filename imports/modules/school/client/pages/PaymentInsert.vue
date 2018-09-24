@@ -154,7 +154,7 @@ import {
   findOnePaymentByCode,
 } from '../..//api/payment/methods'
 import { insertPayment } from '/imports/modules/school/api/payment/methods'
-import { findExchanges } from '/imports/modules/school/api/exchanges/methods'
+import { findExchanges } from '/imports/api/exchanges/methods.js'
 //
 import StudentPay from './StudentPay.vue'
 import SubPayment from '../components/subPayment.vue'

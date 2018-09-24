@@ -75,14 +75,8 @@
         <el-menu-item index="subject">
           <span>Subject</span>
         </el-menu-item>
-        <!-- <el-menu-item index="user">
-          <span>User</span>
-        </el-menu-item> -->
         <el-menu-item index="time">
           <span>Time</span>
-        </el-menu-item>
-        <el-menu-item index="exchange">
-          <span>Exchange</span>
         </el-menu-item>
         <el-menu-item index="salary-rate">
           <span>Rate</span>

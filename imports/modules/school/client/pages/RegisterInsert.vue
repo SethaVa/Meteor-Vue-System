@@ -193,7 +193,7 @@ import {
   findPaymentForClass,
   findOnePaymentByCode,
 } from '/imports/modules/school/api/payment/methods'
-import { findExchanges } from '/imports/modules/school/api/exchanges/methods'
+import { findExchanges } from '/imports/api/exchanges/methods.js'
 const numeral = require('numeral')
 export default {
   // name: 'RegisterInsert',

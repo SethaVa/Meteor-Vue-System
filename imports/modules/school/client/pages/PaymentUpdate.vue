@@ -133,7 +133,7 @@ import {
   updatePaymentForPayment,
   findOnePaymentByCode,
 } from '/imports/modules/school/api/payment/methods'
-import { findExchanges } from '/imports/modules/school/api/exchanges/methods'
+import { findExchanges } from '/imports/api/exchanges/methods.js'
 
 import SubPayment from '../components/subPayment'
 export default {

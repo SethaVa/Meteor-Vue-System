@@ -66,7 +66,7 @@ import RefundUpdate from './RefundUpdate.vue'
 import compareDate from '/imports/modules/school/util/compare-date'
 
 import { findRefund, removeRefund } from '/imports/modules/school/api/Refund/methods'
-import { findExchanges } from '/imports/modules/school/api/exchanges/methods'
+import { findExchanges } from '/imports/api/exchanges/methods.js'
 
 // Table Action
 import TableToolbar from '/imports/client/components/TableToolbar.vue'

@@ -117,7 +117,7 @@ import compareDate from '/imports/modules/school/util/compare-date'
 import Lookup from '/imports/client/lib/Lookup-Value'
 import { findPaymentForClass } from '/imports/modules/school/api/payment/methods'
 import { insertRefund } from '/imports/modules/school/api/Refund/methods'
-import { findExchanges } from '/imports/modules/school/api/exchanges/methods'
+import { findExchanges } from '/imports/api/exchanges/methods.js'
 
 import StudentPay from './StudentPay.vue'
 import SubPayment from '../components/subPayment'

@@ -15,7 +15,8 @@
                           prop="exDate">
               <el-date-picker v-model="form.exDate"
                               type="date"
-                              format="dd/MM/yyyy"
+                              :clearable="false"
+                              :format="dateFormat"
                               style="width:100%">
               </el-date-picker>
             </el-form-item>
@@ -32,23 +33,35 @@
         </el-row>
 
         <el-row :gutter="10">
-          <el-col :span="9">
+          <el-col :span="6">
             <el-form-item label="USD"
                           prop="usd">
               <el-input-number v-model="form.usd"
                                disabled
-                               controls-position="right"
-                               style="width:100%"></el-input-number>
+                               :precision="decimalNumber"
+                               :controls="false"
+                               class="number"></el-input-number>
             </el-form-item>
           </el-col>
 
-          <el-col :span="9">
+          <el-col :span="6">
             <el-form-item label="KHR"
                           prop="khr">
-              <el-input-number ref="khr"
-                               v-model="form.khr"
-                               controls-position="right"
-                               style="width:100%"></el-input-number>
+              <el-input-number v-model="form.khr"
+                               :precision="decimalNumber"
+                               :min="0"
+                               :controls="false"
+                               class="number"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="THB"
+                          prop="thb">
+              <el-input-number v-model="form.thb"
+                               :precision="decimalNumber"
+                               :min="0"
+                               :controls="false"
+                               class="number"></el-input-number>
             </el-form-item>
           </el-col>
 
@@ -72,7 +85,12 @@ import Msg from '/imports/client/lib/message'
 import Notify from '/imports/client/lib/notify'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 
-import { insertExchange, updateExchange } from '/imports/modules/school/api/exchanges/methods'
+import {
+  insertExchange,
+  updateExchange,
+} from '/imports/api/exchanges/methods.js'
+
+import { mapState } from 'vuex'
 
 export default {
   name: 'ExchangeForm',
@@ -94,19 +112,31 @@ export default {
         exDate: moment().toDate(),
         usd: 1,
         khr: 0,
+        thb: 0,
       },
       rules: {
         exDate: [{ required: true }],
         usd: [{ required: true }],
         khr: [{ required: true }],
+        thb: [{ required: true }],
       },
     }
+  },
+  computed: {
+    ...mapState({
+      decimalNumber(state) {
+        let company = state.app && state.app.company
+        return company && company.setting.decimalNumber
+      },
+    }),
+    dateFormat() {
+      return this.$store.getters['app/dateFormat']
+    },
   },
   watch: {
     updateDoc(val) {
       if (val) {
         this.form = val
-        this.focusForm('khr')
       } else {
         this.form = {
           base: 'USD',
@@ -118,13 +148,8 @@ export default {
       }
     },
   },
-  mounted() {
-    this.focusForm('khr')
-  },
+  mounted() {},
   methods: {
-    focusForm(refName) {
-      this.$refs[refName].$el.querySelector('input').focus()
-    },
     submitForm() {
       this.$refs['form'].validate(valid => {
         if (valid) {
@@ -169,7 +194,6 @@ export default {
     },
     handleCancel() {
       this.resetForm()
-      this.focusForm('khr')
       this.$emit('form-change')
     },
   },
@@ -177,5 +201,7 @@ export default {
 </script>
 
 <style scoped>
-
+.number {
+  width: 100%;
+}
 </style>

@@ -2,4 +2,4 @@
 import './accounts'
 import './fixtures.js'
 import './register-api.js'
-import './register-util'
+import './register-utils'

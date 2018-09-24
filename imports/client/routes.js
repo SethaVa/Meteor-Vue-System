@@ -13,6 +13,8 @@ import Company from './pages/Company'
 import UserList from './pages/User.vue'
 //Profile
 import Profile from './pages/UserProfile.vue'
+//Exchange
+import Exchange from './pages/Exchange.vue'
 
 const routes = [
   //Notfound
@@ -62,25 +64,45 @@ const routes = [
         path: 'branch',
         name: 'branch',
         component: BranchList,
+        meta:{
+          headerTitle:'Branch'
+        }
       },
       // Brach
       {
         path: 'company',
         name: 'company',
         component: Company,
+        meta:{
+          headerTitle:'Company'
+        }
       },
       // User List
       {
         path: 'user',
         name: 'user',
         component: UserList,
+        meta:{
+          headerTitle:'User'
+        }
       },
       // User Profile
       {
         path: 'profile/:_id',
         name: 'profile',
         component: Profile,
+        meta:{
+          headerTitle:'User Profile'
+        }
       },
+      {
+        path: 'exchange',
+        name: 'exchange',
+        component: Exchange,
+        meta:{
+          headerTitle:'Exchange Rate'
+        }
+      }
     ],
   },
 ]

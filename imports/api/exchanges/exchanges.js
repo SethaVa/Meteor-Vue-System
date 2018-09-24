@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo'
 import SimpleSchema from 'simpl-schema'
 
-const Exchanges = new Mongo.Collection('sch_exchanges')
+const Exchanges = new Mongo.Collection('exchanges')
 
 // Schema
 Exchanges.schema = new SimpleSchema({
@@ -16,6 +16,9 @@ Exchanges.schema = new SimpleSchema({
     type: Number,
   },
   khr: {
+    type: Number,
+  },
+  thb: {
     type: Number,
   },
 })
