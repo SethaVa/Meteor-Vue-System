@@ -1,7 +1,7 @@
 import {Mongo} from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 
-const Staff = new Mongo.Collection('staff');
+const Staff = new Mongo.Collection('sch_staff');
 
 Staff.schema = new SimpleSchema({
     name:{

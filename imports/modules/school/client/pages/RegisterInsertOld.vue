@@ -148,7 +148,7 @@ import {
   lookupClass,
   lookupStudent,
   lookupStudentForExpire,
-} from '/imports/util/lookup-methods'
+} from '/imports/utils/lookup-methods'
 import {
   insertPayementForNew,
   findPaymentForClass,

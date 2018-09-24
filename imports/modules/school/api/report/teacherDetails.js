@@ -17,7 +17,7 @@ import ClassStudy from '../classStudy/classStudy'
 
 
 export const findTeacherDetails = new ValidatedMethod({
-  name: 'findTeacherDetails',
+  name: 'sch.findTeacherDetails',
   mixins: [CallPromiseMixin],
   validate: null,
   run({

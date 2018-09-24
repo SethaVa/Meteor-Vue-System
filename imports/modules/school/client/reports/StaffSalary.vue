@@ -131,7 +131,7 @@ import wrapCurrentDate from '/imports/client/lib/wrap-current-time'
 import { Printd } from 'printd'
 import Notify from '/imports/client/lib/notify'
 import Lookup from '../lib/Lookup-Value'
-import { lookupType } from '/imports/util/lookup-methods'
+import { lookupType } from '/imports/utils/lookup-methods'
 //
 import { findSalary } from '/imports/modules/school/api/report/salary'
 import { dateRangePickerOpts } from '/imports/client/lib/date-range-picker-opts'

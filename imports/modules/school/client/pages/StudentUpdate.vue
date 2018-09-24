@@ -1,10 +1,11 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" :visible="visible"
+    <el-dialog :close-on-click-modal="false"
+               :visible="visible"
                :before-close="handleClose"
                width="80%">
       <span slot="title">
-      <i class="fa fa-user"></i> Student</span>
+        <i class="fa fa-user"></i> Student</span>
       <el-form label-position="left"
                label-width="100px"
                :model="form"
@@ -15,7 +16,7 @@
           <el-col :span="12">
             <el-form-item label="Date"
                           prop="registerDate">
-              <el-date-picker v-model="form.registerDate"
+              <el-date-picker :format="dateFormat" v-model="form.registerDate"
                               style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="Type"
@@ -80,6 +81,9 @@ import lookupValue from '/imports/client/lib/Lookup-Value'
 import _ from 'lodash'
 import { updateStudent } from '/imports/modules/school/api/students/methods.js'
 import moment from 'moment'
+
+import { mapState } from 'vuex'
+
 export default {
   // name: 'StudentUpdate',
   props: {
@@ -123,18 +127,32 @@ export default {
           { required: true, message: 'Please Select Type', trigger: 'blur' },
         ],
         dob: [
-          { required: true, message: 'Date of birth is required!', trigger: 'blur' },
+          {
+            required: true,
+            message: 'Date of birth is required!',
+            trigger: 'blur',
+          },
         ],
       },
     }
   },
-
+  computed: {
+    ...mapState({
+      currentBranchId(state) {
+        return state.app && state.app.currentBranch._id
+      },
+    }),
+    dateFormat() {
+      return this.$store.getters['app/dateFormat']
+    },
+  },
   methods: {
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.form.dob = wrapCurrentTime(this.form.dob)
           this.form.registerDate = wrapCurrentTime(this.form.registerDate)
+          this.branchId = this.currentBranchId
           // console.log(this.form)
           updateStudent
             .callPromise({ doc: this.form })

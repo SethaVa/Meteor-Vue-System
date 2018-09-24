@@ -17,7 +17,7 @@ import Payment from '../payment/payment'
 
 
 export const findStudentDebt = new ValidatedMethod({
-  name: 'findStudentDebt',
+  name: 'sch.findStudentDebt',
   mixins: [CallPromiseMixin],
   validate: null,
   run({

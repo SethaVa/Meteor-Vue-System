@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import SimpleSchema from 'simpl-schema'
 import { Mongo } from 'meteor/mongo'
 
-const IncomeDetails = new Mongo.Collection('incomeDetails')
+const IncomeDetails = new Mongo.Collection('sch_incomeDetails')
 IncomeDetails.schema = new SimpleSchema({
   tranDate: {
     type: Date,

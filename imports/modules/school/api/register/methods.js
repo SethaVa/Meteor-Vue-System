@@ -10,7 +10,7 @@ import _ from 'lodash'
 import { insertIncome, removeIncomeFromOther } from '/imports/modules/school/api/Income/methods'
 // Find All Data 
 export const findRegister = new ValidatedMethod({
-  name: 'findRegister',
+  name: 'sch.findRegister',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ selector, option }) {
@@ -24,7 +24,7 @@ export const findRegister = new ValidatedMethod({
 })
 
 export const findRegisterForClass = new ValidatedMethod({
-  name: 'findRegisterForClass',
+  name: 'sch.findRegisterForClass',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ selector }) {
@@ -37,7 +37,7 @@ export const findRegisterForClass = new ValidatedMethod({
 })
 
 // export const findClassForStudenDetails = new ValidatedMethod({
-//   name: 'findClassForStudenDetails',
+//   name: 'sch.findClassForStudenDetails',
 //   mixins: [CallPromiseMixin],
 //   validate: null,
 //   run({ selector }) {
@@ -51,7 +51,7 @@ export const findRegisterForClass = new ValidatedMethod({
 
 // find One
 export const findOneRegister = new ValidatedMethod({
-  name: 'findOneRegister',
+  name: 'sch.findOneRegister',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ _id }) {
@@ -63,7 +63,7 @@ export const findOneRegister = new ValidatedMethod({
 
 // Find Data For Options
 export const findRegisterOpts = new ValidatedMethod({
-  name: 'findRegisterOpts',
+  name: 'sch.findRegisterOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run(selector, option) {
@@ -85,7 +85,7 @@ export const findRegisterOpts = new ValidatedMethod({
 
 // Insert សំរាបើសិស្សNew
 export const insertRegister = new ValidatedMethod({
-  name: 'insertRegister',
+  name: 'sch.insertRegister',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Register.schema,
@@ -121,7 +121,7 @@ export const insertRegister = new ValidatedMethod({
 })
 // Update សំរាប់សិស្សNew
 export const updateRegisterForRefund = new ValidatedMethod({
-  name: 'updateRegister',
+  name: 'sch.updateRegister',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Register.schema,
@@ -141,7 +141,7 @@ export const updateRegisterForRefund = new ValidatedMethod({
 })
 // Update Status
 export const updateRegisterStatus = new ValidatedMethod({
-  name: 'updateRegisterStatus',
+  name: 'sch.updateRegisterStatus',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: String,
@@ -163,7 +163,7 @@ export const updateRegisterStatus = new ValidatedMethod({
 
 // Delete
 export const removeRegister = new ValidatedMethod({
-  name: 'removeRegister',
+  name: 'sch.removeRegister',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: String,

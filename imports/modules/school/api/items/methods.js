@@ -16,7 +16,7 @@ import moment from 'moment'
 import Items from './items'
 
 export const findItems = new ValidatedMethod({
-  name: 'findItems',
+  name: 'sch.findItems',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -50,7 +50,7 @@ export const findItems = new ValidatedMethod({
 })
 //find for Options
 export const findItemsOpts = new ValidatedMethod({
-  name: 'findItemsOpts',
+  name: 'sch.findItemsOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -74,7 +74,7 @@ export const findItemsOpts = new ValidatedMethod({
 })
 
 export const findOneItems = new ValidatedMethod({
-  name: 'findOneItems',
+  name: 'sch.findOneItems',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -89,7 +89,7 @@ export const findOneItems = new ValidatedMethod({
 })
 
 export const insertItems = new ValidatedMethod({
-  name: 'insertItems',
+  name: 'sch.insertItems',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -100,7 +100,7 @@ export const insertItems = new ValidatedMethod({
 })
 
 export const updateItems = new ValidatedMethod({
-  name: 'updateItems',
+  name: 'sch.updateItems',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -115,7 +115,7 @@ export const updateItems = new ValidatedMethod({
 })
 
 export const removeItems = new ValidatedMethod({
-  name: 'removeItems',
+  name: 'sch.removeItems',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

@@ -25,7 +25,7 @@ import SalaryRate from '../salary-rate/salaryRate'
 
 // Find All Data
 export const findPayment = new ValidatedMethod({
-  name: 'findPayment',
+  name: 'sch.findPayment',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -42,7 +42,7 @@ export const findPayment = new ValidatedMethod({
 })
 
 export const findPaymentForClass = new ValidatedMethod({
-  name: 'findPaymentForClass',
+  name: 'sch.findPaymentForClass',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -57,7 +57,7 @@ export const findPaymentForClass = new ValidatedMethod({
 })
 
 export const findClassForStudenDetails = new ValidatedMethod({
-  name: 'findClassForStudenDetails',
+  name: 'sch.findClassForStudenDetails',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -73,7 +73,7 @@ export const findClassForStudenDetails = new ValidatedMethod({
 
 // find One
 export const findOnePayment = new ValidatedMethod({
-  name: 'findOnePayment',
+  name: 'sch.findOnePayment',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -87,7 +87,7 @@ export const findOnePayment = new ValidatedMethod({
 
 // find One
 export const findOnePaymentByCode = new ValidatedMethod({
-  name: 'findOnePaymentByCode',
+  name: 'sch.findOnePaymentByCode',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -101,7 +101,7 @@ export const findOnePaymentByCode = new ValidatedMethod({
 
 // Find Data For Options
 export const findPaymentOpts = new ValidatedMethod({
-  name: 'findPaymentOpts',
+  name: 'sch.findPaymentOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run(selector, option) {
@@ -122,7 +122,7 @@ export const findPaymentOpts = new ValidatedMethod({
 })
 // For New Student
 export const insertPayementForNew = new ValidatedMethod({
-  name: 'insertPaymentForNew',
+  name: 'sch.insertPaymentForNew',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Payment.schema,
@@ -179,7 +179,7 @@ export const insertPayementForNew = new ValidatedMethod({
 })
 // update for new Student
 export const updatePayementForNew = new ValidatedMethod({
-  name: 'updatePayementForNew',
+  name: 'sch.updatePayementForNew',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -238,7 +238,7 @@ export const updatePayementForNew = new ValidatedMethod({
 // Insert from Exchange Student
 
 export const insertPaymentFromExchangeClass = new ValidatedMethod({
-  name: 'insertPaymentFromExchangeClass',
+  name: 'sch.insertPaymentFromExchangeClass',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Payment.schema
@@ -322,7 +322,7 @@ export const insertPaymentFromExchangeClass = new ValidatedMethod({
 
 // Insert សំរាបើសិស្សចាស់ដែលគាតមកបងលុយ
 export const insertPayment = new ValidatedMethod({
-  name: 'insertPayment',
+  name: 'sch.insertPayment',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Payment.schema
@@ -380,7 +380,7 @@ export const insertPayment = new ValidatedMethod({
 
 // update សំរាបើសិស្សចាស់ដែលគាតមកបងលុយ
 export const updatePaymentForPayment = new ValidatedMethod({
-  name: 'updatePaymentForPayment',
+  name: 'sch.updatePaymentForPayment',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Payment.schema,
@@ -442,7 +442,7 @@ export const updatePaymentForPayment = new ValidatedMethod({
 
 // Update សំរាប់សិស្សដែលគាតជំពាក់លុយ រួចហើយគាតមកសងលុយវិញ
 export const updatePaymentForRefund = new ValidatedMethod({
-  name: 'updatePayment',
+  name: 'sch.updatePayment',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -497,7 +497,7 @@ export const updatePaymentForRefund = new ValidatedMethod({
 })
 // Update Status
 export const updatePaymentStatus = new ValidatedMethod({
-  name: 'updatePaymentStatus',
+  name: 'sch.updatePaymentStatus',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: String,
@@ -527,7 +527,7 @@ export const updatePaymentStatus = new ValidatedMethod({
 
 // Delete
 export const removePayment = new ValidatedMethod({
-  name: 'removePayment',
+  name: 'sch.removePayment',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     selector: {
@@ -570,7 +570,7 @@ export const removePayment = new ValidatedMethod({
 
 // Delete ECC = Exchange Class
 export const removePaymentFromECC = new ValidatedMethod({
-  name: 'removePaymentFromECC',
+  name: 'sch.removePaymentFromECC',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     selector: {
@@ -652,7 +652,7 @@ export const removePaymentFromECC = new ValidatedMethod({
 
 // Remove Payment from Refund
 export const removePaymentFromRefund = new ValidatedMethod({
-  name: 'removePaymentFromRefund',
+  name: 'sch.removePaymentFromRefund',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

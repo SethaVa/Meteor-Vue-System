@@ -7,7 +7,7 @@ import _ from 'lodash'
 import leveleStudy from './level'
 
 export const findLeveleStudy = new ValidatedMethod({
-  name: 'findleveleStudy',
+  name: 'sch.findleveleStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ selector, options }) {
@@ -21,7 +21,7 @@ export const findLeveleStudy = new ValidatedMethod({
 })
 //find for Options
 export const findLevelStudyOpts = new ValidatedMethod({
-  name: 'findlevelStudyOpt',
+  name: 'sch.findlevelStudyOpt',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ selector, options }) {
@@ -42,7 +42,7 @@ export const findLevelStudyOpts = new ValidatedMethod({
 })
 
 export const findOneLeveleStudy = new ValidatedMethod({
-  name: 'findOneLeveleStudy',
+  name: 'sch.findOneLeveleStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run(id) {
@@ -53,7 +53,7 @@ export const findOneLeveleStudy = new ValidatedMethod({
 })
 
 export const insertLeveleStudy = new ValidatedMethod({
-  name: 'insertLeveleStudy',
+  name: 'sch.insertLeveleStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -64,7 +64,7 @@ export const insertLeveleStudy = new ValidatedMethod({
 })
 
 export const updateLeveleStudy = new ValidatedMethod({
-  name: 'updateLeveleStudy',
+  name: 'sch.updateLeveleStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -75,7 +75,7 @@ export const updateLeveleStudy = new ValidatedMethod({
 })
 
 export const removeLevelStudy = new ValidatedMethod({
-  name: 'removeLeveleStudy',
+  name: 'sch.removeLeveleStudy',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: { type: String },

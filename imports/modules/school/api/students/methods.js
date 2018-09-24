@@ -9,11 +9,16 @@ import {
 } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
+import {
+  throwError
+} from '/imports/utils/security'
+import getNextSeq from '/imports/utils/get-next-seq'
+
 import Students from './students'
 
 // Find All Data
 export const findStudents = new ValidatedMethod({
-  name: 'findStudents',
+  name: 'sch.findStudents',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -35,7 +40,7 @@ export const findStudents = new ValidatedMethod({
 
 // Find All Data
 export const findStudentsByDate = new ValidatedMethod({
-  name: 'findStudentsByDate',
+  name: 'sch.findStudentsByDate',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -53,7 +58,7 @@ export const findStudentsByDate = new ValidatedMethod({
 
 // find One
 export const findOneStudent = new ValidatedMethod({
-  name: 'findOneStudent',
+  name: 'sch.findOneStudent',
   mixins: [CallPromiseMixin],
   validate: null,
   run(_id) {
@@ -65,7 +70,7 @@ export const findOneStudent = new ValidatedMethod({
 
 // Insert
 export const insertStudent = new ValidatedMethod({
-  name: 'insertStudent',
+  name: 'sch.insertStudent',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Students.schema,
@@ -74,11 +79,37 @@ export const insertStudent = new ValidatedMethod({
     doc
   }) {
     if (Meteor.isServer) {
+
+      const _id = getNextSeq({
+        // Mandatory
+        _id: `sch_students${doc.branchId}`,
+        // Optional
+        opts: {
+          seq: 1,
+          // paddingType: 'start',
+          // paddingLength: 6,
+          // paddingChar: '0',
+          prefix: `${doc.branchId}-`,
+        },
+      })
       try {
+        doc._id = _id
         Students.insert(doc)
-        return 'Success'
+        return _id
       } catch (error) {
-        throw new Meteor.Error('Error', 'Payment', error.reason)
+        // Decrement seq
+        getNextSeq({
+          // filter: {
+          _id: 'sch_students',
+          // },
+          opts: {
+            seq: -1,
+          },
+        })
+        Students.remove({
+          _id: _id,
+        })
+        throwError(error)
       }
     }
   },
@@ -86,7 +117,7 @@ export const insertStudent = new ValidatedMethod({
 
 // Update
 export const updateStudent = new ValidatedMethod({
-  name: 'updateStudent',
+  name: 'sch.updateStudent',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: Students.schema,
@@ -107,7 +138,7 @@ export const updateStudent = new ValidatedMethod({
 
 // Delete
 export const removeStudent = new ValidatedMethod({
-  name: 'removeStudent',
+  name: 'sch.removeStudent',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

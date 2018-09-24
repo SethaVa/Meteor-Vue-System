@@ -43,7 +43,7 @@ const inUpSchema = new SimpleSchema({
 })
 
 export const findIncome = new ValidatedMethod({
-  name: 'findIncome',
+  name: 'sch.findIncome',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -60,7 +60,7 @@ export const findIncome = new ValidatedMethod({
 
 // Reprot Income and Expent
 export const findIncomeExpend = new ValidatedMethod({
-  name: 'findIncomeExpend',
+  name: 'sch.findIncomeExpend',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -78,7 +78,7 @@ export const findIncomeExpend = new ValidatedMethod({
 
 // find for Daily Report from Register Payment Refund
 export const findDailyReport = new ValidatedMethod({
-  name: 'findDailyReport',
+  name: 'sch.findDailyReport',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -95,7 +95,7 @@ export const findDailyReport = new ValidatedMethod({
 
 // find for Daily Report from Register Payment Refund
 export const findMonthlyReport = new ValidatedMethod({
-  name: 'findMonthlyReport',
+  name: 'sch.findMonthlyReport',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -113,7 +113,7 @@ export const findMonthlyReport = new ValidatedMethod({
 
 
 export const findOneIncome = new ValidatedMethod({
-  name: 'findOneIncome',
+  name: 'sch.findOneIncome',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -136,7 +136,7 @@ export const findOneIncome = new ValidatedMethod({
 })
 //insert
 export const insertIncome = new ValidatedMethod({
-  name: 'insertIncome',
+  name: 'sch.insertIncome',
   mixins: [CallPromiseMixin],
   validate: inUpSchema.validator(),
   run({
@@ -180,7 +180,7 @@ export const insertIncome = new ValidatedMethod({
 })
 
 export const updateIncome = new ValidatedMethod({
-  name: 'updateIncome',
+  name: 'sch.updateIncome',
   mixins: [CallPromiseMixin],
   validate: inUpSchema.validator(),
   run({
@@ -220,7 +220,7 @@ export const updateIncome = new ValidatedMethod({
 })
 
 export const updateIncomeForPaymentNew = new ValidatedMethod({
-  name: 'updateIncomeForPaymentNew',
+  name: 'sch.updateIncomeForPaymentNew',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -239,7 +239,7 @@ export const updateIncomeForPaymentNew = new ValidatedMethod({
 })
 
 export const removeIncome = new ValidatedMethod({
-  name: 'removeIncome',
+  name: 'sch.removeIncome',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {
@@ -261,7 +261,7 @@ export const removeIncome = new ValidatedMethod({
 })
 
 export const removeIncomeFromOther = new ValidatedMethod({
-  name: 'removeIncomeFromOther',
+  name: 'sch.removeIncomeFromOther',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     referenceId: {

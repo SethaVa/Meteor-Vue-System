@@ -16,7 +16,7 @@ import moment from 'moment'
 import TimeStudy from './times'
 
 export const findTimeStudy = new ValidatedMethod({
-  name: 'findTimeStudy',
+  name: 'sch.findTimeStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -34,7 +34,7 @@ export const findTimeStudy = new ValidatedMethod({
 })
 //find for Options
 export const findTimeStudyOpts = new ValidatedMethod({
-  name: 'findTimeStudyOpts',
+  name: 'sch.findTimeStudyOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -58,7 +58,7 @@ export const findTimeStudyOpts = new ValidatedMethod({
 })
 
 export const findOneTimeStudy = new ValidatedMethod({
-  name: 'findOneTimeStudy',
+  name: 'sch.findOneTimeStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -73,7 +73,7 @@ export const findOneTimeStudy = new ValidatedMethod({
 })
 
 export const insertTimeStudy = new ValidatedMethod({
-  name: 'insertTimeStudy',
+  name: 'sch.insertTimeStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -84,7 +84,7 @@ export const insertTimeStudy = new ValidatedMethod({
 })
 
 export const updateTimeStudy = new ValidatedMethod({
-  name: 'updateTimeStudy',
+  name: 'sch.updateTimeStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -99,7 +99,7 @@ export const updateTimeStudy = new ValidatedMethod({
 })
 
 export const removeTimeStudy = new ValidatedMethod({
-  name: 'removeTimeStudy',
+  name: 'sch.removeTimeStudy',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

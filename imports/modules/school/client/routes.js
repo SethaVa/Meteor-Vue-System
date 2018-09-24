@@ -42,7 +42,7 @@ import StockList from './pages/StockList.vue'
 
 const routes = [
   {
-    path: '/school',
+    path: '/sch',
     component: {
       render(h) {
         return h('router-view')

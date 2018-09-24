@@ -19,7 +19,7 @@ import PaymentDetails from '../payment/payment-details'
 
 // Find Salay
 export const findSalary = new ValidatedMethod({
-  name: 'findSalary',
+  name: 'sch.findSalary',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     selector: Array,

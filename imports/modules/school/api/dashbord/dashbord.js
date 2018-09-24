@@ -19,7 +19,7 @@ import Payment from '../payment/payment'
 
 // Find Student to show in dash bord
 export const findStudentByType = new ValidatedMethod({
-  name: 'findStudentByType',
+  name: 'sch.findStudentByType',
   mixins: [CallPromiseMixin],
   validate: null,
   run() {
@@ -33,7 +33,7 @@ export const findStudentByType = new ValidatedMethod({
 
 //count Class
 export const countClass = new ValidatedMethod({
-  name: 'countClass',
+  name: 'sch.countClass',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -51,7 +51,7 @@ export const countClass = new ValidatedMethod({
 
 // Count Staff
 export const countStaff = new ValidatedMethod({
-  name: 'countStaff',
+  name: 'sch.countStaff',
   mixins: [CallPromiseMixin],
   validate: null,
   run() {
@@ -64,7 +64,7 @@ export const countStaff = new ValidatedMethod({
 
 // Find All Data
 export const countRoom = new ValidatedMethod({
-  name: 'countRoom',
+  name: 'sch.countRoom',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -83,7 +83,7 @@ export const countRoom = new ValidatedMethod({
 
 // Find All Data
 export const countStudents = new ValidatedMethod({
-  name: 'countStudents',
+  name: 'sch.countStudents',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -101,7 +101,7 @@ export const countStudents = new ValidatedMethod({
 
 // Find
 export const countSubject = new ValidatedMethod({
-  name: 'countSubject',
+  name: 'sch.countSubject',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -120,7 +120,7 @@ export const countSubject = new ValidatedMethod({
 
 // Find
 export const countPayment = new ValidatedMethod({
-  name: 'countPayment',
+  name: 'sch.countPayment',
   mixins: [CallPromiseMixin],
   validate: null,
   run({

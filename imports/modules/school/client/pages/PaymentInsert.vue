@@ -148,7 +148,7 @@ import _ from 'lodash'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import compareDate from '/imports/modules/school/util/compare-date'
 import Lookup from '/imports/client/lib/Lookup-Value'
-import { getNextRef } from '/imports/util/get-next-ref'
+import { getNextRef } from '/imports/utils/get-next-ref'
 import {
   findPaymentForClass,
   findOnePaymentByCode,

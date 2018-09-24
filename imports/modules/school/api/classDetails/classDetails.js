@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import SimpleSchema from 'simpl-schema'
 import { Mongo } from 'meteor/mongo'
 
-const ClassDetails = new Mongo.Collection('classDetails')
+const ClassDetails = new Mongo.Collection('sch_classDetails')
 ClassDetails.schema = new SimpleSchema({
   referenceId: {
     type: String,

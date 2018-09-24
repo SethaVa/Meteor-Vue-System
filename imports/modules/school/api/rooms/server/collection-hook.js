@@ -1,4 +1,4 @@
-import AutoId from '/imports/util/auto-id';
+import AutoId from '/imports/utils/auto-id';
 import Room from '../room';
 
 Room.before.insert(function (userId, doc) {

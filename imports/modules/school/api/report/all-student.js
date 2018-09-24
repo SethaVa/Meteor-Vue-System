@@ -9,7 +9,7 @@ import Student from '/imports/modules/school/api/students/students'
 
 // Find Salay
 export const reportStudents = new ValidatedMethod({
-  name: 'reportStudents',
+  name: 'sch.reportStudents',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     periodDate: Array,

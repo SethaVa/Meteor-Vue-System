@@ -184,9 +184,9 @@ import Msg from '/imports/client/lib/message'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import moment from 'moment'
 import Lookup from '/imports/client/lib/Lookup-Value'
-import { getNextRef } from '/imports/util/get-next-ref'
+import { getNextRef } from '/imports/utils/get-next-ref'
 // import { lookupClass, lookupStudent } from ''
-// '/imports/util/lookup-methods'
+// '/imports/utils/lookup-methods'
 
 import {
   insertPayementForNew,

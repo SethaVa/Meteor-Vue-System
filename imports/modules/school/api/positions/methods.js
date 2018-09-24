@@ -15,7 +15,7 @@ import SimpleSchema from 'simpl-schema'
 import Position from './position'
 // Find All Data
 export const findPosition = new ValidatedMethod({
-  name: 'findPosition',
+  name: 'sch.findPosition',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -33,7 +33,7 @@ export const findPosition = new ValidatedMethod({
 
 // find One
 export const findOnePosition = new ValidatedMethod({
-  name: 'findOnePosition',
+  name: 'sch.findOnePosition',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -48,7 +48,7 @@ export const findOnePosition = new ValidatedMethod({
 // Insert
 //=============================================
 export const insertPosition = new ValidatedMethod({
-  name: 'insertPosition',
+  name: 'sch.insertPosition',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -59,7 +59,7 @@ export const insertPosition = new ValidatedMethod({
 })
 // Update
 export const updatePosition = new ValidatedMethod({
-  name: 'updatePosition',
+  name: 'sch.updatePosition',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -75,7 +75,7 @@ export const updatePosition = new ValidatedMethod({
 
 // Delete
 export const removePosition = new ValidatedMethod({
-  name: 'removePosition',
+  name: 'sch.removePosition',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

@@ -6,7 +6,7 @@ import {
   Mongo
 } from 'meteor/mongo'
 
-const ClassStudy = new Mongo.Collection('classStudy')
+const ClassStudy = new Mongo.Collection('sch_classStudy')
 ClassStudy.schema = new SimpleSchema({
   classDate: {
     type: Date,

@@ -23,7 +23,7 @@ import {
 } from '../payment/methods'
 
 export const findExchangeClass = new ValidatedMethod({
-  name: 'findExchangeClass',
+  name: 'sch.findExchangeClass',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -38,7 +38,7 @@ export const findExchangeClass = new ValidatedMethod({
 })
 //find for Options
 export const findExchangeClassOpts = new ValidatedMethod({
-  name: 'findExchangeClassOpts',
+  name: 'sch.findExchangeClassOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -62,7 +62,7 @@ export const findExchangeClassOpts = new ValidatedMethod({
 })
 
 export const findOneExchangeClass = new ValidatedMethod({
-  name: 'findOneExchangeClass',
+  name: 'sch.findOneExchangeClass',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -81,7 +81,7 @@ export const findOneExchangeClass = new ValidatedMethod({
 })
 
 export const insertExchangeClass = new ValidatedMethod({
-  name: 'insertExchangeClass',
+  name: 'sch.insertExchangeClass',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -136,7 +136,7 @@ export const insertExchangeClass = new ValidatedMethod({
 })
 
 export const updateExchangeClass = new ValidatedMethod({
-  name: 'updateExchangeClass',
+  name: 'sch.updateExchangeClass',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -205,7 +205,7 @@ export const updateExchangeClass = new ValidatedMethod({
 })
 
 export const removeExchangeClass = new ValidatedMethod({
-  name: 'removeExchangeClass',
+  name: 'sch.removeExchangeClass',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {
@@ -313,7 +313,7 @@ const aggregateShowExchangeClass = (selector) => {
         classToId: 1,
         studentId: 1,
         type: '$fromDoc.type',
-        name: '$studentDoc.enName',
+        name: 'sch.$studentDoc.enName',
         fromRoom: '$roomFromDoc.roomName',
         toRoom: '$roomToDoc.roomName',
       }

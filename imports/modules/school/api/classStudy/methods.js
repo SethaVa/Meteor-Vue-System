@@ -15,7 +15,7 @@ import SimpleSchema from 'simpl-schema'
 import ClassStudy from './classStudy'
 
 export const findClassStudy = new ValidatedMethod({
-  name: 'findClassStudy',
+  name: 'sch.findClassStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -31,7 +31,7 @@ export const findClassStudy = new ValidatedMethod({
 
 
 export const findOneClassStudy = new ValidatedMethod({
-  name: 'findOneClassStudy',
+  name: 'sch.findOneClassStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -47,7 +47,7 @@ export const findOneClassStudy = new ValidatedMethod({
 
 //insert
 export const insertClassStudy = new ValidatedMethod({
-  name: 'insertclassStudy',
+  name: 'sch.insertclassStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -57,7 +57,7 @@ export const insertClassStudy = new ValidatedMethod({
   },
 })
 export const updateClassStudy = new ValidatedMethod({
-  name: 'updateClassStudy',
+  name: 'sch.updateClassStudy',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -72,7 +72,7 @@ export const updateClassStudy = new ValidatedMethod({
 })
 
 export const updateClassStudyStatus = new ValidatedMethod({
-  name: 'updateClassStudyStatus',
+  name: 'sch.updateClassStudyStatus',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: String,
@@ -96,7 +96,7 @@ export const updateClassStudyStatus = new ValidatedMethod({
 
 
 export const removeClassStudy = new ValidatedMethod({
-  name: 'removeClassStudy',
+  name: 'sch.removeClassStudy',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {
@@ -114,7 +114,7 @@ export const removeClassStudy = new ValidatedMethod({
 
 // finish the class
 export const finishClassStudy = new ValidatedMethod({
-  name: 'finishClassStudy',
+  name: 'sch.finishClassStudy',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {
@@ -214,7 +214,7 @@ const aggregateFindClassStudy = selector => {
         _id: '$_id',
         classDate: '$classDate',
         roomId: '$roomId',
-        roomName: '$roomDoc.roomName',
+        roomname: 'sch.$roomDoc.roomName',
         timeId: '$timeId',
         timeStudy: '$timeDoc.timeStudy',
         staffId: '$staffId',

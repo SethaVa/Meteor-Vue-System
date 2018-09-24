@@ -65,7 +65,7 @@ import Notify from '/imports/client/lib/notify'
 import _ from 'lodash'
 import moment from 'moment'
 import LookUp from '../lib/Lookup-Value'
-import { lookupCategories } from '/imports/util/lookup-methods'
+import { lookupCategories } from '/imports/utils/lookup-methods'
 import { insertItems, updateItems } from '/imports/modules/school/api/items/methods'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 export default {

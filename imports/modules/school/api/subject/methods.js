@@ -16,7 +16,7 @@ import Subject from './subjects'
 
 // Find
 export const findSubject = new ValidatedMethod({
-  name: 'findSubject',
+  name: 'sch.findSubject',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -38,7 +38,7 @@ export const findSubject = new ValidatedMethod({
 
 //find for Options
 export const findSubjectOpts = new ValidatedMethod({
-  name: 'findSubjectOpts',
+  name: 'sch.findSubjectOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -63,7 +63,7 @@ export const findSubjectOpts = new ValidatedMethod({
 
 // Find One
 export const findOneSubject = new ValidatedMethod({
-  name: 'findOneSubject',
+  name: 'sch.findOneSubject',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -81,7 +81,7 @@ export const findOneSubject = new ValidatedMethod({
 
 // Insert
 export const insertSubject = new ValidatedMethod({
-  name: 'insertSubject',
+  name: 'sch.insertSubject',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -93,7 +93,7 @@ export const insertSubject = new ValidatedMethod({
 
 // Update
 export const updateSubject = new ValidatedMethod({
-  name: 'updateSubject',
+  name: 'sch.updateSubject',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -109,7 +109,7 @@ export const updateSubject = new ValidatedMethod({
 
 // Remove
 export const removeSubject = new ValidatedMethod({
-  name: 'removeSubject',
+  name: 'sch.removeSubject',
   mixins: [CallPromiseMixin],
   validate: null,
   run(selector) {

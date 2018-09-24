@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import SimpleSchema from 'simpl-schema'
 import { Mongo } from 'meteor/mongo'
 
-const SalaryRate = new Mongo.Collection('salaryRate')
+const SalaryRate = new Mongo.Collection('sch_salaryRate')
 SalaryRate.schema = new SimpleSchema({
   base: {
     type: String,

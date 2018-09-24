@@ -20,7 +20,7 @@ import {
   updateIncomeForPaymentNew,
 } from '../Income/methods'
 export const findRefund = new ValidatedMethod({
-  name: 'findRefund',
+  name: 'sch.findRefund',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -34,7 +34,7 @@ export const findRefund = new ValidatedMethod({
 })
 
 export const findOneRefund = new ValidatedMethod({
-  name: 'findOneRefund',
+  name: 'sch.findOneRefund',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -49,7 +49,7 @@ export const findOneRefund = new ValidatedMethod({
 })
 
 export const insertRefund = new ValidatedMethod({
-  name: 'insertRefund',
+  name: 'sch.insertRefund',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: _.clone(Refund.schema).extend({
@@ -99,7 +99,7 @@ export const insertRefund = new ValidatedMethod({
 })
 
 export const updateRefund = new ValidatedMethod({
-  name: 'updateRefund',
+  name: 'sch.updateRefund',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     doc: _.clone(Refund.schema).extend({
@@ -149,7 +149,7 @@ export const updateRefund = new ValidatedMethod({
 })
 
 export const removeRefund = new ValidatedMethod({
-  name: 'removeRefund',
+  name: 'sch.removeRefund',
   mixins: [CallPromiseMixin],
   validate: null,
   run({

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import SimpleSchema from 'simpl-schema'
 import { Mongo } from 'meteor/mongo'
 
-const Income = new Mongo.Collection('income')
+const Income = new Mongo.Collection('sch_income')
 Income.schema = new SimpleSchema({
   _id: {
     type: String,
