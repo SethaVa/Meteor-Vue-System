@@ -65,16 +65,19 @@ export const findSubjectOpts = new ValidatedMethod({
 export const findOneSubject = new ValidatedMethod({
   name: 'sch.findOneSubject',
   mixins: [CallPromiseMixin],
-  validate: null,
+  validate: new SimpleSchema({
+    selector:{
+      type:Object,
+      blackbox:true,
+    }
+  }).validator(),
   run({
-    selector,
-    options
+    selector
   }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      options = options || {}
 
-      return Subject.findOne(selector, options)
+      return Subject.findOne(selector)
     }
   },
 })

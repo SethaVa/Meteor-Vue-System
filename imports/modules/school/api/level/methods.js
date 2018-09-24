@@ -19,11 +19,11 @@ import {
 } from '/imports/utils/security'
 import getNextSeq from '/imports/utils/get-next-seq'
 
-import level from './level'
+import Level from './level'
 
 
 export const findLevel = new ValidatedMethod({
-  name: 'sch.findlevel',
+  name: 'sch.findLevel',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -33,14 +33,14 @@ export const findLevel = new ValidatedMethod({
     if (Meteor.isServer) {
       selector = selector || {}
       options = options || {}
-      let data = level.find(selector, options).fetch()
+      let data = Level.find(selector, options).fetch()
       return data
     }
   },
 })
 //find for Options
 export const levelOpts = new ValidatedMethod({
-  name: 'sch.levelOpts',
+  name: 'sch.LevelOpts',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     selector:{
@@ -62,7 +62,7 @@ export const levelOpts = new ValidatedMethod({
       selector = selector || {}
       options = options || {}
       let data = []
-      let level = level.find(selector, options).fetch()
+      let level = Level.find(selector, options).fetch()
       _.forEach(level, o => {
         data.push({
           label: o.level,
@@ -81,7 +81,7 @@ export const findOneLevel = new ValidatedMethod({
   validate: null,
   run(id) {
     if (Meteor.isServer) {
-      return level.findOne({
+      return Level.findOne({
         _id: id
       })
     }
@@ -92,7 +92,7 @@ export const insertLevel = new ValidatedMethod({
   name: 'sch.insertLevel',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    doc: level.schema
+    doc: Level.schema
   }).validator(),
   run({
     doc
@@ -100,7 +100,7 @@ export const insertLevel = new ValidatedMethod({
     if (Meteor.isServer) {
       const _id = getNextSeq({
         // Mandatory
-        _id: `sch_level`,
+        _id: `sch_Level`,
         // Optional
         opts: {
           seq: 1,
@@ -112,18 +112,18 @@ export const insertLevel = new ValidatedMethod({
       })
       try {
         doc._id = _id
-        level.insert(doc)
+        Level.insert(doc)
         return 'success'
       } catch (error) {
         getNextSeq({
           // filter: {
-          _id: 'sch_level',
+          _id: 'sch_Level',
           // },
           opts: {
             seq: -1,
           },
         })
-        level.remove({
+        Level.remove({
           _id: _id,
         })
         throwError(error)
@@ -136,13 +136,13 @@ export const updateLevel = new ValidatedMethod({
   name: 'sch.updateLevel',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
-    doc: level.schema
+    doc: Level.schema
   }).validator(),
   run({
     doc
   }) {
     if (Meteor.isServer) {
-      return level.update({
+      return Level.update({
         _id: doc._id
       }, {
         $set: doc
@@ -163,7 +163,7 @@ export const removeLevel = new ValidatedMethod({
     _id
   }) {
     if (Meteor.isServer) {
-      return level.remove({
+      return Level.remove({
         _id
       })
     }

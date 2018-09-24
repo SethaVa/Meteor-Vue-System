@@ -3,7 +3,7 @@
 
     <component :is="currentDialog"
                :visible="visibleDialog"
-               :update-doc="updateDoc"
+               :update-id="updateId"
                @modal-close="handleClose"></component>
 
     <!-- Table Data -->
@@ -37,8 +37,7 @@
 <script>
 import Notify from '/imports/client/lib/notify'
 import MsgBox from '/imports/client/lib/message'
-import SubjectInsert from './SubjectInsert.vue'
-import SubjectUpdate from './SubjectUpdate.vue'
+import SubjectInsert from './SubjectForm.vue'
 
 // Table Action
 import TableToolbar from '/imports/client/components/TableToolbar.vue'
@@ -56,11 +55,11 @@ export default {
     return {
       currentDialog: null,
       visibleDialog: false,
-      updateDoc: null,
+      updateId: null,
       tableData: [],
       titles: [
         { label: 'Title', prop: 'title', sort: 'custom' },
-        { label: 'Level', prop: 'level' },
+        { label: 'Level', prop: 'levelId' },
         { label: 'Type', prop: 'type' },
       ],
       tableProps: {
@@ -105,9 +104,9 @@ export default {
     },
     // Edit Data
     edit(row) {
-      this.updateDoc = row
+      this.updateId = row._id
       this.visibleDialog = true
-      this.currentDialog = SubjectUpdate
+      this.currentDialog = SubjectInsert
     },
     remove(row) {
       this.$_removeMixin({
@@ -120,8 +119,9 @@ export default {
     },
     handleClose() {
       this.getData()
-      ;(this.visibleDialog = false),
+      this.visibleDialog = false
         this.$nextTick(() => {
+          this.updateId = null
           this.currentDialog = null
         })
     },

@@ -10,12 +10,11 @@ Subjects.schema = new SimpleSchema({
   type: {
     type: String,
   },
-  level: {
+  levelId: {
     type: String,
   },
   status: {
     type: String,
-    optional: true,
   },
 })
 
