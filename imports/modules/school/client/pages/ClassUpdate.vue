@@ -111,7 +111,7 @@ import { findSubjectOpts } from '/imports/modules/school/api/subject/methods'
 import {
   findSalaryRatePartTimeOpts,
   findSalaryRateFullTimeTimeOpts,
-} from '/imports/modules/school/api/salary-rate/methods'
+} from '/imports/modules/school/api/rate-salary/methods'
 import lookupValue from '../../client/lib/Lookup-Value'
 import LookUp from '../../client/lib/Lookup-Value'
 import moment from 'moment'
