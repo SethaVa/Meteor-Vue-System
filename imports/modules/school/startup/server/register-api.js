@@ -1,5 +1,7 @@
 // Register your apis here
 
+import '../../api/views'
+
 //Student
 import '/imports/modules/school/api/students/server/'
 
