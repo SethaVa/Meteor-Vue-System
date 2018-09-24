@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" :visible="visible"
+    <el-dialog :close-on-click-modal="false"
+               :visible="visible"
                :before-close="handleClose"
                width="80%">
       <span slot="title">
@@ -16,6 +17,7 @@
             <el-form-item label="Date"
                           prop="registerDate">
               <el-date-picker v-model="form.registerDate"
+                              :format="dateFormat"
                               style="width:100%"></el-date-picker>
             </el-form-item>
             <el-form-item label="Type"
@@ -68,6 +70,7 @@
         <el-button @click="handleClose"
                    size="mini">Cancel</el-button>
       </span>
+      {{currentBranchId}}
     </el-dialog :close-on-click-modal="false">
   </div>
 </template>
@@ -80,6 +83,8 @@ import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import lookupValue from '/imports/client/lib/Lookup-Value'
 import _ from 'lodash'
 import { insertStudent } from '/imports/modules/school/api/students/methods.js'
+
+import {mapState} from 'vuex'
 
 export default {
   // name: 'StudentInsert',
@@ -131,19 +136,33 @@ export default {
         type: [
           { required: true, message: 'Please Select Type', trigger: 'blur' },
         ],
-         dob: [
-          { required: true, message: 'Date of birth is required!', trigger: 'blur' },
+        dob: [
+          {
+            required: true,
+            message: 'Date of birth is required!',
+            trigger: 'blur',
+          },
         ],
       },
     }
   },
-
+  computed: {
+    ...mapState({
+      currentBranchId(state) {
+        return state.app && state.app.currentBranch._id
+      },
+    }),
+    dateFormat(){
+      return this.$store.getters['app/dateFormat']
+    }
+  },
   methods: {
     handleSave() {
       this.$refs['form'].validate(valid => {
         if (valid) {
           this.form.dob = wrapCurrentTime(this.form.dob)
           this.form.registerDate = wrapCurrentTime(this.form.registerDate)
+          this.form.branchId = this.currentBranchId
           // console.log(this.form)
           insertStudent
             .callPromise({ doc: this.form })

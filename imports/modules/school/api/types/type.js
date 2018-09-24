@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo'
 import SimpleSchema from 'simpl-schema'
 
-const Type = new Mongo.Collection('types')
+const Type = new Mongo.Collection('sch_types')
 
 Type.schema = new SimpleSchema({
   type: {

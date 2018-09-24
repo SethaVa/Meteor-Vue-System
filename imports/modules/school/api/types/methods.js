@@ -8,7 +8,7 @@ import Type from './type'
 import _ from 'lodash'
 // Find All Data
 export const findType = new ValidatedMethod({
-  name: 'findType',
+  name: 'sch.findType',
   mixins: [CallPromiseMixin],
   validate: null,
   run(selector, option) {
@@ -23,7 +23,7 @@ export const findType = new ValidatedMethod({
 
 // find One
 export const findOneType = new ValidatedMethod({
-  name: 'findOneType',
+  name: 'sch.findOneType',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ _id }) {
@@ -35,7 +35,7 @@ export const findOneType = new ValidatedMethod({
 
 // Find for Options
 export const findTypeOpts = new ValidatedMethod({
-  name: 'findTypeOpts',
+  name: 'sch.findTypeOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run(selector, option) {
@@ -57,7 +57,7 @@ export const findTypeOpts = new ValidatedMethod({
 
 // Insert
 export const insertType = new ValidatedMethod({
-  name: 'insertType',
+  name: 'sch.insertType',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -68,7 +68,7 @@ export const insertType = new ValidatedMethod({
 })
 // Update
 export const updateType = new ValidatedMethod({
-  name: 'updateType',
+  name: 'sch.updateType',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -80,7 +80,7 @@ export const updateType = new ValidatedMethod({
 
 // Delete
 export const removeType = new ValidatedMethod({
-  name: 'removeType',
+  name: 'sch.removeType',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     id: { type: String },

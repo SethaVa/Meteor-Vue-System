@@ -1,3 +1,3 @@
-import '/imports/util/lookup-methods'
-import '/imports/util/validate-methods'
-import '/imports/util/get-next-ref'
+import '/imports/utils/lookup-methods'
+import '/imports/utils/validate-methods'
+import '/imports/utils/get-next-ref'

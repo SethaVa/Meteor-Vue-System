@@ -21,7 +21,7 @@
                        sortable="custom">
         <template slot-scope="scope">
           <span v-if="title.prop === 'dob'">
-            {{ formatDate(scope.row.dob) }}
+            {{ scope.row.dob | date }}
           </span>
           <span v-else>{{ scope.row[title.prop] }}</span>
         </template>
@@ -54,6 +54,7 @@ import TableAction from '/imports/client/components/TableAction.vue'
 import removeMixin from '/imports/client/mixins/remove'
 
 import moment from 'moment'
+import { mapState } from 'vuex';
 
 export default {
   // name: 'StudentList',
@@ -93,7 +94,13 @@ export default {
       ],
     }
   },
-
+  computed:{
+    ...mapState({
+      currentBranchId(state){
+        return state.app && state.app.currentBranch._id
+      }
+    })
+  },
   mounted() {
     this.getData()
   },
@@ -106,6 +113,7 @@ export default {
       this.loading = true
       let selector = {
         remove: false,
+        branchId:this.currentBranchId
       }
       findStudents
         .callPromise({ selector: selector })
@@ -143,9 +151,6 @@ export default {
         loading: 'loading',
         title: row.title,
       })
-    },
-    formatDate(val) {
-      return moment(val).format('DD/MM/YYYY')
     },
     handleModalClose() {
       this.getData()

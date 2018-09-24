@@ -9,7 +9,7 @@ import Exchanges from './exchanges'
 
 // Find
 export const findExchanges = new ValidatedMethod({
-  name: 'app.findExchanges',
+  name: 'sch.app.findExchanges',
   mixins: [CallPromiseMixin],
   validate: null,
   run(selector, options) {
@@ -25,7 +25,7 @@ export const findExchanges = new ValidatedMethod({
 
 // Find One
 export const findOneExchange = new ValidatedMethod({
-  name: 'app.findOneExchange',
+  name: 'sch.app.findOneExchange',
   mixins: [CallPromiseMixin],
   // validate: Exchanges.schema.validator(),
   validate: null,
@@ -42,7 +42,7 @@ export const findOneExchange = new ValidatedMethod({
 
 // Insert
 export const insertExchange = new ValidatedMethod({
-  name: 'app.insertExchange',
+  name: 'sch.app.insertExchange',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -56,7 +56,7 @@ export const insertExchange = new ValidatedMethod({
 
 // Update
 export const updateExchange = new ValidatedMethod({
-  name: 'app.updateExchange',
+  name: 'sch.app.updateExchange',
   mixins: [CallPromiseMixin],
   // validate: Exchanges.schema.validator(),
   validate: null,
@@ -73,7 +73,7 @@ export const updateExchange = new ValidatedMethod({
  * Upsert methods
  */
 export const upsertExchange = new ValidatedMethod({
-  name: 'app.upsertExchange',
+  name: 'sch.app.upsertExchange',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -88,7 +88,7 @@ export const upsertExchange = new ValidatedMethod({
 })
 // Remove
 export const removeExchange = new ValidatedMethod({
-  name: 'app.removeExchange',
+  name: 'sch.app.removeExchange',
   mixins: [CallPromiseMixin],
   // validate: null,
   validate: new SimpleSchema({

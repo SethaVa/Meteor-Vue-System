@@ -16,7 +16,7 @@ import moment from 'moment'
 import Categories from './categories'
 
 export const findCategories = new ValidatedMethod({
-  name: 'findCategories',
+  name: 'sch.findCategories',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -34,7 +34,7 @@ export const findCategories = new ValidatedMethod({
 })
 //find for Options
 export const findCategoriesOpts = new ValidatedMethod({
-  name: 'findCategoriesOpts',
+  name: 'sch.findCategoriesOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -58,7 +58,7 @@ export const findCategoriesOpts = new ValidatedMethod({
 })
 
 export const findOneCategories = new ValidatedMethod({
-  name: 'findOneCategories',
+  name: 'sch.findOneCategories',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -73,7 +73,7 @@ export const findOneCategories = new ValidatedMethod({
 })
 
 export const insertCategories = new ValidatedMethod({
-  name: 'insertCategories',
+  name: 'sch.insertCategories',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -84,7 +84,7 @@ export const insertCategories = new ValidatedMethod({
 })
 
 export const updateCategories = new ValidatedMethod({
-  name: 'updateCategories',
+  name: 'sch.updateCategories',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -99,7 +99,7 @@ export const updateCategories = new ValidatedMethod({
 })
 
 export const removeCategories = new ValidatedMethod({
-  name: 'removeCategories',
+  name: 'sch.removeCategories',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

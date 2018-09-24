@@ -1,4 +1,4 @@
-import AutoId from '/imports/util/auto-id';
+import AutoId from '/imports/utils/auto-id';
 import Type from '../type';
 
 Type.before.insert(function (userId, doc) {

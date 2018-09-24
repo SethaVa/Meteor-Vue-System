@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 
-const Position = new Mongo.Collection('position');
+const Position = new Mongo.Collection('sch_position');
 
 Position.schema = new SimpleSchema({
     position:{

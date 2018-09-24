@@ -17,7 +17,7 @@ import ExchagneClass from '../exchange-class/exchange-class'
 import moment from 'moment'
 
 export const findExchangeStudents = new ValidatedMethod({
-  name: 'findExchangeStudents',
+  name: 'sch.findExchangeStudents',
   mixins: [CallPromiseMixin],
   validate: null,
   run({

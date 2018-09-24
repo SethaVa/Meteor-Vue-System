@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
 
-const Rooms = new Mongo.Collection('rooms');
+const Rooms = new Mongo.Collection('sch_rooms');
 
 Rooms.schema = new SimpleSchema({
     roomName:{

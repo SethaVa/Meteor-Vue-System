@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import SimpleSchema from 'simpl-schema'
 import { Mongo } from 'meteor/mongo'
 
-const Refund = new Mongo.Collection('refund')
+const Refund = new Mongo.Collection('sch_refund')
 Refund.schema = new SimpleSchema({
   _id: {
     type: String,

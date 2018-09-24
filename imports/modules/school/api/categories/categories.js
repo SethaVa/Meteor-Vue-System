@@ -6,7 +6,7 @@ import {
   Mongo
 } from 'meteor/mongo'
 
-const Categories = new Mongo.Collection('categories')
+const Categories = new Mongo.Collection('sch_categories')
 Categories.schema = new SimpleSchema({
   name: {
     type: String,

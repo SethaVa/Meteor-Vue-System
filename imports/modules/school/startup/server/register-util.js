@@ -1,4 +1,4 @@
-import '/imports/util/lookup-methods'
+import '/imports/utils/lookup-methods'
 // import '/imports/modules/school/util/compare-date'
-// import '/imports/util/validate-methods'
-// import '/imports/util/get-next-ref'
+// import '/imports/utils/validate-methods'
+// import '/imports/utils/get-next-ref'

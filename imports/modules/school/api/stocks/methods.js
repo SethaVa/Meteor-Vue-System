@@ -16,7 +16,7 @@ import moment from 'moment'
 import Stock from './stocks'
 
 export const findStock = new ValidatedMethod({
-  name: 'findStock',
+  name: 'sch.findStock',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -50,7 +50,7 @@ export const findStock = new ValidatedMethod({
 })
 //find for Options
 export const findStockOpts = new ValidatedMethod({
-  name: 'findStockOpts',
+  name: 'sch.findStockOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -74,7 +74,7 @@ export const findStockOpts = new ValidatedMethod({
 })
 
 export const findOneStock = new ValidatedMethod({
-  name: 'findOneStock',
+  name: 'sch.findOneStock',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -89,7 +89,7 @@ export const findOneStock = new ValidatedMethod({
 })
 
 export const insertStock = new ValidatedMethod({
-  name: 'insertStock',
+  name: 'sch.insertStock',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -100,7 +100,7 @@ export const insertStock = new ValidatedMethod({
 })
 
 export const updateStock = new ValidatedMethod({
-  name: 'updateStock',
+  name: 'sch.updateStock',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -115,7 +115,7 @@ export const updateStock = new ValidatedMethod({
 })
 
 export const removeStock = new ValidatedMethod({
-  name: 'removeStock',
+  name: 'sch.removeStock',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

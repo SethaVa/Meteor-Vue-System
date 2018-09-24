@@ -4,7 +4,7 @@ import {
 import SimpleSchema from 'simpl-schema'
 import {Mongo} from 'meteor/mongo'
 
-const StockDetails = new Mongo.Collection('stock-details')
+const StockDetails = new Mongo.Collection('sch_stock-details')
 
 StockDetails.schema = new SimpleSchema({
   type:{

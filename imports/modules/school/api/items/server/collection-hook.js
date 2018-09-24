@@ -1,4 +1,4 @@
-import AutoId from '/imports/util/auto-id'
+import AutoId from '/imports/utils/auto-id'
 import Items from '../items'
 
 Items.before.insert(function (userId, doc) {

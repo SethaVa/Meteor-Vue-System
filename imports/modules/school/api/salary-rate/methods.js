@@ -13,7 +13,7 @@ import moment from 'moment'
 import SalaryRate from './salaryRate'
 
 export const findSalaryRate = new ValidatedMethod({
-  name: 'findSalaryRate',
+  name: 'sch.findSalaryRate',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -32,7 +32,7 @@ export const findSalaryRate = new ValidatedMethod({
 })
 //find for Part Time Options
 export const findSalaryRatePartTimeOpts = new ValidatedMethod({
-  name: 'findSalaryRatePartTimeOpts',
+  name: 'sch.findSalaryRatePartTimeOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -62,7 +62,7 @@ export const findSalaryRatePartTimeOpts = new ValidatedMethod({
 
 //find for Full Time Options
 export const findSalaryRateFullTimeTimeOpts = new ValidatedMethod({
-  name: 'findSalaryRateFullTimeTimeOpts',
+  name: 'sch.findSalaryRateFullTimeTimeOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -91,7 +91,7 @@ export const findSalaryRateFullTimeTimeOpts = new ValidatedMethod({
 })
 
 export const findOneSalaryRate = new ValidatedMethod({
-  name: 'findOneSalaryRate',
+  name: 'sch.findOneSalaryRate',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -106,7 +106,7 @@ export const findOneSalaryRate = new ValidatedMethod({
 })
 
 export const insertSalaryRate = new ValidatedMethod({
-  name: 'insertSalaryRate',
+  name: 'sch.insertSalaryRate',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -117,7 +117,7 @@ export const insertSalaryRate = new ValidatedMethod({
 })
 
 export const updateSalaryRate = new ValidatedMethod({
-  name: 'updateSalaryRate',
+  name: 'sch.updateSalaryRate',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -132,7 +132,7 @@ export const updateSalaryRate = new ValidatedMethod({
 })
 
 export const removeSalaryRate = new ValidatedMethod({
-  name: 'removeSalaryRate',
+  name: 'sch.removeSalaryRate',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

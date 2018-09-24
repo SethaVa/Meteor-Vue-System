@@ -61,7 +61,7 @@ import Notify from '/imports/client/lib/notify'
 import {
   validateUserExist,
   validateUserPassword,
-} from '/imports/util/validate-methods.js'
+} from '/imports/utils/validate-methods.js'
 import { findOneUser, updateUser } from '../../api/users/methods'
 
 export default {

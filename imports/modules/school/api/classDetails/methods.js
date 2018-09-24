@@ -7,7 +7,7 @@ import SimpleSchema from 'simpl-schema'
 import classDetails from './classDetails'
 //Find
 export const findclassDetails = new ValidatedMethod({
-  name: 'findclassDetails',
+  name: 'sch.findclassDetails',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ selector }) {
@@ -19,7 +19,7 @@ export const findclassDetails = new ValidatedMethod({
 })
 // Find One
 export const findOneclassDetails = new ValidatedMethod({
-  name: 'findOneclassDetails',
+  name: 'sch.findOneclassDetails',
   mixins: [CallPromiseMixin],
   validate: null,
   run({ id }) {
@@ -30,7 +30,7 @@ export const findOneclassDetails = new ValidatedMethod({
 })
 
 export const insertClassDetail = new ValidatedMethod({
-  name: 'insertClassDetail',
+  name: 'sch.insertClassDetail',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -42,7 +42,7 @@ export const insertClassDetail = new ValidatedMethod({
 
 // Update
 export const updateclassDetails = new ValidatedMethod({
-  name: 'updateclassDetails',
+  name: 'sch.updateclassDetails',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -53,7 +53,7 @@ export const updateclassDetails = new ValidatedMethod({
 })
 
 export const removeclassDetails = new ValidatedMethod({
-  name: 'removeclassDetails',
+  name: 'sch.removeclassDetails',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: { type: String },

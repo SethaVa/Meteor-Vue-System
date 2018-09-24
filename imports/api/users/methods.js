@@ -18,8 +18,8 @@ import {
 } from 'meteor/didericis:callpromise-mixin'
 import SimpleSchema from 'simpl-schema'
 
-import { userIsInRole, throwError } from '/imports/util/security'
-import rateLimit from '/imports/util/rate-limit'
+import { userIsInRole, throwError } from '/imports/utils/security'
+import rateLimit from '/imports/utils/rate-limit'
 
 import {
   UserInsertSchema,

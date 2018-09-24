@@ -16,7 +16,7 @@ import Room from './room'
 import _ from 'lodash'
 // Find All Data
 export const findRoom = new ValidatedMethod({
-  name: 'findRoom',
+  name: 'sch.findRoom',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -36,7 +36,7 @@ export const findRoom = new ValidatedMethod({
 
 // find One
 export const findOneRoom = new ValidatedMethod({
-  name: 'findOneRoom',
+  name: 'sch.findOneRoom',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -50,7 +50,7 @@ export const findOneRoom = new ValidatedMethod({
 
 // Find Data Fro Options
 export const findRoomOpts = new ValidatedMethod({
-  name: 'findRoomOpts',
+  name: 'sch.findRoomOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run(selector, option) {
@@ -72,7 +72,7 @@ export const findRoomOpts = new ValidatedMethod({
 
 // Insert
 export const insertRoom = new ValidatedMethod({
-  name: 'insertRoom',
+  name: 'sch.insertRoom',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -83,7 +83,7 @@ export const insertRoom = new ValidatedMethod({
 })
 // Update
 export const updateRoom = new ValidatedMethod({
-  name: 'updateRoom',
+  name: 'sch.updateRoom',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -99,7 +99,7 @@ export const updateRoom = new ValidatedMethod({
 
 // Delete
 export const removeRoom = new ValidatedMethod({
-  name: 'removeRoom',
+  name: 'sch.removeRoom',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     _id: {

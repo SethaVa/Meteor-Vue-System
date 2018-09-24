@@ -6,7 +6,7 @@ import {
   Mongo
 } from 'meteor/mongo'
 
-const ExchangeClass = new Mongo.Collection('exchangeClass')
+const ExchangeClass = new Mongo.Collection('sch_exchangeClass')
 ExchangeClass.schema = new SimpleSchema({
   tranDate: {
     type: Date

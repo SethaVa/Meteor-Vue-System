@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo'
 import SimpleSchema from 'simpl-schema'
 
-const Subjects = new Mongo.Collection('subjects')
+const Subjects = new Mongo.Collection('sch_subjects')
 
 Subjects.schema = new SimpleSchema({
   title: {

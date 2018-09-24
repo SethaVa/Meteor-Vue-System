@@ -3,7 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method'
 import { CallPromiseMixin } from 'meteor/didericis:callpromise-mixin'
 import _ from 'lodash'
 
-import rateLimit from '/imports/util/rate-limit'
+import rateLimit from '/imports/utils/rate-limit'
 import AppLog from '/imports/api/app-logs/methods'
 
 import Company from './company'

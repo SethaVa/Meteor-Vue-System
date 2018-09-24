@@ -3,7 +3,7 @@ import {
 } from 'meteor/mongo'
 import SimpleSchema from 'simpl-schema'
 
-const PaymentDetails = new Mongo.Collection('paymentDetailsDetails')
+const PaymentDetails = new Mongo.Collection('sch_paymentDetailsDetails')
 
 PaymentDetails.schema = new SimpleSchema({
   tranDate: {

@@ -135,7 +135,7 @@ import MsgBox from '/imports/client/lib/message'
 import moment from 'moment'
 import Lookup from '/imports/client/lib/Lookup-Value'
 //
-import { lookupClass } from '/imports/util/lookup-methods'
+import { lookupClass } from '/imports/utils/lookup-methods'
 import { findClassForStudenDetails } from '/imports/modules/school/api/payment/methods'
 import { findOnePayment } from '/imports/modules/school/api/payment/methods'
 import { insertExchangeClass } from '/imports/modules/school/api/exchange-class/methods'

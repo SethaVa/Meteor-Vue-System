@@ -19,7 +19,7 @@ import SalaryRate from '../salary-rate/salaryRate'
 
 // Find
 export const findStaff = new ValidatedMethod({
-  name: 'findStaff',
+  name: 'sch.findStaff',
   mixins: [CallPromiseMixin],
   validate: null,
   run() {
@@ -34,7 +34,7 @@ export const findStaff = new ValidatedMethod({
 
 // Find Staff Detail for Position Teacher
 export const findOneStaffDetails = new ValidatedMethod({
-  name: 'findOneStaffDetails',
+  name: 'sch.findOneStaffDetails',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -50,7 +50,7 @@ export const findOneStaffDetails = new ValidatedMethod({
 
 //find for opts
 export const findStaffOpts = new ValidatedMethod({
-  name: 'findStaffOpts',
+  name: 'sch.findStaffOpts',
   mixins: [CallPromiseMixin],
   validate: null,
   run() {
@@ -72,7 +72,7 @@ export const findStaffOpts = new ValidatedMethod({
 
 // Find One
 export const findOneStaff = new ValidatedMethod({
-  name: 'findOneStaff',
+  name: 'sch.findOneStaff',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -90,7 +90,7 @@ export const findOneStaff = new ValidatedMethod({
 
 //find salary
 export const findStaffSalary = new ValidatedMethod({
-  name: 'findStaffSalary',
+  name: 'sch.findStaffSalary',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -116,7 +116,7 @@ export const findStaffSalary = new ValidatedMethod({
 
 // Insert
 export const insertStaff = new ValidatedMethod({
-  name: 'insertStaff',
+  name: 'sch.insertStaff',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -129,7 +129,7 @@ export const insertStaff = new ValidatedMethod({
 
 // Update
 export const updateStaff = new ValidatedMethod({
-  name: 'updateStaff',
+  name: 'sch.updateStaff',
   mixins: [CallPromiseMixin],
   validate: null,
   run(doc) {
@@ -145,7 +145,7 @@ export const updateStaff = new ValidatedMethod({
 
 // Remove
 export const removeStaff = new ValidatedMethod({
-  name: 'removeStaff',
+  name: 'sch.removeStaff',
   mixins: [CallPromiseMixin],
   validate: null,
   run(selector) {
