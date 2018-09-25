@@ -59,9 +59,7 @@
         <template slot="title">
           <i class="fa fa-users"></i>staff
         </template>
-        <el-menu-item index="sch.position">
-          <span>Position</span>
-        </el-menu-item>
+
         <el-menu-item index="sch.staff">
           <span>Staff</span>
         </el-menu-item>
@@ -72,6 +70,9 @@
         <template slot="title">
           <i class="fa fa-cogs"></i>Setting
         </template>
+        <el-menu-item index="sch.position">
+          <span>Position</span>
+        </el-menu-item>
         <el-menu-item index="sch.level">
           <span>Level</span>
         </el-menu-item>

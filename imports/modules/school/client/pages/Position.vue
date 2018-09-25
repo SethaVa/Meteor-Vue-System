@@ -1,14 +1,10 @@
 <template>
   <div>
-    <component :is="currentModal"
-               :update-doc="updateDoc"
-               :visible="modalVisible"
-               @modal-close="handleModalClose">
-    </component>
-    <!-- Table Data -->
-    <TableToolbar v-model="tableFilters"
-                  @new="addNew">
-    </TableToolbar>
+    <position-form :form-type="formType"
+                   :update-doc="updateDoc"
+                   @modal-close="getData">
+    </position-form>
+
     <data-tables :data="tableData"
                  :filters="tableFilters"
                  :table-props="tableProps">
@@ -34,12 +30,13 @@
 </template>
 
 <script>
-import PositionInsert from './PositionInsert.vue'
-import PositionUpdate from './PositionUpdate.vue'
-import { findPosition, removePosition } from '/imports/modules/school/api/positions/methods'
+import PositionForm from './PositionInsert.vue'
+import {
+  findPosition,
+  removePosition,
+} from '/imports/modules/school/api/positions/methods'
 
 // Table Action
-import TableToolbar from '/imports/client/components/TableToolbar.vue'
 import TableAction from '/imports/client/components/TableAction.vue'
 import removeMixin from '/imports/client/mixins/remove'
 
@@ -48,24 +45,19 @@ import _ from 'lodash'
 export default {
   // name: 'Position',
   components: {
-    PositionInsert,
-    PositionUpdate,
-    TableToolbar,
+    PositionForm,
     TableAction,
   },
   mixins: [removeMixin],
   data() {
     return {
-      currentModal: null,
-      modalVisible: false,
+      formType: 'New',
       updateDoc: null,
       tableSize: 'mini',
       tableData: [],
       titles: [
-        { label: 'ID', prop: '_id', sort: 'custom' },
         { label: 'Position', prop: 'position', sort: 'custom' },
         { label: 'Description', prop: 'des' },
-        { label: 'Status', prop: 'status' },
       ],
       tableProps: {
         size: 'small',
@@ -90,15 +82,11 @@ export default {
         .callPromise({ selector: {}, options: { sort: { _id: -1 } } })
         .then(result => {
           this.tableData = result
+          this.formType = 'New'
         })
         .catch(err => {
           this.$message.error(err.reason)
         })
-    },
-    // Add new
-    addNew() {
-      this.modalVisible = true
-      this.currentModal = PositionInsert
     },
     // Table Action
     actionsList() {
@@ -110,8 +98,7 @@ export default {
     // Edit Data
     edit(row) {
       this.updateDoc = row
-      this.modalVisible = true
-      this.currentModal = PositionUpdate
+      this.formType = 'Update'
     },
     remove(row) {
       this.$_removeMixin({
