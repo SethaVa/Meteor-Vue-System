@@ -59,7 +59,7 @@
         <el-button @click="handleClose"
                    size="mini">Cancel</el-button>
       </span>
-    </el-dialog :close-on-click-modal="false">
+    </el-dialog>
   </div>
 </template>
 
@@ -119,6 +119,7 @@ export default {
     this._getLevelOpts()
   },
   mounted() {
+    console.log(this.updateId);
     if (this.updateId) {
       this._getDataUpdate()
     }
@@ -136,6 +137,7 @@ export default {
         })
         .catch(error => {
           this.loading.form = false
+          console.log(error);
           Notify.error({ message: error })
         })
     },

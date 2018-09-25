@@ -12,7 +12,10 @@ import {
 } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
+
 import Subject from './subjects'
+import ViewSubject from '/imports/modules/school/api/views/subjects'
+
 
 // Find
 export const findSubject = new ValidatedMethod({
@@ -29,7 +32,7 @@ export const findSubject = new ValidatedMethod({
       options = options || {}
 
       // return aggregateSubject(selector)
-      return Subject.find(selector, options).fetch()
+      return ViewSubject.find(selector, options).fetch()
     }
   },
 })
