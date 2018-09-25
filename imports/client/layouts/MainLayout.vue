@@ -75,7 +75,6 @@
 </template>
 
 <script>
-import { slimScroll } from 'meteor/rochal:slimscroll'
 import { Meteor } from 'meteor/meteor'
 import moment from 'moment'
 import _ from 'lodash'

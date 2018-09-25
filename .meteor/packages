@@ -4,58 +4,61 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base@1.2.0             # Packages every Meteor app needs to have
+meteor-base@1.4.0             # Packages every Meteor app needs to have
 mobile-experience@1.0.5       # Packages for a great mobile UX
-mongo@1.3.1                   # The database Meteor supports right now
-#blaze-html-templates@1.0.4 # Compile .html files into Meteor Blaze views
-#reactive-var@1.0.11            # Reactive variable for tracker
-tracker@1.1.3                 # Meteor's client-side reactive programming library
+mongo@1.5.0                   # The database Meteor supports right now
+tracker@1.2.0                 # Meteor's client-side reactive programming library
 
-standard-minifier-css@1.3.5   # CSS minifier run for production mode
-standard-minifier-js@2.2.0    # JS minifier run for production mode
-es5-shim@4.6.15                # ECMAScript 5 compatibility for older browsers
-ecmascript@0.9.0              # Enable ECMAScript2015+ syntax in app code
-shell-server@0.3.0            # Server-side component of the `meteor shell` command
+standard-minifier-css@1.4.1   # CSS minifier run for production mode
+standard-minifier-js@2.3.4    # JS minifier run for production mode
+es5-shim@4.8.0                # ECMAScript 5 compatibility for older browsers
+ecmascript@0.11.1              # Enable ECMAScript2015+ syntax in app code
+shell-server@0.3.1            # Server-side component of the `meteor shell` command
 
-#autopublish@1.0.7             # Publish all data to the clients (for prototyping)
-#insecure@1.0.7                # Allow all DB writes from clients (for prototyping)
-
-# Core
+#--- Core ---
 static-html
-check@1.2.5
-accounts-base@1.4.0
-accounts-password@1.5.0
+dynamic-import@0.4.2
 ddp-rate-limiter@1.0.7
-#session@1.1.7
-session
-less@2.7.11
-http@1.3.0
+http@1.4.1
+check@1.3.1
+accounts-base@1.4.2
+accounts-password@1.5.1
+session@1.1.7
 ejson@1.1.0
-dynamic-import@0.2.0
+less@2.7.12
 
-# Community
-akryum:vue-sass
-fourseven:scss
-fortawesome:fontawesome
-vuejs:blaze-integration
-u2622:persistent-session
+#--- Community ---
+# Collection
+aldeed:collection2-core
+aldeed:schema-index
+aldeed:schema-deny
+matb33:collection-hooks
+sakulstra:aggregate
+cultofcoders:grapher
 
+# Method
+mdg:validated-method
+didericis:callpromise-mixin
+
+# Roles
 alanning:roles
 ongoworks:security
 
-aldeed:collection2-core
-matb33:collection-hooks
-dburles:collection-helpers
-meteorhacks:aggregate
-mdg:validated-method
-didericis:callpromise-mixin
-tmeasday:publish-counts
-
+# Path & File
 ostrio:meteor-root
 pfafman:filesaver
+cfs:standard-packages
+cfs:filesystem
 
-simple:rest
-simple:json-routes
+# UI
+akryum:vue-component
+akryum:vue-less
+akryum:vue-sass
+cultofcoders:persistent-session
+nathantreid:static-assets
+
+# Test
+cultofcoders:mocha
+xolvio:cleaner
+underscore@1.0.10
 simple:rest-method-mixin
-akryum:vue-component@=0.12.2
-rochal:slimscroll

@@ -5,6 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "@babel/runtime": "7.0.0-beta.55",
     "animate.css": "^3.7.0",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",
@@ -16,7 +17,7 @@
     "json2csv": "^4.1.5",
     "lodash": "^4.17.10",
     "mathjs": "^3.18.0",
-    "meteor-node-stubs": "^0.3.2",
+    "meteor-node-stubs": "^0.4.1",
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14",
     "nprogress": "^0.2.0",
