@@ -59,7 +59,7 @@ export default {
       tableData: [],
       titles: [
         { label: 'Title', prop: 'title', sort: 'custom' },
-        { label: 'Level', prop: 'levelId' },
+        { label: 'Level', prop: 'level' },
         { label: 'Type', prop: 'type' },
       ],
       tableProps: {

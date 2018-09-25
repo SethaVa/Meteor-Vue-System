@@ -31,7 +31,7 @@ if (Meteor.isServer) {
         },
         {
           $group: {
-            _id: '_id',
+            _id: '$_id',
             "level": {
               $last: "$levelDoc.level"
             },
