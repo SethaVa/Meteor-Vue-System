@@ -6,7 +6,7 @@ import '../../api/views'
 import '/imports/modules/school/api/students/server/'
 
 // Staff
-import '/imports/modules/school/api/Staffs/server/index'
+import '/imports/modules/school/api/staffs/server/index'
 
 // Book
 import '/imports/modules/school/api/subject/methods'

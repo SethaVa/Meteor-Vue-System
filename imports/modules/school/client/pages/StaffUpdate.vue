@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { findOneStaff, updateStaff } from '/imports/modules/school/api/Staffs/methods.js'
+import { findOneStaff, updateStaff } from '/imports/modules/school/api/staffs/methods.js'
 import { findPosition } from '/imports/modules/school/api/positions/methods.js'
 import Lookup from '../lib/Lookup-Value.js'
 export default {

@@ -10,6 +10,7 @@ import {
 import {
   RestMethodMixin
 } from 'meteor/simple:rest-method-mixin'
+import _ from 'lodash'
 import SimpleSchema from 'simpl-schema'
 
 import rateLimit from '/imports/utils/rate-limit'
@@ -45,7 +46,6 @@ export const findPosition = new ValidatedMethod({
     if (Meteor.isServer) {
       selector = selector || {}
       options = options || {}
-
       return Position.find(selector, options).fetch()
     }
   },
@@ -66,6 +66,44 @@ export const findOnePosition = new ValidatedMethod({
     }
   },
 })
+
+// find One
+export const positionOpts = new ValidatedMethod({
+  name: 'sch.positionOpts',
+  mixins: [CallPromiseMixin],
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true
+    },
+    options: {
+      type: Object,
+      blackbox: true,
+      optional: true
+    }
+  }).validator(),
+  run({
+    selector,
+    options
+  }) {
+    if (Meteor.isServer) {
+      selector = selector || {}
+      options = options || {}
+      let data = []
+      let position = Position.find(selector, options).fetch()
+      _.forEach(position, o => {
+        data.push({
+          label: o.position,
+          value: o._id,
+          doc: o
+        })
+      })
+      return data
+    }
+  },
+})
+
 //=============================================
 // Insert
 //=============================================
@@ -151,5 +189,5 @@ export const removePosition = new ValidatedMethod({
 })
 
 rateLimit({
-  method: [findOnePosition, findPosition, insertPosition, updatePosition, removePosition]
+  method: [findOnePosition, findPosition, positionOpts, insertPosition, updatePosition, removePosition]
 })

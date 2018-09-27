@@ -93,7 +93,7 @@ import Notify from '/imports/client/lib/notify'
 import wrapCurrentTime from '/imports/client/lib/wrap-current-time'
 import Lookup from '../lib/Lookup-Value'
 import { lookupClass } from '/imports/utils/lookup-methods'
-import { findStaff } from '/imports/modules/school/api/Staffs/methods'
+import { findStaff } from '/imports/modules/school/api/staffs/methods'
 import { Printd } from 'printd'
 import toCss from 'to-css'
 // const toCss = require('to-css')

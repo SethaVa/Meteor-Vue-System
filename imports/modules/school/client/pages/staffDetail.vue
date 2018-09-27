@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { findOneStaffDetails } from '/imports/modules/school/api/Staffs/methods'
+import { findOneStaffDetails } from '/imports/modules/school/api/staffs/methods'
 import moment from 'moment'
 
 export default {
