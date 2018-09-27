@@ -46,9 +46,8 @@
 </template>
 
 <script>
-import StaffInsert from './StaffInsert.vue'
-import StaffUpdate from './StaffUpdate.vue'
-import StaffDetail from './staffDetail'
+import StaffForm from './StaffForm.vue'
+// import StaffDetail from './staffDetail'
 import {
   findStaff,
   removeStaff,
@@ -64,9 +63,8 @@ import _ from 'lodash'
 export default {
   name: 'Staff',
   components: {
-    StaffInsert,
-    StaffUpdate,
-    StaffDetail,
+    StaffForm,
+    // StaffDetail,
     TableAction,
     TableToolbar,
   },
@@ -126,7 +124,7 @@ export default {
     // Add new
     addNew() {
       this.modalVisible = true
-      this.currentModal = StaffInsert
+      this.currentModal = StaffForm
     },
     // Table Action
     actionsList() {
@@ -139,7 +137,7 @@ export default {
     edit(row) {
       this.updateId = row._id
       this.modalVisible = true
-      this.currentModal = StaffInsert
+      this.currentModal = StaffForm
     },
     remove(row) {
       this.$_removeMixin({
