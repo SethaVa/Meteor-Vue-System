@@ -10,6 +10,9 @@ import {
 import _ from 'lodash'
 import Msg from '../lib/message'
 
+import {
+  appLog
+} from '/imports/api/app-logs/methods'
 // import createPersistedState from 'vuex-persistedstate'
 //Router 
 import router from '/imports/router'
@@ -109,7 +112,7 @@ export default {
       commit
     }, formData) {
       console.log('Action: login')
-      
+
 
       return new Promise((resolve, reject) => {
         Meteor.loginWithPassword(
@@ -117,12 +120,21 @@ export default {
           formData.password,
           error => {
             if (!error) {
-              commit('updateCurrentUser', Meteor.user())
-              resolve('success')
-             
-            }else{
+
+              appLog
+                .callPromise({
+                  level: 'LOGIN',
+                  title: 'LOG',
+                  data: Meteor.user(),
+                })
+                .then(result => {
+                  commit('updateCurrentUser', Meteor.user())
+                  resolve('success')
+                })
+
+            } else {
               reject(error)
-              
+
             }
           })
       })
@@ -132,7 +144,9 @@ export default {
     }) {
       Meteor.logout(() => {
         console.log('Action: logout')
+
         commit('logout')
+
       })
     },
     loadCurrentUser({
