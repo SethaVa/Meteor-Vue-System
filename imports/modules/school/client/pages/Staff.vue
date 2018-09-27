@@ -10,6 +10,7 @@
     </TableToolbar>
     <data-tables :data="tableData"
                  :filters="tableFilters"
+                 v-loading="loading"
                  :table-props="tableProps">
       <el-table-column v-for="title in titles"
                        :key="title.prop"
@@ -18,10 +19,13 @@
                        sortable="custom">
         <template slot-scope="scope">
           <span v-if="title.prop === 'dob'">
-            {{ formatDate(scope.row.dob) }}
+            {{ scope.row.dob | date }}
           </span>
           <span v-else-if="title.prop === 'position'">
-            {{ formateArr(scope.row.position) }}
+            {{ scope.row.position }}
+          </span>
+          <span v-else-if="title.prop === 'baseSalary'">
+            {{ scope.row.baseSalary | number }}
           </span>
           <span v-else>{{ scope.row[title.prop] }}</span>
         </template>
@@ -42,10 +46,12 @@
 </template>
 
 <script>
-import StaffInsert from './StaffInsert.vue'
-import StaffUpdate from './StaffUpdate.vue'
-import StaffDetail from './staffDetail'
-import { findStaff, removeStaff } from '/imports/modules/school/api/Staffs/methods.js'
+import StaffForm from './StaffForm.vue'
+// import StaffDetail from './staffDetail'
+import {
+  findStaff,
+  removeStaff,
+} from '/imports/modules/school/api/staffs/methods.js'
 
 // Table Action
 import TableToolbar from '/imports/client/components/TableToolbar.vue'
@@ -54,22 +60,23 @@ import removeMixin from '/imports/client/mixins/remove'
 
 import moment from 'moment'
 import _ from 'lodash'
-export default {  
+export default {
   name: 'Staff',
   components: {
-    StaffInsert,
-    StaffUpdate,
-    StaffDetail,
+    StaffForm,
+    // StaffDetail,
     TableAction,
     TableToolbar,
   },
   mixins: [removeMixin],
   data() {
     return {
+      loading:false,
+      // Componemt
       currentModal: null,
       modalVisible: false,
       updateId: null,
-      detailStaff: null,
+      // Table prop
       tableSize: 'mini',
       tableData: [],
       titles: [
@@ -78,6 +85,7 @@ export default {
         { label: 'DOB', prop: 'dob' },
         { label: 'Email', prop: 'email' },
         { label: 'Telephone', prop: 'tel' },
+        { label: 'Salary', prop: 'baseSalary' },
         { label: 'Position', prop: 'position' },
       ],
       tableProps: {
@@ -105,7 +113,7 @@ export default {
     },
     getData() {
       findStaff
-        .callPromise()
+        .callPromise({})
         .then(result => {
           this.tableData = result
         })
@@ -116,7 +124,7 @@ export default {
     // Add new
     addNew() {
       this.modalVisible = true
-      this.currentModal = StaffInsert
+      this.currentModal = StaffForm
     },
     // Table Action
     actionsList() {
@@ -128,7 +136,8 @@ export default {
     // Edit Data
     edit(row) {
       this.updateId = row._id
-      this.currentModal = StaffUpdate
+      this.modalVisible = true
+      this.currentModal = StaffForm
     },
     remove(row) {
       this.$_removeMixin({
@@ -143,6 +152,7 @@ export default {
       this.getData()
       this.modalVisible = false
       this.$nextTick(() => {
+        this.updateId = null
         this.currentModal = null
       })
     },
@@ -151,7 +161,7 @@ export default {
     },
     formateArr(val) {
       return val.map(val => {
-        return val.position.position
+        return val
       })
     },
   },

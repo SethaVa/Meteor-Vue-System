@@ -10,7 +10,7 @@ import {
 
 
 import Students from '../students/students'
-import Staff from '../Staffs/staff'
+import Staff from '../staffs/staff'
 import Room from '../rooms/room'
 import Subject from '../subject/subjects'
 import ClassStudy from '../classStudy/classStudy'

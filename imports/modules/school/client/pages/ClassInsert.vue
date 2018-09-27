@@ -107,7 +107,7 @@ import Notify from '/imports/client/lib/notify'
 import { findTimeStudyOpts } from '/imports/modules/school/api/time/methods'
 import { insertClassStudy } from '/imports/modules/school/api/classStudy/methods'
 import { findRoomOpts } from '/imports/modules/school/api/rooms/methods'
-import { findStaffOpts } from '/imports/modules/school/api/Staffs/methods'
+import { findStaffOpts } from '/imports/modules/school/api/staffs/methods'
 import { findSubjectOpts } from '/imports/modules/school/api/subject/methods'
 import {
   findSalaryRatePartTimeOpts,

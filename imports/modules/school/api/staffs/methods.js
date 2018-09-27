@@ -7,12 +7,19 @@ import {
 import {
   CallPromiseMixin
 } from 'meteor/didericis:callpromise-mixin'
-import {
-  RestMethodMixin
-} from 'meteor/simple:rest-method-mixin'
+
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
+
+import {
+  throwError
+} from '/imports/utils/security'
+import rateLimit from '/imports/utils/rate-limit'
+import getNextSeq from '/imports/utils/get-next-seq'
+
+
 import Staff from './staff'
+import StaffView from '../views/staff'
 import ClassStudy from '../classStudy/classStudy'
 import Payment from '../payment/payment'
 // import SalaryRate from '../salary-rate/salaryRate'
@@ -21,11 +28,19 @@ import Payment from '../payment/payment'
 export const findStaff = new ValidatedMethod({
   name: 'sch.findStaff',
   mixins: [CallPromiseMixin],
-  validate: null,
-  run() {
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true
+    }
+  }).validator(),
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
-
-      return aggregateStaff()
+      selector = selector || {}
+      return StaffView.find(selector).fetch()
     }
   },
 })
@@ -52,13 +67,22 @@ export const findOneStaffDetails = new ValidatedMethod({
 export const findStaffOpts = new ValidatedMethod({
   name: 'sch.findStaffOpts',
   mixins: [CallPromiseMixin],
-  validate: null,
-  run() {
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true
+    }
+  }).validator(),
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
-      //   selector = selector || {}
+      selector = selector || {}
       // sort = sort || {_id:-1};
       let data = []
-      let staff = aggregateStaff()
+      // let staff = aggregateStaff()
+      let staff = Staff.find(selector).fetch()
       _.forEach(staff, o => {
         data.push({
           label: o.name,
@@ -74,7 +98,18 @@ export const findStaffOpts = new ValidatedMethod({
 export const findOneStaff = new ValidatedMethod({
   name: 'sch.findOneStaff',
   mixins: [CallPromiseMixin],
-  validate: null,
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true
+    },
+    options: {
+      type: Object,
+      blackbox: true,
+      optional: true
+    }
+  }).validator(),
   run({
     selector,
     options
@@ -89,8 +124,8 @@ export const findOneStaff = new ValidatedMethod({
 })
 
 //find salary
-export const findStaffSalary = new ValidatedMethod({
-  name: 'sch.findStaffSalary',
+export const findstaffsalary = new ValidatedMethod({
+  name: 'sch.findstaffsalary',
   mixins: [CallPromiseMixin],
   validate: null,
   run({
@@ -98,7 +133,7 @@ export const findStaffSalary = new ValidatedMethod({
   }) {
     if (Meteor.isServer) {
       selector = selector || {}
-      const salaryRate=[]
+      const salaryRate = []
       // const salaryRate = SalaryRate.find({}, {
       //   sort: {
       //     _id: -1
@@ -109,8 +144,8 @@ export const findStaffSalary = new ValidatedMethod({
       let partTiemRate = salaryRate[0].partTime
 
       // sort = sort || {_id:-1};
-      // console.log(aggregateFindStaffSalary(selector, partTiemRate))
-      return aggregateFindStaffSalary(selector, partTiemRate)
+      // console.log(aggregateFindstaffsalary(selector, partTiemRate))
+      return aggregateFindstaffsalary(selector, partTiemRate)
     }
   },
 })
@@ -119,11 +154,45 @@ export const findStaffSalary = new ValidatedMethod({
 export const insertStaff = new ValidatedMethod({
   name: 'sch.insertStaff',
   mixins: [CallPromiseMixin],
-  validate: null,
-  run(doc) {
+  validate: new SimpleSchema({
+    doc: Staff.schema
+  }).validator(),
+  run({
+    doc
+  }) {
     if (Meteor.isServer) {
 
-      return Staff.insert(doc)
+      const _id = getNextSeq({
+        // Mandatory
+        _id: `sch_staffs${doc.branchId}`,
+        // Optional
+        opts: {
+          seq: 1,
+          // paddingType: 'start',
+          // paddingLength: 6,
+          // paddingChar: '0',
+          prefix: `${doc.branchId}-`,
+        },
+      })
+      try {
+        doc._id = _id
+        Staff.insert(doc)
+        return _id
+      } catch (error) {
+        // Decrement seq
+        getNextSeq({
+          // filter: {
+          _id: 'sch_staffs',
+          // },
+          opts: {
+            seq: -1,
+          },
+        })
+        Staff.remove({
+          _id: _id,
+        })
+        throwError(error)
+      }
     }
   },
 })
@@ -132,14 +201,19 @@ export const insertStaff = new ValidatedMethod({
 export const updateStaff = new ValidatedMethod({
   name: 'sch.updateStaff',
   mixins: [CallPromiseMixin],
-  validate: null,
-  run(doc) {
+  validate: new SimpleSchema({
+    doc: Staff.schema
+  }).validator(),
+  run({
+    doc
+  }) {
     if (Meteor.isServer) {
-      return Staff.update({
+      Staff.update({
         _id: doc._id
       }, {
         $set: doc
       })
+      return 'success'
     }
   },
 })
@@ -148,8 +222,16 @@ export const updateStaff = new ValidatedMethod({
 export const removeStaff = new ValidatedMethod({
   name: 'sch.removeStaff',
   mixins: [CallPromiseMixin],
-  validate: null,
-  run(selector) {
+  validate: new SimpleSchema({
+    selector: {
+      type: Object,
+      blackbox: true,
+      optional: true
+    }
+  }).validator(),
+  run({
+    selector
+  }) {
     if (Meteor.isServer) {
       return Staff.remove(selector)
     }
@@ -187,20 +269,30 @@ const aggregateStaff = () => {
     {
       $group: {
         "_id": "$_id",
-        "name": {$last:'$name'},
-        "gender":{$last:'$gender'},
-        "dob": {$last:'$dob'},
-        "email": {$last:'$email'},
-        "tel": {$last:'$tel'},
+        "name": {
+          $last: '$name'
+        },
+        "gender": {
+          $last: '$gender'
+        },
+        "dob": {
+          $last: '$dob'
+        },
+        "email": {
+          $last: '$email'
+        },
+        "tel": {
+          $last: '$tel'
+        },
         "positionId": {
-            $addToSet:{
-                positionId:'$positionId'
-            }
+          $addToSet: {
+            positionId: '$positionId'
+          }
         },
         position: {
-            $addToSet:{
-                position:'$positionDoc'
-            }
+          $addToSet: {
+            position: '$positionDoc'
+          }
         }
       }
     }
@@ -311,7 +403,7 @@ const aggregatefindStaffDetails = selector => {
 }
 
 // Salary Aggregate
-const aggregateFindStaffSalary = (selector, rateSalary) => {
+const aggregateFindstaffsalary = (selector, rateSalary) => {
   let data = Payment.aggregate([{
       $match: {
         status: 'Paid',
@@ -468,38 +560,43 @@ const aggregateFindStaffSalary = (selector, rateSalary) => {
 }
 
 // aggregate Staff Report
-const aggregateStaffReport = selector => {
-  selector = selector || {}
-  let data = Staff.aggregate([
-    // {
-    //     $match: selector
-    // },     
-    {
-      $lookup: {
-        from: "position",
-        localField: "positionId",
-        foreignField: "_id",
-        as: "positionDoc"
-      }
-    },
-    {
-      $unwind: {
-        path: '$positionDoc',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $project: {
-        "_id": 1,
-        "name": 1,
-        "gender": 1,
-        "dob": 1,
-        "email": 1,
-        "tel": 1,
-        "positionId": 1,
-        position: '$positionDoc.position'
-      }
-    }
-  ])
-  return data
-}
+// const aggregateStaffReport = selector => {
+//   selector = selector || {}
+//   let data = Staff.aggregate([
+//     // {
+//     //     $match: selector
+//     // },     
+//     {
+//       $lookup: {
+//         from: "position",
+//         localField: "positionId",
+//         foreignField: "_id",
+//         as: "positionDoc"
+//       }
+//     },
+//     {
+//       $unwind: {
+//         path: '$positionDoc',
+//         preserveNullAndEmptyArrays: true
+//       }
+//     },
+//     {
+//       $project: {
+//         "_id": 1,
+//         "name": 1,
+//         "gender": 1,
+//         "dob": 1,
+//         "email": 1,
+//         "tel": 1,
+//         "positionId": 1,
+//         position: '$positionDoc.position'
+//       }
+//     }
+//   ])
+//   return data
+// }
+
+
+rateLimit({
+  methods: [findOneStaff, findOneStaffDetails, findStaff, findStaffOpts, findstaffsalary, insertStaff, removeStaff]
+})

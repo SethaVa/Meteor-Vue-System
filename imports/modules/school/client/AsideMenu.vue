@@ -55,16 +55,10 @@
       </el-submenu>
 
       <!-- //==================================// Staff //====================== -->
-      <el-submenu index="sch.staff">
-        <template slot="title">
-          <i class="fa fa-users"></i>staff
-        </template>
 
-        <el-menu-item index="sch.staff">
-          <span>Staff</span>
-        </el-menu-item>
-      </el-submenu>
-
+      <el-menu-item index="sch.staff">
+        <i class="fa fa-users"></i>staff
+      </el-menu-item>
       <!-- //========================== // Setting //========================== -->
       <el-submenu index="sch.stting">
         <template slot="title">
