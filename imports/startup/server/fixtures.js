@@ -50,7 +50,7 @@ if (Company.find().count() === 0) {
     setting: {
       baseCurrency: 'USD',
       decimalNumber: 2,
-      accountingIntegration: true,
+      interface: 'small',
       dateFormat: 'DD/MM/YYYY H:mm:ss',
       lang: 'EN',
     },

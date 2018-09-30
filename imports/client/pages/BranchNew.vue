@@ -1,73 +1,59 @@
 <template>
   <div>
-    <el-dialog
-      :visible="visible"
-      :before-close="handleModalClose"
-      title="New Branch"
-      width="60%"
-    >
-      <el-form
-        v-loading="loading"
-        ref="form"
-        :model="form"
-        :rules="rules"
-        label-width="150px"
-        label-position="left"
-      >
+    <el-dialog :visible="visible"
+               :before-close="handleModalClose"
+               title="New Branch"
+               width="60%">
+      <el-form v-loading="loading"
+               ref="form"
+               :model="form"
+               :rules="rules"
+               :size="formSize"
+               label-width="150px"
+               label-position="left">
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item
-              label="Name"
-              prop="name"
-            >
+            <el-form-item label="Name"
+                          prop="name">
               <el-input v-model="form.name"></el-input>
             </el-form-item>
 
-            <el-form-item
-              label="Short Name"
-              prop="shortName"
-            >
+            <el-form-item label="Short Name"
+                          prop="shortName">
               <el-input v-model="form.shortName"></el-input>
             </el-form-item>
 
-            <el-form-item
-              label="Address"
-              prop="address"
-            >
-              <el-input
-                v-model="form.address"
-                type="textarea"
-              ></el-input>
+            <el-form-item label="Address"
+                          prop="address">
+              <el-input v-model="form.address"
+                        type="textarea"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
-            <el-form-item
-              label="Telephone"
-              prop="telephone"
-            >
+            <el-form-item label="Telephone"
+                          prop="telephone">
               <el-input v-model="form.telephone"></el-input>
             </el-form-item>
 
-            <el-form-item
-              label="Email"
-              prop="email"
-            >
+            <el-form-item label="Email"
+                          prop="email">
               <el-input v-model="form.email"></el-input>
             </el-form-item>
-
+            <el-form-item>
+              <el-button type="primary"
+                         @click="submitForm">
+                Save
+              </el-button>
+              <el-button @click="handleModalClose">Cancel</el-button>
+            </el-form-item>
           </el-col>
         </el-row>
+
       </el-form>
-      <span slot="footer">
-        <el-button
-          type="primary"
-          @click="submitForm"
-        >
-          Save
-        </el-button>
-        <el-button @click="handleModalClose">Cancel</el-button>
-      </span>
+      <!-- <span slot="footer">
+        
+      </span> -->
     </el-dialog>
   </div>
 </template>
@@ -105,6 +91,11 @@ export default {
         email: [{ type: 'email', message: 'Email is not a valid email' }],
       },
     }
+  },
+  computed: {
+    formSize() {
+      return this.$store.getters['app/formInterface']
+    },
   },
   methods: {
     submitForm() {

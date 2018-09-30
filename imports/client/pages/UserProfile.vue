@@ -8,6 +8,7 @@
     <el-form v-loading="loading"
              :model="form"
              :rules="rules"
+             :size="formSize"
              ref="form"
              label-width="200px">
       <el-row :gutter="10">
@@ -210,6 +211,9 @@ export default {
     userFullName() {
       return this.$store.getters['app/userFullName']
     },
+    formSize(){
+      return this.$store.getters['app/formInterface']
+    }
   },
   mounted() {
     this.getDataUpdate()

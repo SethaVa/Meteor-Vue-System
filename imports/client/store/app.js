@@ -66,6 +66,12 @@ export default {
         return 'dd/MM/yyyy'
       }
     },
+    formInterface(state){
+      let format = state.company ?
+        state.company.setting.interface : 'small'
+
+        return format
+    }
   },
   mutations: {
     updateCurrentUser(state, user) {
