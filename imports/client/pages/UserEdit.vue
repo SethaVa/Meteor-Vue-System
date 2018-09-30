@@ -1,13 +1,14 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" title="Edit User"
+    <el-dialog :close-on-click-modal="false"
+               title="Edit User"
                :visible="true"
                width="90%"
                :before-close="handleClose">
       <el-form v-loading="loading"
                :model="form"
                :rules="rules"
-               size="mini"
+               :size="formSize"
                ref="form"
                label-position="left"
                label-width="170px">
@@ -89,12 +90,12 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
-                   size="mini"
+                   :size="formSize"
                    @click="submitForm">Save</el-button>
         <el-button @click="handleClose"
-                   size="mini">Cancel</el-button>
+                   :size="formSize">Cancel</el-button>
       </span>
-    </el-dialog :close-on-click-modal="false">
+    </el-dialog>
   </div>
 </template>
 
@@ -182,7 +183,7 @@ export default {
     return {
       loading: false,
       statusOpts: LookupValue.status,
-      roleOpts:[], 
+      roleOpts: [],
       // LookupValue.roles,
       branchPermissionOpts: [],
       form: {
@@ -232,9 +233,7 @@ export default {
           },
           { validator: validateConfirmPassword, trigger: 'blur' },
         ],
-        allowedBranches: [
-          { required: true, message: 'Branches is required' },
-        ],
+        allowedBranches: [{ required: true, message: 'Branches is required' }],
         roles: [{ required: true, message: 'Branches is required' }],
       },
     }
@@ -269,7 +268,7 @@ export default {
       this.loading = true
       const _id = this.updateId
       findOneUser
-        .callPromise({_id})
+        .callPromise({ _id })
         .then(result => {
           // Orange result
           this.form = {

@@ -1,13 +1,14 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" title="New User"
+    <el-dialog :close-on-click-modal="false"
+               title="New User"
                :visible="true"
                width="90%"
                :before-close="handleClose">
       <el-form v-loading="loading"
                :model="form"
                :rules="rules"
-               size="mini"
+               :size="formSize"
                ref="form"
                label-position="left"
                label-width="170px">
@@ -87,12 +88,12 @@
       <span slot="footer"
             class="dialog-footer">
         <el-button type="primary"
-                   size="mini"
+                   :size="formSize"
                    @click="submitForm">Save</el-button>
         <el-button @click="handleClose"
-                   size="mini">Cancel</el-button>
+                   :size="formSize">Cancel</el-button>
       </span>
-    </el-dialog :close-on-click-modal="false">
+    </el-dialog>
   </div>
 </template>
 
@@ -165,7 +166,7 @@ export default {
     return {
       loading: false,
       // roleOpts: LookupValue.roles,
-      roleOpts:[],
+      roleOpts: [],
       statusOpts: LookupValue.status,
       branchPermissionOpts: [],
       form: {
@@ -214,13 +215,17 @@ export default {
           },
           { validator: validateConfirmPassword, trigger: 'blur' },
         ],
-        allowedBranches: [
-          { required: true, message: 'Branches is required' },
-        ],
+        allowedBranches: [{ required: true, message: 'Branches is required' }],
         roles: [{ required: true, message: 'Branches is required' }],
       },
     }
   },
+  computed: {
+    formSize() {
+      return this.$store.getters['app/formInterface']
+    },
+  },
+
   mounted() {
     this.getRoles()
     this.getBranches()
@@ -266,7 +271,7 @@ export default {
             })
             .catch(error => {
               this.loading = false
-              console.log(error);
+              console.log(error)
               Notify.error({ message: error.reason })
             })
         } else {

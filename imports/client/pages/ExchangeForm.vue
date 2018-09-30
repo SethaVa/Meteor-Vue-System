@@ -6,7 +6,7 @@
                ref="form"
                :model="form"
                :rules="rules"
-               size="mini"
+               :size="formSize"
                label-position="left"
                label-width="70px">
         <el-row :gutter="20">
@@ -131,6 +131,9 @@ export default {
     }),
     dateFormat() {
       return this.$store.getters['app/dateFormat']
+    },
+    formSize() {
+      return this.$store.getters['app/formInterface']
     },
   },
   watch: {

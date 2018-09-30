@@ -236,7 +236,7 @@ export default {
       typeOpts: LookUp.type,
       rateOpt: [],
       // form
-      formSize: 'mini',
+      // formSize: 'mini',
       form: {
         code: '',
         classDate: moment().toDate(),
@@ -318,6 +318,9 @@ export default {
     }),
     dateFormat() {
       return this.$store.getters['app/dateFormat']
+    },
+    formSize() {
+      return this.$store.getters['app/formInterface']
     },
   },
   watch: {

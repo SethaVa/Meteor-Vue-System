@@ -10,8 +10,8 @@ Company.settingSchema = new SimpleSchema({
   decimalNumber: {
     type: Number,
   },
-  accountingIntegration: {
-    type: Boolean,
+  interface:{
+    type:String
   },
   dateFormat: {
     type: String,

@@ -4,20 +4,17 @@
       <el-col :span="colSpan.action">
         <!-- Action -->
         <slot name="action">
-          <el-button
-            type="primary"
-            icon="el-icon-plus"
-            @click="$emit('new')"
-          >
+          <el-button :size="formSize"
+                     type="primary"
+                     icon="el-icon-plus"
+                     @click="$emit('new')">
             New
           </el-button>
         </slot>
       </el-col>
-      <el-col
-        :span="colSpan.filter"
-        :offset="colSpanOffset"
-        class="text-right"
-      >
+      <el-col :span="colSpan.filter"
+              :offset="colSpanOffset"
+              class="text-right">
         <!-- Filter -->
         <slot name="filter">
           <el-input v-model="filter"></el-input>
@@ -45,6 +42,11 @@ export default {
       filter: this.value[0].value,
       colSpanOffset: 24 - (this.colSpan.action + this.colSpan.filter),
     }
+  },
+  computed: {
+    formSize() {
+      return this.$store.getters['app/formInterface']
+    },
   },
   watch: {
     filter(val) {
