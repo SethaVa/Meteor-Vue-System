@@ -4,7 +4,8 @@ import Staff from './pages/Staff.vue'
 // Student
 import StudentList from './pages/StudentList.vue'
 //Class Study
-import ClassStudy from './pages/ClassList'
+import ClassList from './pages/ClassList.vue'
+import ClassForm from './pages/ClassForm.vue'
 /**
  * Setting
  */
@@ -16,6 +17,7 @@ import CategoryList from './pages/CategoryList.vue'
 import ItemList from './pages/ItemList.vue'
 import SalaryRate from './pages/SalaryRate.vue'
 import LevelList from './pages/LevelList.vue'
+
 //Register
 import RegisterList from './pages/RegisterList'
 import RegisterInsert from './pages/RegisterInsert.vue'
@@ -64,13 +66,23 @@ const routes = [{
     //class Study
     {
       path: 'class',
-      name: 'sch.classStudy',
-      component: ClassStudy,
+      name: 'sch.classList',
+      component: ClassList,
       meta:{
-        headerTitle:'Class List'
+        headerTitle:'Class List',
       }
     },
-
+    // Class Form
+        // Register update
+        {
+          path: 'class/:type/:id?',
+          name: 'sch.classForm',
+          component: ClassForm,
+          meta: {
+            headerTitle: 'Class Form',
+            linkActiveClass: 'sch.classList',
+          },
+        },
     //Register
     {
       path: 'register-list',
@@ -87,7 +99,7 @@ const routes = [{
       component: RegisterInsert,
       meta: {
         headerTitle: 'Register New',
-        linkActiveClass: 'registerList',
+        linkActiveClass: 'sch.registerList',
       }
     },
     // Register update
@@ -97,7 +109,7 @@ const routes = [{
       component: RegisterUpdate,
       meta: {
         headerTitle: 'Register Edit',
-        linkActiveClass: 'registerList',
+        linkActiveClass: 'sch.registerList',
       },
     },
 
@@ -117,7 +129,7 @@ const routes = [{
       component: PaymentInsert,
       meta: {
         headerTitle: 'New Payment',
-        linkActiveClass: 'payment',
+        linkActiveClass: 'sch.payment',
       },
     },
     //Payment New
@@ -127,7 +139,7 @@ const routes = [{
       component: PaymentUpdate,
       meta: {
         headerTitle: 'Edit Payment',
-        linkActiveClass: 'payment',
+        linkActiveClass: 'sch.payment',
       },
     },
     // Student

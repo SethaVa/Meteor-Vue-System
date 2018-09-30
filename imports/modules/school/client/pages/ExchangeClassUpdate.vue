@@ -142,7 +142,7 @@ import {
   updateExchangeClass,
   findOneExchangeClass,
 } from '/imports/modules/school/api/exchange-class/methods'
-import { findOneClassStudy } from '/imports/modules/school/api/classStudy/methods'
+import { findOneClassStudy } from '/imports/modules/school/api/class-study/methods'
 
 export default {
   props: {

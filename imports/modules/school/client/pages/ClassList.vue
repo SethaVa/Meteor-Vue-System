@@ -1,7 +1,7 @@
 <template>
   <div>
     <component :is="currentModal"
-               :update-doc="updateDoc"
+               :update-id="updateId"
                :visible="modalVisible"
                @modal-close="handleModalClose">
     </component>
@@ -22,10 +22,10 @@
           <!-- <label v-if="scope.props='classDate'">{{ formatDate(scope.props.classDate) }}</label>
           <label v-else></label> -->
           <span v-if="title.prop === 'classDate'">
-            {{ formatDate(scope.row.classDate) }}
+            {{ scope.row.classDate | date }}
           </span>
-          <span v-else-if="title.prop === 'timeStudy'">
-            {{ formatTime(scope.row.timeStudy) }}
+          <span v-else-if="title.prop === 'time'">
+            {{ formatTime(scope.row.time) }}
           </span>
           <!-- <span v-else-if="title.prop[title.prop] === 'Closed'">
             {{ 1+1 }}
@@ -53,14 +53,13 @@
 <script>
 import MsgBox from '/imports/client/lib/message'
 import Notify from '/imports/client/lib/notify'
-import ClassInsert from './ClassInsert'
-import ClassUpdate from './ClassUpdate'
+
+import { mapState } from 'vuex'
+
 import {
   findClassStudy,
   removeClassStudy,
-  finishClassStudy,
-  updateClassStudyStatus,
-} from '/imports/modules/school/api/classStudy/methods'
+} from '/imports/modules/school/api/class-study/methods'
 
 // Table Action
 import TableToolbar from '/imports/client/components/TableToolbar.vue'
@@ -72,8 +71,6 @@ import _ from 'lodash'
 export default {
   // name: 'ClassList',
   components: {
-    ClassInsert,
-    ClassUpdate,
     TableAction,
     TableToolbar,
   },
@@ -82,16 +79,16 @@ export default {
     return {
       currentModal: null,
       modalVisible: false,
-      updateDoc: null,
+      updateId: null,
       tableSize: 'mini',
       tableData: [],
       titles: [
-        // { label: 'ID', prop: '_id' },
+        { label: 'Code', prop: 'code' },
         { label: 'Date', prop: 'classDate' },
-        { label: 'Room', prop: 'roomName' },
-        { label: 'Teacher', prop: 'teacher' },
-        { label: 'Subject', prop: 'subject' },
-        { label: 'Time', prop: 'timeStudy' },
+        { label: 'Room', prop: 'room' },
+        { label: 'Teacher', prop: 'staffName' },
+        { label: 'Subject', prop: 'subjectName' },
+        { label: 'Time', prop: 'time' },
         { label: 'Type', prop: 'type' },
         { label: 'Status', prop: 'status' },
       ],
@@ -100,28 +97,35 @@ export default {
         border: false,
         stripe: false,
         defaultSort: {
-          prop: '_id',
-          order: 'ascending',
+          prop: 'code',
+          order: 'descending',
         },
       },
       tableFilters: [
         {
-          prop: ['roomName', 'teacher','timeStudy','type'],
+          prop: ['room', 'staffName', 'time', 'type', 'code'],
           value: '',
         },
       ],
     }
   },
+  computed: {
+    ...mapState({
+      currentBranchId(state) {
+        return state.app && state.app.currentBranch._id
+      },
+    }),
+  },
   mounted() {
-    this.getData()
+    this._getData()
   },
   methods: {
     renderTableMoreHeader(h, { column, $index }) {
       return h('h2', { class: 'el-icon-menu popover-icon' })
     },
-    getData() {
+    _getData() {
       findClassStudy
-        .callPromise({})
+        .callPromise({ selector: { branchId: this.currentBranchId } })
         .then(result => {
           this.tableData = result
         })
@@ -131,8 +135,7 @@ export default {
     },
     // Add new
     addNew() {
-      this.modalVisible = true
-      this.currentModal = ClassInsert
+      this.$router.push({ name: 'sch.classForm', params: { type: 'new' } })
     },
     // Table Action
     actionsList() {
@@ -143,15 +146,16 @@ export default {
     },
     // Edit Data
     edit(row) {
-      this.updateDoc = row
-      this.modalVisible = true
-      this.currentModal = ClassUpdate
+      this.$router.push({
+        name: 'sch.classForm',
+        params: { type: 'new', id: row._id },
+      })
     },
     remove(row) {
       this.$_removeMixin({
         meteorMethod: removeClassStudy,
         selector: { _id: row._id },
-        successMethod: 'getData',
+        successMethod: '_getData',
         loading: 'loading',
         title: row.title,
       })
@@ -160,9 +164,10 @@ export default {
       this.$message.error(this.currentModal)
     },
     handleModalClose() {
-      this.getData()
+      this._getData()
       this.modalVisible = false
       this.$nextTick(() => {
+        this.updateId = null
         this.currentModal = null
       })
     },

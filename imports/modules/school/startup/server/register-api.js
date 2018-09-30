@@ -1,6 +1,8 @@
 // Register your apis here
 
 import '../../api/views'
+import '../../api/lib'
+
 
 //Student
 import '/imports/modules/school/api/students/server/'
@@ -30,7 +32,7 @@ import '/imports/modules/school/api/time/server/index'
 // Level
 import '/imports/modules/school/api/level/server/index'
 //Class Study
-import '/imports/modules/school/api/classStudy/server/'
+import '/imports/modules/school/api/class-study/server/'
 //class Detail
 import '/imports/modules/school/api/classDetails/server/'
 // Payment

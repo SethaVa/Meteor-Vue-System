@@ -92,7 +92,7 @@ export const findRoomOpts = new ValidatedMethod({
       let room = Room.find(selector, options).fetch()
       _.forEach(room, o => {
         data.push({
-          label: o.roomName,
+          label: o.name,
           value: o._id,
           doc: o
         })
