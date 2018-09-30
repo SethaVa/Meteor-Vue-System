@@ -35,8 +35,8 @@ export const findRateSalary = new ValidatedMethod({
   },
 })
 //find for Part Time Options
-export const RateSalaryOpts = new ValidatedMethod({
-  name: 'sch.RateSalaryOpts',
+export const rateSalaryOpts = new ValidatedMethod({
+  name: 'sch.rateSalaryOpts',
   mixins: [CallPromiseMixin],
   validate: new SimpleSchema({
     selector: {
@@ -51,8 +51,8 @@ export const RateSalaryOpts = new ValidatedMethod({
     if (Meteor.isServer) {
       selector = selector || {}
       let data = []
-      let RateSalary = RateSalary.find(selector).fetch()
-      _.forEach(RateSalary, o => {
+      let rateSalary = RateSalary.find(selector).fetch()
+      _.forEach(rateSalary, o => {
         data.push({
           label: o.name,
           value: o._id,
@@ -160,5 +160,5 @@ export const removeRateSalary = new ValidatedMethod({
 })
 
 rateLimit({
-  method: [findOneRateSalary, findRateSalary, RateSalaryOpts, insertRateSalary, updateRateSalary, removeRateSalary]
+  method: [findOneRateSalary, findRateSalary, rateSalaryOpts, insertRateSalary, updateRateSalary, removeRateSalary]
 })

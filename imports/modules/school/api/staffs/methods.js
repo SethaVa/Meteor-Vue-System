@@ -20,7 +20,7 @@ import getNextSeq from '/imports/utils/get-next-seq'
 
 import Staff from './staff'
 import StaffView from '../views/staff'
-import ClassStudy from '../classStudy/classStudy'
+import ClassStudy from '../class-study/class-study'
 import Payment from '../payment/payment'
 // import SalaryRate from '../salary-rate/salaryRate'
 

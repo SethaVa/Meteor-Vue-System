@@ -13,7 +13,7 @@ import moment from 'moment'
 import Type from '/imports/modules/school/api/types/methods'
 import {
   findClassStudy
-} from '/imports/modules/school/api/classStudy/methods'
+} from '/imports/modules/school/api/class-study/methods'
 import Students from '../api/students/students'
 import Categories from '../api/categories/categories'
 

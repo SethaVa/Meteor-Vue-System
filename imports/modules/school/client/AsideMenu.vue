@@ -21,7 +21,7 @@
         <el-menu-item index="sch.registerList">
           <span>Register</span>
         </el-menu-item>
-        <el-menu-item index="sch.classStudy">
+        <el-menu-item index="sch.classList">
           <span>Class Study</span>
         </el-menu-item>
 

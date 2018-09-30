@@ -13,7 +13,7 @@ import Students from '../students/students'
 import Staff from '../staffs/staff'
 import Room from '../rooms/room'
 import Subject from '../subject/subjects'
-import ClassStudy from '../classStudy/classStudy'
+import ClassStudy from '../class-study/class-study'
 import Payment from '../payment/payment'
 
 

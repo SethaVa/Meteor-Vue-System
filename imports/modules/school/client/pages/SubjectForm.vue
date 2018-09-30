@@ -31,23 +31,17 @@
         </el-form-item>
         <el-form-item label="Type"
                       prop="type">
-          <el-select :placeholder="loading.type"
-                     v-model="form.type">
-            <el-option v-for="doc in typeIdOpts"
-                       :key="doc.value"
-                       :label="doc.label"
-                       :value="doc.value"></el-option>
-          </el-select>
+          <el-radio-group v-model="form.type">
+            <el-radio label="Part_Time"></el-radio>
+            <el-radio label="Full_Time"></el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="Status"
                       prop="status">
-          <el-select :placeholder="loading.status"
-                     v-model="form.status">
-            <el-option v-for="doc in statusOpts"
-                       :key="doc.value"
-                       :label="doc.label"
-                       :value="doc.value"></el-option>
-          </el-select>
+          <el-radio-group v-model="form.status">
+            <el-radio label="Active"></el-radio>
+            <el-radio label="Inactive"></el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
 
@@ -101,9 +95,9 @@ export default {
       // Form
       form: {
         title: '',
-        type: '',
+        type: 'Part_Time',
         levelId: '',
-        status: '',
+        status: 'Active',
       },
       // Rule
       rules: {

@@ -185,7 +185,7 @@ import Avatar from 'vue-avatar'
 // import { countStaff } from '/imports/modules/school/api/staffs/methods'
 // import { countRoom } from '/imports/modules/school/api/rooms/methods'
 // import { countSubject } from '/imports/modules/school/api/subject/methods'
-// import { countClass } from '/imports/modules/school/api/classStudy/methods'
+// import { countClass } from '/imports/modules/school/api/class-study/methods'
 import {
   findStudentByType,
   countStudents,

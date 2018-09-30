@@ -1,0 +1,65 @@
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+
+.el-icon-caret-bottom {
+  font-size: 12px;
+}
+
+.icon-white {
+  color: white;
+}
+
+.header-item-margin {
+  margin-left: 15px;
+}
+
+// clear float
+.clear-fix::after {
+  content: '';
+  clear: both;
+  display: table;
+}
+
+.el-select {
+  width: 100%;
+}
+
+// for add new on form
+.selection-btn {
+  .el-select {
+    position: absolute;
+  }
+
+  .el-button {
+    float: right;
+    position: relative; // right: 0;
+  }
+}
+
+// Collapse border
+.collapse-border {
+  border-top: 1px solid #409eff;
+  // darkgoldenrod;
+}
+
+// Label error
+.label-error {
+  color: #f56c6c;
+  font-size: 12px;
+  font-weight: 100;
+  line-height: 1;
+  // display: inline-block;
+  padding-top: 4px;
+  position: absolute;
+  // top: 100%;
+  // left: 0;
+  // animation-name: topFadeOut;
+  // animation-duration: 1s;
+}
+
+// error color
+.error {
+  color: #f56c6c;
+}

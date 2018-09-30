@@ -139,7 +139,7 @@ import { lookupClass } from '/imports/utils/lookup-methods'
 import { findClassForStudenDetails } from '/imports/modules/school/api/payment/methods'
 import { findOnePayment } from '/imports/modules/school/api/payment/methods'
 import { insertExchangeClass } from '/imports/modules/school/api/exchange-class/methods'
-import { findOneClassStudy } from '/imports/modules/school/api/classStudy/methods'
+import { findOneClassStudy } from '/imports/modules/school/api/class-study/methods'
 
 export default {
   // name: 'ExchangeClass',

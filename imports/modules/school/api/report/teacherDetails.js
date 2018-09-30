@@ -12,7 +12,7 @@ import {
 } from 'meteor/simple:rest-method-mixin'
 import SimpleSchema from 'simpl-schema'
 import _ from 'lodash'
-import ClassStudy from '../classStudy/classStudy'
+import ClassStudy from '../class-study/class-study'
 
 
 
