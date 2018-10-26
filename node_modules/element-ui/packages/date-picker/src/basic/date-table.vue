@@ -9,15 +9,17 @@
     <tbody>
     <tr>
       <th v-if="showWeekNumber">{{ t('el.datepicker.week') }}</th>
-      <th v-for="week in WEEKS">{{ t('el.datepicker.weeks.' + week) }}</th>
+      <th v-for="(week, key) in WEEKS" :key="key">{{ t('el.datepicker.weeks.' + week) }}</th>
     </tr>
     <tr
       class="el-date-table__row"
-      v-for="row in rows"
-      :class="{ current: isWeekActive(row[1]) }">
+      v-for="(row, key) in rows"
+      :class="{ current: isWeekActive(row[1]) }"
+      :key="key">
       <td
-        v-for="cell in row"
-        :class="getCellClasses(cell)">
+        v-for="(cell, key) in row"
+        :class="getCellClasses(cell)"
+        :key="key">
         <div>
           <span>
             {{ cell.text }}
@@ -33,12 +35,21 @@
   import { getFirstDayOfMonth, getDayCountOfMonth, getWeekNumber, getStartDateOfMonth, nextDate, isDate } from '../util';
   import { hasClass } from 'element-ui/src/utils/dom';
   import Locale from 'element-ui/src/mixins/locale';
+  import { arrayFindIndex, arrayFind, coerceTruthyValueToArray } from 'element-ui/src/utils/util';
 
   const WEEKS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const clearHours = function(time) {
     const cloneDate = new Date(time);
     cloneDate.setHours(0, 0, 0, 0);
     return cloneDate.getTime();
+  };
+
+  // remove the first element that satisfies `pred` from arr
+  // return a new array if modification occurs
+  // return the original array otherwise
+  const removeFromArray = function(arr, pred) {
+    const idx = typeof pred === 'function' ? arrayFindIndex(arr, pred) : arr.indexOf(pred);
+    return idx >= 0 ? [...arr.slice(0, idx), ...arr.slice(idx + 1)] : arr;
   };
 
   export default {
@@ -129,9 +140,10 @@
 
         const startDate = this.startDate;
         const disabledDate = this.disabledDate;
+        const selectedDate = this.selectionMode === 'dates' ? coerceTruthyValueToArray(this.value) : [];
         const now = clearHours(new Date());
 
-        for (var i = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) {
           const row = rows[i];
 
           if (this.showWeekNumber) {
@@ -140,7 +152,7 @@
             }
           }
 
-          for (var j = 0; j < 7; j++) {
+          for (let j = 0; j < 7; j++) {
             let cell = row[this.showWeekNumber ? j + 1 : j];
             if (!cell) {
               cell = { row: i, column: j, type: 'normal', inRange: false, start: false, end: false };
@@ -181,7 +193,9 @@
               }
             }
 
-            cell.disabled = typeof disabledDate === 'function' && disabledDate(new Date(time));
+            let cellDate = new Date(time);
+            cell.disabled = typeof disabledDate === 'function' && disabledDate(cellDate);
+            cell.selected = arrayFind(selectedDate, date => date.getTime() === cellDate.getTime());
 
             this.$set(row, this.showWeekNumber ? j + 1 : j, cell);
           }
@@ -225,10 +239,6 @@
         if (newVal && !oldVal) {
           this.rangeState.selecting = false;
           this.markRange(newVal);
-          this.$emit('pick', {
-            minDate: this.minDate,
-            maxDate: this.maxDate
-          });
         }
       }
     },
@@ -285,6 +295,10 @@
           classes.push('disabled');
         }
 
+        if (cell.selected) {
+          classes.push('selected');
+        }
+
         return classes.join(' ');
       },
 
@@ -311,7 +325,8 @@
 
         newDate.setDate(parseInt(cell.text, 10));
 
-        return getWeekNumber(newDate) === getWeekNumber(this.date);
+        const valueYear = isDate(this.value) ? this.value.getFullYear() : null;
+        return year === valueYear && getWeekNumber(newDate) === getWeekNumber(this.value);
       },
 
       markRange(maxDate) {
@@ -331,9 +346,15 @@
             const index = i * 7 + j + (this.showWeekNumber ? -1 : 0);
             const time = nextDate(startDate, index - this.offsetDay).getTime();
 
-            cell.inRange = minDate && time >= clearHours(minDate) && time <= clearHours(maxDate);
-            cell.start = minDate && time === clearHours(minDate.getTime());
-            cell.end = maxDate && time === clearHours(maxDate.getTime());
+            if (maxDate && maxDate < minDate) {
+              cell.inRange = minDate && time >= clearHours(maxDate) && time <= clearHours(minDate);
+              cell.start = maxDate && time === clearHours(maxDate.getTime());
+              cell.end = minDate && time === clearHours(minDate.getTime());
+            } else {
+              cell.inRange = minDate && time >= clearHours(minDate) && time <= clearHours(maxDate);
+              cell.start = minDate && time === clearHours(minDate.getTime());
+              cell.end = maxDate && time === clearHours(maxDate.getTime());
+            }
           }
         }
       },
@@ -442,8 +463,9 @@
               });
             } else {
               const minDate = new Date(newDate.getTime());
+              this.rangeState.selecting = false;
 
-              this.$emit('pick', { minDate, maxDate: this.maxDate }, false);
+              this.$emit('pick', { minDate, maxDate: this.minDate });
             }
           } else if (!this.minDate) {
             const minDate = new Date(newDate.getTime());
@@ -455,7 +477,7 @@
         } else if (selectionMode === 'day') {
           this.$emit('pick', newDate);
         } else if (selectionMode === 'week') {
-          var weekNumber = getWeekNumber(newDate);
+          const weekNumber = getWeekNumber(newDate);
 
           const value = newDate.getFullYear() + 'w' + weekNumber;
           this.$emit('pick', {
@@ -464,6 +486,12 @@
             value: value,
             date: newDate
           });
+        } else if (selectionMode === 'dates') {
+          const value = this.value || [];
+          const newValue = cell.selected
+            ? removeFromArray(value, date => date.getTime() === newDate.getTime())
+            : [...value, newDate];
+          this.$emit('pick', newValue);
         }
       }
     }
