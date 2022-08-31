@@ -19,7 +19,7 @@
     "mathjs": "^3.18.0",
     "meteor-node-stubs": "^0.4.1",
     "moment": "^2.20.1",
-    "moment-timezone": "^0.5.14",
+    "moment-timezone": "^0.5.35",
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",
     "printd": "0.0.10",
